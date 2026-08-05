@@ -4,7 +4,7 @@
 
 ## About
 
-Personal portfolio and CV. Experience spans enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), IoT, and mobile. Founder DNA, with deep expertise in distributed systems, secure application development, and event-driven architecture. Works end-to-end: builds a rough working version early, finds the risks, then iterates. Does his best work in small teams on hard problems and takes on more than pure engineering when a project needs it.
+Personal portfolio and CV. Experience spans enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), IoT, and mobile. Founder DNA, with deep expertise in distributed systems, distributed ledger technology (DLT), secure application development, and event-driven architecture. Works end-to-end: builds a rough working version early, finds the risks, then iterates. Does his best work in small teams on hard problems and takes on more than pure engineering when a project needs it.
 
 ## Site structure
 
@@ -33,7 +33,7 @@ The site is a single scrolling page with these sections (anchor links):
 
 ## Technologies
 
-TypeScript, Rust, Swift, Kotlin, Python, Java, Haskell. Focus areas: Cardano / eUTxO, Plutus smart contracts, distributed systems, event-driven architecture, cryptography, secure application development.
+TypeScript, Rust, Swift, Kotlin, Python, Java, Haskell. Focus areas: distributed ledger technology (DLT), Cardano / eUTxO, Plutus smart contracts, consensus protocols, distributed systems, event-driven architecture, cryptography, secure application development.
 
 ## Links
 

@@ -193,7 +193,7 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
   skill("KI/ML", "LLM-Integration (Claude, GPT-4), Vektorsuche, Embeddings, Whisper"),
   skill("Web & Mobile", "React, React Native, NestJS, Spring Boot, Vert.x, Swift/iOS, Kotlin/Android"),
   skill("DevOps", "Docker, Terraform, Ansible, GitHub Actions, CI/CD, AWS, Prometheus/Grafana"),
-  skill("Blockchain", "Cardano (eUTxO), Plutus, CIP-Standards, Consensus-Protokolle, Wallet-Standards"),
+  skill("Blockchain & DLT", "Cardano (eUTxO), Plutus, CIP-Standards, Consensus-Protokolle, Wallet-Standards"),
   skill("Führung", "Teamaufbau, Technische Strategie, Architektur-Dokumentation, Workshop-Leitung"),
 )
 

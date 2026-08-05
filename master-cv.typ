@@ -193,7 +193,7 @@ Software engineer with 10+ years across enterprise (Deloitte), blockchain infras
   skill("AI/ML", "LLM integration (Claude, GPT-4), Vector search, Embeddings, Whisper"),
   skill("Web & Mobile", "React, React Native, NestJS, Spring Boot, Vert.x, Swift/iOS, Kotlin/Android"),
   skill("DevOps", "Docker, Terraform, Ansible, GitHub Actions, CI/CD, AWS, Prometheus/Grafana"),
-  skill("Blockchain", "Cardano (eUTxO), Plutus, CIP standards, Consensus protocols, Wallet standards"),
+  skill("Blockchain & DLT", "Cardano (eUTxO), Plutus, CIP standards, Consensus protocols, Wallet standards"),
   skill("Leadership", "Team building, Technical strategy, Architecture docs, Workshop facilitation"),
 )
 
