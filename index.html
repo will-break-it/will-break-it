@@ -16,20 +16,27 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Willi Wolff">
     <meta property="og:url" content="https://will-break-it.github.io/">
     <meta property="og:title" content="Willi Wolff - Software Engineer & Technical Architect">
-    <meta property="og:description" content="Versatile engineer with 10+ years building across diverse industries, platforms, and company sizes. Expert in distributed systems, blockchain, and mobile development.">
-    <meta property="og:image" content="https://will-break-it.github.io/assets/images/will.jpg">
+    <meta property="og:description" content="Versatile engineer with 10+ years building across diverse industries, platforms, and company sizes. Expert in distributed systems, DLT, cryptography, and mobile development.">
+    <meta property="og:image" content="https://will-break-it.github.io/social-preview.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Willi Wolff, software engineer and technical architect working on distributed systems, DLT and cryptography">
     <meta property="og:locale" content="en_US">
     <meta property="og:locale:alternate" content="de_DE">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://will-break-it.github.io/">
-    <meta property="twitter:title" content="Willi Wolff - Software Engineer & Technical Architect">
-    <meta property="twitter:description" content="Versatile engineer with 10+ years building across diverse industries, platforms, and company sizes. Expert in distributed systems, blockchain, and mobile development.">
-    <meta property="twitter:image" content="https://will-break-it.github.io/assets/images/will.jpg">
-    <meta property="twitter:creator" content="@will_break_it">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://will-break-it.github.io/">
+    <meta name="twitter:title" content="Willi Wolff - Software Engineer & Technical Architect">
+    <meta name="twitter:description" content="Versatile engineer with 10+ years building across diverse industries, platforms, and company sizes. Expert in distributed systems, DLT, cryptography, and mobile development.">
+    <meta name="twitter:image" content="https://will-break-it.github.io/social-preview.png">
+    <meta name="twitter:image:alt" content="Willi Wolff, software engineer and technical architect working on distributed systems, DLT and cryptography">
+    <meta name="twitter:site" content="@will_break_it">
+    <meta name="twitter:creator" content="@will_break_it">
 
     <!-- Additional Meta Tags -->
     <meta name="theme-color" content="#09090b">
@@ -55,6 +62,7 @@
         "https://x.com/will_break_it"
       ],
       "jobTitle": "Software Engineer & Technical Architect",
+      "email": "wolff.willi+web@gmail.com",
       "worksFor": {
         "@type": "Organization",
         "name": "Input Output Global"
@@ -1005,6 +1013,19 @@
             flex-shrink: 0;
         }
 
+        .cv-meta-link {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .cv-meta-link:hover,
+        .cv-meta-link:focus-visible {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+
         /* Technology Grid */
         .tech-grid {
             display: grid;
@@ -1672,8 +1693,7 @@
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
-                        <span lang="en">Contact available on request</span>
-                        <span lang="de">Kontakt auf Anfrage verfügbar</span>
+                        <a href="mailto:wolff.willi+web@gmail.com" class="cv-meta-link">wolff.willi+web@gmail.com</a>
                     </span>
                 </div>
 
@@ -1844,7 +1864,7 @@
                                             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                                             Repository
                                         </a>
-                                        <a href="https://input-output-hk.github.io/pubsub/" target="_blank" rel="noopener" class="role-link">
+                                        <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener" class="role-link">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                                             Website
                                         </a>
@@ -2251,6 +2271,34 @@
                             <span lang="de">Projekte</span>
                         </h2>
                                                 <div class="projects-grid">
+                        <div class="project-card" data-tags="blockchain,architecture">
+                        <div class="project-logo">
+                            <img src="pubsub-social-preview.png" alt="Cardano PubSub" class="project-logo-img cover">
+                        </div>
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3>
+                                    <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener" class="project-title-link">
+                                        Cardano PubSub – Verifiable Communication Layer
+                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">Protocol Design</span>
+                                <span class="tech-tag">Peer Sampling</span>
+                                <span class="tech-tag">Formal Verification</span>
+                                <span class="tech-tag">Byzantine Fault Tolerance</span>
+                                <span class="tech-tag" style="background: #28a745; color: white;">Open Source</span>
+                            </div>
+                        </div>
+                        <p class="project-description">Technical architect for a Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, and on-chain registered topics. Formally verifying the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank" rel="noopener">SecureCyclon</a> peer-sampling protocol stack and building a working prototype.</p>
+                    </div>
+
                         <div class="project-card" data-tags="blockchain,architecture">
                         <div class="project-logo">
                             <img src="leios-social-preview.jpg" alt="Ouroboros Leios" class="project-logo-img cover">

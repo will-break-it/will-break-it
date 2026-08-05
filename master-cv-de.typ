@@ -61,7 +61,7 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
 #section("Berufserfahrung")
 
 #exp("Technischer Architekt – Byzantine-Resistant PubSub Network", "Feb 2026 – Heute", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Auf Vertragsbasis])[
-  Leite Forschung und Entwicklung eines Byzantine-resistenten Publish/Subscribe-Netzwerks — formale Verifikation eines Forschungsvorschlags und Entwicklung eines Prototyps.
+  Leite Forschung und Entwicklung von #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], einem Byzantine-resistenten Publish/Subscribe-Netzwerk, mit formaler Verifikation eines Forschungsvorschlags und Entwicklung eines Prototyps.
   #v(2pt)
   #b[*Technische Leitung:* Leite ein Team von 4 Ingenieuren und Forschern beim Entwurf eines Byzantine-resistenten Pub/Sub-Overlay-Netzwerks]
   #b[*Formale Verifikation:* Formale Verifikation des #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] Peer-Sampling-Protokoll-Stacks und Entwicklung eines funktionsfähigen Prototyps mittels Spec-Driven Development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
