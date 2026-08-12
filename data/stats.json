@@ -1,0 +1,45 @@
+{
+  "_note": "Hand-maintained career figures for proof-of-work mode. Unlike activity.json, nothing generates this file: edit it when a project ships, dies, or a role changes. 'years' is derived from 'since' at render time so it never goes stale. Every entry in 'failures' needs a 'card' id that exists in index.html, which is what puts the badge on the right project.",
+  "counts": {
+    "built": 14,
+    "live": 6,
+    "companies": 5
+  },
+  "since": 2015,
+  "context": {
+    "employed": 2,
+    "contract": 1,
+    "founded": 2,
+    "publishedCips": 1,
+    "upstreamLibraries": 4
+  },
+  "failures": [
+    {
+      "project": "Drip Dropz",
+      "card": "p-drip-dropz",
+      "year": 2024,
+      "why": {
+        "en": "died with the NFT market",
+        "de": "starb mit dem NFT-Markt"
+      }
+    },
+    {
+      "project": "Dump it!",
+      "card": "p-dump-it",
+      "year": 2025,
+      "why": {
+        "en": "200 users, no business model",
+        "de": "200 Nutzer, kein Geschäftsmodell"
+      }
+    },
+    {
+      "project": "Berlin Pool",
+      "card": "p-berlin-pool",
+      "year": 2024,
+      "why": {
+        "en": "stopped paying for itself",
+        "de": "trug sich nicht mehr selbst"
+      }
+    }
+  ]
+}

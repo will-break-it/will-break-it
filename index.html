@@ -1631,7 +1631,9 @@
             pointer-events: none;
         }
 
-        [data-mode="pow"] #rain,
+        /* Only behind the picker. It makes the entrance, then gets out of the
+           way: a full page of moving cells behind actual content is a novelty
+           that wears off fast, and the content has to be read. */
         [data-mode-undecided] #rain { display: block; }
 
         /* While the gate is up the page itself is hidden rather than covered by
@@ -1887,6 +1889,8 @@
             gap: var(--spacing-lg);
             flex-wrap: wrap;
             align-items: flex-start;
+            justify-content: center;
+            text-align: center;
         }
 
         .now-stat-value {
@@ -1917,6 +1921,9 @@
             font-size: 0.74rem;
             line-height: 1.7;
             color: var(--color-text-lighter);
+            /* Centred with the figures it belongs to. The prose below the rule
+               stays left aligned, because centred paragraphs are harder to read. */
+            text-align: center;
         }
 
         .now-rule {
@@ -2408,47 +2415,15 @@
                 <!-- Main CV Content -->
                 <div class="cv-main">
                     <!-- Career shape, proof-of-work mode only.
-                         Deliberately not a panel: no border, no background. The
-                         figures sit on the page with the rain behind them.
-                         All hand-maintained static numbers, so they are in the
-                         HTML for crawlers rather than assembled by JS. Keep them
-                         in sync when a project ships or dies. -->
+                         Deliberately not a panel: no border, no background.
+                         The figures come from data/stats.json, which is
+                         hand-maintained; edit that file, not this markup. Safe
+                         to render client-side because this whole section is
+                         pow-only, and pow mode never exists without JS, so no
+                         crawler or no-JS visitor loses anything. -->
                     <section id="now" class="pow-only" aria-label="Summary">
-                        <div class="now-stats">
-                            <div>
-                                <span class="now-stat-value">14</span>
-                                <span class="now-stat-label" lang="en">Built</span>
-                                <span class="now-stat-label" lang="de">Gebaut</span>
-                            </div>
-                            <div>
-                                <span class="now-stat-value">6</span>
-                                <span class="now-stat-label" lang="en">Live</span>
-                                <span class="now-stat-label" lang="de">Laufen</span>
-                            </div>
-                            <div>
-                                <!-- Named rather than just counted: a failure
-                                     count nobody can check is just a humblebrag.
-                                     The three cards carry a matching badge. -->
-                                <span class="now-stat-value now-stat-failed" title="Drip Dropz (2024): died with the NFT market. Dump it! (2025): 200 users, no business model. Berlin Pool (2024): stopped paying for itself.">3</span>
-                                <span class="now-stat-label" lang="en">Failed</span>
-                                <span class="now-stat-label" lang="de">Gescheitert</span>
-                            </div>
-                            <div>
-                                <span class="now-stat-value">5</span>
-                                <span class="now-stat-label" lang="en">Companies</span>
-                                <span class="now-stat-label" lang="de">Firmen</span>
-                            </div>
-                            <div>
-                                <span class="now-stat-value">11</span>
-                                <span class="now-stat-label" lang="en">Years</span>
-                                <span class="now-stat-label" lang="de">Jahre</span>
-                            </div>
-                        </div>
-
-                        <p class="now-context">
-                            <span lang="en">2 employed, 1 on contract, 2 founded · <span data-activity="repos">11</span> public repos · 1 published CIP · 4 upstream libraries · shipping since 2015</span>
-                            <span lang="de">2 angestellt, 1 auf Vertragsbasis, 2 gegründet · <span data-activity="repos">11</span> öffentliche Repos · 1 veröffentlichte CIP · 4 Upstream-Bibliotheken · baue seit 2015</span>
-                        </p>
+                        <div class="now-stats" data-stats="counts"></div>
+                        <p class="now-context" data-stats="context"></p>
 
                         <hr class="now-rule">
 
@@ -2458,8 +2433,8 @@
                                 <span lang="en">Building</span>
                                 <span lang="de">In Arbeit</span>
                             </span>
-                            <span lang="en">Technical architect for a <strong>Byzantine-resistant pub/sub network</strong> at IOG: formally verifying the SecureCyclon peer-sampling stack and building the prototype that has to survive it. On the side, <strong>Hausnummer</strong> for screening property deals and a Rust discovery pipeline that keeps eating my evenings.</span>
-                            <span lang="de">Technischer Architekt für ein <strong>Byzantine-resistentes Pub/Sub-Netzwerk</strong> bei IOG: formale Verifikation des SecureCyclon-Peer-Sampling-Stacks und der Prototyp, der das überleben muss. Nebenbei <strong>Hausnummer</strong> zur Prüfung von Immobilienangeboten und eine Rust-Discovery-Pipeline, die mir die Abende frisst.</span>
+                            <span lang="en">A Byzantine-resistant publish/subscribe layer for Cardano at <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener"><strong>pubsub.cardano-scaling.org</strong></a>, and <a href="https://alwayssandy.com" target="_blank" rel="noopener"><strong>alwayssandy.com</strong></a>, which matches beach volleyball players with coaches across Berlin's sand courts.</span>
+                            <span lang="de">Eine Byzantine-resistente Publish/Subscribe-Schicht für Cardano unter <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener"><strong>pubsub.cardano-scaling.org</strong></a> und <a href="https://alwayssandy.com" target="_blank" rel="noopener"><strong>alwayssandy.com</strong></a>, das Beachvolleyball-Spieler mit Trainern auf Berliner Sandplätzen zusammenbringt.</span>
                             <span class="now-push" data-activity="lastpush" hidden></span>
                         </p>
                     </section>
@@ -2699,8 +2674,8 @@
                                             <span lang="de">Leite ein Team von 4 Ingenieuren & Forschern beim Entwurf eines Byzantine-resistenten Pub/Sub-Overlay-Netzwerks</span>
                                         </li>
                                         <li>
-                                            <span lang="en">Formally verifying the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> peer-sampling protocol stack and building a working prototype via spec-driven development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
-                                            <span lang="de">Formale Verifikation des <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> Peer-Sampling-Protokoll-Stacks und Entwicklung eines funktionsfähigen Prototyps mittels Spec-Driven Development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
+                                            <span lang="en">Leading a team through formal verification of the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> peer-sampling protocol stack, and building the working prototype via spec-driven development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
+                                            <span lang="de">Leite ein Team durch die formale Verifikation des <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> Peer-Sampling-Protokoll-Stacks und entwickle den funktionsfähigen Prototyp mittels Spec-Driven Development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
                                         </li>
                                         <li>
                                             <span lang="en">Reevaluating peer-sampling protocols for specific security properties</span>
@@ -3183,7 +3158,7 @@
                                 <span class="tech-tag" style="background: #28a745; color: white;">Open Source</span>
                             </div>
                         </div>
-                        <p class="project-description">Technical architect for a Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, and on-chain registered topics. Formally verifying the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank" rel="noopener">SecureCyclon</a> peer-sampling protocol stack and building a working prototype.</p>
+                        <p class="project-description">Technical architect for a Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, and on-chain registered topics. Leading a team through formal verification of the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank" rel="noopener">SecureCyclon</a> peer-sampling protocol stack, and building the working prototype.</p>
                     </div>
 
                         <div class="project-card" id="p-ouroboros-leios" data-tags="blockchain,architecture">
@@ -3225,7 +3200,6 @@
                                 </h3>
                             </div>
                             <div class="project-tech">
-                                <span class="ended-tag"><span lang="en">failed 2025</span><span lang="de">gescheitert 2025</span></span>
                                 <span class="tech-tag">Swift</span>
                                 <span class="tech-tag">Kotlin</span>
                                 <span class="tech-tag">React</span>
@@ -3372,7 +3346,6 @@
                                 </h3>
                             </div>
                             <div class="project-tech">
-                                <span class="ended-tag"><span lang="en">failed 2024</span><span lang="de">gescheitert 2024</span></span>
                                 <span class="tech-tag">React</span>
                                 <span class="tech-tag">TypeScript</span>
                                 <span class="tech-tag">Cardano</span>
@@ -3500,7 +3473,6 @@
                                 <h3>Berlin Pool – Cardano Stakepool</h3>
                             </div>
                             <div class="project-tech">
-                                <span class="ended-tag"><span lang="en">failed 2024</span><span lang="de">gescheitert 2024</span></span>
                                 <span class="tech-tag">Cardano</span>
                                 <span class="tech-tag">Docker</span>
                                 <span class="tech-tag">Terraform</span>
@@ -3807,6 +3779,102 @@
         })();
 
         // ===================================================================
+        // Career stats
+        // ===================================================================
+        // Numbers live in data/stats.json so they can be edited without going
+        // near the markup. The same file names the failed projects, which is
+        // what puts the badge on the matching card, so the count at the top and
+        // the badges further down can never disagree.
+
+        (function () {
+            const row = document.querySelector('[data-stats="counts"]');
+            if (!row) return;
+
+            const LABELS = {
+                built: { en: 'Built', de: 'Gebaut' },
+                live: { en: 'Live', de: 'Laufen' },
+                failed: { en: 'Failed', de: 'Gescheitert' },
+                companies: { en: 'Companies', de: 'Firmen' },
+                years: { en: 'Years', de: 'Jahre' },
+            };
+            const ORDER = ['built', 'live', 'failed', 'companies', 'years'];
+
+            fetch('data/stats.json', { cache: 'no-cache' })
+                .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+                .then(data => {
+                    const failures = data.failures || [];
+                    const values = Object.assign({}, data.counts, {
+                        failed: failures.length,
+                        // Derived, so it cannot go stale in a hand-edited file.
+                        years: new Date().getFullYear() - data.since,
+                    });
+
+                    // Every failure spelled out, so the count is auditable.
+                    const detail = lang => failures
+                        .map(f => `${f.project} (${f.year}): ${f.why[lang] || f.why.en}`)
+                        .join('\n');
+
+                    row.innerHTML = ORDER.filter(key => values[key] != null).map(key => {
+                        const failed = key === 'failed';
+                        const title = failed ? ` title="${detail('en').replace(/"/g, '&quot;')}"` : '';
+                        return '<div>' +
+                            `<span class="now-stat-value${failed ? ' now-stat-failed' : ''}"${title}>${values[key]}</span>` +
+                            `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
+                            `<span class="now-stat-label" lang="de">${LABELS[key].de}</span>` +
+                            '</div>';
+                    }).join('');
+
+                    const c = data.context || {};
+                    const line = (l) => {
+                        const de = l === 'de';
+                        const bits = [];
+                        const rel = [];
+                        if (c.employed) rel.push(`${c.employed} ${de ? 'angestellt' : 'employed'}`);
+                        if (c.contract) rel.push(`${c.contract} ${de ? 'auf Vertragsbasis' : 'on contract'}`);
+                        if (c.founded) rel.push(`${c.founded} ${de ? 'gegründet' : 'founded'}`);
+                        if (rel.length) bits.push(rel.join(', '));
+                        // Filled in from activity.json once that resolves.
+                        bits.push(`<span data-activity="repos">–</span> ${de ? 'öffentliche Repos' : 'public repos'}`);
+                        if (c.publishedCips) bits.push(`${c.publishedCips} ${de ? 'veröffentlichte CIP' : 'published CIP'}`);
+                        if (c.upstreamLibraries) bits.push(`${c.upstreamLibraries} ${de ? 'Upstream-Bibliotheken' : 'upstream libraries'}`);
+                        bits.push(`${de ? 'baue seit' : 'shipping since'} ${data.since}`);
+                        return `<span lang="${l}">${bits.join(' · ')}</span>`;
+                    };
+                    const context = document.querySelector('[data-stats="context"]');
+                    if (context) {
+                        context.innerHTML = line('en') + line('de');
+                        // The two fetches race. If activity.json already landed
+                        // it parked its repo count here, so use it; if not, it
+                        // will fill these spans when it arrives.
+                        const parked = document.documentElement.dataset.publicRepos;
+                        if (parked) {
+                            context.querySelectorAll('[data-activity="repos"]').forEach(el => {
+                                el.textContent = parked;
+                            });
+                        }
+                    }
+
+                    // Badge the cards the failure count refers to.
+                    failures.forEach(f => {
+                        const card = f.card && document.getElementById(f.card);
+                        const tech = card && card.querySelector('.project-tech');
+                        if (!tech) return;
+                        const tag = document.createElement('span');
+                        tag.className = 'ended-tag';
+                        tag.title = `${f.why.en}`;
+                        tag.innerHTML =
+                            `<span lang="en">failed ${f.year}</span>` +
+                            `<span lang="de">gescheitert ${f.year}</span>`;
+                        tech.insertBefore(tag, tech.firstChild);
+                    });
+                })
+                .catch(() => {
+                    // Without the file there are no numbers to show, so the row
+                    // stays empty rather than displaying placeholders.
+                });
+        })();
+
+        // ===================================================================
         // Activity
         // ===================================================================
         // Reads the file the nightly workflow commits. Month buckets only: this
@@ -3912,8 +3980,9 @@
                         .map(l => `<span class="now-lang">${l.name} <span>${l.share}%</span></span>`)
                         .join('');
 
-                    // Keep the hand-written public repo count honest: if the
-                    // real number has drifted, the file wins over the markup.
+                    // The stats block may not have rendered its context line yet,
+                    // so park the value where it can pick it up either way.
+                    document.documentElement.dataset.publicRepos = data.totals.publicRepositories;
                     document.querySelectorAll('[data-activity="repos"]').forEach(el => {
                         el.textContent = data.totals.publicRepositories;
                     });
@@ -4041,11 +4110,14 @@
                 if (now - last < FRAME_MS) return;
                 last = now;
 
-                // Only burn cycles when the canvas is actually on screen.
-                const root = document.documentElement;
-                const visible = root.getAttribute('data-mode') === 'pow' ||
-                    root.hasAttribute('data-mode-undecided');
-                if (!visible || document.hidden) return;
+                // The rain only exists behind the picker, so once a mode is
+                // chosen the loop retires for good rather than idling.
+                if (!document.documentElement.hasAttribute('data-mode-undecided')) {
+                    stop();
+                    ctx.clearRect(0, 0, width, height);
+                    return;
+                }
+                if (document.hidden) return;
 
                 for (const col of columns) {
                     col.head += col.speed;
@@ -4064,6 +4136,10 @@
                 cancelAnimationFrame(raf);
                 raf = null;
             }
+
+            // Returning visitors go straight to their chosen mode and never see
+            // the picker, so there is nothing to set up or animate for them.
+            if (!document.documentElement.hasAttribute('data-mode-undecided')) return;
 
             resize();
 
