@@ -1943,11 +1943,14 @@
 
         .now-group-label {
             display: block;
-            margin-bottom: var(--spacing-xs);
-            font-size: 0.62rem;
-            letter-spacing: 0.18em;
+            padding-bottom: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.74rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: var(--color-text-lighter);
+            color: var(--color-text);
         }
 
         .now-stats {
@@ -1995,9 +1998,10 @@
             color: var(--color-text);
         }
 
-        /* The one number nobody puts on a CV, so it gets the accent. */
+        /* Deliberately not accented. The number belongs on the page, but
+           colouring it made the layout point at it, and a reader forwarding
+           this to a conservative client sees a highlighted failure count. */
         .now-stat-failed {
-            color: var(--color-live);
             cursor: help;
         }
 
@@ -2023,6 +2027,109 @@
             margin: var(--spacing-md) 0;
             border: none;
             border-top: 1px solid var(--color-border);
+        }
+
+        /* --- career heatmap ----------------------------------------------- */
+
+        .heat { margin-bottom: var(--spacing-lg); }
+
+        .heat-head,
+        .activity-label {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--color-text-light);
+        }
+
+        .heat-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .heat-legend {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.62rem;
+            color: var(--color-text-lighter);
+        }
+
+        .heat-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            max-width: 22rem;
+        }
+
+        .heat-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 3px;
+        }
+
+        .heat-year {
+            flex: none;
+            width: 2.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--color-text-lighter);
+            text-align: right;
+            padding-right: 0.35rem;
+        }
+
+        .heat-cell {
+            flex: 1 1 0;
+            /* Square, like the graph it borrows from. Without the cap, flex
+               stretched each month into a bar and the grid stopped reading as a
+               heatmap at all. */
+            max-width: 22px;
+            aspect-ratio: 1 / 1;
+            border-radius: 2px;
+            background: var(--color-bg-alt);
+        }
+
+        .heat-months {
+            display: flex;
+            flex: 1 1 auto;
+            gap: 3px;
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            color: var(--color-text-lighter);
+        }
+
+        .heat-months span {
+            flex: 1 1 0;
+            max-width: 22px;
+            text-align: center;
+        }
+
+        /* Four steps, same idea as a contribution graph. Level 0 stays the empty
+           background: a month with nothing documented in it is left blank rather
+           than filled in. */
+        .heat-cell[data-level="1"] { background: rgba(45, 212, 191, 0.22); }
+        .heat-cell[data-level="2"] { background: rgba(45, 212, 191, 0.42); }
+        .heat-cell[data-level="3"] { background: rgba(45, 212, 191, 0.66); }
+        .heat-cell[data-level="4"] { background: rgba(45, 212, 191, 0.9); }
+
+        :root:not([data-theme="dark"]) .heat-cell[data-level="1"] { background: rgba(13, 148, 136, 0.18); }
+        :root:not([data-theme="dark"]) .heat-cell[data-level="2"] { background: rgba(13, 148, 136, 0.38); }
+        :root:not([data-theme="dark"]) .heat-cell[data-level="3"] { background: rgba(13, 148, 136, 0.62); }
+        :root:not([data-theme="dark"]) .heat-cell[data-level="4"] { background: rgba(13, 148, 136, 0.88); }
+
+        .heat-key {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            background: var(--color-bg-alt);
+        }
+
+        @media (max-width: 768px) {
+            .heat-cell { max-height: 10px; }
+            .heat-year { width: 2.2rem; font-size: 0.55rem; }
         }
 
         /* --- activity, next to the timeline ------------------------------- */
@@ -2678,9 +2785,33 @@
                              at the top: it is chronological data, and the year
                              bars on the rail below are drawn from the same file. -->
                         <div id="activity" class="pow-only" data-activity="panel" hidden>
+                            <!-- Career heatmap: GitHub's grid, but every cell is
+                                 a month of documented work from the timeline, so
+                                 it can start in 2015 where GitHub cannot. -->
+                            <div class="heat" data-career="grid" hidden>
+                                <div class="heat-head">
+                                    <span class="activity-label">
+                                        <span lang="en">Work running per month, 2015 to now</span>
+                                        <span lang="de">Parallele Arbeit pro Monat, 2015 bis heute</span>
+                                    </span>
+                                    <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
+                                </div>
+                                <div class="heat-rows" data-career="rows"></div>
+                                <p class="now-caption">
+                                    <span lang="en">Each cell is one month, shaded by how many roles, projects and operations were running in it, taken from the dated entries on the timeline below. This is not commit data, which is why it reaches back to 2015: GitHub only holds the last few years of it. Hover a cell to see what was running.</span>
+                                    <span lang="de">Jede Zelle ist ein Monat, eingefärbt danach, wie viele Rollen, Projekte und Betriebsaufgaben darin liefen, entnommen den datierten Einträgen der Zeitachse unten. Keine Commit-Daten, deshalb reicht sie bis 2015 zurück: GitHub kennt nur die letzten Jahre davon. Zelle überfahren zeigt, was lief.</span>
+                                </p>
+                            </div>
+
+                            <div class="activity-head">
+                                <span class="activity-label">
+                                    <span lang="en">Public commits per month, last 12 months</span>
+                                    <span lang="de">Öffentliche Commits pro Monat, letzte 12 Monate</span>
+                                </span>
+                                <span class="activity-langs" data-activity="langs"></span>
+                            </div>
                             <div class="activity-head">
                                 <span class="activity-stats" data-activity="stats"></span>
-                                <span class="activity-langs" data-activity="langs"></span>
                             </div>
                             <svg class="spark" data-activity="spark" viewBox="0 0 600 60" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
                                 <title id="spark-title">Contributions per month over the last twelve months</title>
@@ -4250,6 +4381,89 @@
                 })
                 .catch(() => {
                     // Nothing to say, so say nothing. Better than a graph of zeros.
+                });
+        })();
+
+        // ===================================================================
+        // Career heatmap
+        // ===================================================================
+        // A contribution-graph grid whose cells are months of documented work
+        // rather than commits. Built from dated spans in data/career.json, all
+        // of which appear on the timeline below, which is why it can start in
+        // 2015: none of it depends on GitHub having existed for him yet.
+        //
+        // Nothing here is generated or smoothed. A month with nothing recorded
+        // in it stays empty, including the gap between Deloitte and Mobility
+        // Data Lab, because inventing a value there would be inventing work.
+
+        (function () {
+            const grid = document.querySelector('[data-career="grid"]');
+            if (!grid) return;
+
+            const monthIndex = m => {
+                const [y, mo] = m.split('-').map(Number);
+                return y * 12 + (mo - 1);
+            };
+            const label = i => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
+
+            fetch('data/career.json', { cache: 'no-cache' })
+                .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+                .then(data => {
+                    const now = new Date();
+                    const first = monthIndex(data.from);
+                    const last = now.getFullYear() * 12 + now.getMonth();
+
+                    // Count what was running in each month.
+                    const active = new Map();
+                    data.items.forEach(item => {
+                        const start = monthIndex(item.from);
+                        const end = item.to ? monthIndex(item.to) : last;
+                        for (let i = Math.max(start, first); i <= Math.min(end, last); i++) {
+                            if (!active.has(i)) active.set(i, []);
+                            active.get(i).push(item.label);
+                        }
+                    });
+
+                    const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
+                    const rows = [];
+                    for (let y = Math.floor(first / 12); y <= Math.floor(last / 12); y++) {
+                        const cells = [];
+                        for (let mo = 0; mo < 12; mo++) {
+                            const i = y * 12 + mo;
+                            const items = active.get(i) || [];
+                            // Four steps, capped: past four concurrent threads the
+                            // exact count stops meaning much.
+                            const level = Math.min(items.length, 4);
+                            const title = items.length
+                                ? `${label(i)} · ${items.join(', ')}`
+                                : `${label(i)} · ${de ? 'nichts dokumentiert' : 'nothing recorded'}`;
+                            const future = i > last;
+                            cells.push(future
+                                ? '<span class="heat-cell" data-level="0"></span>'
+                                : `<span class="heat-cell" data-level="${level}" title="${title.replace(/"/g, '&quot;')}"></span>`);
+                        }
+                        rows.push(`<div class="heat-row"><span class="heat-year">${y}</span>${cells.join('')}</div>`);
+                    }
+                    const MONTHS = de
+                        ? ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
+                        : ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+                    const header = '<div class="heat-row"><span class="heat-year"></span>' +
+                        `<span class="heat-months">${MONTHS.map(m => `<span>${m}</span>`).join('')}</span>` +
+                        '</div>';
+                    grid.querySelector('[data-career="rows"]').innerHTML = header + rows.join('');
+
+                    const legend = grid.querySelector('[data-career="legend"]');
+                    if (legend) {
+                        legend.innerHTML =
+                            `<span>${de ? 'weniger' : 'less'}</span>` +
+                            [0, 1, 2, 3, 4].map(l => `<span class="heat-cell heat-key" data-level="${l}"></span>`).join('') +
+                            `<span>${de ? 'mehr' : 'more'}</span>`;
+                    }
+
+                    grid.hidden = false;
+                })
+                .catch(() => {
+                    // No file, no grid. Better than an empty year.
                 });
         })();
 
