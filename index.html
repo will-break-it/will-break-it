@@ -2073,9 +2073,17 @@
 
         .heat-band {
             display: flex;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        /* One zone per resolution. Each grows in proportion to how many cells it
+           holds, so every cell is the same width regardless of how much time it
+           covers: that compression is the whole point of the axis. */
+        .heat-zone {
+            display: flex;
             flex-direction: column;
-            gap: 2px;
-            margin-bottom: var(--spacing-sm);
+            gap: 3px;
         }
 
         .heat-strip {
@@ -2090,28 +2098,20 @@
             background: var(--color-bg-alt);
         }
 
-        .heat-ticks {
-            display: flex;
-            gap: 2px;
+        .heat-zone-label {
             font-family: var(--font-mono);
-            font-size: 0.58rem;
+            font-size: 0.56rem;
+            letter-spacing: 0.04em;
             color: var(--color-text-lighter);
-        }
-
-        .heat-tick {
-            flex: 12 1 0;
-            display: flex;
-            gap: 2px;
-        }
-
-        .heat-tick span {
-            border-left: 1px solid var(--color-border);
-            padding-left: 3px;
-            line-height: 1.6;
+            border-top: 1px solid var(--color-border);
+            padding-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Four steps, same idea as a contribution graph. Level 0 stays the empty
-           background: a month with nothing documented in it is left blank rather
+           background: a bucket with nothing documented in it is left blank rather
            than filled in. */
         .heat-cell[data-level="1"] { background: rgba(45, 212, 191, 0.22); }
         .heat-cell[data-level="2"] { background: rgba(45, 212, 191, 0.42); }
@@ -2131,7 +2131,7 @@
         }
 
         @media (max-width: 768px) {
-            .heat-ticks { font-size: 0.5rem; }
+            .heat-zone-label { font-size: 0.48rem; }
         }
 
         /* --- activity, next to the timeline ------------------------------- */
@@ -2157,6 +2157,13 @@
             display: flex;
             gap: var(--spacing-xs);
             flex-wrap: wrap;
+        }
+
+        .stack-row {
+            margin-top: var(--spacing-md);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
         }
 
         /* Monthly buckets. There is deliberately no per-day mark anywhere in
@@ -2794,12 +2801,20 @@
                             <div class="heat" data-career="grid" hidden>
                                 <div class="heat-head">
                                     <span class="activity-label">
-                                        <span lang="en">Work running per month, 2015 to now</span>
-                                        <span lang="de">Parallele Arbeit pro Monat, 2015 bis heute</span>
+                                        <span lang="en">Work running, 2015 to today · coarse on the left, daily on the right</span>
+                                        <span lang="de">Parallele Arbeit, 2015 bis heute · links grob, rechts täglich</span>
                                     </span>
                                     <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
                                 </div>
                                 <div class="heat-band" data-career="rows"></div>
+
+                                <div class="stack-row">
+                                    <span class="activity-label">
+                                        <span lang="en">Where the code has gone, estimated across 11 years</span>
+                                        <span lang="de">Wohin der Code ging, geschätzt über 11 Jahre</span>
+                                    </span>
+                                    <span class="activity-langs" data-stats="stack"></span>
+                                </div>
                             </div>
 
                             <div class="activity-head">
@@ -2807,7 +2822,7 @@
                                     <span lang="en">Public commits per month, last 12 months</span>
                                     <span lang="de">Öffentliche Commits pro Monat, letzte 12 Monate</span>
                                 </span>
-                                <span class="activity-langs" data-activity="langs"></span>
+
                             </div>
                             <div class="activity-head">
                                 <span class="activity-stats" data-activity="stats"></span>
@@ -2869,6 +2884,8 @@
                                 <div class="company-ships">
                                     <a class="ship-chip" href="#p-pagebase">pagebase</a>
                                     <a class="ship-chip" href="#p-underwater-journeys">underwater journeys</a>
+                                    <a class="ship-chip" href="#p-iramodel">ira model</a>
+                                    <a class="ship-chip" href="#p-ugc-creator">astrid munkwitz</a>
                                 </div>
                             </div>
                         </div>
@@ -3627,6 +3644,59 @@
                         <p class="project-description">Voice-native cross-platform app built on Supabase (PostgreSQL) with AI-powered intent classification, semantic search, and end-to-end encryption. Features Row Level Security, Edge Functions, real-time sync, Event Sourcing architecture, and vector embeddings.</p>
                     </div>
 
+                        <div class="project-card extra" id="p-iramodel" data-tags="web,consulting">
+                        <div class="project-logo">
+                            <div class="project-logo-placeholder">I</div>
+                        </div>
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3>
+                                    <a href="https://iramodel.de" target="_blank" rel="noopener" class="project-title-link">
+                                        Ira Model – Portfolio Site
+                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Astro</span>
+                                <span class="tech-tag">Client Work</span>
+                            </div>
+                        </div>
+                        <p class="project-description">Portfolio and booking site for a Berlin model, built through Pagebase. Image-heavy layout tuned for fast loads on mobile, bilingual copy, and a contact flow that goes straight to the inbox.</p>
+                    </div>
+
+                        <div class="project-card extra" id="p-ugc-creator" data-tags="web,consulting">
+                        <div class="project-logo">
+                            <div class="project-logo-placeholder">U</div>
+                        </div>
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3>
+                                    <a href="https://ugc.astridmunkwitz.de/" target="_blank" rel="noopener" class="project-title-link">
+                                        Astrid Munkwitz – UGC Creator Site
+                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Astro</span>
+                                <span class="tech-tag">i18n</span>
+                                <span class="tech-tag">Client Work</span>
+                            </div>
+                        </div>
+                        <p class="project-description">Portfolio and enquiry site for a Berlin UGC creator and commercial model working with DACH brands, built through Pagebase on the shared component kit. Bilingual with locale routing, selected-work galleries and a services and rate section.</p>
+                    </div>
+
                         <div class="project-card extra" id="p-underwater-journeys" data-tags="web">
                         <div class="project-logo">
                             <img src="https://underwater.journeys.cy/logo.png" alt="Underwater Journeys logo" class="project-logo-img">
@@ -4217,6 +4287,16 @@
                     const context = document.querySelector('[data-stats="context"]');
                     if (context) context.innerHTML = line('en') + line('de');
 
+                    // Career-wide estimate, deliberately not the GitHub language
+                    // bytes: those cannot see the Deloitte Java at all and
+                    // undercount the mobile work.
+                    const stack = document.querySelector('[data-stats="stack"]');
+                    if (stack && data.stack) {
+                        stack.innerHTML = data.stack
+                            .map(l => `<span class="now-lang">${l.name} <span>${l.share}%</span></span>`)
+                            .join('');
+                    }
+
                     // Tag every card with its status, which is what the status
                     // filters match on, and badge the failures.
                     let tagged = 0;
@@ -4354,11 +4434,6 @@
                         window12.months
                     );
 
-                    const langs = panel.querySelector('[data-activity="langs"]');
-                    langs.innerHTML = data.languages
-                        .slice(0, 5)
-                        .map(l => `<span class="now-lang">${l.name} <span>${l.share}%</span></span>`)
-                        .join('');
 
                     // The stats block may not have rendered its context line yet,
                     // so park the value where it can pick it up either way.
@@ -4426,43 +4501,113 @@
                     });
 
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
-                    const firstYear = Math.floor(first / 12);
-                    const lastYear = Math.floor(last / 12);
 
-                    // Months run continuously left to right, wrapped into rows of
-                    // six years so the cells stay square while the band fills the
-                    // full content width.
-                    const PER_ROW = 6;
-                    const out = [];
-                    for (let y0 = firstYear; y0 <= lastYear; y0 += PER_ROW) {
-                        const y1 = Math.min(y0 + PER_ROW - 1, lastYear);
-                        const cells = [];
-                        const ticks = [];
-                        for (let y = y0; y <= y1; y++) {
-                            ticks.push(`<span class="heat-tick"><span>${y}</span></span>`);
-                            for (let mo = 0; mo < 12; mo++) {
-                                const i = y * 12 + mo;
-                                if (i < first || i > last) {
-                                    cells.push('<span class="heat-cell" data-level="0"></span>');
-                                    continue;
-                                }
-                                const bucket = active.get(i);
-                                const labels = bucket ? bucket.labels : [];
-                                // Weighted, so a lead year reads heavier than an IC
-                                // year even when both are a single role. Capped at
-                                // four: past that the exact figure stops meaning much.
-                                const score = bucket ? bucket.score : 0;
-                                const level = score === 0 ? 0 : Math.min(Math.ceil(score / 1.5), 4);
-                                const title = labels.length
-                                    ? `${label(i)} · ${labels.join(', ')}`
-                                    : `${label(i)} · ${de ? 'nichts dokumentiert' : 'nothing recorded'}`;
-                                cells.push(`<span class="heat-cell" data-level="${level}" title="${title.replace(/"/g, '&quot;')}"></span>`);
-                            }
-                        }
-                        out.push(`<div class="heat-strip">${cells.join('')}</div>`);
-                        out.push(`<div class="heat-ticks">${ticks.join('')}</div>`);
+                    // Score for one month index, from the weighted spans above.
+                    const scoreOf = i => {
+                        const bucket = active.get(i);
+                        return bucket ? bucket.score : 0;
+                    };
+                    const labelsOf = i => {
+                        const bucket = active.get(i);
+                        return bucket ? bucket.labels : [];
+                    };
+                    const level = score => (score === 0 ? 0 : Math.min(Math.ceil(score / 1.5), 4));
+
+                    const fmt = d => d.toISOString().slice(0, 10);
+                    const today = new Date();
+                    today.setUTCHours(0, 0, 0, 0);
+                    const midx = d => d.getUTCFullYear() * 12 + d.getUTCMonth();
+
+                    // A bucket covers a date range and reports the peak of the
+                    // months it spans, so compressing time never invents a value
+                    // and never averages a busy period away.
+                    function bucket(fromDate, toDate, caption) {
+                        const months = new Set();
+                        for (let i = midx(fromDate); i <= midx(toDate); i++) months.add(i);
+                        let peak = 0;
+                        const labels = new Set();
+                        months.forEach(i => {
+                            peak = Math.max(peak, scoreOf(i));
+                            labelsOf(i).forEach(l => labels.add(l));
+                        });
+                        return {
+                            level: level(peak),
+                            title: `${caption} · ${labels.size ? [...labels].join(', ') : (de ? 'nichts dokumentiert' : 'nothing recorded')}`,
+                        };
                     }
-                    grid.querySelector('[data-career="rows"]').innerHTML = out.join('');
+
+                    const zones = [];
+
+                    // --- oldest zone: one cell per year, 2015 up to four years ago
+                    const yearZoneEnd = today.getUTCFullYear() - 4;
+                    const yearCells = [];
+                    for (let y = Math.floor(first / 12); y <= yearZoneEnd; y++) {
+                        yearCells.push(bucket(
+                            new Date(Date.UTC(y, 0, 1)),
+                            new Date(Date.UTC(y, 11, 31)),
+                            String(y)
+                        ));
+                    }
+                    if (yearCells.length) {
+                        zones.push({ cells: yearCells, label: `${Math.floor(first / 12)}\u2013${yearZoneEnd} · ${de ? 'Jahre' : 'years'}` });
+                    }
+
+                    // --- then quarters, for the three years before the last one
+                    const quarterCells = [];
+                    for (let y = yearZoneEnd + 1; y <= today.getUTCFullYear() - 1; y++) {
+                        for (let q = 0; q < 4; q++) {
+                            quarterCells.push(bucket(
+                                new Date(Date.UTC(y, q * 3, 1)),
+                                new Date(Date.UTC(y, q * 3 + 2, 28)),
+                                `${y} Q${q + 1}`
+                            ));
+                        }
+                    }
+                    if (quarterCells.length) {
+                        zones.push({ cells: quarterCells, label: de ? 'Quartale' : 'quarters' });
+                    }
+
+                    // --- then months, the trailing twelve minus the last two
+                    const monthCells = [];
+                    for (let k = 11; k >= 2; k--) {
+                        const d = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - k, 1));
+                        monthCells.push(bucket(
+                            d,
+                            new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)),
+                            d.toISOString().slice(0, 7)
+                        ));
+                    }
+                    zones.push({ cells: monthCells, label: de ? 'Monate' : 'months' });
+
+                    // --- then weeks, the trailing eight before this one
+                    const weekCells = [];
+                    for (let k = 8; k >= 1; k--) {
+                        const end = new Date(today);
+                        end.setUTCDate(end.getUTCDate() - (k - 1) * 7 - 1);
+                        const start = new Date(end);
+                        start.setUTCDate(start.getUTCDate() - 6);
+                        weekCells.push(bucket(start, end, `${fmt(start)} \u2192 ${fmt(end)}`));
+                    }
+                    zones.push({ cells: weekCells, label: de ? 'Wochen' : 'weeks' });
+
+                    // --- trailing edge: one cell per day for the last seven
+                    const dayCells = [];
+                    for (let k = 6; k >= 0; k--) {
+                        const d = new Date(today);
+                        d.setUTCDate(d.getUTCDate() - k);
+                        dayCells.push(bucket(d, d, fmt(d)));
+                    }
+                    zones.push({ cells: dayCells, label: de ? 'Tage' : 'days' });
+
+                    grid.querySelector('[data-career="rows"]').innerHTML = zones.map(z => {
+                        const cells = z.cells.map(c =>
+                            `<span class="heat-cell" data-level="${c.level}" title="${c.title.replace(/"/g, '&quot;')}"></span>`
+                        ).join('');
+                        return `<div class="heat-zone" style="flex: ${z.cells.length} 1 0">` +
+                            `<div class="heat-strip">${cells}</div>` +
+                            `<div class="heat-zone-label">${z.label}</div>` +
+                            '</div>';
+                    }).join('');
 
                     const legend = grid.querySelector('[data-career="legend"]');
                     if (legend) {

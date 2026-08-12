@@ -11,6 +11,20 @@
   "context": {
     "publishedCips": 1
   },
+  "_stack": "Hand-maintained weighting across the whole career, NOT measured from GitHub. GitHub only sees code pushed to GitHub, so it misses the Deloitte Java entirely and undercounts the mobile work. Adjust these freely; they are an estimate and the page says so.",
+  "stack": [
+    { "name": "TypeScript", "share": 28 },
+    { "name": "Java", "share": 12 },
+    { "name": "Swift", "share": 10 },
+    { "name": "React / React Native", "share": 9 },
+    { "name": "Kotlin", "share": 8 },
+    { "name": "Rust", "share": 8 },
+    { "name": "Plutus / Haskell", "share": 7 },
+    { "name": "Python", "share": 6 },
+    { "name": "Agda", "share": 4 },
+    { "name": "Dart / Flutter", "share": 4 },
+    { "name": "Astro", "share": 4 }
+  ],
   "projects": [
     { "card": "p-pubsub", "status": "live" },
     { "card": "p-ouroboros-leios", "status": "live" },
@@ -19,6 +33,8 @@
     { "card": "p-pagebase", "status": "live" },
     { "card": "p-operando", "status": "live" },
     { "card": "p-underwater-journeys", "status": "live" },
+    { "card": "p-iramodel", "status": "live" },
+    { "card": "p-ugc-creator", "status": "live" },
 
     {
       "card": "p-drip-dropz",
