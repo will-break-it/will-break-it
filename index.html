@@ -1884,13 +1884,60 @@
 
         .now-building strong { color: var(--color-text); }
 
+        .now-groups {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .now-group {
+            text-align: center;
+        }
+
+        .now-group-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-text-lighter);
+        }
+
         .now-stats {
             display: flex;
-            gap: var(--spacing-lg);
+            gap: var(--spacing-md);
             flex-wrap: wrap;
             align-items: flex-start;
             justify-content: center;
             text-align: center;
+        }
+
+        /* The project figures double as filters for the wall below, so they are
+           real buttons: focusable, and obviously clickable on hover. */
+        .now-stat-btn {
+            border: none;
+            background: none;
+            padding: 0;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .now-stat-btn:hover .now-stat-value,
+        .now-stat-btn:focus-visible .now-stat-value {
+            color: var(--color-live);
+        }
+
+        .now-stat-btn:hover .now-stat-label,
+        .now-stat-btn:focus-visible .now-stat-label {
+            color: var(--color-text);
+        }
+
+        .now-stat-btn:focus-visible {
+            outline: 1px solid var(--color-live);
+            outline-offset: 4px;
+            border-radius: 4px;
         }
 
         .now-stat-value {
@@ -2422,7 +2469,24 @@
                          pow-only, and pow mode never exists without JS, so no
                          crawler or no-JS visitor loses anything. -->
                     <section id="now" class="pow-only" aria-label="Summary">
-                        <div class="now-stats" data-stats="counts"></div>
+                        <!-- Two labelled groups, because a bare "5" next to
+                             "founded" read as five founded companies. -->
+                        <div class="now-groups">
+                            <div class="now-group">
+                                <span class="now-group-label">
+                                    <span lang="en">Projects</span>
+                                    <span lang="de">Projekte</span>
+                                </span>
+                                <div class="now-stats" data-stats="projects"></div>
+                            </div>
+                            <div class="now-group">
+                                <span class="now-group-label">
+                                    <span lang="en">Career</span>
+                                    <span lang="de">Werdegang</span>
+                                </span>
+                                <div class="now-stats" data-stats="career"></div>
+                            </div>
+                        </div>
                         <p class="now-context" data-stats="context"></p>
 
                         <hr class="now-rule">
@@ -3125,6 +3189,15 @@
                             <button type="button" class="filter-btn" data-filter="all" aria-pressed="true">
                                 <span lang="en">All</span><span lang="de">Alle</span>
                             </button>
+                            <!-- Status chips stay hidden until stats.json has
+                                 actually tagged the cards, so they can never
+                                 filter everything away. -->
+                            <button type="button" class="filter-btn" data-filter="status:live" aria-pressed="false" hidden>
+                                <span lang="en">live</span><span lang="de">laufen</span>
+                            </button>
+                            <button type="button" class="filter-btn" data-filter="status:failed" aria-pressed="false" hidden>
+                                <span lang="en">failed</span><span lang="de">gescheitert</span>
+                            </button>
                             <button type="button" class="filter-btn" data-filter="blockchain" aria-pressed="false">blockchain</button>
                             <button type="button" class="filter-btn" data-filter="architecture" aria-pressed="false">architecture</button>
                             <button type="button" class="filter-btn" data-filter="infrastructure" aria-pressed="false">infrastructure</button>
@@ -3766,16 +3839,31 @@
             if (!buttons.length) return;
             const cards = Array.from(document.querySelectorAll('.project-card'));
 
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const filter = btn.dataset.filter;
-                    buttons.forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
-                    cards.forEach(card => {
-                        const tags = (card.dataset.tags || '').split(',');
-                        card.classList.toggle('hidden', filter !== 'all' && !tags.includes(filter));
-                    });
+            // One active filter at a time. A value is either "all", a tag from
+            // data-tags, or "status:<name>" matching the data-status that
+            // stats.json puts on each card.
+            function matches(card, value) {
+                if (value === 'all') return true;
+                if (value.indexOf('status:') === 0) {
+                    return card.dataset.status === value.slice(7);
+                }
+                return (card.dataset.tags || '').split(',').indexOf(value) !== -1;
+            }
+
+            function apply(value) {
+                buttons.forEach(b => {
+                    b.setAttribute('aria-pressed', b.dataset.filter === value ? 'true' : 'false');
                 });
+                cards.forEach(card => card.classList.toggle('hidden', !matches(card, value)));
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => apply(btn.dataset.filter));
             });
+
+            // The career figures at the top filter the wall too, and reach this
+            // through an event rather than a shared global.
+            document.addEventListener('filter-projects', e => apply(e.detail.value));
         })();
 
         // ===================================================================
@@ -3787,56 +3875,77 @@
         // the badges further down can never disagree.
 
         (function () {
-            const row = document.querySelector('[data-stats="counts"]');
-            if (!row) return;
+            const projectRow = document.querySelector('[data-stats="projects"]');
+            const careerRow = document.querySelector('[data-stats="career"]');
+            if (!projectRow || !careerRow) return;
 
             const LABELS = {
                 built: { en: 'Built', de: 'Gebaut' },
                 live: { en: 'Live', de: 'Laufen' },
                 failed: { en: 'Failed', de: 'Gescheitert' },
-                companies: { en: 'Companies', de: 'Firmen' },
+                employers: { en: 'Employers', de: 'Arbeitgeber' },
+                founded: { en: 'Founded', de: 'Gegründet' },
                 years: { en: 'Years', de: 'Jahre' },
             };
-            const ORDER = ['built', 'live', 'failed', 'companies', 'years'];
+
+            // A figure that filters the wall is a button; one that does not is
+            // plain text. Nothing looks clickable unless it is.
+            function figure(key, value, opts) {
+                const o = opts || {};
+                const classes = 'now-stat-value' + (o.accent ? ' now-stat-failed' : '');
+                const title = o.title ? ` title="${o.title.replace(/"/g, '&quot;')}"` : '';
+                const inner =
+                    `<span class="${classes}">${value}</span>` +
+                    `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
+                    `<span class="now-stat-label" lang="de">${LABELS[key].de}</span>`;
+                if (!o.filter) return `<div${title}>${inner}</div>`;
+                return `<button type="button" class="now-stat-btn" data-jump="${o.filter}"${title}>${inner}</button>`;
+            }
 
             fetch('data/stats.json', { cache: 'no-cache' })
                 .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
                 .then(data => {
-                    const failures = data.failures || [];
-                    const values = Object.assign({}, data.counts, {
-                        failed: failures.length,
-                        // Derived, so it cannot go stale in a hand-edited file.
-                        years: new Date().getFullYear() - data.since,
-                    });
+                    const projects = data.projects || [];
+                    const byStatus = s => projects.filter(p => p.status === s);
+                    const failures = byStatus('failed');
 
-                    // Every failure spelled out, so the count is auditable.
-                    const detail = lang => failures
-                        .map(f => `${f.project} (${f.year}): ${f.why[lang] || f.why.en}`)
+                    // Counts are derived from the project list, never typed, so
+                    // the number and what the filter shows cannot disagree.
+                    const built = projects.length;
+                    const live = byStatus('live').length;
+
+                    const detail = failures
+                        .map(f => `${f.project || f.card.replace(/^p-/, '')} (${f.year}): ${f.why.en}`)
                         .join('\n');
 
-                    row.innerHTML = ORDER.filter(key => values[key] != null).map(key => {
-                        const failed = key === 'failed';
-                        const title = failed ? ` title="${detail('en').replace(/"/g, '&quot;')}"` : '';
-                        return '<div>' +
-                            `<span class="now-stat-value${failed ? ' now-stat-failed' : ''}"${title}>${values[key]}</span>` +
-                            `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
-                            `<span class="now-stat-label" lang="de">${LABELS[key].de}</span>` +
-                            '</div>';
-                    }).join('');
+                    projectRow.innerHTML =
+                        figure('built', built, { filter: 'all' }) +
+                        figure('live', live, { filter: 'status:live' }) +
+                        figure('failed', failures.length, {
+                            filter: 'status:failed', accent: true, title: detail,
+                        });
 
-                    const c = data.context || {};
+                    const c = data.career || {};
+                    careerRow.innerHTML =
+                        figure('employers', c.employers, {
+                            title: `${c.employed} employed, ${c.contract} on contract`,
+                        }) +
+                        figure('founded', c.founded) +
+                        // Derived, so it cannot go stale in a hand-edited file.
+                        figure('years', new Date().getFullYear() - data.since);
+
                     const line = (l) => {
                         const de = l === 'de';
                         const bits = [];
-                        const rel = [];
-                        if (c.employed) rel.push(`${c.employed} ${de ? 'angestellt' : 'employed'}`);
-                        if (c.contract) rel.push(`${c.contract} ${de ? 'auf Vertragsbasis' : 'on contract'}`);
-                        if (c.founded) rel.push(`${c.founded} ${de ? 'gegründet' : 'founded'}`);
-                        if (rel.length) bits.push(rel.join(', '));
+                        if (c.employed) bits.push(`${c.employed} ${de ? 'angestellt' : 'employed'}`);
+                        if (c.contract) bits.push(`${c.contract} ${de ? 'auf Vertragsbasis' : 'on contract'}`);
+                        const upstream = byStatus('upstream').length;
+                        if (upstream) bits.push(`${upstream} ${de ? 'Upstream-Bibliotheken' : 'upstream libraries'}`);
+                        if ((data.context || {}).publishedCips) {
+                            bits.push(`${data.context.publishedCips} ${de ? 'veröffentlichte CIP' : 'published CIP'}`);
+                        }
                         // Filled in from activity.json once that resolves.
                         bits.push(`<span data-activity="repos">–</span> ${de ? 'öffentliche Repos' : 'public repos'}`);
-                        if (c.publishedCips) bits.push(`${c.publishedCips} ${de ? 'veröffentlichte CIP' : 'published CIP'}`);
-                        if (c.upstreamLibraries) bits.push(`${c.upstreamLibraries} ${de ? 'Upstream-Bibliotheken' : 'upstream libraries'}`);
                         bits.push(`${de ? 'baue seit' : 'shipping since'} ${data.since}`);
                         return `<span lang="${l}">${bits.join(' · ')}</span>`;
                     };
@@ -3854,23 +3963,46 @@
                         }
                     }
 
-                    // Badge the cards the failure count refers to.
-                    failures.forEach(f => {
-                        const card = f.card && document.getElementById(f.card);
-                        const tech = card && card.querySelector('.project-tech');
+                    // Tag every card with its status, which is what the status
+                    // filters match on, and badge the failures.
+                    let tagged = 0;
+                    projects.forEach(p => {
+                        const card = p.card && document.getElementById(p.card);
+                        if (!card) return;
+                        card.dataset.status = p.status;
+                        tagged++;
+                        if (p.status !== 'failed') return;
+                        const tech = card.querySelector('.project-tech');
                         if (!tech) return;
                         const tag = document.createElement('span');
                         tag.className = 'ended-tag';
-                        tag.title = `${f.why.en}`;
+                        tag.title = p.why.en;
                         tag.innerHTML =
-                            `<span lang="en">failed ${f.year}</span>` +
-                            `<span lang="de">gescheitert ${f.year}</span>`;
+                            `<span lang="en">failed ${p.year}</span>` +
+                            `<span lang="de">gescheitert ${p.year}</span>`;
                         tech.insertBefore(tag, tech.firstChild);
+                    });
+
+                    // Only offer status filters once cards actually carry one.
+                    if (tagged) {
+                        document.querySelectorAll('.filter-btn[data-filter^="status:"]')
+                            .forEach(btn => { btn.hidden = false; });
+                    }
+
+                    // Clicking a figure filters the wall and scrolls to it.
+                    projectRow.addEventListener('click', function (e) {
+                        const btn = e.target.closest('[data-jump]');
+                        if (!btn) return;
+                        document.dispatchEvent(new CustomEvent('filter-projects', {
+                            detail: { value: btn.dataset.jump },
+                        }));
+                        const projectsSection = document.getElementById('projects');
+                        if (projectsSection) projectsSection.scrollIntoView({ behavior: 'smooth' });
                     });
                 })
                 .catch(() => {
-                    // Without the file there are no numbers to show, so the row
-                    // stays empty rather than displaying placeholders.
+                    // Without the file there are no numbers to show, so the rows
+                    // stay empty rather than displaying placeholders.
                 });
         })();
 

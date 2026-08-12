@@ -1,45 +1,47 @@
 {
-  "_note": "Hand-maintained career figures for proof-of-work mode. Unlike activity.json, nothing generates this file: edit it when a project ships, dies, or a role changes. 'years' is derived from 'since' at render time so it never goes stale. Every entry in 'failures' needs a 'card' id that exists in index.html, which is what puts the badge on the right project.",
-  "counts": {
-    "built": 14,
-    "live": 6,
-    "companies": 5
-  },
+  "_note": "Hand-maintained figures for proof-of-work mode. Nothing generates this file. The project counts at the top of the page are DERIVED from the list below, so add or move an entry here and the numbers, the filter chips and the card badges all follow. Every 'card' must match an id in index.html. Statuses: live (still running), failed (needs year + why), upstream (a library or extension built into someone else's project), archived (experiment, not maintained).",
   "since": 2015,
-  "context": {
-    "employed": 2,
-    "contract": 1,
+  "career": {
+    "employers": 3,
     "founded": 2,
-    "publishedCips": 1,
-    "upstreamLibraries": 4
+    "employed": 2,
+    "contract": 1
   },
-  "failures": [
+  "context": {
+    "publishedCips": 1
+  },
+  "projects": [
+    { "card": "p-pubsub", "status": "live" },
+    { "card": "p-ouroboros-leios", "status": "live" },
+    { "card": "p-leios-mempool-simulation", "status": "live" },
+    { "card": "p-hausnummer", "status": "live" },
+    { "card": "p-pagebase", "status": "live" },
+    { "card": "p-underwater-journeys", "status": "live" },
+
     {
-      "project": "Drip Dropz",
       "card": "p-drip-dropz",
+      "status": "failed",
       "year": 2024,
-      "why": {
-        "en": "died with the NFT market",
-        "de": "starb mit dem NFT-Markt"
-      }
+      "why": { "en": "died with the NFT market", "de": "starb mit dem NFT-Markt" }
     },
     {
-      "project": "Dump it!",
       "card": "p-dump-it",
+      "status": "failed",
       "year": 2025,
-      "why": {
-        "en": "200 users, no business model",
-        "de": "200 Nutzer, kein Geschäftsmodell"
-      }
+      "why": { "en": "200 users, no business model", "de": "200 Nutzer, kein Geschäftsmodell" }
     },
     {
-      "project": "Berlin Pool",
       "card": "p-berlin-pool",
+      "status": "failed",
       "year": 2024,
-      "why": {
-        "en": "stopped paying for itself",
-        "de": "trug sich nicht mehr selbst"
-      }
-    }
+      "why": { "en": "stopped paying for itself", "de": "trug sich nicht mehr selbst" }
+    },
+
+    { "card": "p-dolos", "status": "upstream" },
+    { "card": "p-lucid", "status": "upstream" },
+    { "card": "p-scrolls", "status": "upstream" },
+    { "card": "p-dex-order-serialization-library", "status": "upstream" },
+
+    { "card": "p-vert-x-pow-blockchain", "status": "archived" }
   ]
 }
