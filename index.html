@@ -2030,6 +2030,8 @@
         }
 
         /* --- career heatmap ----------------------------------------------- */
+        /* GitHub's orientation: time runs left to right, so years are columns
+           with the current one on the right edge, and months are rows. */
 
         .heat { margin-bottom: var(--spacing-lg); }
 
@@ -2057,54 +2059,43 @@
             color: var(--color-text-lighter);
         }
 
-        .heat-rows {
+        .heat-band {
             display: flex;
             flex-direction: column;
-            gap: 3px;
-            max-width: 22rem;
+            gap: 2px;
+            margin-bottom: var(--spacing-sm);
         }
 
-        .heat-row {
+        .heat-strip {
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 3px;
-        }
-
-        .heat-year {
-            flex: none;
-            width: 2.6rem;
-            font-family: var(--font-mono);
-            font-size: 0.62rem;
-            color: var(--color-text-lighter);
-            text-align: right;
-            padding-right: 0.35rem;
+            gap: 2px;
         }
 
         .heat-cell {
             flex: 1 1 0;
-            /* Square, like the graph it borrows from. Without the cap, flex
-               stretched each month into a bar and the grid stopped reading as a
-               heatmap at all. */
-            max-width: 22px;
             aspect-ratio: 1 / 1;
             border-radius: 2px;
             background: var(--color-bg-alt);
         }
 
-        .heat-months {
+        .heat-ticks {
             display: flex;
-            flex: 1 1 auto;
-            gap: 3px;
+            gap: 2px;
             font-family: var(--font-mono);
-            font-size: 0.55rem;
+            font-size: 0.58rem;
             color: var(--color-text-lighter);
         }
 
-        .heat-months span {
-            flex: 1 1 0;
-            max-width: 22px;
-            text-align: center;
+        .heat-tick {
+            flex: 12 1 0;
+            display: flex;
+            gap: 2px;
+        }
+
+        .heat-tick span {
+            border-left: 1px solid var(--color-border);
+            padding-left: 3px;
+            line-height: 1.6;
         }
 
         /* Four steps, same idea as a contribution graph. Level 0 stays the empty
@@ -2128,8 +2119,7 @@
         }
 
         @media (max-width: 768px) {
-            .heat-cell { max-height: 10px; }
-            .heat-year { width: 2.2rem; font-size: 0.55rem; }
+            .heat-ticks { font-size: 0.5rem; }
         }
 
         /* --- activity, next to the timeline ------------------------------- */
@@ -2796,11 +2786,7 @@
                                     </span>
                                     <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
                                 </div>
-                                <div class="heat-rows" data-career="rows"></div>
-                                <p class="now-caption">
-                                    <span lang="en">Each cell is one month, shaded by how many roles, projects and operations were running in it, taken from the dated entries on the timeline below. This is not commit data, which is why it reaches back to 2015: GitHub only holds the last few years of it. Hover a cell to see what was running.</span>
-                                    <span lang="de">Jede Zelle ist ein Monat, eingefärbt danach, wie viele Rollen, Projekte und Betriebsaufgaben darin liefen, entnommen den datierten Einträgen der Zeitachse unten. Keine Commit-Daten, deshalb reicht sie bis 2015 zurück: GitHub kennt nur die letzten Jahre davon. Zelle überfahren zeigt, was lief.</span>
-                                </p>
+                                <div class="heat-band" data-career="rows"></div>
                             </div>
 
                             <div class="activity-head">
@@ -4419,38 +4405,51 @@
                         const start = monthIndex(item.from);
                         const end = item.to ? monthIndex(item.to) : last;
                         for (let i = Math.max(start, first); i <= Math.min(end, last); i++) {
-                            if (!active.has(i)) active.set(i, []);
-                            active.get(i).push(item.label);
+                            if (!active.has(i)) active.set(i, { labels: [], score: 0 });
+                            const bucket = active.get(i);
+                            bucket.labels.push(item.label);
+                            bucket.score += item.weight || 1;
                         }
                     });
 
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
-                    const rows = [];
-                    for (let y = Math.floor(first / 12); y <= Math.floor(last / 12); y++) {
+                    const firstYear = Math.floor(first / 12);
+                    const lastYear = Math.floor(last / 12);
+
+                    // Months run continuously left to right, wrapped into rows of
+                    // six years so the cells stay square while the band fills the
+                    // full content width.
+                    const PER_ROW = 6;
+                    const out = [];
+                    for (let y0 = firstYear; y0 <= lastYear; y0 += PER_ROW) {
+                        const y1 = Math.min(y0 + PER_ROW - 1, lastYear);
                         const cells = [];
-                        for (let mo = 0; mo < 12; mo++) {
-                            const i = y * 12 + mo;
-                            const items = active.get(i) || [];
-                            // Four steps, capped: past four concurrent threads the
-                            // exact count stops meaning much.
-                            const level = Math.min(items.length, 4);
-                            const title = items.length
-                                ? `${label(i)} · ${items.join(', ')}`
-                                : `${label(i)} · ${de ? 'nichts dokumentiert' : 'nothing recorded'}`;
-                            const future = i > last;
-                            cells.push(future
-                                ? '<span class="heat-cell" data-level="0"></span>'
-                                : `<span class="heat-cell" data-level="${level}" title="${title.replace(/"/g, '&quot;')}"></span>`);
+                        const ticks = [];
+                        for (let y = y0; y <= y1; y++) {
+                            ticks.push(`<span class="heat-tick"><span>${y}</span></span>`);
+                            for (let mo = 0; mo < 12; mo++) {
+                                const i = y * 12 + mo;
+                                if (i < first || i > last) {
+                                    cells.push('<span class="heat-cell" data-level="0"></span>');
+                                    continue;
+                                }
+                                const bucket = active.get(i);
+                                const labels = bucket ? bucket.labels : [];
+                                // Weighted, so a lead year reads heavier than an IC
+                                // year even when both are a single role. Capped at
+                                // four: past that the exact figure stops meaning much.
+                                const score = bucket ? bucket.score : 0;
+                                const level = score === 0 ? 0 : Math.min(Math.ceil(score / 1.5), 4);
+                                const title = labels.length
+                                    ? `${label(i)} · ${labels.join(', ')}`
+                                    : `${label(i)} · ${de ? 'nichts dokumentiert' : 'nothing recorded'}`;
+                                cells.push(`<span class="heat-cell" data-level="${level}" title="${title.replace(/"/g, '&quot;')}"></span>`);
+                            }
                         }
-                        rows.push(`<div class="heat-row"><span class="heat-year">${y}</span>${cells.join('')}</div>`);
+                        out.push(`<div class="heat-strip">${cells.join('')}</div>`);
+                        out.push(`<div class="heat-ticks">${ticks.join('')}</div>`);
                     }
-                    const MONTHS = de
-                        ? ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
-                        : ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-                    const header = '<div class="heat-row"><span class="heat-year"></span>' +
-                        `<span class="heat-months">${MONTHS.map(m => `<span>${m}</span>`).join('')}</span>` +
-                        '</div>';
-                    grid.querySelector('[data-career="rows"]').innerHTML = header + rows.join('');
+                    grid.querySelector('[data-career="rows"]').innerHTML = out.join('');
 
                     const legend = grid.querySelector('[data-career="legend"]');
                     if (legend) {
