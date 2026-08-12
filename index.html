@@ -1887,7 +1887,7 @@
 
         .now-list {
             list-style: none;
-            margin: var(--spacing-xs) 0 0 0;
+            margin: var(--spacing-xs) 0 0 var(--spacing-md);
             padding: 0;
         }
 
@@ -2138,6 +2138,13 @@
             font-family: var(--font-mono);
             font-size: 0.7rem;
             color: var(--color-live);
+        }
+
+        /* Handed over is not a failure: still running, just not mine. Muted so
+           it reads as a fact rather than a flag. */
+        [data-mode="pow"] .ended-tag--neutral {
+            border-color: var(--color-border);
+            color: var(--color-text-lighter);
         }
 
         .project-live {
@@ -2554,6 +2561,11 @@
                                     <a href="https://alwayssandy.com" target="_blank" rel="noopener">alwayssandy.com</a>
                                     <span lang="en">Matches beach volleyball players with coaches across Berlin's sand courts</span>
                                     <span lang="de">Bringt Beachvolleyball-Spieler mit Trainern auf Berliner Sandplätzen zusammen</span>
+                                </li>
+                                <li>
+                                    <a href="https://pagebase.dev" target="_blank" rel="noopener">pagebase.dev</a>
+                                    <span lang="en">My freelance studio: Supabase and PostgreSQL backends, web and mobile builds, AI automation</span>
+                                    <span lang="de">Mein Freelance-Studio: Supabase- und PostgreSQL-Backends, Web- und Mobile-Entwicklung, KI-Automatisierung</span>
                                 </li>
                             </ul>
                             <span class="now-push" data-activity="lastpush" hidden></span>
@@ -4060,14 +4072,23 @@
                         if (!card) return;
                         card.dataset.status = p.status;
                         tagged++;
-                        if (p.status !== 'failed') return;
+
+                        // Both failed and handed-over projects say so on the card,
+                        // but they are different claims and must not look alike:
+                        // handed over means it still runs, just not by me.
+                        const LEAD = {
+                            failed: { en: 'failed', de: 'gescheitert', cls: 'ended-tag' },
+                            'handed-over': { en: 'handed over', de: 'übergeben', cls: 'ended-tag ended-tag--neutral' },
+                        }[p.status];
+                        if (!LEAD) return;
+
                         const tech = card.querySelector('.project-tech');
                         if (!tech) return;
                         const tag = document.createElement('span');
-                        tag.className = 'ended-tag';
+                        tag.className = LEAD.cls;
                         tag.innerHTML =
-                            `<span lang="en">failed ${p.year} · ${p.why.en}</span>` +
-                            `<span lang="de">gescheitert ${p.year} · ${p.why.de || p.why.en}</span>`;
+                            `<span lang="en">${LEAD.en} ${p.year} · ${p.why.en}</span>` +
+                            `<span lang="de">${LEAD.de} ${p.year} · ${p.why.de || p.why.en}</span>`;
                         tech.insertBefore(tag, tech.firstChild);
                     });
 
@@ -4221,11 +4242,10 @@
 
                     const push = document.querySelector('[data-activity="lastpush"]');
                     if (push && data.lastPush) {
+                        // Timestamp only. Which repo it landed in is either a
+                        // private name we will not print or noise up here.
                         const when = relative(data.lastPush.at);
-                        const where = data.lastPush.repo
-                            ? ` · ${data.lastPush.repo}`
-                            : (lang() === 'de' ? ' · privates Repo' : ' · private repo');
-                        push.textContent = `${lang() === 'de' ? 'letzter Push' : 'last push'} ${when}${where}`;
+                        push.textContent = `${lang() === 'de' ? 'letzter Push' : 'last push'} ${when}`;
                         push.hidden = false;
                     }
 
