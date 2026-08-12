@@ -1,0 +1,55 @@
+name: Refresh activity data
+
+# Rebuilds data/activity.json from the GitHub GraphQL API and commits it when
+# the numbers actually changed. The site reads the committed file, so page loads
+# never touch the GitHub API: no rate limits, no CORS, no empty graph when the
+# API is down.
+#
+# Runs in both this repo and the will-break-it.github.io mirror. Set the
+# GH_ACTIVITY_TOKEN secret in both, otherwise the mirror falls back to
+# public-only counts and the two sites report different totals.
+#
+# GH_ACTIVITY_TOKEN: classic PAT, read:user scope only. Needed because roughly
+# 70% of contributions sit in private repos; the token makes them count without
+# exposing any repo name.
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: activity-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Aggregate contribution data
+        env:
+          # Falls back to the job token, which sees public contributions only.
+          GH_ACTIVITY_TOKEN: ${{ secrets.GH_ACTIVITY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/build-activity.mjs
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/activity.json; then
+            echo "No change in activity data."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/activity.json
+          git commit -m "data: refresh activity aggregates"
+          git push

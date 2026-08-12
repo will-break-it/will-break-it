@@ -1,0 +1,247 @@
+{
+  "generated": "2026-08-12T18:41:24Z",
+  "login": "will-break-it",
+  "scope": "public+private",
+  "since": "2014-10-08",
+  "last12Months": {
+    "total": 4988,
+    "activeWeeks": 51,
+    "weeksInWindow": 52,
+    "months": [
+      {
+        "month": "2025-09",
+        "total": 27
+      },
+      {
+        "month": "2025-10",
+        "total": 206
+      },
+      {
+        "month": "2025-11",
+        "total": 829
+      },
+      {
+        "month": "2025-12",
+        "total": 418
+      },
+      {
+        "month": "2026-01",
+        "total": 481
+      },
+      {
+        "month": "2026-02",
+        "total": 1308
+      },
+      {
+        "month": "2026-03",
+        "total": 457
+      },
+      {
+        "month": "2026-04",
+        "total": 153
+      },
+      {
+        "month": "2026-05",
+        "total": 138
+      },
+      {
+        "month": "2026-06",
+        "total": 221
+      },
+      {
+        "month": "2026-07",
+        "total": 290
+      },
+      {
+        "month": "2026-08",
+        "total": 274
+      }
+    ]
+  },
+  "streakDays": 3,
+  "totals": {
+    "contributions": 8693,
+    "private": 6140,
+    "commits": 2180,
+    "pullRequests": 187,
+    "reviews": 37,
+    "repositories": 40,
+    "publicRepositories": 11
+  },
+  "years": [
+    {
+      "year": 2014,
+      "total": 1,
+      "private": 0,
+      "commits": 0,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2015,
+      "total": 1,
+      "private": 0,
+      "commits": 0,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2016,
+      "total": 1,
+      "private": 0,
+      "commits": 0,
+      "prs": 1,
+      "reviews": 0
+    },
+    {
+      "year": 2017,
+      "total": 0,
+      "private": 0,
+      "commits": 0,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2018,
+      "total": 0,
+      "private": 0,
+      "commits": 0,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2019,
+      "total": 0,
+      "private": 0,
+      "commits": 0,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2020,
+      "total": 101,
+      "private": 98,
+      "commits": 1,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2021,
+      "total": 7,
+      "private": 4,
+      "commits": 0,
+      "prs": 0,
+      "reviews": 0
+    },
+    {
+      "year": 2022,
+      "total": 858,
+      "private": 715,
+      "commits": 130,
+      "prs": 1,
+      "reviews": 0
+    },
+    {
+      "year": 2023,
+      "total": 1685,
+      "private": 1598,
+      "commits": 55,
+      "prs": 22,
+      "reviews": 2
+    },
+    {
+      "year": 2024,
+      "total": 205,
+      "private": 91,
+      "commits": 84,
+      "prs": 22,
+      "reviews": 4
+    },
+    {
+      "year": 2025,
+      "total": 2512,
+      "private": 1464,
+      "commits": 950,
+      "prs": 56,
+      "reviews": 18
+    },
+    {
+      "year": 2026,
+      "total": 3322,
+      "private": 2170,
+      "commits": 960,
+      "prs": 85,
+      "reviews": 13
+    }
+  ],
+  "languages": [
+    {
+      "name": "TypeScript",
+      "share": 55.9
+    },
+    {
+      "name": "Dart",
+      "share": 7.6
+    },
+    {
+      "name": "Rust",
+      "share": 7.1
+    },
+    {
+      "name": "Astro",
+      "share": 5.4
+    },
+    {
+      "name": "PHP",
+      "share": 4.8
+    },
+    {
+      "name": "JavaScript",
+      "share": 3.3
+    }
+  ],
+  "lastPush": {
+    "at": "2026-08-12T18:40:37Z",
+    "repo": null,
+    "url": null,
+    "private": true
+  },
+  "recentPublic": [
+    {
+      "name": "will-break-it.github.io",
+      "url": "https://github.com/will-break-it/will-break-it.github.io",
+      "pushedAt": "2026-08-05T20:38:32Z",
+      "language": "HTML"
+    },
+    {
+      "name": "will-break-it",
+      "url": "https://github.com/will-break-it/will-break-it",
+      "pushedAt": "2026-08-05T20:38:31Z",
+      "language": "HTML"
+    },
+    {
+      "name": "uplc",
+      "url": "https://github.com/will-break-it/uplc",
+      "pushedAt": "2026-02-19T14:37:20Z",
+      "language": "TypeScript"
+    },
+    {
+      "name": "pagebase-kit",
+      "url": "https://github.com/will-break-it/pagebase-kit",
+      "pushedAt": "2026-02-16T11:46:22Z",
+      "language": "Astro"
+    },
+    {
+      "name": "agda-web-docs-lib",
+      "url": "https://github.com/will-break-it/agda-web-docs-lib",
+      "pushedAt": "2026-01-07T15:21:37Z",
+      "language": "JavaScript"
+    },
+    {
+      "name": "wallet-architecture",
+      "url": "https://github.com/will-break-it/wallet-architecture",
+      "pushedAt": "2024-09-07T13:47:31Z",
+      "language": null
+    }
+  ]
+}

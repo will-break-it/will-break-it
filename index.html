@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- data-lang and data-theme carry static defaults so a visitor without JS
+     gets one language rather than both stacked, and the dark default the rest
+     of the page assumes. The head script overrides both before first paint.
+     data-mode is deliberately NOT set here: its absence is how the CSS
+     recognises "no JS" and keeps the mode switch out of the way. -->
+<html lang="en" data-lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,6 +120,9 @@
             --color-bg: #f5f7f5;
             --color-bg-alt: #e9ede9;
             --color-link-hover: #333;
+            /* Signal colour for live/current things. Already the accent in the
+               print stylesheet and in ::selection; now an actual token. */
+            --color-live: #0d9488;
             --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
             --max-width: 900px;
@@ -134,6 +142,8 @@
             --color-bg: #09090b;
             --color-bg-alt: #18181b;
             --color-link-hover: #d4d4d8;
+            /* Lifted for contrast against near-black; same hue family. */
+            --color-live: #2dd4bf;
         }
 
         /* Modern CSS Reset */
@@ -1583,9 +1593,571 @@
                 word-break: break-word;
             }
         }
+
+        /* ===================================================================
+           TWO MODES
+           -------------------------------------------------------------------
+           The page carries one copy of the content and two presentations of
+           it, switched by data-mode on <html> exactly the way data-lang
+           already switches language. Everything here is CSS, so:
+
+             - with no data-mode attribute the CV renders. That is what
+               crawlers, no-JS visitors and the print stylesheet get.
+             - proof-of-work mode reorders and reskins the same nodes.
+
+           Projects are NOT duplicated between modes. The cards live in
+           #projects and get pulled to the top by order; the timeline links
+           to them by anchor instead of repeating them.
+           =================================================================== */
+
+        /* Nothing mode-specific is visible until JS commits to a mode, which
+           avoids a flash of the wrong layout for returning visitors. */
+        .pow-only { display: none; }
+        [data-mode="pow"] .pow-only { display: block; }
+        [data-mode="pow"] .cv-only { display: none; }
+
+        /* --- boot gate ---------------------------------------------------- */
+
+        #mode-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            background: var(--color-bg);
+            font-family: var(--font-mono);
+        }
+
+        #mode-gate[hidden] { display: none; }
+
+        .gate-window {
+            width: 100%;
+            max-width: 560px;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            background: var(--color-bg-alt);
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+        }
+
+        .gate-titlebar {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.72rem;
+            color: var(--color-text-lighter);
+            letter-spacing: 0.04em;
+        }
+
+        .gate-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-border);
+            flex: none;
+        }
+
+        .gate-dot:first-child { background: var(--color-live); }
+
+        .gate-body { padding: var(--spacing-md); }
+
+        .gate-line {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .gate-prompt { color: var(--color-live); }
+
+        .gate-caret {
+            display: inline-block;
+            width: 0.5em;
+            height: 1em;
+            vertical-align: -0.15em;
+            background: var(--color-live);
+            animation: gate-blink 1.1s step-end infinite;
+        }
+
+        @keyframes gate-blink { 50% { opacity: 0; } }
+
+        .gate-options {
+            display: grid;
+            gap: var(--spacing-xs);
+        }
+
+        .gate-option {
+            display: flex;
+            gap: var(--spacing-sm);
+            width: 100%;
+            padding: 0.75rem 0.85rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.15s ease, transform 0.15s ease;
+        }
+
+        .gate-option:hover,
+        .gate-option:focus-visible {
+            border-color: var(--color-live);
+            transform: translateX(2px);
+            outline: none;
+        }
+
+        .gate-key {
+            flex: none;
+            color: var(--color-live);
+            font-weight: 700;
+        }
+
+        .gate-option-title { font-weight: 600; }
+
+        .gate-option-sub {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.75rem;
+            color: var(--color-text-lighter);
+        }
+
+        .gate-foot {
+            margin-top: var(--spacing-md);
+            font-size: 0.72rem;
+            color: var(--color-text-lighter);
+        }
+
+        /* --- header mode switch ------------------------------------------- */
+
+        /* Without JS there is nothing to switch to, so the control does not
+           appear. The head script sets data-mode, so its absence means no JS. */
+        html:not([data-mode]) .mode-switch { display: none; }
+
+        .mode-switch {
+            display: flex;
+            padding: 2px;
+            border: 1px solid var(--color-border);
+            border-radius: 999px;
+            background: var(--color-bg-alt);
+        }
+
+        .mode-switch button {
+            padding: 0.25rem 0.6rem;
+            border: none;
+            border-radius: 999px;
+            background: none;
+            color: var(--color-text-lighter);
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .mode-switch button:hover { color: var(--color-text); }
+
+        .mode-switch button[aria-pressed="true"] {
+            background: var(--color-text);
+            color: var(--color-bg);
+        }
+
+        /* --- proof-of-work layout ----------------------------------------- */
+        /* Same trick the print stylesheet already uses: flex order pulls
+           sections into a different sequence without moving any markup. */
+
+        [data-mode="pow"] .cv-main {
+            display: flex;
+            flex-direction: column;
+        }
+
+        [data-mode="pow"] #now { order: 1; }
+        [data-mode="pow"] #projects { order: 2; }
+        [data-mode="pow"] #experience { order: 3; }
+        [data-mode="pow"] #technologies { order: 4; }
+        [data-mode="pow"] #publications { order: 5; }
+
+        /* Education is fully represented on the rail in pow mode, with the same
+           two entries and nothing extra to add, so the section would be pure
+           repetition. Publications keep their section: the rail places CIP-0164
+           in time, the section explains what it is. */
+        [data-mode="pow"] #education { display: none; }
+
+        /* The sidebar outline is a CV artefact; pow mode gets its own nav. */
+        [data-mode="pow"] .cv-layout { display: block; }
+        [data-mode="pow"] .cv-sidebar { display: none; }
+
+        /* Compact hero: the long bio belongs to the CV, not to the wall. */
+        [data-mode="pow"] #home .bio { display: none; }
+        [data-mode="pow"] .profile-image { width: 88px; height: 88px; }
+        [data-mode="pow"] .intro-section { margin-bottom: var(--spacing-md); }
+
+        /* --- now strip ---------------------------------------------------- */
+
+        #now {
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            background: var(--color-bg-alt);
+            font-family: var(--font-mono);
+        }
+
+        .now-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .now-label {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-lighter);
+        }
+
+        .now-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-live);
+            box-shadow: 0 0 0 0 var(--color-live);
+            animation: now-pulse 2.4s ease-out infinite;
+        }
+
+        @keyframes now-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.55); }
+            70% { box-shadow: 0 0 0 9px rgba(13, 148, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
+        }
+
+        .now-push {
+            font-size: 0.75rem;
+            color: var(--color-text-lighter);
+        }
+
+        .now-building {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .now-building strong { color: var(--color-text); }
+
+        .now-stats {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .now-stat-value {
+            display: block;
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--color-text);
+        }
+
+        .now-stat-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-text-lighter);
+        }
+
+        /* Monthly buckets. There is deliberately no per-day mark anywhere in
+           this chart: a missing Tuesday is not a thing it can draw. */
+        .spark {
+            display: block;
+            width: 100%;
+            height: 72px;
+            overflow: visible;
+        }
+
+        .spark-area { fill: rgba(13, 148, 136, 0.16); }
+        .spark-line { fill: none; stroke: var(--color-live); stroke-width: 2; }
+        .spark-node { fill: var(--color-live); }
+        .spark-axis { font-size: 9px; fill: var(--color-text-lighter); font-family: var(--font-mono); }
+
+        .now-langs {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+            margin-top: var(--spacing-sm);
+        }
+
+        .now-lang {
+            font-size: 0.7rem;
+            color: var(--color-text-light);
+            border: 1px solid var(--color-border);
+            border-radius: 999px;
+            padding: 0.1rem 0.5rem;
+        }
+
+        .now-lang span { color: var(--color-text-lighter); }
+
+        .now-caption {
+            margin-top: var(--spacing-sm);
+            padding-top: var(--spacing-sm);
+            border-top: 1px dashed var(--color-border);
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            line-height: 1.55;
+            color: var(--color-text-lighter);
+        }
+
+        /* --- shipped wall ------------------------------------------------- */
+
+        .section-kicker {
+            /* No display here on purpose: .pow-only owns visibility, and this
+               rule sits later in the sheet, so declaring display:block would
+               override the hide and leak the kicker into CV mode. */
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-live);
+            margin-top: var(--spacing-lg);
+        }
+
+        /* The kicker belongs to the heading it labels, so it takes over the
+           heading's top margin instead of adding to it. Scoped to pow mode:
+           in CV mode the kicker is display:none and the heading must keep its
+           own margin. */
+        [data-mode="pow"] .section-kicker + h2 {
+            margin-top: 0.1rem;
+        }
+
+        /* Everything is on the wall in pow mode. Nothing hides behind a
+           "show more" button when showing the work is the entire point, so the
+           collapsible wrapper is forced open and its button retired. */
+        [data-mode="pow"] #show-more-projects { display: none; }
+        [data-mode="pow"] .projects-extra-wrap { grid-template-rows: 1fr; }
+        [data-mode="pow"] .projects-extra-inner { overflow: visible; }
+
+        .project-filters {
+            display: none;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-md);
+        }
+
+        [data-mode="pow"] .project-filters { display: flex; }
+
+        .project-card.hidden { display: none; }
+
+        .project-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-live);
+        }
+
+        .project-live::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--color-live);
+        }
+
+        /* --- timeline in pow mode ----------------------------------------- */
+
+        .stream-only { display: none; }
+        [data-mode="pow"] .stream-only { display: block; }
+
+        .company-bar {
+            display: block;
+            margin-left: auto;
+            margin-top: 3px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--color-live);
+            opacity: 0.7;
+        }
+
+        /* Ship chips annotate the stream, so they belong to pow mode only. The
+           CV lists the same projects in their own section. */
+        .company-ships { display: none; }
+
+        [data-mode="pow"] .company-ships {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+            margin-top: var(--spacing-xs);
+        }
+
+        .ship-chip {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.12rem 0.5rem;
+            border: 1px solid var(--color-border);
+            border-radius: 999px;
+            color: var(--color-text-light);
+            text-decoration: none;
+            transition: border-color 0.15s ease, color 0.15s ease;
+        }
+
+        .ship-chip::before { content: "\2197 "; color: var(--color-live); }
+
+        .ship-chip:hover {
+            border-color: var(--color-live);
+            color: var(--color-text);
+        }
+
+        .milestone .company-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-text-light);
+        }
+
+        .milestone::before {
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+        }
+
+        /* --- mobile ------------------------------------------------------- */
+
+        @media (max-width: 768px) {
+            .now-stats { gap: var(--spacing-sm); }
+            .now-stat-value { font-size: 1.15rem; }
+            .gate-body { padding: var(--spacing-sm); }
+            .mode-switch button { padding: 0.25rem 0.45rem; font-size: 0.62rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .now-pulse, .gate-caret { animation: none; }
+            .gate-option:hover, .gate-option:focus-visible { transform: none; }
+        }
+
+        /* --- print: always the CV ---------------------------------------- */
+        /* A printed page has no toggle, so it gets the format that survives
+           being handed to a human on paper. */
+
+        @media print {
+            #mode-gate,
+            .mode-switch,
+            .pow-only,
+            .stream-only,
+            .project-filters,
+            .company-bar,
+            .company-ships { display: none !important; }
+
+            /* Undo the pow layout so the printed page is the CV either way.
+               The pow rules above are [data-mode] + #id, which outranks the
+               print block's bare #id order rules, so print has to restate the
+               order at matching specificity. Without this, printing from pow
+               mode silently produced a different document to printing from CV
+               mode. */
+            [data-mode="pow"] #experience { order: 1; }
+            [data-mode="pow"] #technologies { order: 2; }
+            [data-mode="pow"] #publications { order: 3; }
+            [data-mode="pow"] #projects { order: 4; }
+            [data-mode="pow"] #education { order: 5; display: block; }
+
+            [data-mode="pow"] #home .bio { display: block !important; }
+            [data-mode="pow"] .intro-section { margin-bottom: 0; }
+        }
     </style>
+    <script>
+        // Mode, theme and language are resolved before first paint so returning
+        // visitors never see the other layout flash past. Keep this in <head>
+        // and keep it small; it blocks rendering by design.
+        (function () {
+            var root = document.documentElement;
+            var store;
+            try { store = window.localStorage; } catch (e) { store = null; }
+            var get = function (k) { try { return store && store.getItem(k); } catch (e) { return null; } };
+
+            // ?mode=cv is shareable: hand it to a recruiter and they never see
+            // the chooser. It also sticks, so their next visit matches.
+            var forced = null;
+            var match = /[?&]mode=(pow|cv)/.exec(window.location.search);
+            if (match) {
+                forced = match[1];
+                try { store && store.setItem('mode', forced); } catch (e) {}
+            }
+
+            var mode = forced || get('mode');
+            if (mode === 'pow' || mode === 'cv') {
+                root.setAttribute('data-mode', mode);
+            } else {
+                // Undecided: the gate will ask. Until it does, hold the CV
+                // layout, which is also what no-JS visitors keep.
+                root.setAttribute('data-mode', 'cv');
+                root.setAttribute('data-mode-undecided', 'true');
+            }
+
+            root.setAttribute('data-theme', get('theme') || 'dark');
+
+            var lang = get('lang');
+            if (!lang) {
+                lang = (navigator.language || 'en').indexOf('de') === 0 ? 'de' : 'en';
+            }
+            root.setAttribute('data-lang', lang);
+        })();
+    </script>
 </head>
 <body>
+    <!-- Mode chooser. Ships hidden and stays hidden unless JS finds no stored
+         choice, so crawlers and no-JS visitors are never gated. -->
+    <div id="mode-gate" role="dialog" aria-modal="true" aria-labelledby="gate-question" hidden>
+        <div class="gate-window">
+            <div class="gate-titlebar">
+                <span class="gate-dot"></span>
+                <span class="gate-dot"></span>
+                <span class="gate-dot"></span>
+                <span>wolff@berlin</span>
+            </div>
+            <div class="gate-body">
+                <p class="gate-line" id="gate-question">
+                    <span class="gate-prompt">$</span>
+                    <span lang="en">whoami --format=? <span class="gate-caret"></span></span>
+                    <span lang="de">whoami --format=? <span class="gate-caret"></span></span>
+                </p>
+                <div class="gate-options">
+                    <button class="gate-option" type="button" data-choose-mode="pow" autofocus>
+                        <span class="gate-key">[1]</span>
+                        <span>
+                            <span class="gate-option-title">proof-of-work</span>
+                            <span class="gate-option-sub" lang="en">What I am building, what I shipped, one timeline</span>
+                            <span class="gate-option-sub" lang="de">Woran ich baue, was ich veröffentlicht habe, eine Zeitachse</span>
+                        </span>
+                    </button>
+                    <button class="gate-option" type="button" data-choose-mode="cv">
+                        <span class="gate-key">[2]</span>
+                        <span>
+                            <span class="gate-option-title">curriculum-vitae</span>
+                            <span class="gate-option-sub" lang="en">The classic format, print and PDF ready</span>
+                            <span class="gate-option-sub" lang="de">Das klassische Format, druck- und PDF-fertig</span>
+                        </span>
+                    </button>
+                </div>
+                <p class="gate-foot">
+                    <span lang="en">Press 1 or 2. Remembered next time, switchable in the header.</span>
+                    <span lang="de">1 oder 2 drücken. Wird gespeichert, oben jederzeit umschaltbar.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <header id="header">
@@ -1596,6 +2168,11 @@
 
 
             <div class="header-controls">
+                <div class="mode-switch" role="group" aria-label="View mode">
+                    <button type="button" data-choose-mode="pow" aria-pressed="false">work</button>
+                    <button type="button" data-choose-mode="cv" aria-pressed="false">cv</button>
+                </div>
+
                 <div class="header-social-links">
                     <a href="https://github.com/will-break-it" target="_blank" rel="noopener" class="social-link header-social-link" title="GitHub">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1739,6 +2316,35 @@
 
                 <!-- Main CV Content -->
                 <div class="cv-main">
+                    <!-- Now strip: proof-of-work mode only -->
+                    <section id="now" class="pow-only" aria-labelledby="now-label">
+                        <div class="now-head">
+                            <span class="now-label" id="now-label">
+                                <span class="now-pulse" aria-hidden="true"></span>
+                                <span lang="en">Currently building</span>
+                                <span lang="de">Aktuell in Arbeit</span>
+                            </span>
+                            <span class="now-push" data-activity="lastpush" hidden></span>
+                        </div>
+
+                        <p class="now-building">
+                            <span lang="en">Technical architect for a <strong>Byzantine-resistant pub/sub network</strong> at IOG: formally verifying the SecureCyclon peer-sampling stack and building the prototype that has to survive it. On the side, <strong>Hausnummer</strong> for screening property deals and a Rust discovery pipeline that keeps eating my evenings.</span>
+                            <span lang="de">Technischer Architekt für ein <strong>Byzantine-resistentes Pub/Sub-Netzwerk</strong> bei IOG: formale Verifikation des SecureCyclon-Peer-Sampling-Stacks und der Prototyp, der das überleben muss. Nebenbei <strong>Hausnummer</strong> zur Prüfung von Immobilienangeboten und eine Rust-Discovery-Pipeline, die mir die Abende frisst.</span>
+                        </p>
+
+                        <div data-activity="panel" hidden>
+                            <div class="now-stats" data-activity="stats"></div>
+                            <svg class="spark" data-activity="spark" viewBox="0 0 600 72" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
+                                <title id="spark-title" lang="en">Contributions per month over the last twelve months</title>
+                            </svg>
+                            <div class="now-langs" data-activity="langs"></div>
+                            <p class="now-caption">
+                                <span lang="en">Monthly totals, GitHub only, private repositories included as counts. There are no per-day marks here on purpose: merges get squashed, plenty of work lives on other forges, and review or design days leave no commit. Read it as a floor, not a total.</span>
+                                <span lang="de">Monatswerte, nur GitHub, private Repositories als Zahlen enthalten. Bewusst keine Tagesmarkierungen: Merges werden gequetscht, viel Arbeit liegt auf anderen Forges, und Review- oder Design-Tage hinterlassen keinen Commit. Als Untergrenze lesen, nicht als Gesamtwert.</span>
+                            </p>
+                        </div>
+                    </section>
+
                     <!-- Technologies Section -->
                     <section id="technologies">
                         <h2>
@@ -1807,12 +2413,109 @@
 
                     <!-- Experience Section -->
                     <section id="experience">
+                        <span class="section-kicker pow-only">
+                            <span lang="en">Roles, studies, side projects, one rail</span>
+                            <span lang="de">Rollen, Studium, Nebenprojekte, eine Achse</span>
+                        </span>
                         <h2>
-                            <span lang="en">Experience</span>
-                            <span lang="de">Erfahrung</span>
+                            <!-- In pow mode this section is more than employment,
+                                 so it stops calling itself Experience. -->
+                            <span class="cv-only"><span lang="en">Experience</span><span lang="de">Erfahrung</span></span>
+                            <span class="pow-only"><span lang="en">Timeline</span><span lang="de">Zeitachse</span></span>
                         </h2>
 
                         <div class="timeline">
+
+                        <!-- Independent work, education and publications join the
+                             employment blocks here so proof-of-work mode reads as
+                             one life rather than four CV sections. All of it is
+                             .stream-only, so CV mode still shows employment alone
+                             and the print layout is untouched. -->
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2026</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Hausnummer</h3>
+                                <span class="company-span">
+                                    <span lang="en">Solo · shipped · property deal screening</span>
+                                    <span lang="de">Eigenprojekt · veröffentlicht · Immobilien-Objektprüfung</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-hausnummer">hausnummer</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2025</div>
+                            <div class="company-head">
+                                <h3 class="company-name">CIP-0164</h3>
+                                <span class="company-span">
+                                    <span lang="en">Published · principal author · Cardano Improvement Proposal</span>
+                                    <span lang="de">Veröffentlicht · Hauptautor · Cardano Improvement Proposal</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank" rel="noopener">CIP-0164</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2024</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Pagebase</h3>
+                                <span class="company-span">
+                                    <span lang="en">Founder · freelance agency · Berlin · 2024 – Present</span>
+                                    <span lang="de">Gründer · Freelance-Agentur · Berlin · 2024 – Heute</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-pagebase">pagebase</a>
+                                    <a class="ship-chip" href="#p-underwater-journeys">underwater journeys</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2023</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Dump it!</h3>
+                                <span class="company-span">
+                                    <span lang="en">Solo · iOS, Android, web · 200+ users · 2023 – 2025</span>
+                                    <span lang="de">Eigenprojekt · iOS, Android, Web · 200+ Nutzer · 2023 – 2025</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-dump-it">dump it</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2022</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Drip Dropz</h3>
+                                <span class="company-span">
+                                    <span lang="en">Built and launched · NFT marketplace · 2022 – 2024</span>
+                                    <span lang="de">Gebaut und gelauncht · NFT-Marktplatz · 2022 – 2024</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-drip-dropz">drip dropz</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2021</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Berlin Pool</h3>
+                                <span class="company-span">
+                                    <span lang="en">Operated · Cardano stakepool · 2,000+ blocks · 2021 – 2024</span>
+                                    <span lang="de">Betrieben · Cardano-Stakepool · 2.000+ Blöcke · 2021 – 2024</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-berlin-pool">berlin pool</a>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="company present">
                             <div class="company-marker">2021</div>
@@ -1822,6 +2525,15 @@
                                     <span lang="en">4 yrs 7 mo · Remote · Contract · Nov 2021 – Present</span>
                                     <span lang="de">4 Jahre, 7 Monate · Remote · Auf Vertragsbasis · Nov 2021 – Heute</span>
                                 </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-pubsub">pubsub</a>
+                                    <a class="ship-chip" href="#p-ouroboros-leios">leios</a>
+                                    <a class="ship-chip" href="#p-leios-mempool-simulation">mempool sim</a>
+                                    <a class="ship-chip" href="#p-dolos">dolos</a>
+                                    <a class="ship-chip" href="#p-scrolls">scrolls</a>
+                                    <a class="ship-chip" href="#p-lucid">lucid</a>
+                                    <a class="ship-chip" href="#p-dex-order-serialization-library">dex serialization</a>
+                                </div>
                             </div>
 
                         <div class="job role">
@@ -2240,6 +2952,28 @@
 
                         </div><!-- /company CityXcape -->
 
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2014</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Hult International Business School</h3>
+                                <span class="company-span">
+                                    <span lang="en">International Business · San Francisco, CA · 2014 – 2015</span>
+                                    <span lang="de">International Business · San Francisco, CA · 2014 – 2015</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="company milestone stream-only">
+                            <div class="company-marker">2011</div>
+                            <div class="company-head">
+                                <h3 class="company-name">DHBW Stuttgart</h3>
+                                <span class="company-span">
+                                    <span lang="en">B.Sc. Computer Science · Germany · 2011 – 2014</span>
+                                    <span lang="de">B.Sc. Informatik · Deutschland · 2011 – 2014</span>
+                                </span>
+                            </div>
+                        </div>
+
                         </div><!-- /timeline -->
                     </section>
 
@@ -2266,12 +3000,29 @@
 
                     <!-- Projects Section -->
                     <section id="projects">
+                        <span class="section-kicker pow-only">
+                            <span lang="en">Proof of work</span>
+                            <span lang="de">Belege</span>
+                        </span>
                         <h2>
                             <span lang="en">Projects</span>
                             <span lang="de">Projekte</span>
                         </h2>
+                        <!-- Filters are pow-only. They finally use the data-tags
+                             attributes the cards have always carried. -->
+                        <div class="project-filters" role="group" aria-label="Filter projects by area">
+                            <button type="button" class="filter-btn" data-filter="all" aria-pressed="true">
+                                <span lang="en">All</span><span lang="de">Alle</span>
+                            </button>
+                            <button type="button" class="filter-btn" data-filter="blockchain" aria-pressed="false">blockchain</button>
+                            <button type="button" class="filter-btn" data-filter="architecture" aria-pressed="false">architecture</button>
+                            <button type="button" class="filter-btn" data-filter="infrastructure" aria-pressed="false">infrastructure</button>
+                            <button type="button" class="filter-btn" data-filter="web" aria-pressed="false">web</button>
+                            <button type="button" class="filter-btn" data-filter="mobile" aria-pressed="false">mobile</button>
+                            <button type="button" class="filter-btn" data-filter="ai" aria-pressed="false">ai</button>
+                        </div>
                                                 <div class="projects-grid">
-                        <div class="project-card" data-tags="blockchain,architecture">
+                        <div class="project-card" id="p-pubsub" data-tags="blockchain,architecture">
                         <div class="project-logo">
                             <img src="pubsub-social-preview.png" alt="Byzantine-Resistant PubSub" class="project-logo-img cover">
                         </div>
@@ -2299,7 +3050,7 @@
                         <p class="project-description">Technical architect for a Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, and on-chain registered topics. Formally verifying the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank" rel="noopener">SecureCyclon</a> peer-sampling protocol stack and building a working prototype.</p>
                     </div>
 
-                        <div class="project-card" data-tags="blockchain,architecture">
+                        <div class="project-card" id="p-ouroboros-leios" data-tags="blockchain,architecture">
                         <div class="project-logo">
                             <img src="leios-social-preview.jpg" alt="Ouroboros Leios" class="project-logo-img cover">
                         </div>
@@ -2327,7 +3078,7 @@
                         <p class="project-description">Principal author of <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164</a>, the canonical architecture design document for Cardano's high-throughput protocol. Built interactive web-based simulator and documentation site with formal specification rendered via custom <a href="https://github.com/will-break-it/agda-web-docs-lib" target="_blank">agda-web-docs-lib</a>.</p>
                     </div>
 
-                        <div class="project-card" data-tags="web,mobile,ai,architecture">
+                        <div class="project-card" id="p-dump-it" data-tags="web,mobile,ai,architecture">
                         <div class="project-logo">
                             <img src="dumpit-logo.png" alt="Dump it! logo" class="project-logo-img">
                         </div>
@@ -2351,7 +3102,7 @@
                         <p class="project-description">Voice-native cross-platform app built on Supabase (PostgreSQL) with AI-powered intent classification, semantic search, and end-to-end encryption. Features Row Level Security, Edge Functions, real-time sync, Event Sourcing architecture, and vector embeddings.</p>
                     </div>
 
-                        <div class="project-card" data-tags="web,architecture,consulting">
+                        <div class="project-card" id="p-pagebase" data-tags="web,architecture,consulting">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">P</div>
                         </div>
@@ -2379,7 +3130,7 @@
                         <p class="project-description">Berlin-based freelance agency specializing in Supabase and PostgreSQL backends, web/mobile apps, and AI automation.</p>
                     </div>
 
-                        <div class="project-card" data-tags="web,ai,architecture">
+                        <div class="project-card" id="p-hausnummer" data-tags="web,ai,architecture">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">H</div>
                         </div>
@@ -2413,7 +3164,7 @@
                         <div class="projects-extra-wrap" id="projects-extra">
                             <div class="projects-extra-inner">
                                 <div class="projects-grid projects-grid--extra">
-<div class="project-card extra" data-tags="web">
+<div class="project-card extra" id="p-underwater-journeys" data-tags="web">
                         <div class="project-logo">
                             <img src="https://underwater.journeys.cy/logo.png" alt="Underwater Journeys logo" class="project-logo-img">
                         </div>
@@ -2440,7 +3191,7 @@
                         <p class="project-description">Modern website and booking system for a dive center in Cyprus. Mobile-first design with focus on user experience and easy booking management.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain,infrastructure">
+                        <div class="project-card extra" id="p-leios-mempool-simulation" data-tags="blockchain,infrastructure">
                         <div class="project-logo">
                             <img src="leios-thumbnail.jpg" alt="Leios Mempool Simulation" class="project-logo-img cover">
                         </div>
@@ -2466,7 +3217,7 @@
                         <p class="project-description">Interactive mempool visualization tool for the Leios protocol. Explores front-running opportunities and attack vectors to build educational resources for community understanding of protocol security.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="web,blockchain">
+                        <div class="project-card extra" id="p-drip-dropz" data-tags="web,blockchain">
                         <div class="project-logo">
                             <img src="https://dripdropz.io/favicon.ico" alt="Drip Dropz logo" class="project-logo-img">
                         </div>
@@ -2494,7 +3245,7 @@
                         <p class="project-description">Production NFT marketplace on Cardano with smart contract integration for trading, bidding, and swapping. Implemented wallet standards and event-driven sync patterns later adopted by IOG.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain,infrastructure,architecture">
+                        <div class="project-card extra" id="p-dolos" data-tags="blockchain,infrastructure,architecture">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">D</div>
                         </div>
@@ -2521,7 +3272,7 @@
                         <p class="project-description">Extended <a href="https://docs.txpipe.io/dolos" target="_blank">Dolos</a> chain indexer to support DEX script addresses for Lace wallet's swap feature. Custom fork enabling efficient DEX data retrieval and aggregation.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain">
+                        <div class="project-card extra" id="p-lucid" data-tags="blockchain">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">L</div>
                         </div>
@@ -2548,7 +3299,7 @@
                         <p class="project-description">Extended Cardano transaction library with UTXO chaining capability for complex multi-transaction workflows and atomic operation sequences.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain,infrastructure,architecture">
+                        <div class="project-card extra" id="p-scrolls" data-tags="blockchain,infrastructure,architecture">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">S</div>
                         </div>
@@ -2575,7 +3326,7 @@
                         <p class="project-description">Extended Cardano indexing tool for smart contracts across major DEXes (SundaeSwap, Minswap, WingRiders, MuesliSwap). Comprehensive DeFi data aggregation.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain,architecture">
+                        <div class="project-card extra" id="p-dex-order-serialization-library" data-tags="blockchain,architecture">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">DS</div>
                         </div>
@@ -2602,7 +3353,7 @@
                         <p class="project-description">Published npm package for swap transaction construction across multiple Cardano DEXes. Foundation for Lace wallet's swap feature.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain,infrastructure">
+                        <div class="project-card extra" id="p-berlin-pool" data-tags="blockchain,infrastructure">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">BP</div>
                         </div>
@@ -2621,7 +3372,7 @@
                         <p class="project-description">Production Cardano consensus node infrastructure. Operated 2,000+ blocks with 99.9% uptime and managed 15M+ ADA delegation.</p>
                     </div>
 
-                        <div class="project-card extra" data-tags="blockchain">
+                        <div class="project-card extra" id="p-vert-x-pow-blockchain" data-tags="blockchain">
                         <div class="project-logo">
                             <div class="project-logo-placeholder">VX</div>
                         </div>
@@ -2698,9 +3449,10 @@
         const moonIcon = document.querySelector('.moon-icon');
         const html = document.documentElement;
 
-        // Check for saved theme preference or default to dark mode
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        html.setAttribute('data-theme', currentTheme);
+        // The head script already resolved and applied the theme before first
+        // paint. Read it back rather than resolving the default a second time,
+        // so there is one place that decides what the default is.
+        const currentTheme = html.getAttribute('data-theme') || 'dark';
 
         if (currentTheme === 'dark') {
             sunIcon.style.display = 'none';
@@ -2744,7 +3496,10 @@
             updateCvDownload(lang);
         }
 
-        applyLang(localStorage.getItem('lang') || getBrowserLanguage());
+        // The head script already resolved the language (stored preference, then
+        // browser locale) and applied it before first paint. Read it back so the
+        // fallback chain lives in exactly one place.
+        applyLang(html.getAttribute('data-lang') || getBrowserLanguage());
 
         langToggle.addEventListener('click', function() {
             const lang = html.getAttribute('data-lang') === 'en' ? 'de' : 'en';
@@ -2820,6 +3575,233 @@
                 if (de) de.textContent = open ? 'Weniger anzeigen' : 'Mehr anzeigen';
             });
         }
+
+        // ===================================================================
+        // Mode switching
+        // ===================================================================
+        // The head script has already committed to a mode. This part owns the
+        // gate (only when no choice is stored) and the header switch.
+
+        (function () {
+            const gate = document.getElementById('mode-gate');
+            const switchButtons = Array.from(document.querySelectorAll('.mode-switch button'));
+
+            function syncSwitch(mode) {
+                switchButtons.forEach(btn => {
+                    btn.setAttribute('aria-pressed', btn.dataset.chooseMode === mode ? 'true' : 'false');
+                });
+            }
+
+            function setMode(mode, remember) {
+                html.setAttribute('data-mode', mode);
+                html.removeAttribute('data-mode-undecided');
+                if (remember) {
+                    try { localStorage.setItem('mode', mode); } catch (e) {}
+                }
+                syncSwitch(mode);
+            }
+
+            function closeGate(mode) {
+                setMode(mode, true);
+                if (gate) gate.hidden = true;
+                // Land at the top of whichever layout was chosen.
+                window.scrollTo({ top: 0, behavior: 'auto' });
+            }
+
+            syncSwitch(html.getAttribute('data-mode'));
+
+            // Any element carrying data-choose-mode switches modes: the two gate
+            // options and the two header buttons share one handler.
+            document.addEventListener('click', function (e) {
+                const target = e.target.closest('[data-choose-mode]');
+                if (!target) return;
+                const mode = target.dataset.chooseMode;
+                if (gate && !gate.hidden) closeGate(mode);
+                else setMode(mode, true);
+            });
+
+            if (gate && html.getAttribute('data-mode-undecided') === 'true') {
+                gate.hidden = false;
+                const focusable = () => Array.from(gate.querySelectorAll('button'));
+                const first = focusable()[0];
+                if (first) first.focus();
+
+                document.addEventListener('keydown', function onKey(e) {
+                    if (gate.hidden) { document.removeEventListener('keydown', onKey); return; }
+                    if (e.key === '1') { e.preventDefault(); closeGate('pow'); }
+                    else if (e.key === '2') { e.preventDefault(); closeGate('cv'); }
+                    else if (e.key === 'Escape') { e.preventDefault(); closeGate('pow'); }
+                    else if (e.key === 'Tab') {
+                        // Keep focus inside the dialog while it is open.
+                        const items = focusable();
+                        const i = items.indexOf(document.activeElement);
+                        const next = e.shiftKey ? i - 1 : i + 1;
+                        if (next < 0 || next >= items.length) {
+                            e.preventDefault();
+                            items[e.shiftKey ? items.length - 1 : 0].focus();
+                        }
+                    }
+                });
+            }
+        })();
+
+        // ===================================================================
+        // Project filters
+        // ===================================================================
+        // Reads the data-tags attributes the cards have carried since the start.
+
+        (function () {
+            const buttons = Array.from(document.querySelectorAll('.filter-btn'));
+            if (!buttons.length) return;
+            const cards = Array.from(document.querySelectorAll('.project-card'));
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const filter = btn.dataset.filter;
+                    buttons.forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+                    cards.forEach(card => {
+                        const tags = (card.dataset.tags || '').split(',');
+                        card.classList.toggle('hidden', filter !== 'all' && !tags.includes(filter));
+                    });
+                });
+            });
+        })();
+
+        // ===================================================================
+        // Activity
+        // ===================================================================
+        // Reads the file the nightly workflow commits. Month buckets only: this
+        // data cannot describe a single day, so it cannot imply an idle one.
+        // If the file is missing the whole panel stays hidden rather than
+        // rendering zeros.
+
+        (function () {
+            const panel = document.querySelector('[data-activity="panel"]');
+            if (!panel) return;
+
+            const lang = () => html.getAttribute('data-lang') || 'en';
+
+            function relative(iso) {
+                const then = new Date(iso);
+                const hours = Math.floor((Date.now() - then.getTime()) / 36e5);
+                const de = lang() === 'de';
+                if (hours < 1) return de ? 'gerade eben' : 'just now';
+                if (hours < 24) return `${hours}h ${de ? 'her' : 'ago'}`;
+                const days = Math.floor(hours / 24);
+                if (days === 1) return de ? 'gestern' : 'yesterday';
+                if (days < 30) return `${days} ${de ? 'Tage her' : 'days ago'}`;
+                const months = Math.floor(days / 30);
+                return `${months} ${de ? 'Monate her' : 'months ago'}`;
+            }
+
+            function stat(value, labelEn, labelDe) {
+                const el = document.createElement('div');
+                el.innerHTML =
+                    `<span class="now-stat-value">${value}</span>` +
+                    `<span class="now-stat-label" lang="en">${labelEn}</span>` +
+                    `<span class="now-stat-label" lang="de">${labelDe}</span>`;
+                return el;
+            }
+
+            // Monthly area chart. Twelve points, no day resolution.
+            function sparkline(svg, months) {
+                const W = 600, H = 72, top = 8, bottom = 50;
+                const max = Math.max(...months.map(m => m.total), 1);
+                const x = i => (i / (months.length - 1)) * (W - 24) + 12;
+                const y = v => bottom - (v / max) * (bottom - top);
+
+                const line = months.map((m, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(m.total).toFixed(1)}`).join(' ');
+                const area = `${line} L${x(months.length - 1).toFixed(1)},${bottom} L${x(0).toFixed(1)},${bottom} Z`;
+
+                const parts = [
+                    `<path class="spark-area" d="${area}"></path>`,
+                    `<path class="spark-line" d="${line}"></path>`,
+                ];
+                months.forEach((m, i) => {
+                    parts.push(`<circle class="spark-node" cx="${x(i).toFixed(1)}" cy="${y(m.total).toFixed(1)}" r="2.5"><title>${m.month}: ${m.total}</title></circle>`);
+                    // Label every other month so the axis stays readable.
+                    if (i % 2 === 0) {
+                        const label = m.month.slice(5) + '/' + m.month.slice(2, 4);
+                        parts.push(`<text class="spark-axis" x="${x(i).toFixed(1)}" y="66" text-anchor="middle">${label}</text>`);
+                    }
+                });
+                svg.insertAdjacentHTML('beforeend', parts.join(''));
+            }
+
+            // Per-year bars on the timeline rail.
+            //
+            // Two thresholds matter here. A year with no GitHub record gets no
+            // bar, because an empty bar reads as an idle year and everything
+            // before roughly 2020 simply was not on GitHub. A year with a
+            // handful of contributions gets no bar either: a 1-commit 2015
+            // would render as a speck that says "nearly nothing happened" about
+            // a year spent building a company.
+            const BAR_FLOOR = 100;
+            const BAR_MAX_PX = 40;
+
+            function yearBars(years) {
+                const byYear = new Map(years.map(y => [String(y.year), y.total]));
+                const max = Math.max(...years.map(y => y.total), 1);
+                document.querySelectorAll('.company-marker').forEach(marker => {
+                    const year = marker.textContent.trim();
+                    const total = byYear.get(year);
+                    if (!total || total < BAR_FLOOR) return;
+                    const bar = document.createElement('span');
+                    bar.className = 'company-bar stream-only';
+                    bar.style.width = `${Math.max(5, Math.round((total / max) * BAR_MAX_PX))}px`;
+                    bar.title = `${total.toLocaleString()} GitHub contributions in ${year}`;
+                    marker.appendChild(bar);
+                });
+            }
+
+            fetch('data/activity.json', { cache: 'no-cache' })
+                .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+                .then(data => {
+                    const stats = panel.querySelector('[data-activity="stats"]');
+                    const window12 = data.last12Months;
+
+                    stats.appendChild(stat(
+                        window12.total.toLocaleString(),
+                        'contributions · 12 mo', 'Beiträge · 12 Mon.'
+                    ));
+                    stats.appendChild(stat(
+                        `${window12.activeWeeks}/${window12.weeksInWindow}`,
+                        'weeks with commits', 'Wochen mit Commits'
+                    ));
+                    stats.appendChild(stat(
+                        data.totals.repositories,
+                        'repositories', 'Repositories'
+                    ));
+                    // A short streak says nothing useful and reads as a slump, so
+                    // it only earns a slot once it is actually notable.
+                    if (data.streakDays >= 7) {
+                        stats.appendChild(stat(data.streakDays, 'day streak', 'Tage Serie'));
+                    }
+
+                    sparkline(panel.querySelector('[data-activity="spark"]'), window12.months);
+
+                    const langs = panel.querySelector('[data-activity="langs"]');
+                    langs.innerHTML = data.languages
+                        .map(l => `<span class="now-lang">${l.name} <span>${l.share}%</span></span>`)
+                        .join('');
+
+                    const push = document.querySelector('[data-activity="lastpush"]');
+                    if (push && data.lastPush) {
+                        const when = relative(data.lastPush.at);
+                        const where = data.lastPush.repo
+                            ? ` · ${data.lastPush.repo}`
+                            : (lang() === 'de' ? ' · privates Repo' : ' · private repo');
+                        push.textContent = `${lang() === 'de' ? 'letzter Push' : 'last push'} ${when}${where}`;
+                        push.hidden = false;
+                    }
+
+                    yearBars(data.years);
+                    panel.hidden = false;
+                })
+                .catch(() => {
+                    // Nothing to say, so say nothing. Better than a graph of zeros.
+                });
+        })();
     </script>
 </body>
 </html>
