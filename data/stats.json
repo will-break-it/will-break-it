@@ -1,5 +1,6 @@
 {
   "_note": "Hand-maintained figures for proof-of-work mode. Nothing generates this file. The project counts at the top of the page are DERIVED from the list below, so add or move an entry here and the numbers, the filter chips and the card badges all follow. Every 'card' must match an id in index.html. Statuses: live (still running), failed (needs year + why), upstream (a library or extension built into someone else's project), archived (experiment, not maintained).",
+  "codingSince": 2008,
   "since": 2015,
   "career": {
     "employers": 3,
@@ -16,6 +17,7 @@
     { "card": "p-leios-mempool-simulation", "status": "live" },
     { "card": "p-hausnummer", "status": "live" },
     { "card": "p-pagebase", "status": "live" },
+    { "card": "p-operando", "status": "live" },
     { "card": "p-underwater-journeys", "status": "live" },
 
     {

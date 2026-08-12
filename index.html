@@ -1205,6 +1205,7 @@
             color: var(--color-text);
         }
 
+        .filter-btn[aria-pressed="true"],
         .filter-btn.active {
             background: var(--color-accent);
             border-color: var(--color-accent);
@@ -1810,8 +1811,10 @@
         }
 
         [data-mode="pow"] #now { order: 1; }
-        [data-mode="pow"] #projects { order: 2; }
-        [data-mode="pow"] #experience { order: 3; }
+        /* Timeline before the wall: the wall is a three-card teaser now, and the
+           architecture story is the thing worth reading first. */
+        [data-mode="pow"] #experience { order: 2; }
+        [data-mode="pow"] #projects { order: 3; }
         [data-mode="pow"] #technologies { order: 4; }
         [data-mode="pow"] #publications { order: 5; }
 
@@ -1882,7 +1885,41 @@
             line-height: 1.55;
         }
 
-        .now-building strong { color: var(--color-text); }
+        .now-list {
+            list-style: none;
+            margin: var(--spacing-xs) 0 0 0;
+            padding: 0;
+        }
+
+        .now-list li {
+            position: relative;
+            padding-left: 1.1rem;
+            margin-bottom: 0.35rem;
+        }
+
+        /* A live thing gets a live marker, same signal as the pulse above. */
+        .now-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.62em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--color-live);
+        }
+
+        .now-list a {
+            font-family: var(--font-mono);
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .now-list li > span {
+            display: block;
+            font-size: 0.92rem;
+            color: var(--color-text-light);
+        }
 
         .now-groups {
             display: flex;
@@ -2013,10 +2050,23 @@
             overflow: visible;
         }
 
-        .spark-area { fill: rgba(13, 148, 136, 0.16); }
-        .spark-line { fill: none; stroke: var(--color-live); stroke-width: 2; }
-        .spark-node { fill: var(--color-live); }
-        .spark-axis { font-size: 9px; fill: var(--color-text-lighter); font-family: var(--font-mono); }
+        .spark { height: 60px; }
+
+        .spark-bar { fill: var(--color-live); opacity: 0.75; }
+
+        /* Labels in HTML, so they are not stretched by the SVG's non-uniform
+           scaling, and stay selectable text. */
+        .spark-axis-row {
+            display: flex;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--color-text-lighter);
+        }
+
+        .spark-axis-row span {
+            flex: 1 1 0;
+            text-align: center;
+        }
 
         .now-lang {
             font-size: 0.7rem;
@@ -2060,12 +2110,9 @@
             margin-top: 0.1rem;
         }
 
-        /* Everything is on the wall in pow mode. Nothing hides behind a
-           "show more" button when showing the work is the entire point, so the
-           collapsible wrapper is forced open and its button retired. */
-        [data-mode="pow"] #show-more-projects { display: none; }
-        [data-mode="pow"] .projects-extra-wrap { grid-template-rows: 1fr; }
-        [data-mode="pow"] .projects-extra-inner { overflow: visible; }
+        /* The showcase stays curated in pow mode too: six things worth leading
+           with, the rest behind "show more". Filtering by tag or status opens
+           the drawer automatically so hidden matches are never lost. */
 
         .project-filters {
             display: none;
@@ -2491,16 +2538,26 @@
 
                         <hr class="now-rule">
 
-                        <p class="now-building">
+                        <div class="now-building">
                             <span class="now-label">
                                 <span class="now-pulse" aria-hidden="true"></span>
-                                <span lang="en">Building</span>
-                                <span lang="de">In Arbeit</span>
+                                <span lang="en">Building now</span>
+                                <span lang="de">Aktuell in Arbeit</span>
                             </span>
-                            <span lang="en">A Byzantine-resistant publish/subscribe layer for Cardano at <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener"><strong>pubsub.cardano-scaling.org</strong></a>, and <a href="https://alwayssandy.com" target="_blank" rel="noopener"><strong>alwayssandy.com</strong></a>, which matches beach volleyball players with coaches across Berlin's sand courts.</span>
-                            <span lang="de">Eine Byzantine-resistente Publish/Subscribe-Schicht für Cardano unter <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener"><strong>pubsub.cardano-scaling.org</strong></a> und <a href="https://alwayssandy.com" target="_blank" rel="noopener"><strong>alwayssandy.com</strong></a>, das Beachvolleyball-Spieler mit Trainern auf Berliner Sandplätzen zusammenbringt.</span>
+                            <ul class="now-list">
+                                <li>
+                                    <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener">pubsub.cardano-scaling.org</a>
+                                    <span lang="en">Byzantine-resistant publish/subscribe layer for Cardano</span>
+                                    <span lang="de">Byzantine-resistente Publish/Subscribe-Schicht für Cardano</span>
+                                </li>
+                                <li>
+                                    <a href="https://alwayssandy.com" target="_blank" rel="noopener">alwayssandy.com</a>
+                                    <span lang="en">Matches beach volleyball players with coaches across Berlin's sand courts</span>
+                                    <span lang="de">Bringt Beachvolleyball-Spieler mit Trainern auf Berliner Sandplätzen zusammen</span>
+                                </li>
+                            </ul>
                             <span class="now-push" data-activity="lastpush" hidden></span>
-                        </p>
+                        </div>
                     </section>
 
                     <!-- Technologies Section -->
@@ -2590,9 +2647,10 @@
                                 <span class="activity-stats" data-activity="stats"></span>
                                 <span class="activity-langs" data-activity="langs"></span>
                             </div>
-                            <svg class="spark" data-activity="spark" viewBox="0 0 600 72" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
+                            <svg class="spark" data-activity="spark" viewBox="0 0 600 60" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
                                 <title id="spark-title">Contributions per month over the last twelve months</title>
                             </svg>
+                            <div class="spark-axis-row" data-activity="axis" aria-hidden="true"></div>
                             <p class="now-caption">
                                 <span lang="en">Monthly totals, GitHub only, private repositories included as counts. There are no per-day marks here on purpose: merges get squashed, plenty of work lives on other forges, and review or design days leave no commit. Read it as a floor, not a total.</span>
                                 <span lang="de">Monatswerte, nur GitHub, private Repositories als Zahlen enthalten. Bewusst keine Tagesmarkierungen: Merges werden gequetscht, viel Arbeit liegt auf anderen Forges, und Review- oder Design-Tage hinterlassen keinen Commit. Als Untergrenze lesen, nicht als Gesamtwert.</span>
@@ -3262,39 +3320,15 @@
                         <p class="project-description">Principal author of <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164</a>, the canonical architecture design document for Cardano's high-throughput protocol. Built interactive web-based simulator and documentation site with formal specification rendered via custom <a href="https://github.com/will-break-it/agda-web-docs-lib" target="_blank">agda-web-docs-lib</a>.</p>
                     </div>
 
-                        <div class="project-card" id="p-dump-it" data-tags="web,mobile,ai,architecture">
+                        <div class="project-card" id="p-operando" data-tags="ai,architecture,consulting">
                         <div class="project-logo">
-                            <img src="dumpit-logo.png" alt="Dump it! logo" class="project-logo-img">
-                        </div>
-                        <div class="project-header">
-                            <div class="project-title-row">
-                                <h3 class="project-title-link">
-                                    Dump it! – Voice-First Note Taking App
-                                </h3>
-                            </div>
-                            <div class="project-tech">
-                                <span class="tech-tag">Swift</span>
-                                <span class="tech-tag">Kotlin</span>
-                                <span class="tech-tag">React</span>
-                                <span class="tech-tag">TypeScript</span>
-                                <span class="tech-tag">Supabase</span>
-                                <span class="tech-tag">PostgreSQL</span>
-                                <span class="tech-tag">Whisper</span>
-                                <span class="tech-tag">Event Sourcing</span>
-                            </div>
-                        </div>
-                        <p class="project-description">Voice-native cross-platform app built on Supabase (PostgreSQL) with AI-powered intent classification, semantic search, and end-to-end encryption. Features Row Level Security, Edge Functions, real-time sync, Event Sourcing architecture, and vector embeddings.</p>
-                    </div>
-
-                        <div class="project-card" id="p-pagebase" data-tags="web,architecture,consulting">
-                        <div class="project-logo">
-                            <div class="project-logo-placeholder">P</div>
+                            <img src="https://operando.de/wp-content/uploads/2024/09/cropped-operando-favicon-192x192.png" alt="Operando Partners" class="project-logo-img">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
                                 <h3>
-                                    <a href="https://pagebase.dev" target="_blank" class="project-title-link">
-                                        Pagebase – Freelance Development Agency
+                                    <a href="https://operando.de" target="_blank" rel="noopener" class="project-title-link">
+                                        Operando – AI Lead Intake Pipeline
                                         <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                             <polyline points="15 3 21 3 21 9"></polyline>
@@ -3304,19 +3338,24 @@
                                 </h3>
                             </div>
                             <div class="project-tech">
-                                <span class="tech-tag">Supabase</span>
-                                <span class="tech-tag">PostgreSQL</span>
-                                <span class="tech-tag">React</span>
-                                <span class="tech-tag">Node.js</span>
-                                <span class="tech-tag">Consulting</span>
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Claude</span>
+                                <span class="tech-tag">Microsoft Graph</span>
+                                <span class="tech-tag">HubSpot API</span>
+                                <span class="tech-tag">Zod</span>
+                                <span class="tech-tag">Client Work</span>
                             </div>
                         </div>
-                        <p class="project-description">Berlin-based freelance agency specializing in Supabase and PostgreSQL backends, web/mobile apps, and AI automation.</p>
+                        <p class="project-description">Client pipeline that turns deal emails into reviewed CRM leads: reads the mailbox, extracts figures from PDF and image attachments with a multimodal model, and creates a standardised HubSpot lead for human approval. Untrusted email content is constrained to a schema and never executed as instructions, a blocklist keeps it out of production pipelines, and processing state lives on the mail item itself so the poll runs statelessly from any machine.</p>
                     </div>
 
-                        <div class="project-card" id="p-hausnummer" data-tags="web,ai,architecture">
+                        </div>
+                        <div class="projects-extra-wrap" id="projects-extra">
+                            <div class="projects-extra-inner">
+                                <div class="projects-grid projects-grid--extra">
+<div class="project-card extra" id="p-hausnummer" data-tags="web,ai,architecture">
                         <div class="project-logo">
-                            <div class="project-logo-placeholder">H</div>
+                            <img src="hausnummer-logo.svg" alt="Hausnummer" class="project-logo-img">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -3344,11 +3383,86 @@
                     </div>
 
 
+                        <div class="project-card extra" id="p-pagebase" data-tags="web,architecture,consulting">
+                        <div class="project-logo">
+                            <div class="project-logo-placeholder">P</div>
                         </div>
-                        <div class="projects-extra-wrap" id="projects-extra">
-                            <div class="projects-extra-inner">
-                                <div class="projects-grid projects-grid--extra">
-<div class="project-card extra" id="p-underwater-journeys" data-tags="web">
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3>
+                                    <a href="https://pagebase.dev" target="_blank" class="project-title-link">
+                                        Pagebase – Freelance Development Agency
+                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">Supabase</span>
+                                <span class="tech-tag">PostgreSQL</span>
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">Node.js</span>
+                                <span class="tech-tag">Consulting</span>
+                            </div>
+                        </div>
+                        <p class="project-description">Berlin-based freelance agency specializing in Supabase and PostgreSQL backends, web/mobile apps, and AI automation.</p>
+                    </div>
+
+                        <div class="project-card extra" id="p-dolos" data-tags="blockchain,infrastructure,architecture">
+                        <div class="project-logo">
+                            <div class="project-logo-placeholder">D</div>
+                        </div>
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3>
+                                    <a href="https://github.com/will-break-it/dolos" target="_blank" class="project-title-link">
+                                        Dolos – Chain Indexer Extension
+                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">Rust</span>
+                                <span class="tech-tag">Cardano</span>
+                                <span class="tech-tag">Blockchain Indexing</span>
+                                <span class="tech-tag" style="background: #28a745; color: white;">Open Source</span>
+                            </div>
+                        </div>
+                        <p class="project-description">Extended <a href="https://docs.txpipe.io/dolos" target="_blank">Dolos</a> chain indexer to support DEX script addresses for Lace wallet's swap feature. Custom fork enabling efficient DEX data retrieval and aggregation.</p>
+                    </div>
+
+                        <div class="project-card extra" id="p-dump-it" data-tags="web,mobile,ai,architecture">
+                        <div class="project-logo">
+                            <img src="dumpit-logo.png" alt="Dump it! logo" class="project-logo-img">
+                        </div>
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3 class="project-title-link">
+                                    Dump it! – Voice-First Note Taking App
+                                </h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">Swift</span>
+                                <span class="tech-tag">Kotlin</span>
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">Supabase</span>
+                                <span class="tech-tag">PostgreSQL</span>
+                                <span class="tech-tag">Whisper</span>
+                                <span class="tech-tag">Event Sourcing</span>
+                            </div>
+                        </div>
+                        <p class="project-description">Voice-native cross-platform app built on Supabase (PostgreSQL) with AI-powered intent classification, semantic search, and end-to-end encryption. Features Row Level Security, Edge Functions, real-time sync, Event Sourcing architecture, and vector embeddings.</p>
+                    </div>
+
+                        <div class="project-card extra" id="p-underwater-journeys" data-tags="web">
                         <div class="project-logo">
                             <img src="https://underwater.journeys.cy/logo.png" alt="Underwater Journeys logo" class="project-logo-img">
                         </div>
@@ -3427,33 +3541,6 @@
                             </div>
                         </div>
                         <p class="project-description">Production NFT marketplace on Cardano with smart contract integration for trading, bidding, and swapping. Implemented wallet standards and event-driven sync patterns later adopted by IOG.</p>
-                    </div>
-
-                        <div class="project-card extra" id="p-dolos" data-tags="blockchain,infrastructure,architecture">
-                        <div class="project-logo">
-                            <div class="project-logo-placeholder">D</div>
-                        </div>
-                        <div class="project-header">
-                            <div class="project-title-row">
-                                <h3>
-                                    <a href="https://github.com/will-break-it/dolos" target="_blank" class="project-title-link">
-                                        Dolos – Chain Indexer Extension
-                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                            <polyline points="15 3 21 3 21 9"></polyline>
-                                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                                        </svg>
-                                    </a>
-                                </h3>
-                            </div>
-                            <div class="project-tech">
-                                <span class="tech-tag">Rust</span>
-                                <span class="tech-tag">Cardano</span>
-                                <span class="tech-tag">Blockchain Indexing</span>
-                                <span class="tech-tag" style="background: #28a745; color: white;">Open Source</span>
-                            </div>
-                        </div>
-                        <p class="project-description">Extended <a href="https://docs.txpipe.io/dolos" target="_blank">Dolos</a> chain indexer to support DEX script addresses for Lace wallet's swap feature. Custom fork enabling efficient DEX data retrieval and aggregation.</p>
                     </div>
 
                         <div class="project-card extra" id="p-lucid" data-tags="blockchain">
@@ -3838,6 +3925,8 @@
             const buttons = Array.from(document.querySelectorAll('.filter-btn'));
             if (!buttons.length) return;
             const cards = Array.from(document.querySelectorAll('.project-card'));
+            const projectsExtra = document.getElementById('projects-extra');
+            const showMore = document.getElementById('show-more-projects');
 
             // One active filter at a time. A value is either "all", a tag from
             // data-tags, or "status:<name>" matching the data-status that
@@ -3855,6 +3944,17 @@
                     b.setAttribute('aria-pressed', b.dataset.filter === value ? 'true' : 'false');
                 });
                 cards.forEach(card => card.classList.toggle('hidden', !matches(card, value)));
+
+                // The wall is a three-card teaser by default. Filtering with the
+                // drawer shut would silently drop most matches, so any filter
+                // other than "all" opens it.
+                if (projectsExtra && value !== 'all') {
+                    projectsExtra.classList.add('open');
+                    if (showMore) {
+                        showMore.classList.add('expanded');
+                        showMore.setAttribute('aria-expanded', 'true');
+                    }
+                }
             }
 
             buttons.forEach(btn => {
@@ -3914,8 +4014,10 @@
                     const built = projects.length;
                     const live = byStatus('live').length;
 
+                    const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
+                    const why = f => (de && f.why.de) || f.why.en;
                     const detail = failures
-                        .map(f => `${f.project || f.card.replace(/^p-/, '')} (${f.year}): ${f.why.en}`)
+                        .map(f => `${f.project || f.card.replace(/^p-/, '')} (${f.year}): ${why(f)}`)
                         .join('\n');
 
                     projectRow.innerHTML =
@@ -3934,34 +4036,21 @@
                         // Derived, so it cannot go stale in a hand-edited file.
                         figure('years', new Date().getFullYear() - data.since);
 
+                    // Prose, not a pile of abbreviations. The previous version
+                    // ("4 upstream libraries · 1 published CIP · 11 public
+                    // repos") was six facts nobody could parse at a glance.
                     const line = (l) => {
-                        const de = l === 'de';
-                        const bits = [];
-                        if (c.employed) bits.push(`${c.employed} ${de ? 'angestellt' : 'employed'}`);
-                        if (c.contract) bits.push(`${c.contract} ${de ? 'auf Vertragsbasis' : 'on contract'}`);
-                        const upstream = byStatus('upstream').length;
-                        if (upstream) bits.push(`${upstream} ${de ? 'Upstream-Bibliotheken' : 'upstream libraries'}`);
-                        if ((data.context || {}).publishedCips) {
-                            bits.push(`${data.context.publishedCips} ${de ? 'veröffentlichte CIP' : 'published CIP'}`);
-                        }
-                        // Filled in from activity.json once that resolves.
-                        bits.push(`<span data-activity="repos">–</span> ${de ? 'öffentliche Repos' : 'public repos'}`);
-                        bits.push(`${de ? 'baue seit' : 'shipping since'} ${data.since}`);
-                        return `<span lang="${l}">${bits.join(' · ')}</span>`;
+                        const text = l === 'de'
+                            ? `Code seit ${data.codingSince}, werde dafür bezahlt seit ${data.since}. ` +
+                              `${c.employers} Arbeitgeber, ${c.founded} eigene Firmen, ` +
+                              `eine veröffentlichte Protokollspezifikation.`
+                            : `Writing code since ${data.codingSince}, paid for it since ${data.since}. ` +
+                              `${c.employers} employers, ${c.founded} companies of my own, ` +
+                              `one published protocol specification.`;
+                        return `<span lang="${l}">${text}</span>`;
                     };
                     const context = document.querySelector('[data-stats="context"]');
-                    if (context) {
-                        context.innerHTML = line('en') + line('de');
-                        // The two fetches race. If activity.json already landed
-                        // it parked its repo count here, so use it; if not, it
-                        // will fill these spans when it arrives.
-                        const parked = document.documentElement.dataset.publicRepos;
-                        if (parked) {
-                            context.querySelectorAll('[data-activity="repos"]').forEach(el => {
-                                el.textContent = parked;
-                            });
-                        }
-                    }
+                    if (context) context.innerHTML = line('en') + line('de');
 
                     // Tag every card with its status, which is what the status
                     // filters match on, and badge the failures.
@@ -3976,10 +4065,9 @@
                         if (!tech) return;
                         const tag = document.createElement('span');
                         tag.className = 'ended-tag';
-                        tag.title = p.why.en;
                         tag.innerHTML =
-                            `<span lang="en">failed ${p.year}</span>` +
-                            `<span lang="de">gescheitert ${p.year}</span>`;
+                            `<span lang="en">failed ${p.year} · ${p.why.en}</span>` +
+                            `<span lang="de">gescheitert ${p.year} · ${p.why.de || p.why.en}</span>`;
                         tech.insertBefore(tag, tech.firstChild);
                     });
 
@@ -4033,29 +4121,35 @@
                 return `${months} ${de ? 'Monate her' : 'months ago'}`;
             }
 
-            // Monthly area chart. Twelve points, no day resolution.
-            function sparkline(svg, months) {
-                const W = 600, H = 72, top = 8, bottom = 50;
+            // Twelve bars, one per month.
+            //
+            // Bars rather than a line on purpose. A line drawn through monthly
+            // totals interpolates a rate for every day between two points, which
+            // is exactly the claim the caption underneath says this data cannot
+            // make. A bar states one number for one month and nothing in between.
+            //
+            // Month labels live in HTML next to the chart, not inside it: the SVG
+            // stretches to the container width with preserveAspectRatio="none",
+            // which would distort any text drawn in it.
+            function sparkline(svg, axis, months) {
+                const W = 600, top = 6, bottom = 60;
                 const max = Math.max(...months.map(m => m.total), 1);
-                const x = i => (i / (months.length - 1)) * (W - 24) + 12;
-                const y = v => bottom - (v / max) * (bottom - top);
+                const slot = W / months.length;
+                const barW = slot * 0.62;
 
-                const line = months.map((m, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(m.total).toFixed(1)}`).join(' ');
-                const area = `${line} L${x(months.length - 1).toFixed(1)},${bottom} L${x(0).toFixed(1)},${bottom} Z`;
+                svg.insertAdjacentHTML('beforeend', months.map((m, i) => {
+                    const h = Math.max(2, ((m.total / max) * (bottom - top)));
+                    const x = i * slot + (slot - barW) / 2;
+                    return `<rect class="spark-bar" x="${x.toFixed(1)}" y="${(bottom - h).toFixed(1)}" ` +
+                        `width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="1">` +
+                        `<title>${m.month}: ${m.total}</title></rect>`;
+                }).join(''));
 
-                const parts = [
-                    `<path class="spark-area" d="${area}"></path>`,
-                    `<path class="spark-line" d="${line}"></path>`,
-                ];
-                months.forEach((m, i) => {
-                    parts.push(`<circle class="spark-node" cx="${x(i).toFixed(1)}" cy="${y(m.total).toFixed(1)}" r="2.5"><title>${m.month}: ${m.total}</title></circle>`);
-                    // Label every other month so the axis stays readable.
-                    if (i % 2 === 0) {
-                        const label = m.month.slice(5) + '/' + m.month.slice(2, 4);
-                        parts.push(`<text class="spark-axis" x="${x(i).toFixed(1)}" y="66" text-anchor="middle">${label}</text>`);
-                    }
-                });
-                svg.insertAdjacentHTML('beforeend', parts.join(''));
+                if (axis) {
+                    axis.innerHTML = months
+                        .map(m => `<span>${m.month.slice(5)}/${m.month.slice(2, 4)}</span>`)
+                        .join('');
+                }
             }
 
             // Per-year bars on the timeline rail.
@@ -4096,6 +4190,8 @@
                     const parts = [
                         `${window12.total.toLocaleString()} ${de ? 'Beiträge' : 'contributions'}`,
                         `${window12.activeWeeks}/${window12.weeksInWindow} ${de ? 'Wochen mit Commits' : 'weeks with commits'}`,
+                        `${data.totals.pullRequests} ${de ? 'Pull Requests' : 'pull requests'}`,
+                        `${data.totals.reviews} ${de ? 'Reviews' : 'reviews'}`,
                     ];
                     // A short streak says nothing useful and reads as a slump, so
                     // it only earns a mention once it is actually notable.
@@ -4104,7 +4200,11 @@
                     }
                     panel.querySelector('[data-activity="stats"]').textContent = parts.join(' · ');
 
-                    sparkline(panel.querySelector('[data-activity="spark"]'), window12.months);
+                    sparkline(
+                        panel.querySelector('[data-activity="spark"]'),
+                        panel.querySelector('[data-activity="axis"]'),
+                        window12.months
+                    );
 
                     const langs = panel.querySelector('[data-activity="langs"]');
                     langs.innerHTML = data.languages
