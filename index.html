@@ -1871,9 +1871,18 @@
             100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0); }
         }
 
+        .now-building-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        /* No display declaration here on purpose: the element ships with the
+           hidden attribute until the activity file resolves, and any display
+           value would override it. */
         .now-push {
-            display: block;
-            margin-top: var(--spacing-xs);
             font-family: var(--font-mono);
             font-size: 0.72rem;
             color: var(--color-text-lighter);
@@ -2546,11 +2555,14 @@
                         <hr class="now-rule">
 
                         <div class="now-building">
-                            <span class="now-label">
-                                <span class="now-pulse" aria-hidden="true"></span>
-                                <span lang="en">Building now</span>
-                                <span lang="de">Aktuell in Arbeit</span>
-                            </span>
+                            <div class="now-building-head">
+                                <span class="now-label">
+                                    <span class="now-pulse" aria-hidden="true"></span>
+                                    <span lang="en">Building now</span>
+                                    <span lang="de">Aktuell in Arbeit</span>
+                                </span>
+                                <span class="now-push" data-activity="lastpush" hidden></span>
+                            </div>
                             <ul class="now-list">
                                 <li>
                                     <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener">pubsub.cardano-scaling.org</a>
@@ -2568,7 +2580,6 @@
                                     <span lang="de">Mein Freelance-Studio: Supabase- und PostgreSQL-Backends, Web- und Mobile-Entwicklung, KI-Automatisierung</span>
                                 </li>
                             </ul>
-                            <span class="now-push" data-activity="lastpush" hidden></span>
                         </div>
                     </section>
 
