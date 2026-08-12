@@ -1616,6 +1616,37 @@
         [data-mode="pow"] .pow-only { display: block; }
         [data-mode="pow"] .cv-only { display: none; }
 
+        /* --- decorative rain ---------------------------------------------- */
+        /* Sits behind everything. The header and the now-strip both paint an
+           opaque background, so nothing legible ever has cells running under
+           it. Ships display:none so no-JS and CV mode never see it. */
+
+        #rain {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: none;
+            pointer-events: none;
+        }
+
+        [data-mode="pow"] #rain,
+        [data-mode-undecided] #rain { display: block; }
+
+        /* While the gate is up the page itself is hidden rather than covered by
+           an opaque backdrop. That leaves the transparent gate sitting directly
+           on the rain, with no z-index gymnastics: position:fixed creates a
+           stacking context of its own, so a backdrop inside the gate can never
+           be separated from the gate's own contents by an outside canvas.
+           Only ever active with JS, and only until a mode is chosen. */
+        [data-mode-undecided] .container { visibility: hidden; }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
         /* --- boot gate ---------------------------------------------------- */
 
         #mode-gate {
@@ -1626,13 +1657,13 @@
             align-items: center;
             justify-content: center;
             padding: var(--spacing-md);
-            background: var(--color-bg);
             font-family: var(--font-mono);
         }
 
         #mode-gate[hidden] { display: none; }
 
         .gate-window {
+            position: relative;
             width: 100%;
             max-width: 560px;
             border: 1px solid var(--color-border);
@@ -2052,6 +2083,7 @@
            being handed to a human on paper. */
 
         @media print {
+            #rain,
             #mode-gate,
             .mode-switch,
             .pow-only,
@@ -2059,6 +2091,10 @@
             .project-filters,
             .company-bar,
             .company-ships { display: none !important; }
+
+            /* Printing while the chooser is still open must not emit a blank
+               page: the gate hides the container on screen, print shows it. */
+            .container { visibility: visible !important; }
 
             /* Undo the pow layout so the printed page is the CV either way.
                The pow rules above are [data-mode] + #id, which outranks the
@@ -2116,6 +2152,12 @@
     </script>
 </head>
 <body>
+    <!-- Decorative background: contribution-style cells falling top down.
+         Purely ornamental. It is NOT drawn from activity.json and carries no
+         information, which is why it is aria-hidden and never labelled with a
+         count. Only ever visible in proof-of-work mode and behind the gate. -->
+    <canvas id="rain" aria-hidden="true"></canvas>
+
     <!-- Mode chooser. Ships hidden and stays hidden unless JS finds no stored
          choice, so crawlers and no-JS visitors are never gated. -->
     <div id="mode-gate" role="dialog" aria-modal="true" aria-labelledby="gate-question" hidden>
@@ -3801,6 +3843,167 @@
                 .catch(() => {
                     // Nothing to say, so say nothing. Better than a graph of zeros.
                 });
+        })();
+
+        // ===================================================================
+        // Decorative rain
+        // ===================================================================
+        // Contribution-style cells falling top down, in the accent colour.
+        // Ornament only: it encodes nothing and is not derived from
+        // activity.json. Cells snap to a grid and hold a fixed brightness per
+        // row so they read as heatmap squares rather than flickering noise.
+
+        (function () {
+            const canvas = document.getElementById('rain');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d');
+
+            const CELL = 11;          // square size
+            const GAP = 5;            // grid gutter
+            const STEP = CELL + GAP;
+            const FPS = 20;           // slow on purpose: calm, and cheap
+            const FRAME_MS = 1000 / FPS;
+            // Four brightness steps, the way a contribution graph has levels.
+            const LEVELS = [0.28, 0.5, 0.72, 1];
+
+            const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+            let columns = [];
+            let width = 0, height = 0, rows = 0, dpr = 1;
+            let last = 0, raf = null;
+
+            function accent() {
+                const css = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--color-live').trim() || '#2dd4bf';
+                // Parse the token once per resize/theme change into rgb parts.
+                const hex = css.replace('#', '');
+                const full = hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex;
+                const n = parseInt(full, 16);
+                return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+            }
+
+            // Light backgrounds need a fainter wash than near-black ones.
+            function ceiling() {
+                return document.documentElement.getAttribute('data-theme') === 'dark' ? 0.16 : 0.1;
+            }
+
+            let rgb = accent();
+            let maxAlpha = ceiling();
+
+            function column(x, seeded) {
+                return {
+                    x,
+                    // Start scattered above the fold so nothing arrives in lockstep.
+                    head: seeded ? Math.random() * rows : -Math.random() * rows - 4,
+                    speed: 0.06 + Math.random() * 0.16,   // rows per frame
+                    trail: 5 + Math.floor(Math.random() * 14),
+                    // Fixed per-row brightness, so a cell keeps its level as the
+                    // trail moves over it instead of strobing.
+                    levels: Array.from({ length: 24 }, () => LEVELS[Math.floor(Math.random() * LEVELS.length)]),
+                };
+            }
+
+            function resize() {
+                dpr = Math.min(window.devicePixelRatio || 1, 2);
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = Math.floor(width * dpr);
+                canvas.height = Math.floor(height * dpr);
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                rows = Math.ceil(height / STEP) + 2;
+                rgb = accent();
+                maxAlpha = ceiling();
+                const count = Math.ceil(width / STEP);
+                columns = Array.from({ length: count }, (_, i) => column(i * STEP, true));
+                draw();
+            }
+
+            function cell(x, y, alpha) {
+                if (alpha <= 0.004) return;
+                ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha.toFixed(3)})`;
+                if (ctx.roundRect) {
+                    ctx.beginPath();
+                    ctx.roundRect(x, y, CELL, CELL, 2);
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(x, y, CELL, CELL);
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                for (const col of columns) {
+                    const headRow = Math.floor(col.head);
+                    for (let i = 0; i < col.trail; i++) {
+                        const row = headRow - i;
+                        if (row < 0 || row > rows) continue;
+                        const level = col.levels[((row % col.levels.length) + col.levels.length) % col.levels.length];
+                        // Brightest at the head, fading up the trail.
+                        const fade = 1 - i / col.trail;
+                        cell(col.x, row * STEP, maxAlpha * level * fade * fade);
+                    }
+                }
+            }
+
+            function tick(now) {
+                raf = requestAnimationFrame(tick);
+                if (now - last < FRAME_MS) return;
+                last = now;
+
+                // Only burn cycles when the canvas is actually on screen.
+                const root = document.documentElement;
+                const visible = root.getAttribute('data-mode') === 'pow' ||
+                    root.hasAttribute('data-mode-undecided');
+                if (!visible || document.hidden) return;
+
+                for (const col of columns) {
+                    col.head += col.speed;
+                    if (col.head - col.trail > rows) Object.assign(col, column(col.x, false));
+                }
+                draw();
+            }
+
+            function start() {
+                if (raf !== null) return;
+                raf = requestAnimationFrame(tick);
+            }
+
+            function stop() {
+                if (raf === null) return;
+                cancelAnimationFrame(raf);
+                raf = null;
+            }
+
+            resize();
+
+            let resizeTimer = null;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(resize, 150);
+            });
+
+            // Reduced motion gets the texture without the movement: one frame,
+            // then nothing animates.
+            if (still.matches) {
+                draw();
+            } else {
+                start();
+            }
+            still.addEventListener('change', e => (e.matches ? (stop(), draw()) : start()));
+
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) stop(); else if (!still.matches) start();
+            });
+
+            // The accent colour differs per theme, so recolour on toggle.
+            const themeBtn = document.getElementById('theme-toggle');
+            if (themeBtn) {
+                themeBtn.addEventListener('click', function () {
+                    rgb = accent();
+                    maxAlpha = ceiling();
+                    draw();
+                });
+            }
         })();
     </script>
 </body>
