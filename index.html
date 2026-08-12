@@ -1775,30 +1775,42 @@
 
         .mode-switch {
             display: flex;
-            padding: 2px;
-            border: 1px solid var(--color-border);
-            border-radius: 999px;
-            background: var(--color-bg-alt);
+            align-items: center;
+            gap: 0.45rem;
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            letter-spacing: 0.04em;
         }
 
+        /* Two words and a rule, no capsule. The pill was the heaviest object in
+           a header of otherwise weightless icons. */
         .mode-switch button {
-            padding: 0.25rem 0.6rem;
+            padding: 0;
             border: none;
-            border-radius: 999px;
             background: none;
             color: var(--color-text-lighter);
-            font-family: var(--font-mono);
-            font-size: 0.68rem;
-            letter-spacing: 0.03em;
+            font: inherit;
+            letter-spacing: inherit;
             cursor: pointer;
-            transition: background 0.15s ease, color 0.15s ease;
+            border-bottom: 1px solid transparent;
+            transition: color 0.15s ease, border-color 0.15s ease;
         }
 
         .mode-switch button:hover { color: var(--color-text); }
 
         .mode-switch button[aria-pressed="true"] {
-            background: var(--color-text);
-            color: var(--color-bg);
+            color: var(--color-live);
+            border-bottom-color: var(--color-live);
+        }
+
+        .mode-switch::after {
+            content: "";
+            order: -1;
+        }
+
+        .mode-switch .mode-sep {
+            color: var(--color-border);
+            user-select: none;
         }
 
         /* --- proof-of-work layout ----------------------------------------- */
@@ -2487,6 +2499,7 @@
             <div class="header-controls">
                 <div class="mode-switch" role="group" aria-label="View mode">
                     <button type="button" data-choose-mode="pow" aria-pressed="false">work</button>
+                    <span class="mode-sep" aria-hidden="true">/</span>
                     <button type="button" data-choose-mode="cv" aria-pressed="false">cv</button>
                 </div>
 
