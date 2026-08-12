@@ -1828,34 +1828,27 @@
         [data-mode="pow"] .profile-image { width: 88px; height: 88px; }
         [data-mode="pow"] .intro-section { margin-bottom: var(--spacing-md); }
 
-        /* --- now strip ---------------------------------------------------- */
+        /* --- career stat row ---------------------------------------------- */
+        /* No box. The numbers are the design; the rain shows through behind
+           them. A panel here read as a dashboard widget bolted to a CV. */
 
         #now {
-            border: 1px solid var(--color-border);
-            border-radius: 12px;
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            background: var(--color-bg-alt);
+            /* No bottom margin: the next section's kicker already carries a
+               top margin, and doubling them left a hole. */
             font-family: var(--font-mono);
         }
 
-        .now-head {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: var(--spacing-sm);
-            flex-wrap: wrap;
-            margin-bottom: var(--spacing-sm);
-        }
-
         .now-label {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.45rem;
+            margin-right: 0.6rem;
+            font-family: var(--font-mono);
             font-size: 0.72rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--color-text-lighter);
+            white-space: nowrap;
         }
 
         .now-pulse {
@@ -1874,39 +1867,87 @@
         }
 
         .now-push {
-            font-size: 0.75rem;
+            display: block;
+            margin-top: var(--spacing-xs);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
             color: var(--color-text-lighter);
         }
 
         .now-building {
             font-family: var(--font-sans);
             font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: var(--spacing-md);
+            line-height: 1.55;
         }
 
         .now-building strong { color: var(--color-text); }
 
         .now-stats {
             display: flex;
-            gap: var(--spacing-md);
+            gap: var(--spacing-lg);
             flex-wrap: wrap;
-            margin-bottom: var(--spacing-sm);
+            align-items: flex-start;
         }
 
         .now-stat-value {
             display: block;
-            font-size: 1.35rem;
+            font-size: 2.1rem;
             font-weight: 700;
-            line-height: 1.1;
+            line-height: 1;
+            letter-spacing: -0.02em;
             color: var(--color-text);
         }
 
+        /* The one number nobody puts on a CV, so it gets the accent. */
+        .now-stat-failed {
+            color: var(--color-live);
+            cursor: help;
+        }
+
         .now-stat-label {
-            font-size: 0.68rem;
-            letter-spacing: 0.06em;
+            font-size: 0.66rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--color-text-lighter);
+        }
+
+        .now-context {
+            margin-top: var(--spacing-sm);
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            line-height: 1.7;
+            color: var(--color-text-lighter);
+        }
+
+        .now-rule {
+            margin: var(--spacing-md) 0;
+            border: none;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* --- activity, next to the timeline ------------------------------- */
+
+        #activity {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .activity-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            color: var(--color-text-lighter);
+        }
+
+        .activity-stats { color: var(--color-text-light); }
+
+        .activity-langs {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
         }
 
         /* Monthly buckets. There is deliberately no per-day mark anywhere in
@@ -1922,13 +1963,6 @@
         .spark-line { fill: none; stroke: var(--color-live); stroke-width: 2; }
         .spark-node { fill: var(--color-live); }
         .spark-axis { font-size: 9px; fill: var(--color-text-lighter); font-family: var(--font-mono); }
-
-        .now-langs {
-            display: flex;
-            gap: var(--spacing-xs);
-            flex-wrap: wrap;
-            margin-top: var(--spacing-sm);
-        }
 
         .now-lang {
             font-size: 0.7rem;
@@ -1989,6 +2023,21 @@
         [data-mode="pow"] .project-filters { display: flex; }
 
         .project-card.hidden { display: none; }
+
+        /* Marks the three projects the "failed" count refers to, so the number
+           at the top can be checked by scrolling. Pow mode only: the CV keeps
+           its own tone. */
+        .ended-tag { display: none; }
+
+        [data-mode="pow"] .ended-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border: 1px solid var(--color-live);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--color-live);
+        }
 
         .project-live {
             display: inline-flex;
@@ -2358,33 +2407,61 @@
 
                 <!-- Main CV Content -->
                 <div class="cv-main">
-                    <!-- Now strip: proof-of-work mode only -->
-                    <section id="now" class="pow-only" aria-labelledby="now-label">
-                        <div class="now-head">
-                            <span class="now-label" id="now-label">
-                                <span class="now-pulse" aria-hidden="true"></span>
-                                <span lang="en">Currently building</span>
-                                <span lang="de">Aktuell in Arbeit</span>
-                            </span>
-                            <span class="now-push" data-activity="lastpush" hidden></span>
+                    <!-- Career shape, proof-of-work mode only.
+                         Deliberately not a panel: no border, no background. The
+                         figures sit on the page with the rain behind them.
+                         All hand-maintained static numbers, so they are in the
+                         HTML for crawlers rather than assembled by JS. Keep them
+                         in sync when a project ships or dies. -->
+                    <section id="now" class="pow-only" aria-label="Summary">
+                        <div class="now-stats">
+                            <div>
+                                <span class="now-stat-value">14</span>
+                                <span class="now-stat-label" lang="en">Built</span>
+                                <span class="now-stat-label" lang="de">Gebaut</span>
+                            </div>
+                            <div>
+                                <span class="now-stat-value">6</span>
+                                <span class="now-stat-label" lang="en">Live</span>
+                                <span class="now-stat-label" lang="de">Laufen</span>
+                            </div>
+                            <div>
+                                <!-- Named rather than just counted: a failure
+                                     count nobody can check is just a humblebrag.
+                                     The three cards carry a matching badge. -->
+                                <span class="now-stat-value now-stat-failed" title="Drip Dropz (2024): died with the NFT market. Dump it! (2025): 200 users, no business model. Berlin Pool (2024): stopped paying for itself.">3</span>
+                                <span class="now-stat-label" lang="en">Failed</span>
+                                <span class="now-stat-label" lang="de">Gescheitert</span>
+                            </div>
+                            <div>
+                                <span class="now-stat-value">5</span>
+                                <span class="now-stat-label" lang="en">Companies</span>
+                                <span class="now-stat-label" lang="de">Firmen</span>
+                            </div>
+                            <div>
+                                <span class="now-stat-value">11</span>
+                                <span class="now-stat-label" lang="en">Years</span>
+                                <span class="now-stat-label" lang="de">Jahre</span>
+                            </div>
                         </div>
 
-                        <p class="now-building">
-                            <span lang="en">Technical architect for a <strong>Byzantine-resistant pub/sub network</strong> at IOG: formally verifying the SecureCyclon peer-sampling stack and building the prototype that has to survive it. On the side, <strong>Hausnummer</strong> for screening property deals and a Rust discovery pipeline that keeps eating my evenings.</span>
-                            <span lang="de">Technischer Architekt für ein <strong>Byzantine-resistentes Pub/Sub-Netzwerk</strong> bei IOG: formale Verifikation des SecureCyclon-Peer-Sampling-Stacks und der Prototyp, der das überleben muss. Nebenbei <strong>Hausnummer</strong> zur Prüfung von Immobilienangeboten und eine Rust-Discovery-Pipeline, die mir die Abende frisst.</span>
+                        <p class="now-context">
+                            <span lang="en">2 employed, 1 on contract, 2 founded · <span data-activity="repos">11</span> public repos · 1 published CIP · 4 upstream libraries · shipping since 2015</span>
+                            <span lang="de">2 angestellt, 1 auf Vertragsbasis, 2 gegründet · <span data-activity="repos">11</span> öffentliche Repos · 1 veröffentlichte CIP · 4 Upstream-Bibliotheken · baue seit 2015</span>
                         </p>
 
-                        <div data-activity="panel" hidden>
-                            <div class="now-stats" data-activity="stats"></div>
-                            <svg class="spark" data-activity="spark" viewBox="0 0 600 72" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
-                                <title id="spark-title" lang="en">Contributions per month over the last twelve months</title>
-                            </svg>
-                            <div class="now-langs" data-activity="langs"></div>
-                            <p class="now-caption">
-                                <span lang="en">Monthly totals, GitHub only, private repositories included as counts. There are no per-day marks here on purpose: merges get squashed, plenty of work lives on other forges, and review or design days leave no commit. Read it as a floor, not a total.</span>
-                                <span lang="de">Monatswerte, nur GitHub, private Repositories als Zahlen enthalten. Bewusst keine Tagesmarkierungen: Merges werden gequetscht, viel Arbeit liegt auf anderen Forges, und Review- oder Design-Tage hinterlassen keinen Commit. Als Untergrenze lesen, nicht als Gesamtwert.</span>
-                            </p>
-                        </div>
+                        <hr class="now-rule">
+
+                        <p class="now-building">
+                            <span class="now-label">
+                                <span class="now-pulse" aria-hidden="true"></span>
+                                <span lang="en">Building</span>
+                                <span lang="de">In Arbeit</span>
+                            </span>
+                            <span lang="en">Technical architect for a <strong>Byzantine-resistant pub/sub network</strong> at IOG: formally verifying the SecureCyclon peer-sampling stack and building the prototype that has to survive it. On the side, <strong>Hausnummer</strong> for screening property deals and a Rust discovery pipeline that keeps eating my evenings.</span>
+                            <span lang="de">Technischer Architekt für ein <strong>Byzantine-resistentes Pub/Sub-Netzwerk</strong> bei IOG: formale Verifikation des SecureCyclon-Peer-Sampling-Stacks und der Prototyp, der das überleben muss. Nebenbei <strong>Hausnummer</strong> zur Prüfung von Immobilienangeboten und eine Rust-Discovery-Pipeline, die mir die Abende frisst.</span>
+                            <span class="now-push" data-activity="lastpush" hidden></span>
+                        </p>
                     </section>
 
                     <!-- Technologies Section -->
@@ -2465,6 +2542,23 @@
                             <span class="cv-only"><span lang="en">Experience</span><span lang="de">Erfahrung</span></span>
                             <span class="pow-only"><span lang="en">Timeline</span><span lang="de">Zeitachse</span></span>
                         </h2>
+
+                        <!-- The monthly chart lives with the timeline rather than
+                             at the top: it is chronological data, and the year
+                             bars on the rail below are drawn from the same file. -->
+                        <div id="activity" class="pow-only" data-activity="panel" hidden>
+                            <div class="activity-head">
+                                <span class="activity-stats" data-activity="stats"></span>
+                                <span class="activity-langs" data-activity="langs"></span>
+                            </div>
+                            <svg class="spark" data-activity="spark" viewBox="0 0 600 72" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
+                                <title id="spark-title">Contributions per month over the last twelve months</title>
+                            </svg>
+                            <p class="now-caption">
+                                <span lang="en">Monthly totals, GitHub only, private repositories included as counts. There are no per-day marks here on purpose: merges get squashed, plenty of work lives on other forges, and review or design days leave no commit. Read it as a floor, not a total.</span>
+                                <span lang="de">Monatswerte, nur GitHub, private Repositories als Zahlen enthalten. Bewusst keine Tagesmarkierungen: Merges werden gequetscht, viel Arbeit liegt auf anderen Forges, und Review- oder Design-Tage hinterlassen keinen Commit. Als Untergrenze lesen, nicht als Gesamtwert.</span>
+                            </p>
+                        </div>
 
                         <div class="timeline">
 
@@ -3131,6 +3225,7 @@
                                 </h3>
                             </div>
                             <div class="project-tech">
+                                <span class="ended-tag"><span lang="en">failed 2025</span><span lang="de">gescheitert 2025</span></span>
                                 <span class="tech-tag">Swift</span>
                                 <span class="tech-tag">Kotlin</span>
                                 <span class="tech-tag">React</span>
@@ -3277,6 +3372,7 @@
                                 </h3>
                             </div>
                             <div class="project-tech">
+                                <span class="ended-tag"><span lang="en">failed 2024</span><span lang="de">gescheitert 2024</span></span>
                                 <span class="tech-tag">React</span>
                                 <span class="tech-tag">TypeScript</span>
                                 <span class="tech-tag">Cardano</span>
@@ -3404,6 +3500,7 @@
                                 <h3>Berlin Pool – Cardano Stakepool</h3>
                             </div>
                             <div class="project-tech">
+                                <span class="ended-tag"><span lang="en">failed 2024</span><span lang="de">gescheitert 2024</span></span>
                                 <span class="tech-tag">Cardano</span>
                                 <span class="tech-tag">Docker</span>
                                 <span class="tech-tag">Terraform</span>
@@ -3736,15 +3833,6 @@
                 return `${months} ${de ? 'Monate her' : 'months ago'}`;
             }
 
-            function stat(value, labelEn, labelDe) {
-                const el = document.createElement('div');
-                el.innerHTML =
-                    `<span class="now-stat-value">${value}</span>` +
-                    `<span class="now-stat-label" lang="en">${labelEn}</span>` +
-                    `<span class="now-stat-label" lang="de">${labelDe}</span>`;
-                return el;
-            }
-
             // Monthly area chart. Twelve points, no day resolution.
             function sparkline(svg, months) {
                 const W = 600, H = 72, top = 8, bottom = 50;
@@ -3799,33 +3887,36 @@
             fetch('data/activity.json', { cache: 'no-cache' })
                 .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
                 .then(data => {
-                    const stats = panel.querySelector('[data-activity="stats"]');
+                    const de = lang() === 'de';
                     const window12 = data.last12Months;
 
-                    stats.appendChild(stat(
-                        window12.total.toLocaleString(),
-                        'contributions · 12 mo', 'Beiträge · 12 Mon.'
-                    ));
-                    stats.appendChild(stat(
-                        `${window12.activeWeeks}/${window12.weeksInWindow}`,
-                        'weeks with commits', 'Wochen mit Commits'
-                    ));
-                    stats.appendChild(stat(
-                        data.totals.repositories,
-                        'repositories', 'Repositories'
-                    ));
+                    // One compact line rather than a row of tiles: the big
+                    // numbers at the top of the page are the career ones, and
+                    // two competing stat rows read as a dashboard.
+                    const parts = [
+                        `${window12.total.toLocaleString()} ${de ? 'Beiträge' : 'contributions'}`,
+                        `${window12.activeWeeks}/${window12.weeksInWindow} ${de ? 'Wochen mit Commits' : 'weeks with commits'}`,
+                    ];
                     // A short streak says nothing useful and reads as a slump, so
-                    // it only earns a slot once it is actually notable.
+                    // it only earns a mention once it is actually notable.
                     if (data.streakDays >= 7) {
-                        stats.appendChild(stat(data.streakDays, 'day streak', 'Tage Serie'));
+                        parts.push(`${data.streakDays} ${de ? 'Tage Serie' : 'day streak'}`);
                     }
+                    panel.querySelector('[data-activity="stats"]').textContent = parts.join(' · ');
 
                     sparkline(panel.querySelector('[data-activity="spark"]'), window12.months);
 
                     const langs = panel.querySelector('[data-activity="langs"]');
                     langs.innerHTML = data.languages
+                        .slice(0, 5)
                         .map(l => `<span class="now-lang">${l.name} <span>${l.share}%</span></span>`)
                         .join('');
+
+                    // Keep the hand-written public repo count honest: if the
+                    // real number has drifted, the file wins over the markup.
+                    document.querySelectorAll('[data-activity="repos"]').forEach(el => {
+                        el.textContent = data.totals.publicRepositories;
+                    });
 
                     const push = document.querySelector('[data-activity="lastpush"]');
                     if (push && data.lastPush) {
