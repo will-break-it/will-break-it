@@ -159,6 +159,13 @@ Software engineer with 10+ years across enterprise (Deloitte), blockchain infras
   #b[*Stack:* Supabase, PostgreSQL, React/React Native, edge functions, CI/CD]
 ]
 
+#exp("Hausnummer – Property Deal Screening", "2026", "Solo Project")[
+  Screening tool for German residential investment listings, built and shipped solo.
+  #v(2pt)
+  #b[*Modelling:* Monthly cashflow before tax as the headline figure, after-tax estimates kept separate, break-even equity and cash-on-cash return; all assumptions visible and editable]
+  #b[*Stack:* Astro on Cloudflare Workers with KV; listing import extracts figures from a pasted link via browser rendering and structured output parsing]
+]
+
 #exp("Drip Dropz – NFT Marketplace", "2022 – 2024", "Cardano")[
   Production NFT trading platform built from scratch.
   #v(2pt)

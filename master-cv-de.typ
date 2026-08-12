@@ -159,6 +159,13 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
   #b[*Stack:* Supabase, PostgreSQL, React/React Native, Edge Functions, CI/CD]
 ]
 
+#exp("Hausnummer – Immobilien-Objektprüfung", "2026", "Eigenprojekt")[
+  Prüfwerkzeug für deutsche Wohnimmobilien-Anzeigen, allein gebaut und veröffentlicht.
+  #v(2pt)
+  #b[*Berechnung:* Monatlicher Cashflow vor Steuern als Kennzahl, Nachsteuer-Schätzungen getrennt ausgewiesen, Break-even-Eigenkapital und Cash-on-Cash-Rendite; alle Annahmen sichtbar und editierbar]
+  #b[*Stack:* Astro auf Cloudflare Workers mit KV; Anzeigen-Import liest Kennzahlen aus einem eingefügten Link über Browser-Rendering und strukturierte Ausgabe]
+]
+
 #exp("Drip Dropz – NFT-Marktplatz", "2022 – 2024", "Cardano")[
   Produktive NFT-Handelsplattform von Grund auf entwickelt.
   #v(2pt)
