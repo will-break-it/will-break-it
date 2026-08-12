@@ -2180,43 +2180,52 @@
         .stream-only { display: none; }
         [data-mode="pow"] .stream-only { display: block; }
 
-        .company-bar {
-            display: block;
-            margin-left: auto;
-            margin-top: 3px;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--color-live);
-            opacity: 0.7;
-        }
-
         /* Ship chips annotate the stream, so they belong to pow mode only. The
            CV lists the same projects in their own section. */
         .company-ships { display: none; }
 
         [data-mode="pow"] .company-ships {
             display: flex;
-            gap: var(--spacing-xs);
+            gap: 0.35rem;
             flex-wrap: wrap;
-            margin-top: var(--spacing-xs);
+            margin-top: 0.4rem;
         }
 
         .ship-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
             font-family: var(--font-mono);
             font-size: 0.7rem;
-            padding: 0.12rem 0.5rem;
+            padding: 0.2rem 0.6rem;
             border: 1px solid var(--color-border);
             border-radius: 999px;
             color: var(--color-text-light);
             text-decoration: none;
+            line-height: 1.35;
             transition: border-color 0.15s ease, color 0.15s ease;
         }
 
-        .ship-chip::before { content: "\2197 "; color: var(--color-live); }
+        /* Gap comes from flex, not from a trailing space inside content: a space
+           at the end of a content string does not reliably render, which is why
+           the arrow was touching the label. */
+        .ship-chip::before {
+            content: "\2197";
+            color: var(--color-live);
+            font-size: 0.78em;
+        }
 
         .ship-chip:hover {
             border-color: var(--color-live);
             color: var(--color-text);
+        }
+
+        .milestone {
+            padding-bottom: var(--spacing-md);
+        }
+
+        .milestone .company-head {
+            margin-bottom: 0;
         }
 
         .milestone .company-name {
@@ -2255,7 +2264,6 @@
             .pow-only,
             .stream-only,
             .project-filters,
-            .company-bar,
             .company-ships { display: none !important; }
 
             /* Printing while the chooser is still open must not emit a blank
@@ -4184,32 +4192,6 @@
                 }
             }
 
-            // Per-year bars on the timeline rail.
-            //
-            // Two thresholds matter here. A year with no GitHub record gets no
-            // bar, because an empty bar reads as an idle year and everything
-            // before roughly 2020 simply was not on GitHub. A year with a
-            // handful of contributions gets no bar either: a 1-commit 2015
-            // would render as a speck that says "nearly nothing happened" about
-            // a year spent building a company.
-            const BAR_FLOOR = 100;
-            const BAR_MAX_PX = 40;
-
-            function yearBars(years) {
-                const byYear = new Map(years.map(y => [String(y.year), y.total]));
-                const max = Math.max(...years.map(y => y.total), 1);
-                document.querySelectorAll('.company-marker').forEach(marker => {
-                    const year = marker.textContent.trim();
-                    const total = byYear.get(year);
-                    if (!total || total < BAR_FLOOR) return;
-                    const bar = document.createElement('span');
-                    bar.className = 'company-bar stream-only';
-                    bar.style.width = `${Math.max(5, Math.round((total / max) * BAR_MAX_PX))}px`;
-                    bar.title = `${total.toLocaleString()} GitHub contributions in ${year}`;
-                    marker.appendChild(bar);
-                });
-            }
-
             fetch('data/activity.json', { cache: 'no-cache' })
                 .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
                 .then(data => {
@@ -4260,7 +4242,6 @@
                         push.hidden = false;
                     }
 
-                    yearBars(data.years);
                     panel.hidden = false;
                 })
                 .catch(() => {
