@@ -2212,7 +2212,11 @@
         .ship-chip::before {
             content: "\2197";
             color: var(--color-live);
-            font-size: 0.78em;
+            /* Larger than the label, not smaller: at 0.7rem the mono arrow
+               glyph was too fine to register as an arrow at all. */
+            font-size: 1.15em;
+            font-weight: 700;
+            line-height: 1;
         }
 
         .ship-chip:hover {
