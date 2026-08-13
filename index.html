@@ -2045,7 +2045,7 @@
         /* GitHub's orientation: time runs left to right, so years are columns
            with the current one on the right edge, and months are rows. */
 
-        .heat { margin-bottom: var(--spacing-lg); }
+        .heat { margin-top: var(--spacing-lg); }
 
         .heat-head,
         .activity-label {
@@ -2168,30 +2168,10 @@
 
         /* Monthly buckets. There is deliberately no per-day mark anywhere in
            this chart: a missing Tuesday is not a thing it can draw. */
-        .spark {
-            display: block;
-            width: 100%;
-            height: 72px;
-            overflow: visible;
-        }
 
-        .spark { height: 60px; }
 
-        .spark-bar { fill: var(--color-live); opacity: 0.75; }
 
-        /* Labels in HTML, so they are not stretched by the SVG's non-uniform
-           scaling, and stay selectable text. */
-        .spark-axis-row {
-            display: flex;
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            color: var(--color-text-lighter);
-        }
 
-        .spark-axis-row span {
-            flex: 1 1 0;
-            text-align: center;
-        }
 
         .now-lang {
             font-size: 0.7rem;
@@ -2344,6 +2324,33 @@
             padding-bottom: var(--spacing-md);
         }
 
+        /* Side work hangs off the role it ran during rather than competing with
+           it for a rail slot. Sixteen equal entries read as a list; four roles
+           with work hanging off them reads as a career. */
+        .company-alongside {
+            margin-top: var(--spacing-xs);
+            font-size: 0.85rem;
+            line-height: 1.55;
+            color: var(--color-text-lighter);
+        }
+
+        .company-alongside a { color: var(--color-text-light); }
+        .company-alongside a:hover { color: var(--color-text); }
+
+        .heat-foot {
+            margin-top: var(--spacing-sm);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--color-text-lighter);
+        }
+
+        .stack-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+        }
+
         .milestone .company-head {
             margin-bottom: 0;
         }
@@ -2372,6 +2379,26 @@
             .now-pulse, .gate-caret { animation: none; }
             .gate-option:hover, .gate-option:focus-visible { transform: none; }
         }
+
+        .site-foot {
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--color-text-lighter);
+        }
+
+        .site-foot-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            margin-top: var(--spacing-xs);
+        }
+
+        .site-foot-links a { color: var(--color-text-light); }
 
         /* --- print: always the CV ---------------------------------------- */
         /* A printed page has no toggle, so it gets the format that survives
@@ -2681,6 +2708,27 @@
                         </div>
                         <p class="now-context" data-stats="context"></p>
 
+                        <div id="activity" data-activity="panel">
+                        <!-- Career heatmap: GitHub's grid, but every cell is
+                             a month of documented work from the timeline, so
+                             it can start in 2015 where GitHub cannot. -->
+                        <div class="heat" data-career="grid" hidden>
+                            <div class="heat-head">
+                            <span class="activity-label">
+                                <span lang="en">Work running, 2015 to today · coarse on the left, daily on the right</span>
+                                <span lang="de">Parallele Arbeit, 2015 bis heute · links grob, rechts täglich</span>
+                            </span>
+                            <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
+                            </div>
+                            <div class="heat-band" data-career="rows"></div>
+                            <p class="heat-foot">
+                                <span class="activity-stats" data-activity="stats"></span>
+                            </p>
+
+                        </div>
+
+</div>
+
                         <hr class="now-rule">
 
                         <div class="now-building">
@@ -2718,6 +2766,14 @@
                             <span lang="en">Technologies</span>
                             <span lang="de">Technologien</span>
                         </h2>
+                        <div class="stack-row pow-only">
+                            <span class="activity-label">
+                                <span lang="en">Where the code has gone, estimated across 11 years</span>
+                                <span lang="de">Wohin der Code ging, geschätzt über 11 Jahre</span>
+                            </span>
+                            <span class="activity-langs" data-stats="stack"></span>
+                        </div>
+
                         <div class="tech-grid">
                             <div class="tech-category">
                                 <h3>
@@ -2780,62 +2836,12 @@
 
                     <!-- Experience Section -->
                     <section id="experience">
-                        <span class="section-kicker pow-only">
-                            <span lang="en">Roles, studies, side projects, one rail</span>
-                            <span lang="de">Rollen, Studium, Nebenprojekte, eine Achse</span>
-                        </span>
                         <h2>
                             <!-- In pow mode this section is more than employment,
                                  so it stops calling itself Experience. -->
                             <span class="cv-only"><span lang="en">Experience</span><span lang="de">Erfahrung</span></span>
                             <span class="pow-only"><span lang="en">Timeline</span><span lang="de">Zeitachse</span></span>
                         </h2>
-
-                        <!-- The monthly chart lives with the timeline rather than
-                             at the top: it is chronological data, and the year
-                             bars on the rail below are drawn from the same file. -->
-                        <div id="activity" class="pow-only" data-activity="panel" hidden>
-                            <!-- Career heatmap: GitHub's grid, but every cell is
-                                 a month of documented work from the timeline, so
-                                 it can start in 2015 where GitHub cannot. -->
-                            <div class="heat" data-career="grid" hidden>
-                                <div class="heat-head">
-                                    <span class="activity-label">
-                                        <span lang="en">Work running, 2015 to today · coarse on the left, daily on the right</span>
-                                        <span lang="de">Parallele Arbeit, 2015 bis heute · links grob, rechts täglich</span>
-                                    </span>
-                                    <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
-                                </div>
-                                <div class="heat-band" data-career="rows"></div>
-
-                                <div class="stack-row">
-                                    <span class="activity-label">
-                                        <span lang="en">Where the code has gone, estimated across 11 years</span>
-                                        <span lang="de">Wohin der Code ging, geschätzt über 11 Jahre</span>
-                                    </span>
-                                    <span class="activity-langs" data-stats="stack"></span>
-                                </div>
-                            </div>
-
-                            <div class="activity-head">
-                                <span class="activity-label">
-                                    <span lang="en">Public commits per month, last 12 months</span>
-                                    <span lang="de">Öffentliche Commits pro Monat, letzte 12 Monate</span>
-                                </span>
-
-                            </div>
-                            <div class="activity-head">
-                                <span class="activity-stats" data-activity="stats"></span>
-                            </div>
-                            <svg class="spark" data-activity="spark" viewBox="0 0 600 60" preserveAspectRatio="none" role="img" aria-labelledby="spark-title">
-                                <title id="spark-title">Contributions per month over the last twelve months</title>
-                            </svg>
-                            <div class="spark-axis-row" data-activity="axis" aria-hidden="true"></div>
-                            <p class="now-caption">
-                                <span lang="en">Monthly totals, GitHub only, private repositories included as counts. There are no per-day marks here on purpose: merges get squashed, plenty of work lives on other forges, and review or design days leave no commit. Read it as a floor, not a total.</span>
-                                <span lang="de">Monatswerte, nur GitHub, private Repositories als Zahlen enthalten. Bewusst keine Tagesmarkierungen: Merges werden gequetscht, viel Arbeit liegt auf anderen Forges, und Review- oder Design-Tage hinterlassen keinen Commit. Als Untergrenze lesen, nicht als Gesamtwert.</span>
-                            </p>
-                        </div>
 
                         <div class="timeline">
 
@@ -2845,92 +2851,11 @@
                              .stream-only, so CV mode still shows employment alone
                              and the print layout is untouched. -->
 
-                        <div class="company milestone stream-only">
-                            <div class="company-marker">2026</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Hausnummer</h3>
-                                <span class="company-span">
-                                    <span lang="en">Solo · shipped · property deal screening</span>
-                                    <span lang="de">Eigenprojekt · veröffentlicht · Immobilien-Objektprüfung</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="#p-hausnummer">hausnummer</a>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="company milestone stream-only">
-                            <div class="company-marker">2025</div>
-                            <div class="company-head">
-                                <h3 class="company-name">CIP-0164</h3>
-                                <span class="company-span">
-                                    <span lang="en">Published · principal author · Cardano Improvement Proposal</span>
-                                    <span lang="de">Veröffentlicht · Hauptautor · Cardano Improvement Proposal</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank" rel="noopener">CIP-0164</a>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="company milestone stream-only">
-                            <div class="company-marker">2024</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Pagebase</h3>
-                                <span class="company-span">
-                                    <span lang="en">Founder · freelance agency · Berlin · 2024 – Present</span>
-                                    <span lang="de">Gründer · Freelance-Agentur · Berlin · 2024 – Heute</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="#p-pagebase">pagebase</a>
-                                    <a class="ship-chip" href="#p-underwater-journeys">underwater journeys</a>
-                                    <a class="ship-chip" href="#p-iramodel">ira model</a>
-                                    <a class="ship-chip" href="#p-ugc-creator">astrid munkwitz</a>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="company milestone stream-only">
-                            <div class="company-marker">2023</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Dump it!</h3>
-                                <span class="company-span">
-                                    <span lang="en">Solo · iOS, Android, web · 200+ users · 2023 – 2025</span>
-                                    <span lang="de">Eigenprojekt · iOS, Android, Web · 200+ Nutzer · 2023 – 2025</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="#p-dump-it">dump it</a>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="company milestone stream-only">
-                            <div class="company-marker">2022</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Drip Dropz</h3>
-                                <span class="company-span">
-                                    <span lang="en">Built and launched · NFT marketplace · 2022 – 2024</span>
-                                    <span lang="de">Gebaut und gelauncht · NFT-Marktplatz · 2022 – 2024</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="#p-drip-dropz">drip dropz</a>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="company milestone stream-only">
-                            <div class="company-marker">2021</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Berlin Pool</h3>
-                                <span class="company-span">
-                                    <span lang="en">Operated · Cardano stakepool · 2,000+ blocks · 2021 – 2024</span>
-                                    <span lang="de">Betrieben · Cardano-Stakepool · 2.000+ Blöcke · 2021 – 2024</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="#p-berlin-pool">berlin pool</a>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="company present">
                             <div class="company-marker">2021</div>
@@ -2949,6 +2874,10 @@
                                     <a class="ship-chip" href="#p-lucid">lucid</a>
                                     <a class="ship-chip" href="#p-dex-order-serialization-library">dex serialization</a>
                                 </div>
+                                <p class="company-alongside">
+                                    <span lang="en">Alongside, on my own time: <a href="#p-berlin-pool">Berlin Pool</a>, <a href="#p-drip-dropz">Drip Dropz</a>, <a href="#p-dump-it">Dump it!</a>, <a href="#p-pagebase">Pagebase</a>, <a href="#p-hausnummer">Hausnummer</a>, <a href="#p-operando">Operando</a> and five client sites. CIP-0164 published 2025.</span>
+                                    <span lang="de">Nebenbei, in eigener Zeit: <a href="#p-berlin-pool">Berlin Pool</a>, <a href="#p-drip-dropz">Drip Dropz</a>, <a href="#p-dump-it">Dump it!</a>, <a href="#p-pagebase">Pagebase</a>, <a href="#p-hausnummer">Hausnummer</a>, <a href="#p-operando">Operando</a> und fünf Kundenseiten. CIP-0164 veröffentlicht 2025.</span>
+                                </p>
                             </div>
 
                         <div class="job role">
@@ -3318,6 +3247,10 @@
                                     <span lang="en">1 yr 7 mo · San Francisco, CA · Feb 2015 – Sep 2016</span>
                                     <span lang="de">1 Jahr, 7 Monate · San Francisco, CA · Feb 2015 – Sep 2016</span>
                                 </span>
+                                <p class="company-alongside">
+                                    <span lang="en">Founded while finishing the Hult programme in San Francisco.</span>
+                                    <span lang="de">Gegründet während des Hult-Programms in San Francisco.</span>
+                                </p>
                             </div>
 
                         <div class="job role">
@@ -3415,10 +3348,6 @@
 
                     <!-- Projects Section -->
                     <section id="projects">
-                        <span class="section-kicker pow-only">
-                            <span lang="en">Proof of work</span>
-                            <span lang="de">Belege</span>
-                        </span>
                         <h2>
                             <span lang="en">Projects</span>
                             <span lang="de">Projekte</span>
@@ -4375,37 +4304,6 @@
                 return `${months} ${de ? 'Monate her' : 'months ago'}`;
             }
 
-            // Twelve bars, one per month.
-            //
-            // Bars rather than a line on purpose. A line drawn through monthly
-            // totals interpolates a rate for every day between two points, which
-            // is exactly the claim the caption underneath says this data cannot
-            // make. A bar states one number for one month and nothing in between.
-            //
-            // Month labels live in HTML next to the chart, not inside it: the SVG
-            // stretches to the container width with preserveAspectRatio="none",
-            // which would distort any text drawn in it.
-            function sparkline(svg, axis, months) {
-                const W = 600, top = 6, bottom = 60;
-                const max = Math.max(...months.map(m => m.total), 1);
-                const slot = W / months.length;
-                const barW = slot * 0.62;
-
-                svg.insertAdjacentHTML('beforeend', months.map((m, i) => {
-                    const h = Math.max(2, ((m.total / max) * (bottom - top)));
-                    const x = i * slot + (slot - barW) / 2;
-                    return `<rect class="spark-bar" x="${x.toFixed(1)}" y="${(bottom - h).toFixed(1)}" ` +
-                        `width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="1">` +
-                        `<title>${m.month}: ${m.total}</title></rect>`;
-                }).join(''));
-
-                if (axis) {
-                    axis.innerHTML = months
-                        .map(m => `<span>${m.month.slice(5)}/${m.month.slice(2, 4)}</span>`)
-                        .join('');
-                }
-            }
-
             fetch('data/activity.json', { cache: 'no-cache' })
                 .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
                 .then(data => {
@@ -4426,13 +4324,9 @@
                     if (data.streakDays >= 7) {
                         parts.push(`${data.streakDays} ${de ? 'Tage Serie' : 'day streak'}`);
                     }
-                    panel.querySelector('[data-activity="stats"]').textContent = parts.join(' · ');
+                    const statsEl = panel.querySelector('[data-activity="stats"]');
+                    if (statsEl) statsEl.textContent = parts.join(' · ');
 
-                    sparkline(
-                        panel.querySelector('[data-activity="spark"]'),
-                        panel.querySelector('[data-activity="axis"]'),
-                        window12.months
-                    );
 
 
                     // The stats block may not have rendered its context line yet,
