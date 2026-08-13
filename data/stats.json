@@ -28,6 +28,7 @@
   "projects": [
     { "card": "p-pubsub", "status": "live" },
     { "card": "p-ouroboros-leios", "status": "live" },
+    { "card": "p-lace-architecture", "status": "live" },
     { "card": "p-leios-mempool-simulation", "status": "live" },
     { "card": "p-hausnummer", "status": "live" },
     { "card": "p-pagebase", "status": "live" },
