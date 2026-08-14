@@ -1842,8 +1842,6 @@
 
         /* Compact hero: the long bio belongs to the CV, not to the wall. */
         [data-mode="pow"] #home .bio { display: none; }
-        /* The header carries these already, and so does the footer. */
-        [data-mode="pow"] #home .social-links { display: none; }
         [data-mode="pow"] .profile-image { width: 88px; height: 88px; }
         [data-mode="pow"] .intro-section { margin-bottom: var(--spacing-md); }
 
@@ -2438,7 +2436,6 @@
             [data-mode="pow"] #education { order: 5; display: block; }
 
             [data-mode="pow"] #home .bio { display: block !important; }
-            [data-mode="pow"] #home .social-links { display: flex !important; }
             [data-mode="pow"] .intro-section { margin-bottom: 0; }
         }
     </style>
@@ -4472,10 +4469,8 @@
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
 
                     const scoreOf = i => { const b = active.get(i); return b ? b.score : 0; };
-                    const labelsOf = i => { const b = active.get(i); return b ? b.labels : []; };
                     const toLevel = s => (s === 0 ? 0 : Math.min(Math.ceil(s / 1.5), 4));
 
-                    const fmt = d => d.toISOString().slice(0, 10);
                     const today = new Date();
                     today.setUTCHours(0, 0, 0, 0);
                     const midx = d => d.getUTCFullYear() * 12 + d.getUTCMonth();
@@ -4483,15 +4478,15 @@
                     // A bucket reports the peak of the months it covers, so
                     // compressing time never averages a busy stretch away and
                     // never invents a value for a gap.
-                    function cellFor(fromDate, toDate, caption) {
+                    // No title attribute: 477 cells each sprouting a browser
+                    // tooltip made the grid twitchy to move across, and the
+                    // shading is the whole message.
+                    function cellFor(fromDate, toDate) {
                         let peak = 0;
-                        const labels = new Set();
                         for (let i = midx(fromDate); i <= midx(toDate); i++) {
                             peak = Math.max(peak, scoreOf(i));
-                            labelsOf(i).forEach(l => labels.add(l));
                         }
-                        const title = `${caption} · ${labels.size ? [...labels].join(', ') : (de ? 'nichts dokumentiert' : 'nothing recorded')}`;
-                        return `<span class="heat-cell" data-level="${toLevel(peak)}" title="${title.replace(/"/g, '&quot;')}"></span>`;
+                        return `<span class="heat-cell" data-level="${toLevel(peak)}"></span>`;
                     }
 
                     // Log axis: one cell per month for everything older than a
@@ -4512,13 +4507,12 @@
                         noteYear(y, cells.length);
                         cells.push(cellFor(
                             new Date(Date.UTC(y, mo, 1)),
-                            new Date(Date.UTC(y, mo + 1, 0)),
-                            `${y}-${String(mo + 1).padStart(2, '0')}`
+                            new Date(Date.UTC(y, mo + 1, 0))
                         ));
                     }
                     for (let d = new Date(coarseEnd); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
                         noteYear(d.getUTCFullYear(), cells.length);
-                        cells.push(cellFor(d, d, fmt(d)));
+                        cells.push(cellFor(d, d));
                     }
 
                     grid.querySelector('[data-career="rows"]').innerHTML = cells.join('');
