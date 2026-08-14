@@ -1422,7 +1422,16 @@
                 margin: 0 0 4pt 0;
             }
 
-            .hero-name { display: none !important; }
+            /* Willi is the legal name, Will is the one he uses. Dimming the final
+           letter says both at once without an explanatory line. Text content is
+           untouched, so crawlers, screen readers and the JSON-LD still read the
+           full name. */
+        .name-soft {
+            color: var(--color-text-lighter);
+            font-weight: 400;
+        }
+
+        .hero-name { display: none !important; }
 
             .logo {
                 font-size: 21pt;
@@ -1868,6 +1877,15 @@
             /* No bottom margin: the next section's kicker already carries a
                top margin, and doubling them left a hole. */
             font-family: var(--font-mono);
+        }
+
+        /* Willi is the legal name, Will is the one he uses. Dimming the final
+           letter says both at once without an explanatory line. Text content is
+           untouched, so crawlers, screen readers and the JSON-LD still read the
+           full name. */
+        .name-soft {
+            color: var(--color-text-lighter);
+            font-weight: 400;
         }
 
         .hero-name {
@@ -2498,7 +2516,7 @@
     <div id="mode-gate" role="dialog" aria-modal="true" aria-labelledby="gate-question" hidden>
         <div class="gate-window">
             <img class="gate-avatar" src="assets/images/will.jpg" alt="" aria-hidden="true">
-            <p class="gate-name">Willi Wolff</p>
+            <p class="gate-name">Will<span class="name-soft">i</span> Wolff</p>
             <p class="gate-role">
                 <span lang="en">Software Engineer · Technical Architect · Berlin</span>
                 <span lang="de">Software Engineer · Technical Architect · Berlin</span>
@@ -2551,7 +2569,7 @@
         <header id="header">
             <div class="header-brand">
                 <img class="header-avatar" src="assets/images/will.jpg" alt="" aria-hidden="true">
-                <a href="#home" class="logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">Willi Wolff</a>
+                <a href="#home" class="logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">Will<span class="name-soft">i</span> Wolff</a>
             </div>
 
 
@@ -2616,7 +2634,7 @@
             <div class="intro-section">
                 <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
 
-                <h1 class="hero-name">Willi Wolff</h1>
+                <h1 class="hero-name">Will<span class="name-soft">i</span> Wolff</h1>
 
                 <p class="tagline">
                     <span lang="en">Software Engineer • Technical Architect • Builder</span>
