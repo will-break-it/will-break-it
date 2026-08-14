@@ -199,7 +199,15 @@ publicRepos.sort((a, b) => (a.pushedAt < b.pushedAt ? 1 : -1));
 // --- emit -----------------------------------------------------------------
 // Private repo names never leave this script; only counts and language bytes.
 
-const hasPrivateVisibility = years.some((y) => y.private > 0);
+// restrictedContributionsCount means "contributions the caller cannot see the
+// detail of". Granting repo scope therefore DRIVES IT DOWN, because those
+// contributions stop being restricted: this run reports 96 where a token
+// without repo reported 6,217, for the same underlying work. Detecting scope
+// from that number alone would flip to "public" the moment it legitimately hits
+// zero and trip the downgrade guard forever. Seeing private repositories is the
+// reliable signal.
+const seesPrivateRepos = repoCount > publicRepos.length;
+const hasPrivateVisibility = seesPrivateRepos || years.some((y) => y.private > 0);
 
 const out = {
   generated: iso(now),

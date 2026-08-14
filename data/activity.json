@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-14T21:13:01Z",
+  "generated": "2026-08-14T21:14:09Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5093,
+    "total": 5095,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,17 +54,17 @@
       },
       {
         "month": "2026-08",
-        "total": 402
+        "total": 404
       }
     ]
   },
   "streakDays": 5,
   "totals": {
-    "contributions": 8821,
-    "private": 96,
-    "commits": 8121,
-    "pullRequests": 371,
-    "reviews": 45,
+    "contributions": 8823,
+    "private": 6237,
+    "commits": 2210,
+    "pullRequests": 190,
+    "reviews": 37,
     "repositories": 40,
     "publicRepositories": 11
   },
@@ -120,9 +120,9 @@
     {
       "year": 2020,
       "total": 101,
-      "private": 82,
-      "commits": 11,
-      "prs": 6,
+      "private": 98,
+      "commits": 1,
+      "prs": 0,
       "reviews": 0
     },
     {
@@ -136,41 +136,41 @@
     {
       "year": 2022,
       "total": 858,
-      "private": 0,
-      "commits": 839,
-      "prs": 5,
-      "reviews": 1
+      "private": 715,
+      "commits": 130,
+      "prs": 1,
+      "reviews": 0
     },
     {
       "year": 2023,
       "total": 1685,
-      "private": 10,
-      "commits": 1569,
-      "prs": 80,
-      "reviews": 9
+      "private": 1598,
+      "commits": 55,
+      "prs": 22,
+      "reviews": 2
     },
     {
       "year": 2024,
       "total": 205,
-      "private": 0,
-      "commits": 158,
-      "prs": 38,
+      "private": 91,
+      "commits": 84,
+      "prs": 22,
       "reviews": 4
     },
     {
       "year": 2025,
       "total": 2512,
-      "private": 0,
-      "commits": 2388,
-      "prs": 75,
+      "private": 1464,
+      "commits": 950,
+      "prs": 56,
       "reviews": 18
     },
     {
       "year": 2026,
-      "total": 3450,
-      "private": 0,
-      "commits": 3156,
-      "prs": 166,
+      "total": 3452,
+      "private": 2267,
+      "commits": 990,
+      "prs": 88,
       "reviews": 13
     }
   ],
@@ -201,7 +201,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-14T21:12:46Z",
+    "at": "2026-08-14T21:13:50Z",
     "repo": null,
     "url": null,
     "private": true
@@ -210,7 +210,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-14T21:02:44Z",
+      "pushedAt": "2026-08-14T21:13:09Z",
       "language": "HTML"
     },
     {

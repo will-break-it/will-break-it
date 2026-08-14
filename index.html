@@ -4315,13 +4315,21 @@
                         const failedWord = l === 'de'
                             ? (WORDS_DE[failed] || failed)
                             : (WORDS_EN[failed] || failed);
+                        // Written as German, not translated from the English: the
+                        // literal version was verbless ("Seit 18 Jahren Code"),
+                        // misused seit ("seit 11 davon bezahlt") and called
+                        // projects "Sachen".
+                        const failedDe = failed === 1
+                            ? 'ein gescheitertes Projekt'
+                            : `${failedWord} gescheiterte Projekte`;
+                        const failedEn = failed === 1
+                            ? 'one thing that did not make it'
+                            : `${failedWord} things that did not make it`;
                         const text = l === 'de'
-                            ? `Seit ${coding} Jahren Code, seit ${paid} davon bezahlt. ` +
-                              `Zwei eigene Firmen, eine Protokollspezifikation offen einsehbar, ` +
-                              `und ${failedWord} Sachen, die es nicht geschafft haben.`
+                            ? `Seit ${coding} Jahren schreibe ich Code, seit ${paid} verdiene ich damit mein Geld. ` +
+                              `Zwei eigene Firmen, eine veröffentlichte Protokollspezifikation und ${failedDe}.`
                             : `Writing code for ${coding} years, paid for ${paid} of them. ` +
-                              `Two companies of my own, one protocol spec out in the open, ` +
-                              `and ${failedWord} things that did not make it.`;
+                              `Two companies of my own, one protocol spec out in the open, and ${failedEn}.`;
                         return `<span lang="${l}">${text}</span>`;
                     };
 
