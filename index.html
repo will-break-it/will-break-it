@@ -1842,6 +1842,8 @@
 
         /* Compact hero: the long bio belongs to the CV, not to the wall. */
         [data-mode="pow"] #home .bio { display: none; }
+        /* The header carries these already, and so does the footer. */
+        [data-mode="pow"] #home .social-links { display: none; }
         [data-mode="pow"] .profile-image { width: 88px; height: 88px; }
         [data-mode="pow"] .intro-section { margin-bottom: var(--spacing-md); }
 
@@ -2024,14 +2026,13 @@
             color: var(--color-text-lighter);
         }
 
-        .now-context {
-            margin-top: var(--spacing-sm);
+        .hero-line {
+            max-width: 34rem;
+            margin: var(--spacing-xs) auto 0;
             font-family: var(--font-mono);
             font-size: 0.74rem;
             line-height: 1.7;
-            color: var(--color-text-lighter);
-            /* Centred with the figures it belongs to. The prose below the rule
-               stays left aligned, because centred paragraphs are harder to read. */
+            color: var(--color-text-light);
             text-align: center;
         }
 
@@ -2096,7 +2097,7 @@
 
         .heat-axis span {
             border-left: 1px solid var(--color-border);
-            padding-left: 3px;
+            padding-left: 2px;
             white-space: nowrap;
             overflow: hidden;
         }
@@ -2371,6 +2372,22 @@
             .gate-option:hover, .gate-option:focus-visible { transform: none; }
         }
 
+        /* Says plainly that the byline is not there yet. Remove this span, not
+           just its styling, once the CIP lists him. */
+        .pub-pending {
+            display: inline-block;
+            margin-left: var(--spacing-xs);
+            padding: 2px 7px;
+            border: 1px dashed var(--color-border);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: var(--color-text-lighter);
+            vertical-align: middle;
+        }
+
         .site-foot {
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-md);
@@ -2421,6 +2438,7 @@
             [data-mode="pow"] #education { order: 5; display: block; }
 
             [data-mode="pow"] #home .bio { display: block !important; }
+            [data-mode="pow"] #home .social-links { display: flex !important; }
             [data-mode="pow"] .intro-section { margin-bottom: 0; }
         }
     </style>
@@ -2587,6 +2605,8 @@
                     <span lang="de">Software Engineer • Technical Architect • Builder</span>
                 </p>
 
+                <p class="hero-line pow-only" data-stats="context"></p>
+
                 <div class="social-links">
                     <a href="https://github.com/will-break-it" target="_blank" rel="noopener" class="social-link" title="GitHub">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -2697,7 +2717,6 @@
                                 <div class="now-stats" data-stats="career"></div>
                             </div>
                         </div>
-                        <p class="now-context" data-stats="context"></p>
 
                         <div id="activity" data-activity="panel">
                         <!-- Career heatmap: GitHub's grid, but every cell is
@@ -2705,10 +2724,6 @@
                              it can start in 2015 where GitHub cannot. -->
                         <div class="heat" data-career="grid" hidden>
                             <div class="heat-head">
-                            <span class="activity-label">
-                                <span lang="en">Work running, 2015 to today · coarse on the left, daily on the right</span>
-                                <span lang="de">Parallele Arbeit, 2015 bis heute · links grob, rechts täglich</span>
-                            </span>
                             <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
                             </div>
                             <div class="heat-band" data-career="rows"></div>
@@ -3325,6 +3340,30 @@
                             <span lang="en">Published Work</span>
                             <span lang="de">Veröffentlichungen</span>
                         </h2>
+                        <!-- CIP-0118 currently lists Polina Vinogradova, Will Gould
+                             and Alexey Kuleshevich as authors, not Willi. The link is
+                             one click away, so the page says "contributing" until the
+                             authors list changes. WHEN IT DOES: delete the
+                             .pub-pending span and change the meta line to
+                             "Cardano Improvement Proposal · co-author". -->
+                        <div class="education-item">
+                            <h3>
+                                <a href="https://github.com/cardano-foundation/CIPs/blob/master/CIP-0118/README.md" target="_blank" rel="noopener">CIP-0118: Nested Transactions</a>
+                                <span class="pub-pending">
+                                    <span lang="en">co-authorship pending</span>
+                                    <span lang="de">Co-Autorenschaft ausstehend</span>
+                                </span>
+                            </h3>
+                            <p class="education-meta">
+                                <span lang="en">Cardano Improvement Proposal · status: proposed · contributing</span>
+                                <span lang="de">Cardano Improvement Proposal · Status: proposed · Mitarbeit</span>
+                            </p>
+                            <p>
+                                <span lang="en">Ledger-level batching of partially valid transactions, so a transaction missing value or fees can be completed by another one in the same batch. It is the mechanism behind Babel fees, paying fees in non-ADA tokens, and it gives swaps and fee sponsorship counterparty irrelevance: the author of a transaction never has to approve the batch it lands in.</span>
+                                <span lang="de">Ledger-seitiges Bündeln teilweise gültiger Transaktionen, sodass eine Transaktion ohne ausreichende Deckung oder Gebühren von einer anderen im selben Batch vervollständigt wird. Es ist der Mechanismus hinter Babel Fees, dem Bezahlen von Gebühren in Nicht-ADA-Token, und macht Swaps und Gebührenübernahme unabhängig von der Gegenpartei: wer eine Transaktion erstellt, muss den Batch nie freigeben.</span>
+                            </p>
+                        </div>
+
                         <div class="education-item">
                             <h3>
                                 <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164: Ouroboros Leios</a>
@@ -4224,19 +4263,31 @@
                         // Derived, so it cannot go stale in a hand-edited file.
                         figure('years', new Date().getFullYear() - data.since);
 
-                    // Prose, not a pile of abbreviations. The previous version
-                    // ("4 upstream libraries · 1 published CIP · 11 public
-                    // repos") was six facts nobody could parse at a glance.
+                    // One line under the role, warmer than a stat dump. Years
+                    // are derived so they cannot go stale, and the closing clause
+                    // is the failure count: it belongs in the introduction, not
+                    // buried in a tooltip.
+                    const year = new Date().getFullYear();
                     const line = (l) => {
+                        const coding = year - data.codingSince;
+                        const paid = year - data.since;
+                        const failed = (data.projects || []).filter(p => p.status === 'failed').length;
+                        // Spelled out: a numeral mid-sentence reads like a metric.
+                        const WORDS_EN = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+                        const WORDS_DE = ['keine', 'eine', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun'];
+                        const failedWord = l === 'de'
+                            ? (WORDS_DE[failed] || failed)
+                            : (WORDS_EN[failed] || failed);
                         const text = l === 'de'
-                            ? `Code seit ${data.codingSince}, werde dafür bezahlt seit ${data.since}. ` +
-                              `${c.employers} Arbeitgeber, ${c.founded} eigene Firmen, ` +
-                              `eine veröffentlichte Protokollspezifikation.`
-                            : `Writing code since ${data.codingSince}, paid for it since ${data.since}. ` +
-                              `${c.employers} employers, ${c.founded} companies of my own, ` +
-                              `one published protocol specification.`;
+                            ? `Seit ${coding} Jahren Code, seit ${paid} davon bezahlt. ` +
+                              `Zwei eigene Firmen, eine Protokollspezifikation offen einsehbar, ` +
+                              `und ${failedWord} Sachen, die es nicht geschafft haben.`
+                            : `Writing code for ${coding} years, paid for ${paid} of them. ` +
+                              `Two companies of my own, one protocol spec out in the open, ` +
+                              `and ${failedWord} things that did not make it.`;
                         return `<span lang="${l}">${text}</span>`;
                     };
+
                     const context = document.querySelector('[data-stats="context"]');
                     if (context) context.innerHTML = line('en') + line('de');
 
@@ -4447,37 +4498,47 @@
                     // year, one cell per day for the last twelve months. Same
                     // uniform cell, progressively less time inside it.
                     const cells = [];
-                    const zones = [];
+                    const starts = [];   // cell index where each year begins
+
+                    const noteYear = (y, idx) => {
+                        if (!starts.length || starts[starts.length - 1].year !== y) {
+                            starts.push({ year: y, at: idx });
+                        }
+                    };
 
                     const coarseEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 11, 1));
-                    let monthCount = 0;
                     for (let i = first; i < midx(coarseEnd); i++) {
                         const y = Math.floor(i / 12), mo = i % 12;
+                        noteYear(y, cells.length);
                         cells.push(cellFor(
                             new Date(Date.UTC(y, mo, 1)),
                             new Date(Date.UTC(y, mo + 1, 0)),
                             `${y}-${String(mo + 1).padStart(2, '0')}`
                         ));
-                        monthCount++;
                     }
-                    zones.push({ n: monthCount, label: `${Math.floor(first / 12)}\u2013${coarseEnd.getUTCFullYear()} · ${de ? 'ein Feld = ein Monat' : 'one cell = one month'}` });
-
-                    let dayCount = 0;
                     for (let d = new Date(coarseEnd); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
+                        noteYear(d.getUTCFullYear(), cells.length);
                         cells.push(cellFor(d, d, fmt(d)));
-                        dayCount++;
                     }
-                    zones.push({ n: dayCount, label: de ? 'letzte 12 Monate · ein Feld = ein Tag' : 'last 12 months · one cell = one day' });
 
                     grid.querySelector('[data-career="rows"]').innerHTML = cells.join('');
 
-                    // The axis mirrors the column split, so the change of
-                    // resolution is stated rather than left to be noticed.
+                    // Ticks sized by how many columns each year takes. A year of
+                    // months is narrow, a year of days is wide, and that spacing
+                    // is the axis explaining itself.
                     const axis = grid.querySelector('[data-career="axis"]');
                     if (axis) {
-                        axis.innerHTML = zones
-                            .map(z => `<span style="flex: ${Math.ceil(z.n / 7)} 1 0">${z.label}</span>`)
-                            .join('');
+                        const col = i => Math.floor(i / 7);
+                        const total = col(cells.length - 1) + 1;
+                        axis.innerHTML = starts.map((s, i) => {
+                            const from = col(s.at);
+                            const to = i + 1 < starts.length ? col(starts[i + 1].at) : total;
+                            const width = Math.max(1, to - from);
+                            // Two bare digits in the narrow slots: an apostrophe
+                            // is a third character and the label clipped to "'1".
+                            const text = width >= 4 ? s.year : String(s.year).slice(2);
+                            return `<span style="flex: ${width} 1 0">${text}</span>`;
+                        }).join('');
                     }
 
                     const legend = grid.querySelector('[data-career="legend"]');
