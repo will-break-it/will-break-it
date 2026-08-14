@@ -4451,11 +4451,19 @@
                     // One compact line rather than a row of tiles: the big
                     // numbers at the top of the page are the career ones, and
                     // two competing stat rows read as a dashboard.
+                    // Both figures, both labelled. An unqualified count sitting
+                    // under a chart that spans 2015 to today reads as a lifetime
+                    // total when it is only the trailing year.
+                    const sinceYear = (data.since || '').slice(0, 4);
                     const parts = [
-                        `${window12.total.toLocaleString()} ${de ? 'Beiträge' : 'contributions'}`,
+                        de
+                            ? `${data.totals.contributions.toLocaleString('de-DE')} Beiträge seit ${sinceYear}`
+                            : `${data.totals.contributions.toLocaleString()} contributions since ${sinceYear}`,
+                        de
+                            ? `${window12.total.toLocaleString('de-DE')} in den letzten 12 Monaten`
+                            : `${window12.total.toLocaleString()} in the last 12 months`,
                         `${window12.activeWeeks}/${window12.weeksInWindow} ${de ? 'Wochen mit Commits' : 'weeks with commits'}`,
                         `${data.totals.pullRequests} ${de ? 'Pull Requests' : 'pull requests'}`,
-                        `${data.totals.reviews} ${de ? 'Reviews' : 'reviews'}`,
                     ];
                     // A short streak says nothing useful and reads as a slump, so
                     // it only earns a mention once it is actually notable.
