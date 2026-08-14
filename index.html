@@ -1650,7 +1650,10 @@
             z-index: 1;
         }
 
-        /* --- boot gate ---------------------------------------------------- */
+        /* --- entry chooser -------------------------------------------------- */
+        /* Not a terminal. A head hunter landing here needs to know who this is
+           and be able to click something obvious; the keyboard shortcuts stay,
+           but as a hint rather than the instruction. */
 
         #mode-gate {
             position: fixed;
@@ -1660,111 +1663,121 @@
             align-items: center;
             justify-content: center;
             padding: var(--spacing-md);
-            font-family: var(--font-mono);
+            /* No fill: the page behind is already hidden while the chooser is
+               up, so leaving this transparent lets the rain through. */
+            overflow-y: auto;
         }
 
         #mode-gate[hidden] { display: none; }
 
         .gate-window {
-            position: relative;
             width: 100%;
-            max-width: 560px;
-            border: 1px solid var(--color-border);
-            border-radius: 10px;
-            background: var(--color-bg-alt);
-            overflow: hidden;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+            max-width: 680px;
+            text-align: center;
         }
 
-        .gate-titlebar {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            padding: 0.6rem 0.8rem;
-            border-bottom: 1px solid var(--color-border);
-            font-size: 0.72rem;
-            color: var(--color-text-lighter);
-            letter-spacing: 0.04em;
-        }
-
-        .gate-dot {
-            width: 10px;
-            height: 10px;
+        .gate-avatar {
+            width: 84px;
+            height: 84px;
             border-radius: 50%;
-            background: var(--color-border);
-            flex: none;
+            object-fit: cover;
+            border: 2px solid var(--color-border);
         }
 
-        .gate-dot:first-child { background: var(--color-live); }
+        .gate-name {
+            margin-top: var(--spacing-sm);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
 
-        .gate-body { padding: var(--spacing-md); }
+        .gate-role {
+            margin-top: 2px;
+            font-size: 0.9rem;
+            color: var(--color-text-lighter);
+        }
 
-        .gate-line {
-            font-size: 0.85rem;
+        .gate-question {
+            margin: var(--spacing-lg) 0 var(--spacing-md);
+            font-size: 1.05rem;
+            font-weight: 500;
             color: var(--color-text-light);
-            margin-bottom: var(--spacing-md);
+            letter-spacing: 0;
         }
-
-        .gate-prompt { color: var(--color-live); }
-
-        .gate-caret {
-            display: inline-block;
-            width: 0.5em;
-            height: 1em;
-            vertical-align: -0.15em;
-            background: var(--color-live);
-            animation: gate-blink 1.1s step-end infinite;
-        }
-
-        @keyframes gate-blink { 50% { opacity: 0; } }
 
         .gate-options {
             display: grid;
-            gap: var(--spacing-xs);
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-sm);
+            text-align: left;
         }
 
         .gate-option {
-            display: flex;
-            gap: var(--spacing-sm);
-            width: 100%;
-            padding: 0.75rem 0.85rem;
+            position: relative;
+            display: block;
+            padding: var(--spacing-md);
+            padding-bottom: 2.6rem;
             border: 1px solid var(--color-border);
-            border-radius: 8px;
-            background: var(--color-bg);
+            border-radius: 12px;
+            background: var(--color-bg-alt);
             color: var(--color-text);
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-align: left;
             cursor: pointer;
-            transition: border-color 0.15s ease, transform 0.15s ease;
+            transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
         }
 
         .gate-option:hover,
         .gate-option:focus-visible {
             border-color: var(--color-live);
-            transform: translateX(2px);
+            transform: translateY(-2px);
             outline: none;
         }
 
-        .gate-key {
-            flex: none;
-            color: var(--color-live);
-            font-weight: 700;
+        .gate-option-title {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 600;
         }
-
-        .gate-option-title { font-weight: 600; }
 
         .gate-option-sub {
             display: block;
-            margin-top: 2px;
-            font-size: 0.75rem;
+            margin-top: 0.4rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
             color: var(--color-text-lighter);
         }
 
+        /* A visible affordance, so the card reads as something you press. */
+        .gate-option-go {
+            position: absolute;
+            left: var(--spacing-md);
+            bottom: var(--spacing-md);
+            font-size: 1.1rem;
+            color: var(--color-live);
+            transition: transform 0.15s ease;
+        }
+
+        .gate-option:hover .gate-option-go { transform: translateX(4px); }
+
         .gate-foot {
             margin-top: var(--spacing-md);
-            font-size: 0.72rem;
+            font-size: 0.8rem;
             color: var(--color-text-lighter);
+        }
+
+        .gate-key-hint {
+            display: block;
+            margin-top: var(--spacing-xs);
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--color-border);
+        }
+
+        @media (max-width: 600px) {
+            .gate-options { grid-template-columns: 1fr; }
+            .gate-question { margin: var(--spacing-md) 0 var(--spacing-sm); }
         }
 
         /* --- header mode switch ------------------------------------------- */
@@ -2474,41 +2487,52 @@
          choice, so crawlers and no-JS visitors are never gated. -->
     <div id="mode-gate" role="dialog" aria-modal="true" aria-labelledby="gate-question" hidden>
         <div class="gate-window">
-            <div class="gate-titlebar">
-                <span class="gate-dot"></span>
-                <span class="gate-dot"></span>
-                <span class="gate-dot"></span>
-                <span>wolff@berlin</span>
+            <img class="gate-avatar" src="assets/images/will.jpg" alt="" aria-hidden="true">
+            <p class="gate-name">Willi Wolff</p>
+            <p class="gate-role">
+                <span lang="en">Software Engineer · Technical Architect · Berlin</span>
+                <span lang="de">Software Engineer · Technical Architect · Berlin</span>
+            </p>
+
+            <p class="gate-question" id="gate-question">
+                <span lang="en">How would you like to see this?</span>
+                <span lang="de">Wie möchten Sie das sehen?</span>
+            </p>
+
+            <div class="gate-options">
+                <button class="gate-option" type="button" data-choose-mode="pow" autofocus>
+                    <span class="gate-option-title">
+                        <span lang="en">What I have built</span>
+                        <span lang="de">Was ich gebaut habe</span>
+                    </span>
+                    <span class="gate-option-sub">
+                        <span lang="en">Live projects, a timeline of eleven years, and what I am working on right now</span>
+                        <span lang="de">Laufende Projekte, eine Zeitachse über elf Jahre und woran ich gerade arbeite</span>
+                    </span>
+                    <span class="gate-option-go" aria-hidden="true">→</span>
+                </button>
+
+                <button class="gate-option" type="button" data-choose-mode="cv">
+                    <span class="gate-option-title">
+                        <span lang="en">The traditional CV</span>
+                        <span lang="de">Der klassische Lebenslauf</span>
+                    </span>
+                    <span class="gate-option-sub">
+                        <span lang="en">Familiar layout, full work history, ready to print or download as PDF</span>
+                        <span lang="de">Gewohnte Struktur, vollständiger Werdegang, druckfertig oder als PDF</span>
+                    </span>
+                    <span class="gate-option-go" aria-hidden="true">→</span>
+                </button>
             </div>
-            <div class="gate-body">
-                <p class="gate-line" id="gate-question">
-                    <span class="gate-prompt">$</span>
-                    <span lang="en">whoami --format=? <span class="gate-caret"></span></span>
-                    <span lang="de">whoami --format=? <span class="gate-caret"></span></span>
-                </p>
-                <div class="gate-options">
-                    <button class="gate-option" type="button" data-choose-mode="pow" autofocus>
-                        <span class="gate-key">[1]</span>
-                        <span>
-                            <span class="gate-option-title">proof-of-work</span>
-                            <span class="gate-option-sub" lang="en">What I am building, what I shipped, one timeline</span>
-                            <span class="gate-option-sub" lang="de">Woran ich baue, was ich veröffentlicht habe, eine Zeitachse</span>
-                        </span>
-                    </button>
-                    <button class="gate-option" type="button" data-choose-mode="cv">
-                        <span class="gate-key">[2]</span>
-                        <span>
-                            <span class="gate-option-title">curriculum-vitae</span>
-                            <span class="gate-option-sub" lang="en">The classic format, print and PDF ready</span>
-                            <span class="gate-option-sub" lang="de">Das klassische Format, druck- und PDF-fertig</span>
-                        </span>
-                    </button>
-                </div>
-                <p class="gate-foot">
-                    <span lang="en">Press 1 or 2. Remembered next time, switchable in the header.</span>
-                    <span lang="de">1 oder 2 drücken. Wird gespeichert, oben jederzeit umschaltbar.</span>
-                </p>
-            </div>
+
+            <p class="gate-foot">
+                <span lang="en">You can switch between the two at any time in the header.</span>
+                <span lang="de">Sie können jederzeit oben zwischen beiden wechseln.</span>
+                <span class="gate-key-hint">
+                    <span lang="en">or press 1 or 2</span>
+                    <span lang="de">oder 1 bzw. 2 drücken</span>
+                </span>
+            </p>
         </div>
     </div>
 
