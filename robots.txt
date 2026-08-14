@@ -1,4 +1,4 @@
-# robots.txt for will-break-it.github.io
+# robots.txt for wwolff.pages.dev (canonical host)
 
 User-agent: *
 Allow: /
@@ -32,4 +32,4 @@ User-agent: OAI-SearchBot
 Allow: /
 
 # Sitemap
-Sitemap: https://will-break-it.github.io/sitemap.xml
+Sitemap: https://wwolff.pages.dev/sitemap.xml
