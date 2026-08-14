@@ -236,6 +236,29 @@ const out = {
   recentPublic: publicRepos.slice(0, 6),
 };
 
+// Never downgrade a full record to a public-only one. Without the PAT this
+// script still succeeds, it just cannot see private contributions, and
+// committing that result would silently drop the published totals by roughly
+// 70%. If the file on disk already knows about private work and this run does
+// not, the run is the thing that is wrong.
+if (existsSync(OUT)) {
+  const previous = JSON.parse(readFileSync(OUT, 'utf8'));
+  const lostPrivateCounts = out.scope === 'public' && previous.scope === 'public+private';
+  // Contribution counts and repository visibility come from different scopes,
+  // so a token can keep one and lose the other. Losing most of the repositories
+  // silently changes repo count, language mix and the last-push timestamp.
+  const lostRepos = out.totals.repositories < previous.totals.repositories * 0.6;
+  if (lostPrivateCounts || lostRepos) {
+    console.error(
+      'Refusing to publish a smaller view of the same account.\n' +
+      `  scope       ${previous.scope} -> ${out.scope}\n` +
+      `  repositories ${previous.totals.repositories} -> ${out.totals.repositories}\n` +
+      'GH_ACTIVITY_TOKEN is missing or under-scoped. A classic PAT needs repo + read:user.'
+    );
+    process.exit(1);
+  }
+}
+
 const serialized = `${JSON.stringify(out, null, 2)}\n`;
 
 // Ignore the timestamp when deciding whether anything actually changed, so the
