@@ -2072,42 +2072,33 @@
         }
 
         .heat-band {
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-        }
-
-        /* One zone per resolution. Each grows in proportion to how many cells it
-           holds, so every cell is the same width regardless of how much time it
-           covers: that compression is the whole point of the axis. */
-        .heat-zone {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .heat-strip {
-            display: flex;
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: repeat(7, 1fr);
             gap: 2px;
+            width: 100%;
         }
 
         .heat-cell {
-            flex: 1 1 0;
             aspect-ratio: 1 / 1;
             border-radius: 2px;
             background: var(--color-bg-alt);
+            min-width: 0;
         }
 
-        .heat-zone-label {
+        .heat-axis {
+            display: flex;
+            margin-top: 4px;
             font-family: var(--font-mono);
             font-size: 0.56rem;
-            letter-spacing: 0.04em;
             color: var(--color-text-lighter);
-            border-top: 1px solid var(--color-border);
-            padding-top: 2px;
+        }
+
+        .heat-axis span {
+            border-left: 1px solid var(--color-border);
+            padding-left: 3px;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         /* Four steps, same idea as a contribution graph. Level 0 stays the empty
@@ -2721,6 +2712,7 @@
                             <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
                             </div>
                             <div class="heat-band" data-career="rows"></div>
+                        <div class="heat-axis" data-career="axis" aria-hidden="true"></div>
                             <p class="heat-foot">
                                 <span class="activity-stats" data-activity="stats"></span>
                             </p>
@@ -2815,6 +2807,7 @@
                                     <span class="tech-item">Redis</span>
                                     <span class="tech-item">Docker</span>
                                     <span class="tech-item">Terraform</span>
+                                <span class="tech-item">Ansible</span>
                                     <span class="tech-item">GitHub Actions</span>
                                 </div>
                             </div>
@@ -4427,112 +4420,65 @@
 
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
 
-                    // Score for one month index, from the weighted spans above.
-                    const scoreOf = i => {
-                        const bucket = active.get(i);
-                        return bucket ? bucket.score : 0;
-                    };
-                    const labelsOf = i => {
-                        const bucket = active.get(i);
-                        return bucket ? bucket.labels : [];
-                    };
-                    const level = score => (score === 0 ? 0 : Math.min(Math.ceil(score / 1.5), 4));
+                    const scoreOf = i => { const b = active.get(i); return b ? b.score : 0; };
+                    const labelsOf = i => { const b = active.get(i); return b ? b.labels : []; };
+                    const toLevel = s => (s === 0 ? 0 : Math.min(Math.ceil(s / 1.5), 4));
 
                     const fmt = d => d.toISOString().slice(0, 10);
                     const today = new Date();
                     today.setUTCHours(0, 0, 0, 0);
                     const midx = d => d.getUTCFullYear() * 12 + d.getUTCMonth();
 
-                    // A bucket covers a date range and reports the peak of the
-                    // months it spans, so compressing time never invents a value
-                    // and never averages a busy period away.
-                    function bucket(fromDate, toDate, caption) {
-                        const months = new Set();
-                        for (let i = midx(fromDate); i <= midx(toDate); i++) months.add(i);
+                    // A bucket reports the peak of the months it covers, so
+                    // compressing time never averages a busy stretch away and
+                    // never invents a value for a gap.
+                    function cellFor(fromDate, toDate, caption) {
                         let peak = 0;
                         const labels = new Set();
-                        months.forEach(i => {
+                        for (let i = midx(fromDate); i <= midx(toDate); i++) {
                             peak = Math.max(peak, scoreOf(i));
                             labelsOf(i).forEach(l => labels.add(l));
-                        });
-                        return {
-                            level: level(peak),
-                            title: `${caption} · ${labels.size ? [...labels].join(', ') : (de ? 'nichts dokumentiert' : 'nothing recorded')}`,
-                        };
+                        }
+                        const title = `${caption} · ${labels.size ? [...labels].join(', ') : (de ? 'nichts dokumentiert' : 'nothing recorded')}`;
+                        return `<span class="heat-cell" data-level="${toLevel(peak)}" title="${title.replace(/"/g, '&quot;')}"></span>`;
                     }
 
+                    // Log axis: one cell per month for everything older than a
+                    // year, one cell per day for the last twelve months. Same
+                    // uniform cell, progressively less time inside it.
+                    const cells = [];
                     const zones = [];
 
-                    // --- oldest zone: one cell per year, 2015 up to four years ago
-                    const yearZoneEnd = today.getUTCFullYear() - 4;
-                    const yearCells = [];
-                    for (let y = Math.floor(first / 12); y <= yearZoneEnd; y++) {
-                        yearCells.push(bucket(
-                            new Date(Date.UTC(y, 0, 1)),
-                            new Date(Date.UTC(y, 11, 31)),
-                            String(y)
+                    const coarseEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 11, 1));
+                    let monthCount = 0;
+                    for (let i = first; i < midx(coarseEnd); i++) {
+                        const y = Math.floor(i / 12), mo = i % 12;
+                        cells.push(cellFor(
+                            new Date(Date.UTC(y, mo, 1)),
+                            new Date(Date.UTC(y, mo + 1, 0)),
+                            `${y}-${String(mo + 1).padStart(2, '0')}`
                         ));
+                        monthCount++;
                     }
-                    if (yearCells.length) {
-                        zones.push({ cells: yearCells, label: `${Math.floor(first / 12)}\u2013${yearZoneEnd} · ${de ? 'Jahre' : 'years'}` });
-                    }
+                    zones.push({ n: monthCount, label: `${Math.floor(first / 12)}\u2013${coarseEnd.getUTCFullYear()} · ${de ? 'ein Feld = ein Monat' : 'one cell = one month'}` });
 
-                    // --- then quarters, for the three years before the last one
-                    const quarterCells = [];
-                    for (let y = yearZoneEnd + 1; y <= today.getUTCFullYear() - 1; y++) {
-                        for (let q = 0; q < 4; q++) {
-                            quarterCells.push(bucket(
-                                new Date(Date.UTC(y, q * 3, 1)),
-                                new Date(Date.UTC(y, q * 3 + 2, 28)),
-                                `${y} Q${q + 1}`
-                            ));
-                        }
+                    let dayCount = 0;
+                    for (let d = new Date(coarseEnd); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
+                        cells.push(cellFor(d, d, fmt(d)));
+                        dayCount++;
                     }
-                    if (quarterCells.length) {
-                        zones.push({ cells: quarterCells, label: de ? 'Quartale' : 'quarters' });
-                    }
+                    zones.push({ n: dayCount, label: de ? 'letzte 12 Monate · ein Feld = ein Tag' : 'last 12 months · one cell = one day' });
 
-                    // --- then months, the trailing twelve minus the last two
-                    const monthCells = [];
-                    for (let k = 11; k >= 2; k--) {
-                        const d = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - k, 1));
-                        monthCells.push(bucket(
-                            d,
-                            new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)),
-                            d.toISOString().slice(0, 7)
-                        ));
-                    }
-                    zones.push({ cells: monthCells, label: de ? 'Monate' : 'months' });
+                    grid.querySelector('[data-career="rows"]').innerHTML = cells.join('');
 
-                    // --- then weeks, the trailing eight before this one
-                    const weekCells = [];
-                    for (let k = 8; k >= 1; k--) {
-                        const end = new Date(today);
-                        end.setUTCDate(end.getUTCDate() - (k - 1) * 7 - 1);
-                        const start = new Date(end);
-                        start.setUTCDate(start.getUTCDate() - 6);
-                        weekCells.push(bucket(start, end, `${fmt(start)} \u2192 ${fmt(end)}`));
+                    // The axis mirrors the column split, so the change of
+                    // resolution is stated rather than left to be noticed.
+                    const axis = grid.querySelector('[data-career="axis"]');
+                    if (axis) {
+                        axis.innerHTML = zones
+                            .map(z => `<span style="flex: ${Math.ceil(z.n / 7)} 1 0">${z.label}</span>`)
+                            .join('');
                     }
-                    zones.push({ cells: weekCells, label: de ? 'Wochen' : 'weeks' });
-
-                    // --- trailing edge: one cell per day for the last seven
-                    const dayCells = [];
-                    for (let k = 6; k >= 0; k--) {
-                        const d = new Date(today);
-                        d.setUTCDate(d.getUTCDate() - k);
-                        dayCells.push(bucket(d, d, fmt(d)));
-                    }
-                    zones.push({ cells: dayCells, label: de ? 'Tage' : 'days' });
-
-                    grid.querySelector('[data-career="rows"]').innerHTML = zones.map(z => {
-                        const cells = z.cells.map(c =>
-                            `<span class="heat-cell" data-level="${c.level}" title="${c.title.replace(/"/g, '&quot;')}"></span>`
-                        ).join('');
-                        return `<div class="heat-zone" style="flex: ${z.cells.length} 1 0">` +
-                            `<div class="heat-strip">${cells}</div>` +
-                            `<div class="heat-zone-label">${z.label}</div>` +
-                            '</div>';
-                    }).join('');
 
                     const legend = grid.querySelector('[data-career="legend"]');
                     if (legend) {
