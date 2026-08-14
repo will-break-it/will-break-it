@@ -15,7 +15,9 @@ name: Refresh activity data
 
 on:
   schedule:
-    - cron: '17 4 * * *'
+    # Every six hours. "last push 2 days ago" on a daily job could sit a full
+    # day behind reality, which reads badly on a line labelled "last push".
+    - cron: '17 */6 * * *'
   workflow_dispatch:
 
 permissions:

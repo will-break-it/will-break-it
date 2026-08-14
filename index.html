@@ -2370,21 +2370,6 @@
             .gate-option:hover, .gate-option:focus-visible { transform: none; }
         }
 
-        /* Says plainly that the byline is not there yet. Remove this span, not
-           just its styling, once the CIP lists him. */
-        .pub-pending {
-            display: inline-block;
-            margin-left: var(--spacing-xs);
-            padding: 2px 7px;
-            border: 1px dashed var(--color-border);
-            border-radius: 4px;
-            font-family: var(--font-mono);
-            font-size: 0.62rem;
-            font-weight: 400;
-            letter-spacing: 0.04em;
-            color: var(--color-text-lighter);
-            vertical-align: middle;
-        }
 
         .site-foot {
             margin-top: var(--spacing-xl);
@@ -3337,30 +3322,13 @@
                             <span lang="en">Published Work</span>
                             <span lang="de">Veröffentlichungen</span>
                         </h2>
-                        <!-- CIP-0118 currently lists Polina Vinogradova, Will Gould
-                             and Alexey Kuleshevich as authors, not Willi. The link is
-                             one click away, so the page says "contributing" until the
-                             authors list changes. WHEN IT DOES: delete the
-                             .pub-pending span and change the meta line to
-                             "Cardano Improvement Proposal · co-author". -->
-                        <div class="education-item">
-                            <h3>
-                                <a href="https://github.com/cardano-foundation/CIPs/blob/master/CIP-0118/README.md" target="_blank" rel="noopener">CIP-0118: Nested Transactions</a>
-                                <span class="pub-pending">
-                                    <span lang="en">co-authorship pending</span>
-                                    <span lang="de">Co-Autorenschaft ausstehend</span>
-                                </span>
-                            </h3>
-                            <p class="education-meta">
-                                <span lang="en">Cardano Improvement Proposal · status: proposed · contributing</span>
-                                <span lang="de">Cardano Improvement Proposal · Status: proposed · Mitarbeit</span>
-                            </p>
-                            <p>
-                                <span lang="en">Ledger-level batching of partially valid transactions, so a transaction missing value or fees can be completed by another one in the same batch. It is the mechanism behind Babel fees, paying fees in non-ADA tokens, and it gives swaps and fee sponsorship counterparty irrelevance: the author of a transaction never has to approve the batch it lands in.</span>
-                                <span lang="de">Ledger-seitiges Bündeln teilweise gültiger Transaktionen, sodass eine Transaktion ohne ausreichende Deckung oder Gebühren von einer anderen im selben Batch vervollständigt wird. Es ist der Mechanismus hinter Babel Fees, dem Bezahlen von Gebühren in Nicht-ADA-Token, und macht Swaps und Gebührenübernahme unabhängig von der Gegenpartei: wer eine Transaktion erstellt, muss den Batch nie freigeben.</span>
-                            </p>
-                        </div>
-
+                        <!-- CIP-0118 lists Polina Vinogradova, Will Gould and Alexey
+                             Kuleshevich as authors; Willi is not on it yet and the link
+                             is one click from this page. The meta line therefore says
+                             "contributing", not "co-author". ONCE THE AUTHORS LIST
+                             INCLUDES HIM: change "contributing" to "co-author" in both
+                             language spans below, and add the entry to llms.txt and
+                             both Typst CVs, which deliberately do not carry it yet. -->
                         <div class="education-item">
                             <h3>
                                 <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164: Ouroboros Leios</a>
@@ -3372,6 +3340,22 @@
                             <p>
                                 <span lang="en">Canonical architecture and design specification for Cardano's high-throughput overlay protocol — an open industry RFC comparable to Bitcoin's BIPs and IETF standards.</span>
                                 <span lang="de">Kanonische Architektur- und Designspezifikation für Cardanos Hochdurchsatz-Overlay-Protokoll — ein offener Industrie-RFC vergleichbar mit Bitcoins BIPs und IETF-Standards.</span>
+                            </p>
+                        </div>
+
+                        <div class="education-item">
+                            <h3>
+                                <a href="https://github.com/cardano-foundation/CIPs/blob/master/CIP-0118/README.md" target="_blank" rel="noopener">CIP-0118: Nested Transactions</a>
+                                    <span lang="de">Co-Autorenschaft ausstehend</span>
+                                </span>
+                            </h3>
+                            <p class="education-meta">
+                                <span lang="en">Cardano Improvement Proposal · status: proposed · contributing</span>
+                                <span lang="de">Cardano Improvement Proposal · Status: proposed · Mitarbeit</span>
+                            </p>
+                            <p>
+                                <span lang="en">Ledger-level batching of partially valid transactions, so a transaction missing value or fees can be completed by another one in the same batch. It is the mechanism behind Babel fees, paying fees in non-ADA tokens, and it gives swaps and fee sponsorship counterparty irrelevance: the author of a transaction never has to approve the batch it lands in.</span>
+                                <span lang="de">Ledger-seitiges Bündeln teilweise gültiger Transaktionen, sodass eine Transaktion ohne ausreichende Deckung oder Gebühren von einer anderen im selben Batch vervollständigt wird. Es ist der Mechanismus hinter Babel Fees, dem Bezahlen von Gebühren in Nicht-ADA-Token, und macht Swaps und Gebührenübernahme unabhängig von der Gegenpartei: wer eine Transaktion erstellt, muss den Batch nie freigeben.</span>
                             </p>
                         </div>
                     </section>
