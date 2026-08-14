@@ -1,0 +1,71 @@
+name: Refresh activity data
+
+# Rebuilds data/activity.json from the GitHub GraphQL API and commits it when
+# the numbers actually changed. The site reads the committed file, so page loads
+# never touch the GitHub API: no rate limits, no CORS, no empty graph when the
+# API is down.
+#
+# Runs in both this repo and the will-break-it.github.io mirror. Set the
+# GH_ACTIVITY_TOKEN secret in both, otherwise the mirror falls back to
+# public-only counts and the two sites report different totals.
+#
+# GH_ACTIVITY_TOKEN: classic PAT with `repo` + `read:user`.
+#
+#   read:user  private contribution COUNTS, and only if "Include private
+#              contributions on my profile" is enabled in profile settings
+#   repo       the private repositories themselves, which is where the repo
+#              count, the language bytes and the last-push timestamp come from
+#
+# Roughly 70% of contributions and 29 of 40 repositories are private, so a
+# token without `repo` produces a much smaller picture of the same account.
+# The script refuses to publish that: it exits non-zero rather than commit a
+# downgrade, so a mis-scoped token fails loudly instead of quietly shrinking
+# the numbers on the site.
+#
+# Classic `repo` is read/write and covers every repo, which is broad for a job
+# that only reads. The narrower alternative is read:user alone plus the profile
+# setting: totals stay correct, but repo count drops to the 11 public ones and
+# last push only reflects public activity.
+
+on:
+  schedule:
+    # Every six hours. "last push 2 days ago" on a daily job could sit a full
+    # day behind reality, which reads badly on a line labelled "last push".
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: activity-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Aggregate contribution data
+        env:
+          # Falls back to the job token, which sees public contributions only.
+          GH_ACTIVITY_TOKEN: ${{ secrets.GH_ACTIVITY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/build-activity.mjs
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/activity.json; then
+            echo "No change in activity data."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/activity.json
+          git commit -m "data: refresh activity aggregates"
+          git push

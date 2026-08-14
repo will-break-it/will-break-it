@@ -33,6 +33,8 @@ jobs:
             --exclude='.github' \
             --exclude='README.md' \
             --exclude='master-cv.typ' \
+            --exclude='master-cv-de.typ' \
+            --exclude='scripts' \
             --exclude='.gitignore' \
             --exclude='.DS_Store' \
             --exclude='dist' \

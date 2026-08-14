@@ -19,7 +19,7 @@ The site is a single scrolling page with these sections (anchor links):
 
 ## Experience highlights
 
-- **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–present): leading a team of 5, formally verifying a research proposal and building a prototype; evaluating peer-sampling protocols for specific security properties. Project site: https://pubsub.cardano-scaling.org/
+- **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–present): leading a team of 5 that is formally verifying a research proposal, and building the prototype; evaluating peer-sampling protocols for specific security properties. Project site: https://pubsub.cardano-scaling.org/
 - **Technical Architect — Ouroboros Leios**, IOG (Nov 2024–Feb 2026): led R&D for Cardano's high-throughput overlay protocol; principal author of CIP-0164.
 - **Technical Architect — Lace Wallet**, IOG (Nov 2022–Nov 2024): event-driven re-architecture (45% latency reduction, 60%+ cost savings), custom chain indexer (2,000+ tx/s), MetaDex swap feature.
 - **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture; workshops for 100+ Amazon engineers.
@@ -30,6 +30,14 @@ The site is a single scrolling page with these sections (anchor links):
 ## Publications
 
 - **CIP-0164: Ouroboros Leios** — principal author. Canonical architecture and design specification for Cardano's high-throughput protocol. https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md
+
+## Selected projects
+
+- **Byzantine-Resistant PubSub** — Cardano-anchored publish/subscribe layer with identifiable publishers, verifiable events and on-chain registered topics, with the team formally verifying the SecureCyclon peer-sampling stack. https://pubsub.cardano-scaling.org/
+- **Ouroboros Leios** — protocol architecture and CIP-0164 authorship, interactive simulator, Agda specification rendered for the web. http://leios.cardano-scaling.org/
+- **Hausnummer** — screening tool for German residential investment listings: monthly cashflow before tax, after-tax estimates, break-even equity, cash-on-cash return, and listing import that extracts figures from a pasted link. Astro on Cloudflare Workers. https://hausnummer.pages.dev/
+- **Dump it!** — voice-first cross-platform note taking with end-to-end encryption, intent classification and semantic search.
+- **Pagebase** — Berlin freelance agency for Supabase/PostgreSQL backends, web and mobile apps, and AI automation. https://pagebase.dev
 
 ## Technologies
 
@@ -47,4 +55,4 @@ Content available in English (default) and German.
 
 ## Contact
 
-wolff.willi+web@gmail.com
+wolff.willi@gmail.com

@@ -1,0 +1,35 @@
+{
+  "_note": "Drives the career heatmap. Every entry is a real, dated span from the CV timeline: roles, projects, operations and publications. Cell intensity is how many of these were running in a given month, NOT commit counts, and nothing here is generated or estimated. This is why the heatmap can cover 2015 onwards while GitHub only holds 2020 onwards. 'to' may be omitted for anything still running. Months are YYYY-MM, inclusive.",
+  "_weights": "Optional per-item weight, default 1, counted instead of a plain tally so scope shows: founding and leading weigh more than holding one IC role. Still a count of documented work, never a generated value.",
+  "metric": {
+    "en": "work running per month",
+    "de": "parallele Arbeit pro Monat"
+  },
+  "from": "2015-01",
+  "items": [
+    { "kind": "study", "label": "Hult International Business", "from": "2015-01", "to": "2015-06", "weight": 1 },
+
+    { "kind": "role", "label": "CityXcape (co-founder, CTO)", "from": "2015-02", "to": "2016-09", "weight": 2 },
+    { "kind": "role", "label": "Deloitte (software engineer, Austin)", "from": "2016-09", "to": "2018-01" },
+    { "kind": "role", "label": "Deloitte (lead engineer, Ulm)", "from": "2018-01", "to": "2019-11", "weight": 2 },
+    { "kind": "role", "label": "Mobility Data Lab (senior engineer)", "from": "2020-02", "to": "2021-11" },
+    { "kind": "role", "label": "IOG (solutions architect)", "from": "2021-11", "to": "2022-11" },
+    { "kind": "role", "label": "IOG (technical architect, Lace)", "from": "2022-11", "to": "2024-11" },
+    { "kind": "role", "label": "IOG (technical architect, Leios)", "from": "2024-11", "to": "2026-02" },
+    { "kind": "role", "label": "IOG (technical architect, PubSub)", "from": "2026-02" },
+
+    { "kind": "ops", "label": "Berlin Pool (stakepool)", "from": "2021-01", "to": "2024-12" },
+
+    { "kind": "project", "label": "Drip Dropz", "from": "2022-01", "to": "2024-12" },
+    { "kind": "project", "label": "Cardano upstream libraries", "from": "2023-01", "to": "2024-06" },
+    { "kind": "project", "label": "Dump it!", "from": "2023-01", "to": "2025-12" },
+    { "kind": "project", "label": "Pagebase", "from": "2024-01" },
+    { "kind": "project", "label": "Leios mempool simulation", "from": "2025-01", "to": "2025-06" },
+    { "kind": "project", "label": "Underwater Journeys", "from": "2026-02", "to": "2026-04" },
+    { "kind": "project", "label": "Hausnummer", "from": "2026-05" },
+    { "kind": "project", "label": "Operando lead intake", "from": "2026-06" },
+    { "kind": "project", "label": "AlwaysSandy", "from": "2026-03" },
+
+    { "kind": "publication", "label": "CIP-0164 published", "from": "2025-06", "to": "2025-06", "weight": 2 }
+  ]
+}

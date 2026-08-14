@@ -16,7 +16,7 @@
   #v(4pt)
   #text(size: 9pt, fill: muted)[Berlin, Germany · German & English]
   #v(2pt)
-  #link("mailto:wolff.willi@gmail.com")[#text(size: 9pt, fill: accent)[Email]] #h(6pt) #link("https://linkedin.com/in/wwolff")[#text(size: 9pt, fill: accent)[LinkedIn]] #h(6pt) #link("https://github.com/will-break-it")[#text(size: 9pt, fill: accent)[GitHub]]
+  #link("mailto:wolff.willi@gmail.com")[#text(size: 9pt, fill: accent)[wolff.willi\@gmail.com]] #h(6pt) #link("https://linkedin.com/in/wwolff")[#text(size: 9pt, fill: accent)[LinkedIn]] #h(6pt) #link("https://github.com/will-break-it")[#text(size: 9pt, fill: accent)[GitHub]]
 ]
 
 // Section heading
@@ -61,10 +61,10 @@ Software engineer with 10+ years across enterprise (Deloitte), blockchain infras
 #section("Experience")
 
 #exp("Technical Architect – Byzantine-Resistant PubSub Network", "Feb 2026 – Present", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Contract])[
-  Leading research and development of #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], a Byzantine-resistant publish/subscribe network, formally verifying a research proposal and building a prototype.
+  Leading research and development of #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], a Byzantine-resistant publish/subscribe network, taking a team through formal verification of a research proposal and building the prototype.
   #v(2pt)
   #b[*Technical Leadership:* Lead a team of 4 engineers and researchers designing a Byzantine-resistant pub/sub overlay network]
-  #b[*Formal Verification:* Formally verifying the #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] peer-sampling protocol stack and building a working prototype via spec-driven development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
+  #b[*Formal Verification:* Leading a team through formal verification of the #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] peer-sampling protocol stack, and building the working prototype via spec-driven development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
   #b[*Protocol Security:* Reevaluating peer-sampling protocols that come with specific security properties]
 ]
 
@@ -157,6 +157,13 @@ Software engineer with 10+ years across enterprise (Deloitte), blockchain infras
   Berlin-based agency building Supabase/PostgreSQL backends, web and mobile apps, and AI automation.
   #v(2pt)
   #b[*Stack:* Supabase, PostgreSQL, React/React Native, edge functions, CI/CD]
+]
+
+#exp("Hausnummer – Property Deal Screening", "2026", "Solo Project")[
+  Screening tool for German residential investment listings, built and shipped solo.
+  #v(2pt)
+  #b[*Modelling:* Monthly cashflow before tax as the headline figure, after-tax estimates kept separate, break-even equity and cash-on-cash return; all assumptions visible and editable]
+  #b[*Stack:* Astro on Cloudflare Workers with KV; listing import extracts figures from a pasted link via browser rendering and structured output parsing]
 ]
 
 #exp("Drip Dropz – NFT Marketplace", "2022 – 2024", "Cardano")[

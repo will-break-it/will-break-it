@@ -16,7 +16,7 @@
   #v(4pt)
   #text(size: 9pt, fill: muted)[Berlin, Deutschland · Deutsch & Englisch]
   #v(2pt)
-  #link("mailto:wolff.willi@gmail.com")[#text(size: 9pt, fill: accent)[E-Mail]] #h(6pt) #link("https://linkedin.com/in/wwolff")[#text(size: 9pt, fill: accent)[LinkedIn]] #h(6pt) #link("https://github.com/will-break-it")[#text(size: 9pt, fill: accent)[GitHub]]
+  #link("mailto:wolff.willi@gmail.com")[#text(size: 9pt, fill: accent)[wolff.willi\@gmail.com]] #h(6pt) #link("https://linkedin.com/in/wwolff")[#text(size: 9pt, fill: accent)[LinkedIn]] #h(6pt) #link("https://github.com/will-break-it")[#text(size: 9pt, fill: accent)[GitHub]]
 ]
 
 // Abschnittsüberschrift
@@ -61,10 +61,10 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
 #section("Berufserfahrung")
 
 #exp("Technischer Architekt – Byzantine-Resistant PubSub Network", "Feb 2026 – Heute", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Auf Vertragsbasis])[
-  Leite Forschung und Entwicklung von #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], einem Byzantine-resistenten Publish/Subscribe-Netzwerk, mit formaler Verifikation eines Forschungsvorschlags und Entwicklung eines Prototyps.
+  Leite Forschung und Entwicklung von #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], einem Byzantine-resistenten Publish/Subscribe-Netzwerk: leite ein Team durch die formale Verifikation eines Forschungsvorschlags und entwickle den Prototyp.
   #v(2pt)
   #b[*Technische Leitung:* Leite ein Team von 4 Ingenieuren und Forschern beim Entwurf eines Byzantine-resistenten Pub/Sub-Overlay-Netzwerks]
-  #b[*Formale Verifikation:* Formale Verifikation des #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] Peer-Sampling-Protokoll-Stacks und Entwicklung eines funktionsfähigen Prototyps mittels Spec-Driven Development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
+  #b[*Formale Verifikation:* Leite ein Team durch die formale Verifikation des #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] Peer-Sampling-Protokoll-Stacks und entwickle den funktionsfähigen Prototyp mittels Spec-Driven Development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
   #b[*Protokollsicherheit:* Neubewertung von Peer-Sampling-Protokollen mit spezifischen Sicherheitseigenschaften]
 ]
 
@@ -157,6 +157,13 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
   Berliner Agentur, die Supabase/PostgreSQL-Backends, Web- und Mobile-Apps sowie KI-Automatisierung baut.
   #v(2pt)
   #b[*Stack:* Supabase, PostgreSQL, React/React Native, Edge Functions, CI/CD]
+]
+
+#exp("Hausnummer – Immobilien-Objektprüfung", "2026", "Eigenprojekt")[
+  Prüfwerkzeug für deutsche Wohnimmobilien-Anzeigen, allein gebaut und veröffentlicht.
+  #v(2pt)
+  #b[*Berechnung:* Monatlicher Cashflow vor Steuern als Kennzahl, Nachsteuer-Schätzungen getrennt ausgewiesen, Break-even-Eigenkapital und Cash-on-Cash-Rendite; alle Annahmen sichtbar und editierbar]
+  #b[*Stack:* Astro auf Cloudflare Workers mit KV; Anzeigen-Import liest Kennzahlen aus einem eingefügten Link über Browser-Rendering und strukturierte Ausgabe]
 ]
 
 #exp("Drip Dropz – NFT-Marktplatz", "2022 – 2024", "Cardano")[
