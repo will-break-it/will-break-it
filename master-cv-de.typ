@@ -16,7 +16,7 @@
   #v(4pt)
   #text(size: 9pt, fill: muted)[Berlin, Deutschland · Deutsch & Englisch]
   #v(2pt)
-  #link("mailto:wolff.willi@gmail.com")[#text(size: 9pt, fill: accent)[E-Mail]] #h(6pt) #link("https://linkedin.com/in/wwolff")[#text(size: 9pt, fill: accent)[LinkedIn]] #h(6pt) #link("https://github.com/will-break-it")[#text(size: 9pt, fill: accent)[GitHub]]
+  #link("mailto:wolff.willi@gmail.com")[#text(size: 9pt, fill: accent)[wolff.willi\@gmail.com]] #h(6pt) #link("https://linkedin.com/in/wwolff")[#text(size: 9pt, fill: accent)[LinkedIn]] #h(6pt) #link("https://github.com/will-break-it")[#text(size: 9pt, fill: accent)[GitHub]]
 ]
 
 // Abschnittsüberschrift

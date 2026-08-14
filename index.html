@@ -67,7 +67,7 @@
         "https://x.com/will_break_it"
       ],
       "jobTitle": "Software Engineer & Technical Architect",
-      "email": "wolff.willi+web@gmail.com",
+      "email": "wolff.willi@gmail.com",
       "worksFor": {
         "@type": "Organization",
         "name": "Input Output Global"
@@ -1422,6 +1422,8 @@
                 margin: 0 0 4pt 0;
             }
 
+            .hero-name { display: none !important; }
+
             .logo {
                 font-size: 21pt;
                 font-weight: 700;
@@ -1866,6 +1868,14 @@
             /* No bottom margin: the next section's kicker already carries a
                top margin, and doubling them left a hole. */
             font-family: var(--font-mono);
+        }
+
+        .hero-name {
+            margin-top: var(--spacing-sm);
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-text);
         }
 
         .now-label {
@@ -2606,6 +2616,8 @@
             <div class="intro-section">
                 <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
 
+                <h1 class="hero-name">Willi Wolff</h1>
+
                 <p class="tagline">
                     <span lang="en">Software Engineer • Technical Architect • Builder</span>
                     <span lang="de">Software Engineer • Technical Architect • Builder</span>
@@ -2651,7 +2663,7 @@
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
-                        <a href="mailto:wolff.willi+web@gmail.com" class="cv-meta-link">wolff.willi+web@gmail.com</a>
+                        <a href="mailto:wolff.willi@gmail.com" class="cv-meta-link">wolff.willi@gmail.com</a>
                     </span>
                 </div>
 
@@ -3263,8 +3275,8 @@
                                     <span lang="de">1 Jahr, 7 Monate · San Francisco, CA · Feb 2015 – Sep 2016</span>
                                 </span>
                                 <p class="company-alongside">
-                                    <span lang="en">Founded while finishing the Hult programme in San Francisco.</span>
-                                    <span lang="de">Gegründet während des Hult-Programms in San Francisco.</span>
+                                    <span lang="en">Founded while finishing the M.A. at Hult in San Francisco.</span>
+                                    <span lang="de">Gegründet während des M.A. an der Hult in San Francisco.</span>
                                 </p>
                             </div>
 
@@ -3320,8 +3332,8 @@
                             <div class="company-head">
                                 <h3 class="company-name">Hult International Business School</h3>
                                 <span class="company-span">
-                                    <span lang="en">International Business · San Francisco, CA · 2014 – 2015</span>
-                                    <span lang="de">International Business · San Francisco, CA · 2014 – 2015</span>
+                                    <span lang="en">M.A. International Business · San Francisco, CA · 2014 – 2015</span>
+                                    <span lang="de">M.A. International Business · San Francisco, CA · 2014 – 2015</span>
                                 </span>
                             </div>
                         </div>
@@ -3955,7 +3967,7 @@
                                     <p class="education-meta">DHBW Stuttgart • Germany • 2011 - 2014</p>
                                 </div>
                                 <div class="education-item">
-                                    <h3>International Business</h3>
+                                    <h3>M.A. International Business</h3>
                                     <p class="education-meta">Hult International Business School • San Francisco, CA • 2014 - 2015</p>
                                 </div>
                             </div>

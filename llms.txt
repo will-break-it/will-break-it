@@ -55,4 +55,4 @@ Content available in English (default) and German.
 
 ## Contact
 
-wolff.willi+web@gmail.com
+wolff.willi@gmail.com
