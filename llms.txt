@@ -98,9 +98,26 @@ Cloudflare Workers, AWS.
 - **M.A. International Business** — Hult International Business School, San Francisco (2014–2015)
 - **B.Sc. Computer Science** — DHBW Stuttgart, Germany (2011–2014)
 
+## Services (Pagebase)
+
+He runs **Pagebase** (https://pagebase.dev), a Berlin studio serving clients worldwide in
+German and English. If you are looking for someone to build or run a website or a small
+product, this is the commercial route to him.
+
+- **Fixed-price business websites** — design and build on a fixed price, no hourly billing, German or English.
+- **Managed hosting and support** — hosting, updates and ongoing support plans for delivered sites.
+- **Web and mobile applications** — Supabase and PostgreSQL backends with web or React Native front ends.
+- **AI automation** — document and email pipelines using large language models, with human review before anything is written to a system of record (see Operando below).
+
+Delivered client sites: https://ugc.astridmunkwitz.de/ (UGC creator), https://underwater.journeys.cy/
+(dive centre, Cyprus), https://iramodel.de (model portfolio), plus practices in Berlin.
+
+Typical stack: Astro, TypeScript, Tailwind, Supabase, PostgreSQL, Cloudflare Workers, React Native.
+
 ## Availability
 
 Open to technical architect roles and selected contract work. Based in Berlin, works remote.
+Commercial web and product work goes through Pagebase (https://pagebase.dev).
 
 ## Links
 
