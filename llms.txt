@@ -1,57 +1,118 @@
 # Willi Wolff — Software Engineer & Technical Architect
 
-> Single-page portfolio and CV for Willi Wolff, a software engineer with 10+ years of experience across blockchain infrastructure, distributed systems, mobile, and IoT. Currently technical architect for a Byzantine-resistant publish/subscribe network at Input Output Global (IOG).
+> Portfolio and CV for Willi Wolff (goes by Will), a Berlin-based software engineer and
+> technical architect. Eleven years shipping professionally, writing code since 2008.
+> Currently technical architect for a Byzantine-resistant publish/subscribe network at
+> Input Output Global (IOG), leading the team through formal verification of the
+> SecureCyclon peer-sampling stack and building the prototype.
 
 ## About
 
-Personal portfolio and CV. Experience spans enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), IoT, and mobile. Founder DNA, with deep expertise in distributed systems, distributed ledger technology (DLT), secure application development, and event-driven architecture. Works end-to-end: builds a rough working version early, finds the risks, then iterates. Does his best work in small teams on hard problems and takes on more than pure engineering when a project needs it.
+Range across enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), mobile and
+IoT. Founder DNA: two companies of his own. Deep in distributed systems, distributed ledger
+technology (DLT), consensus protocols, event-driven architecture and secure application
+development. Works end to end: builds a rough working version early, finds the risks, then
+iterates. Best in small teams on hard problems, and takes on more than pure engineering when
+a project needs it. Berlin, Germany. German and English, both fluent.
 
 ## Site structure
 
-The site is a single scrolling page with these sections (anchor links):
+One page, two presentations of the same content, chosen at entry and switchable in the
+header. `?mode=pow` shows the proof-of-work view; `?mode=cv` shows the traditional CV and is
+what crawlers and visitors without JavaScript get by default.
 
-- `/#profile` — short professional summary
-- `/#technologies` — technology stack
-- `/#experience` — full work history
-- `/#publications` — published work
-- `/#projects` — selected projects
+- `/#now` — summary figures and what he is building right now (proof-of-work view)
+- `/#experience` — timeline: roles, studies and side work on one rail
+- `/#projects` — project wall, filterable by area and by status
+- `/#technologies` — stack and focus areas
+- `/#publications` — published specifications
 - `/#education` — education
 
-## Experience highlights
+## Current work
 
-- **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–present): leading a team of 5 that is formally verifying a research proposal, and building the prototype; evaluating peer-sampling protocols for specific security properties. Project site: https://pubsub.cardano-scaling.org/
-- **Technical Architect — Ouroboros Leios**, IOG (Nov 2024–Feb 2026): led R&D for Cardano's high-throughput overlay protocol; principal author of CIP-0164.
-- **Technical Architect — Lace Wallet**, IOG (Nov 2022–Nov 2024): event-driven re-architecture (45% latency reduction, 60%+ cost savings), custom chain indexer (2,000+ tx/s), MetaDex swap feature.
-- **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture; workshops for 100+ Amazon engineers.
-- **Senior Software Engineer**, Mobility Data Lab (Feb 2020–Nov 2021): IoT and connected-vehicle systems.
-- **Software Engineer → Lead Engineer**, Deloitte (Sep 2016–Nov 2019): 16M-line legacy migration toolchain; €6M/yr license savings.
-- **Co-Founder & CTO**, CityXcape (Feb 2015–Sep 2016): social discovery platform; raised ~€150k seed.
+Technical Architect, Byzantine-Resistant PubSub Network, IOG (Feb 2026–present). Leads a team
+through formal verification of a research proposal and builds the prototype; evaluates
+peer-sampling protocols for specific security properties. https://pubsub.cardano-scaling.org/
+
+Also building, on his own time:
+
+- https://alwayssandy.com — matches beach volleyball players with coaches across Berlin's sand courts
+- https://pagebase.dev — his freelance studio: Supabase and PostgreSQL backends, web and mobile, AI automation
+
+## Experience
+
+- **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–present): leads the team through formal verification of the SecureCyclon peer-sampling stack and builds the prototype via spec-driven development.
+- **Technical Architect — Ouroboros Leios**, IOG (Nov 2024–Feb 2026): led R&D for Cardano's high-throughput overlay protocol; principal author of CIP-0164; ran monthly public demo and review sessions (~5k views per session, sustained over 1.5 years).
+- **Technical Architect — Lace Wallet**, IOG (Nov 2022–Nov 2024): event-driven re-architecture using CQRS and event sourcing (45% latency reduction, 60%+ infrastructure savings), custom chain indexer with bloom filters and credential-based indexing (2,000+ tx/s, sub-second wallet sync), led a 7-person team delivering the MetaDex swap feature.
+- **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture for a collateralised debt position platform; workshops for 100+ Amazon engineers on the eUTxO model.
+- **Senior Software Engineer**, Mobility Data Lab, Berlin (Feb 2020–Nov 2021): IoT and connected-vehicle systems; OTA fleet-update pipeline (Rust embedded, Vert.x backend).
+- **Software Engineer → Lead Engineer**, Deloitte, Austin TX then Ulm (Sep 2016–Nov 2019): toolchain that migrated 16M lines of legacy code to Java; €6M/yr license savings.
+- **Co-Founder & CTO**, CityXcape, San Francisco (Feb 2015–Sep 2016): social discovery platform; raised ~€150k seed; iOS app and Django/Rails backend from concept to App Store launch.
+
+Three employers, two companies founded.
 
 ## Publications
 
-- **CIP-0164: Ouroboros Leios** — principal author. Canonical architecture and design specification for Cardano's high-throughput protocol. https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md
+- **CIP-0164: Ouroboros Leios** — principal author. Canonical architecture and design specification for Cardano's high-throughput overlay protocol, an open industry RFC comparable to Bitcoin's BIPs or IETF standards. https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md
+- **CIP-0118: Nested Transactions** — co-author. Ledger-level batching of partially valid transactions, the mechanism behind Babel fees (paying transaction fees in non-ADA tokens), giving swaps and fee sponsorship counterparty irrelevance. Status: proposed. https://github.com/cardano-foundation/CIPs/blob/master/CIP-0118/README.md
 
-## Selected projects
+## Projects
 
-- **Byzantine-Resistant PubSub** — Cardano-anchored publish/subscribe layer with identifiable publishers, verifiable events and on-chain registered topics, with the team formally verifying the SecureCyclon peer-sampling stack. https://pubsub.cardano-scaling.org/
-- **Ouroboros Leios** — protocol architecture and CIP-0164 authorship, interactive simulator, Agda specification rendered for the web. http://leios.cardano-scaling.org/
-- **Hausnummer** — screening tool for German residential investment listings: monthly cashflow before tax, after-tax estimates, break-even equity, cash-on-cash return, and listing import that extracts figures from a pasted link. Astro on Cloudflare Workers. https://hausnummer.pages.dev/
-- **Dump it!** — voice-first cross-platform note taking with end-to-end encryption, intent classification and semantic search.
-- **Pagebase** — Berlin freelance agency for Supabase/PostgreSQL backends, web and mobile apps, and AI automation. https://pagebase.dev
+Nineteen built, ten still running, two failed. The site marks each project's status and names
+the failures rather than omitting them.
+
+Protocol and infrastructure:
+
+- **Byzantine-Resistant PubSub** — Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, on-chain registered topics. https://pubsub.cardano-scaling.org/
+- **Ouroboros Leios** — protocol architecture and CIP-0164, interactive simulator, Agda specification rendered for the web. http://leios.cardano-scaling.org/
+- **Lace Wallet indexing architecture** — the CQRS and event-sourcing design behind Cardano's light wallet, published as a CIP and a problem statement. https://github.com/will-break-it/wallet-architecture
+- **Leios mempool simulation** — interactive mempool visualisation exploring front-running and attack vectors. https://leios.cardano-scaling.org/mempool-viz/
+- **Upstream Cardano libraries** — extensions to Dolos (chain indexer), Lucid (UTXO chaining), Scrolls (multi-DEX indexing), and a DEX order serialization library.
+- **Berlin Pool** — Cardano stakepool: 2,000+ mainnet blocks, 99.9% uptime, 15M+ ADA delegation. Wound down in 2024.
+
+Products and client work:
+
+- **Hausnummer** — screening tool for German residential investment listings: monthly cashflow before tax, after-tax estimates, break-even equity, cash-on-cash return, and listing import that extracts the figures from a pasted link. Astro on Cloudflare Workers. https://hausnummer.pages.dev/
+- **Operando** — AI lead intake pipeline: reads a mailbox, extracts figures from PDF and image attachments with a multimodal model, and creates reviewed HubSpot leads. Untrusted email content is constrained to a schema and never executed as instructions. https://operando.de
+- **AlwaysSandy** — beach volleyball coach booking across Berlin's sand courts. https://alwayssandy.com
+- **TokenRiot.IO** — lead frontend developer for a Cardano NFT marketplace, 2022–2024, roughly 80% of the frontend: Next.js, Redux Toolkit, CIP-30 wallet integration.
+- **Dump it!** — voice-first cross-platform note taking with end-to-end encryption, intent classification and semantic search. 200+ users. Shut down in 2025.
+- **Drip Dropz** — NFT marketplace, 10k+ listings. Handed over to the team in 2024.
+- **Pagebase** — Berlin freelance studio, plus client sites including https://iramodel.de, https://ugc.astridmunkwitz.de/ and https://underwater.journeys.cy/
 
 ## Technologies
 
-TypeScript, Rust, Swift, Kotlin, Python, Java, Haskell. Focus areas: distributed ledger technology (DLT), Cardano / eUTxO, Plutus smart contracts, consensus protocols, distributed systems, event-driven architecture, cryptography, secure application development.
+Languages by weight across the career: TypeScript, Java, Swift, React/React Native, Kotlin,
+Rust, Plutus/Haskell, Python, Agda, Dart/Flutter, Astro.
+
+Focus areas: distributed ledger technology (DLT), Cardano and the eUTxO model, Plutus smart
+contracts, consensus protocols, formal methods, distributed systems, event-driven
+architecture and CQRS, chain indexing, cryptography, end-to-end encryption, secure
+application development.
+
+Infrastructure: PostgreSQL, Supabase, Redis, Docker, Terraform, Ansible, GitHub Actions,
+Cloudflare Workers, AWS.
+
+## Education
+
+- **M.A. International Business** — Hult International Business School, San Francisco (2014–2015)
+- **B.Sc. Computer Science** — DHBW Stuttgart, Germany (2011–2014)
+
+## Availability
+
+Open to technical architect roles and selected contract work. Based in Berlin, works remote.
 
 ## Links
 
 - Portfolio & CV: https://wwolff.pages.dev
+- CV as PDF: https://wwolff.pages.dev/willi-wolff-cv-en.pdf (English), https://wwolff.pages.dev/willi-wolff-cv-de.pdf (German)
 - GitHub: https://github.com/will-break-it
 - LinkedIn: https://linkedin.com/in/wwolff
+- X: https://x.com/will_break_it
 
 ## Languages
 
-Content available in English (default) and German.
+Site content available in English (default) and German.
 
 ## Contact
 
