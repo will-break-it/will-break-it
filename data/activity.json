@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-16T06:29:29Z",
+  "generated": "2026-08-16T12:28:58Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5195,
+    "total": 5225,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-08",
-        "total": 514
+        "total": 544
       }
     ]
   },
   "streakDays": 7,
   "totals": {
-    "contributions": 8933,
+    "contributions": 8963,
     "private": 96,
-    "commits": 8181,
-    "pullRequests": 423,
+    "commits": 8209,
+    "pullRequests": 425,
     "reviews": 45,
     "repositories": 40,
     "publicRepositories": 11
@@ -167,50 +167,50 @@
     },
     {
       "year": 2026,
-      "total": 3562,
+      "total": 3592,
       "private": 0,
-      "commits": 3216,
-      "prs": 218,
+      "commits": 3244,
+      "prs": 220,
       "reviews": 13
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 54.7
+      "share": 55.5
     },
     {
       "name": "Dart",
-      "share": 6.5
+      "share": 6.3
     },
     {
       "name": "Rust",
-      "share": 6.1
-    },
-    {
-      "name": "HTML",
-      "share": 4.8
+      "share": 5.9
     },
     {
       "name": "Astro",
-      "share": 4.8
+      "share": 4.6
     },
     {
-      "name": "PHP",
-      "share": 4.1
+      "name": "HTML",
+      "share": 4.6
+    },
+    {
+      "name": "PLpgSQL",
+      "share": 4.3
     }
   ],
   "lastPush": {
-    "at": "2026-08-16T00:30:34Z",
-    "repo": "will-break-it",
-    "url": "https://github.com/will-break-it/will-break-it",
-    "private": false
+    "at": "2026-08-16T08:57:15Z",
+    "repo": null,
+    "url": null,
+    "private": true
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-16T00:30:34Z",
+      "pushedAt": "2026-08-16T06:29:36Z",
       "language": "HTML"
     },
     {
