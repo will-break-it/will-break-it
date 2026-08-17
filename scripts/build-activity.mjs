@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 // Aggregates GitHub contribution data into data/activity.json.
 //
-// Deliberately coarse: day-level data is used only to derive aggregates and is
-// dropped before writing. The output file cannot express "nothing happened on
-// this day", because no day survives into it. Commits land in private repos,
-// get squashed on merge, or happen on other forges, so a per-day grid would
-// claim idle days that were not idle.
+// Records presence, never absence. Days and months both survive into the file,
+// but only where something was recorded: a bucket with nothing in it is left
+// out entirely rather than written as zero. That distinction is the whole
+// contract. Work lands in private repos, gets squashed on merge, or happens on
+// another forge, so an explicit zero would claim an idle day this data has no
+// way of knowing about, while an absent key claims only "nothing recorded".
 //
 // Usage:
 //   GH_TOKEN=$(gh auth token) node scripts/build-activity.mjs
@@ -115,19 +116,62 @@ for (let i = 0; i < 12; i++) {
   cursor.setUTCMonth(cursor.getUTCMonth() + 1);
 }
 
-// --- month buckets across the whole history ---------------------------------
-// Same rule as the trailing window: months, never days. A month with nothing
-// recorded is left out entirely rather than written as zero, so the file still
-// cannot claim an idle stretch it has no way of knowing about.
+// --- day and month buckets across the whole history -------------------------
+// Days used to be derived and thrown away here, on the reasoning that a per-day
+// grid claims idle days that were not idle: work lands in private repos, gets
+// squashed on merge, or happens on another forge entirely. That reasoning still
+// holds and is the reason a blank day is written as ABSENT rather than zero --
+// the file says "nothing recorded here", not "nothing happened here". What
+// changed is that the chart now needs real daily texture, and inventing it from
+// month averages was the worse lie: it drew thirty identical days in a row and
+// implied a precision the month buckets never had.
 
-const monthlyTotals = new Map();
-for (const [date, count] of dayIndex) {
-  const key = monthKey(date);
-  monthlyTotals.set(key, (monthlyTotals.get(key) || 0) + count);
+const commitsFor = async (windows) => {
+  // contributionsCollection is per-window, so a commit count for each bucket
+  // means one collection per bucket. Aliased twenty to a request, and only for
+  // buckets the calendar already shows activity in, which keeps a full run to a
+  // few dozen calls rather than one per day of the account's life.
+  const found = new Map();
+  for (let i = 0; i < windows.length; i += 20) {
+    const batch = windows.slice(i, i + 20);
+    const params = batch.map((_, n) => `$f${n}:DateTime!,$t${n}:DateTime!`).join(',');
+    const fields = batch
+      .map((_, n) => `b${n}: contributionsCollection(from:$f${n},to:$t${n}){ totalCommitContributions }`)
+      .join('\n');
+    const vars = { login: LOGIN };
+    batch.forEach((w, n) => { vars[`f${n}`] = w.from; vars[`t${n}`] = w.to; });
+    const data = await gql(`query($login:String!,${params}){ user(login:$login){ ${fields} } }`, vars);
+    batch.forEach((w, n) => found.set(w.key, data.user[`b${n}`].totalCommitContributions));
+  }
+  return found;
+};
+
+const activeDays = [...dayIndex.keys()].sort();
+const dayCommits = await commitsFor(activeDays.map((date) => ({
+  key: date,
+  from: `${date}T00:00:00Z`,
+  to: `${date}T23:59:59Z`,
+})));
+process.stderr.write(`  commits resolved for ${activeDays.length} days\n`);
+
+const days = activeDays.map((date) => ({
+  date,
+  total: dayIndex.get(date),
+  commits: dayCommits.get(date) || 0,
+}));
+
+// Months roll up from the days, so the two can never disagree.
+const monthAcc = new Map();
+for (const d of days) {
+  const key = monthKey(d.date);
+  const bucket = monthAcc.get(key) || { total: 0, commits: 0 };
+  bucket.total += d.total;
+  bucket.commits += d.commits;
+  monthAcc.set(key, bucket);
 }
-const monthly = [...monthlyTotals.entries()]
+const monthly = [...monthAcc.entries()]
   .sort((a, b) => (a[0] < b[0] ? -1 : 1))
-  .map(([month, total]) => ({ month, total }));
+  .map(([month, v]) => ({ month, total: v.total, commits: v.commits }));
 
 // --- aggregates that describe presence, never absence ----------------------
 
@@ -245,7 +289,8 @@ const out = {
     publicRepositories: publicRepos.length,
   },
   years,
-  monthly, // whole history, month buckets only
+  monthly, // whole history, rolled up from days
+  days,    // only days with recorded activity; absent means unrecorded
   languages,
   lastPush: lastPush
     ? {
@@ -271,12 +316,21 @@ if (existsSync(OUT)) {
   // so a token can keep one and lose the other. Losing most of the repositories
   // silently changes repo count, language mix and the last-push timestamp.
   const lostRepos = out.totals.repositories < previous.totals.repositories * 0.6;
-  if (lostPrivateCounts || lostRepos) {
+  // A token can hold `repo` and still be locked out of an org it was never
+  // SSO-authorised for. Nothing above notices: the scope still reads
+  // public+private and every repository is still visible, while the org's work
+  // silently falls back to "restricted" and drops out of the commit counts. The
+  // collapse only shows up in the commit total itself, so that is what to watch.
+  const lostCommits = out.totals.commits < previous.totals.commits * 0.6;
+  if (lostPrivateCounts || lostRepos || lostCommits) {
     console.error(
       'Refusing to publish a smaller view of the same account.\n' +
-      `  scope       ${previous.scope} -> ${out.scope}\n` +
+      `  scope        ${previous.scope} -> ${out.scope}\n` +
       `  repositories ${previous.totals.repositories} -> ${out.totals.repositories}\n` +
-      'GH_ACTIVITY_TOKEN is missing or under-scoped. A classic PAT needs repo + read:user.'
+      `  commits      ${previous.totals.commits} -> ${out.totals.commits}\n` +
+      'GH_ACTIVITY_TOKEN is missing, under-scoped, or not SSO-authorised for an\n' +
+      'org that holds private work. A classic PAT needs repo + read:user, and\n' +
+      'must be authorised for every org whose contributions should count.'
     );
     process.exit(1);
   }
