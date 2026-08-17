@@ -115,6 +115,20 @@ for (let i = 0; i < 12; i++) {
   cursor.setUTCMonth(cursor.getUTCMonth() + 1);
 }
 
+// --- month buckets across the whole history ---------------------------------
+// Same rule as the trailing window: months, never days. A month with nothing
+// recorded is left out entirely rather than written as zero, so the file still
+// cannot claim an idle stretch it has no way of knowing about.
+
+const monthlyTotals = new Map();
+for (const [date, count] of dayIndex) {
+  const key = monthKey(date);
+  monthlyTotals.set(key, (monthlyTotals.get(key) || 0) + count);
+}
+const monthly = [...monthlyTotals.entries()]
+  .sort((a, b) => (a[0] < b[0] ? -1 : 1))
+  .map(([month, total]) => ({ month, total }));
+
 // --- aggregates that describe presence, never absence ----------------------
 
 const twelveMonthsAgo = new Date(now);
@@ -231,6 +245,7 @@ const out = {
     publicRepositories: publicRepos.length,
   },
   years,
+  monthly, // whole history, month buckets only
   languages,
   lastPush: lastPush
     ? {

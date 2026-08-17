@@ -2315,6 +2315,51 @@
             background: var(--color-bg-alt);
         }
 
+        /* Hover/tap readout for a heatmap bucket. One shared element that moves,
+           rather than a title attribute on every cell: 477 native tooltips made
+           the grid twitchy to move across and none of them could be tapped. */
+        .heat-band[data-readout] .heat-cell { cursor: pointer; }
+
+        .heat-cell.is-probed {
+            outline: 1px solid var(--color-text-light);
+            outline-offset: 1px;
+        }
+
+        .heat-tip {
+            position: fixed;
+            z-index: 60;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            padding: 6px 9px;
+            border-radius: 4px;
+            background: var(--color-text);
+            color: var(--color-bg);
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            line-height: 1.4;
+            /* The role list on a busy month is long, so the readout wraps inside
+               a fixed width rather than running off a phone screen. */
+            max-width: min(260px, calc(100vw - 24px));
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 110ms ease;
+        }
+
+        .heat-tip[data-open="1"] {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .heat-tip span { display: block; }
+        .heat-tip .heat-tip-when { font-weight: 600; }
+        .heat-tip .heat-tip-roles { opacity: 0.7; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .heat-tip { transition: none; }
+        }
+
         @media (max-width: 768px) {
             .heat-zone-label { font-size: 0.48rem; }
         }
@@ -2917,6 +2962,7 @@
                             <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
                             </div>
                             <div class="heat-band" data-career="rows"></div>
+                            <div class="heat-tip" data-career="tip" aria-hidden="true"></div>
                         <div class="heat-axis" data-career="axis" aria-hidden="true"></div>
                             <p class="heat-foot">
                                 <span class="activity-stats" data-activity="stats"></span>
@@ -4674,9 +4720,16 @@
             };
             const label = i => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
 
-            fetch('data/career.json', { cache: 'no-cache' })
-                .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-                .then(data => {
+            const grab = (url, required) =>
+                fetch(url, { cache: 'no-cache' })
+                    .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+                    // The grid is career data. Contribution counts only decorate
+                    // it, so a missing activity.json costs a line in the readout,
+                    // not the whole chart.
+                    .catch(err => { if (required) throw err; return null; });
+
+            Promise.all([grab('data/career.json', true), grab('data/activity.json', false)])
+                .then(([data, activity]) => {
                     const now = new Date();
                     const first = monthIndex(data.from);
                     const last = now.getFullYear() * 12 + now.getMonth();
@@ -4706,15 +4759,26 @@
                     // A bucket reports the peak of the months it covers, so
                     // compressing time never averages a busy stretch away and
                     // never invents a value for a gap.
-                    // No title attribute: 477 cells each sprouting a browser
-                    // tooltip made the grid twitchy to move across, and the
-                    // shading is the whole message.
-                    function cellFor(fromDate, toDate) {
+                    // Each cell carries the period it stands for and the roles
+                    // running inside it, so the readout below can answer for it
+                    // without rebuilding any of this. Still no title attribute:
+                    // 477 native tooltips made the grid twitchy to move across.
+                    const iso = d => d.toISOString().slice(0, 10);
+
+                    function cellFor(fromDate, toDate, unit) {
                         let peak = 0;
+                        const roles = [];
                         for (let i = midx(fromDate); i <= midx(toDate); i++) {
                             peak = Math.max(peak, scoreOf(i));
+                            const bucket = active.get(i);
+                            if (bucket) {
+                                bucket.labels.forEach(l => { if (!roles.includes(l)) roles.push(l); });
+                            }
                         }
-                        return `<span class="heat-cell" data-level="${toLevel(peak)}"></span>`;
+                        const attrs =
+                            ` data-from="${iso(fromDate)}" data-unit="${unit}"` +
+                            (roles.length ? ` data-roles="${roles.join('|').replace(/"/g, '&quot;')}"` : '');
+                        return `<span class="heat-cell" data-level="${toLevel(peak)}"${attrs}></span>`;
                     }
 
                     // Log axis: one cell per month for everything older than a
@@ -4735,12 +4799,13 @@
                         noteYear(y, cells.length);
                         cells.push(cellFor(
                             new Date(Date.UTC(y, mo, 1)),
-                            new Date(Date.UTC(y, mo + 1, 0))
+                            new Date(Date.UTC(y, mo + 1, 0)),
+                            'month'
                         ));
                     }
                     for (let d = new Date(coarseEnd); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
                         noteYear(d.getUTCFullYear(), cells.length);
-                        cells.push(cellFor(d, d));
+                        cells.push(cellFor(d, d, 'day'));
                     }
 
                     grid.querySelector('[data-career="rows"]').innerHTML = cells.join('');
@@ -4769,6 +4834,124 @@
                             `<span>${de ? 'weniger' : 'less'}</span>` +
                             [0, 1, 2, 3, 4].map(l => `<span class="heat-cell heat-key" data-level="${l}"></span>`).join('') +
                             `<span>${de ? 'mehr' : 'more'}</span>`;
+                    }
+
+                    // --- hover / tap readout ------------------------------
+                    // Two facts per bucket: which roles were running in it, and
+                    // how much landed on GitHub. The second is always a MONTH
+                    // figure and is labelled as one, even on a day cell, because
+                    // activity.json holds no days on purpose -- see the note at
+                    // the top of scripts/build-activity.mjs. A day cell reporting
+                    // its month is honest; a day cell reporting a day would be
+                    // claiming an idle Tuesday nothing here can actually know.
+                    const tip = grid.querySelector('[data-career="tip"]');
+                    const band = grid.querySelector('[data-career="rows"]');
+                    if (tip && band) {
+                        const monthTotals = new Map(
+                            ((activity && (activity.monthly ||
+                                (activity.last12Months && activity.last12Months.months))) || [])
+                                .map(m => [m.month, m.total])
+                        );
+                        band.setAttribute('data-readout', '');
+
+                        const isDe = () =>
+                            (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
+                        const locale = () => (isDe() ? 'de-DE' : 'en-GB');
+                        const when = (date, opts) =>
+                            new Intl.DateTimeFormat(locale(), Object.assign({ timeZone: 'UTC' }, opts)).format(date);
+
+                        let probed = null;
+                        let pinned = null;
+
+                        const line = (cls, text) => {
+                            const el = document.createElement('span');
+                            if (cls) el.className = cls;
+                            el.textContent = text;
+                            return el;
+                        };
+
+                        function fill(cell) {
+                            const from = cell.getAttribute('data-from');
+                            if (!from) return false;
+                            const date = new Date(from + 'T00:00:00Z');
+                            const isDay = cell.getAttribute('data-unit') === 'day';
+                            const month = when(date, { month: 'short', year: 'numeric' });
+
+                            tip.textContent = '';
+                            tip.appendChild(line(
+                                'heat-tip-when',
+                                isDay ? when(date, { day: 'numeric', month: 'short', year: 'numeric' }) : month
+                            ));
+
+                            const total = monthTotals.get(from.slice(0, 7));
+                            if (total != null) {
+                                tip.appendChild(line('', isDe()
+                                    ? total.toLocaleString('de-DE') + ' Beiträge in ' + month
+                                    : total.toLocaleString('en-GB') + ' contributions in ' + month));
+                            }
+
+                            const roles = cell.getAttribute('data-roles');
+                            if (roles) tip.appendChild(line('heat-tip-roles', roles.split('|').join(' \u00b7 ')));
+                            return true;
+                        }
+
+                        function show(cell) {
+                            if (!fill(cell)) return hide();
+                            if (probed) probed.classList.remove('is-probed');
+                            probed = cell;
+                            cell.classList.add('is-probed');
+                            tip.setAttribute('data-open', '1');
+
+                            // Measured after the content is in, so a two-line and
+                            // a three-line readout both sit clear of the cell.
+                            const box = cell.getBoundingClientRect();
+                            const own = tip.getBoundingClientRect();
+                            const left = Math.max(8, Math.min(
+                                box.left + box.width / 2 - own.width / 2,
+                                window.innerWidth - own.width - 8
+                            ));
+                            const above = box.top - own.height - 8;
+                            tip.style.left = Math.round(left) + 'px';
+                            tip.style.top = Math.round(above < 8 ? box.bottom + 8 : above) + 'px';
+                        }
+
+                        function hide() {
+                            pinned = null;
+                            tip.removeAttribute('data-open');
+                            if (probed) probed.classList.remove('is-probed');
+                            probed = null;
+                        }
+
+                        const cellUnder = e => {
+                            const el = e.target;
+                            return el && el.classList && el.classList.contains('heat-cell') ? el : null;
+                        };
+
+                        band.addEventListener('pointermove', e => {
+                            if (pinned || e.pointerType === 'touch') return;
+                            const cell = cellUnder(e);
+                            if (!cell) return hide();
+                            if (cell !== probed) show(cell);
+                        });
+                        band.addEventListener('pointerleave', () => { if (!pinned) hide(); });
+
+                        // Tap, and anything without a hover state, gets the same
+                        // readout by pinning it until the next tap elsewhere.
+                        band.addEventListener('click', e => {
+                            const cell = cellUnder(e);
+                            if (!cell) return hide();
+                            if (pinned === cell) return hide();
+                            pinned = cell;
+                            show(cell);
+                        });
+                        document.addEventListener('click', e => {
+                            if (pinned && !band.contains(e.target)) hide();
+                        });
+                        document.addEventListener('keydown', e => { if (e.key === 'Escape') hide(); });
+                        // Fixed positioning: the readout would otherwise drift off
+                        // its cell the moment the page moves under it.
+                        window.addEventListener('scroll', () => { if (probed) hide(); }, { passive: true });
+                        window.addEventListener('resize', () => { if (probed) hide(); });
                     }
 
                     grid.hidden = false;
