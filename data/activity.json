@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-17T06:30:20Z",
+  "generated": "2026-08-17T12:29:28Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5290,
+    "total": 5348,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-08",
-        "total": 614
+        "total": 672
       }
     ]
   },
   "streakDays": 8,
   "totals": {
-    "contributions": 9033,
+    "contributions": 9091,
     "private": 96,
-    "commits": 8262,
-    "pullRequests": 442,
+    "commits": 8310,
+    "pullRequests": 452,
     "reviews": 45,
     "repositories": 40,
     "publicRepositories": 11
@@ -167,50 +167,50 @@
     },
     {
       "year": 2026,
-      "total": 3662,
+      "total": 3720,
       "private": 0,
-      "commits": 3297,
-      "prs": 237,
+      "commits": 3345,
+      "prs": 247,
       "reviews": 13
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 55
+      "share": 55.5
     },
     {
       "name": "HTML",
-      "share": 8
+      "share": 7.8
     },
     {
       "name": "Dart",
-      "share": 5.7
-    },
-    {
-      "name": "Rust",
-      "share": 5.3
+      "share": 5.5
     },
     {
       "name": "PLpgSQL",
-      "share": 4.6
+      "share": 5.2
+    },
+    {
+      "name": "Rust",
+      "share": 5.1
     },
     {
       "name": "Astro",
-      "share": 4.2
+      "share": 4.1
     }
   ],
   "lastPush": {
-    "at": "2026-08-17T00:30:36Z",
-    "repo": "will-break-it",
-    "url": "https://github.com/will-break-it/will-break-it",
-    "private": false
+    "at": "2026-08-17T11:43:44Z",
+    "repo": null,
+    "url": null,
+    "private": true
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-17T00:30:36Z",
+      "pushedAt": "2026-08-17T06:30:29Z",
       "language": "HTML"
     },
     {
