@@ -25,7 +25,9 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-async function gql(query, variables = {}) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function gql(query, variables = {}, attempt = 0) {
   const res = await fetch('https://api.github.com/graphql', {
     method: 'POST',
     headers: {
@@ -35,7 +37,20 @@ async function gql(query, variables = {}) {
     },
     body: JSON.stringify({ query, variables }),
   });
-  if (!res.ok) throw new Error(`GitHub API ${res.status}: ${await res.text()}`);
+  if (!res.ok) {
+    // Secondary limits are about request RATE, not quota, so the quota can look
+    // healthy while every call is rejected. Backing off and retrying is the only
+    // way through; failing the run would leave the site on stale data.
+    const body = await res.text();
+    if ((res.status === 403 || res.status === 429) && /rate limit/i.test(body) && attempt < 5) {
+      const after = Number(res.headers.get('retry-after')) || 0;
+      const wait = (after || Math.min(60, 5 * 2 ** attempt)) * 1000;
+      process.stderr.write(`  rate limited, waiting ${wait / 1000}s\n`);
+      await sleep(wait);
+      return gql(query, variables, attempt + 1);
+    }
+    throw new Error(`GitHub API ${res.status}: ${body}`);
+  }
   const json = await res.json();
   if (json.errors) throw new Error(`GraphQL: ${JSON.stringify(json.errors)}`);
   return json.data;
@@ -132,8 +147,12 @@ const commitsFor = async (windows) => {
   // buckets the calendar already shows activity in, which keeps a full run to a
   // few dozen calls rather than one per day of the account's life.
   const found = new Map();
-  for (let i = 0; i < windows.length; i += 20) {
-    const batch = windows.slice(i, i + 20);
+  for (let i = 0; i < windows.length; i += 10) {
+    // Spaced out on purpose. Twenty collections a request as fast as the loop
+    // could issue them tripped the secondary limit on a full-visibility token,
+    // which sees far more active days than a thin one does.
+    if (i) await sleep(1500);
+    const batch = windows.slice(i, i + 10);
     const params = batch.map((_, n) => `$f${n}:DateTime!,$t${n}:DateTime!`).join(',');
     const fields = batch
       .map((_, n) => `b${n}: contributionsCollection(from:$f${n},to:$t${n}){ totalCommitContributions }`)
@@ -146,7 +165,15 @@ const commitsFor = async (windows) => {
   return found;
 };
 
-const activeDays = [...dayIndex.keys()].sort();
+// Only the trailing year is drawn as day cells; everything older is a month
+// bucket and never asks a day for its number. Resolving commits for all of
+// history was work the chart could not use, and enough requests to trip the
+// secondary rate limit.
+const dayWindowStart = new Date(now);
+dayWindowStart.setUTCMonth(dayWindowStart.getUTCMonth() - 13);
+const dayCutoff = dayWindowStart.toISOString().slice(0, 10);
+
+const activeDays = [...dayIndex.keys()].filter((d) => d >= dayCutoff).sort();
 const dayCommits = await commitsFor(activeDays.map((date) => ({
   key: date,
   from: `${date}T00:00:00Z`,
@@ -160,18 +187,30 @@ const days = activeDays.map((date) => ({
   commits: dayCommits.get(date) || 0,
 }));
 
-// Months roll up from the days, so the two can never disagree.
+// Months cover the whole history, so they roll up from every recorded day, not
+// just the trailing year the day cells use. Their commit counts come from their
+// own monthly windows below.
 const monthAcc = new Map();
-for (const d of days) {
-  const key = monthKey(d.date);
-  const bucket = monthAcc.get(key) || { total: 0, commits: 0 };
-  bucket.total += d.total;
-  bucket.commits += d.commits;
+for (const [date, total] of dayIndex) {
+  const key = monthKey(date);
+  const bucket = monthAcc.get(key) || { total: 0 };
+  bucket.total += total;
   monthAcc.set(key, bucket);
 }
 const monthly = [...monthAcc.entries()]
   .sort((a, b) => (a[0] < b[0] ? -1 : 1))
-  .map(([month, v]) => ({ month, total: v.total, commits: v.commits }));
+  .map(([month, v]) => ({ month, total: v.total }));
+
+const monthCommits = await commitsFor(monthly.map((m) => {
+  const [y, mo] = m.month.split('-').map(Number);
+  return {
+    key: m.month,
+    from: iso(new Date(Date.UTC(y, mo - 1, 1))),
+    to: iso(new Date(Date.UTC(y, mo, 0, 23, 59, 59))),
+  };
+}));
+monthly.forEach((m) => { m.commits = monthCommits.get(m.month) || 0; });
+process.stderr.write(`  commits resolved for ${monthly.length} months\n`);
 
 // --- aggregates that describe presence, never absence ----------------------
 
