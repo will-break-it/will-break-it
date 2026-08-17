@@ -2257,6 +2257,11 @@
             margin-bottom: var(--spacing-xs);
         }
 
+        .heat-note {
+            font-size: 0.62rem;
+            color: var(--color-text-lighter);
+        }
+
         .heat-legend {
             display: flex;
             align-items: center;
@@ -2354,7 +2359,6 @@
 
         .heat-tip span { display: block; }
         .heat-tip .heat-tip-when { font-weight: 600; }
-        .heat-tip .heat-tip-roles { opacity: 0.7; }
 
         @media (prefers-reduced-motion: reduce) {
             .heat-tip { transition: none; }
@@ -2959,6 +2963,10 @@
                              it can start in 2015 where GitHub cannot. -->
                         <div class="heat" data-career="grid" hidden>
                             <div class="heat-head">
+                            <span class="heat-note">
+                                <span lang="en">Dimmest step: work on the timeline with no public commit record</span>
+                                <span lang="de">Dunkelste Stufe: Arbeit aus der Zeitachse ohne öffentliche Commits</span>
+                            </span>
                             <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
                             </div>
                             <div class="heat-band" data-career="rows"></div>
@@ -4749,8 +4757,38 @@
 
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
 
+                    // Brightness is activity, with the career record as a floor.
+                    // Counting overlapping roles the way this used to only ever
+                    // ratcheted upward -- side projects accumulate and several
+                    // never end -- so it pinned at maximum from 2023 on and read
+                    // as a smooth ramp rather than a record of anything.
+                    //
+                    // The floor is what keeps 2015-2021 on the chart at all.
+                    // GitHub has almost nothing there and the work is real, so a
+                    // documented month is never darker than level 1, and the
+                    // legend says what that dimmest step means.
                     const scoreOf = i => { const b = active.get(i); return b ? b.score : 0; };
-                    const toLevel = s => (s === 0 ? 0 : Math.min(Math.ceil(s / 1.5), 4));
+
+                    const dayCommits = new Map(
+                        ((activity && activity.days) || []).map(d => [d.date, d.commits])
+                    );
+                    const monthCommits = new Map(
+                        ((activity && activity.monthly) || [])
+                            .filter(m => typeof m.commits === 'number')
+                            .map(m => [m.month, m.commits])
+                    );
+
+                    // Quartiles per granularity. A busy day and a busy month are
+                    // different magnitudes, and one shared scale would leave every
+                    // month cell dim next to the day cells beside it.
+                    const cutsFor = values => {
+                        const v = values.filter(n => n > 0).sort((a, b) => a - b);
+                        return v.length ? [0.25, 0.5, 0.75].map(q => v[Math.floor(v.length * q)]) : null;
+                    };
+                    const dayCuts = cutsFor([...dayCommits.values()]);
+                    const monthCuts = cutsFor([...monthCommits.values()]);
+                    const levelFor = (n, cuts) =>
+                        (!n || !cuts ? 0 : 1 + cuts.filter(c => n > c).length);
 
                     const today = new Date();
                     today.setUTCHours(0, 0, 0, 0);
@@ -4759,26 +4797,37 @@
                     // A bucket reports the peak of the months it covers, so
                     // compressing time never averages a busy stretch away and
                     // never invents a value for a gap.
-                    // Each cell carries the period it stands for and the roles
-                    // running inside it, so the readout below can answer for it
-                    // without rebuilding any of this. Still no title attribute:
-                    // 477 native tooltips made the grid twitchy to move across.
+                    // Each cell carries the period it stands for, so the readout
+                    // below can answer for it without rebuilding any of this.
+                    // Still no title attribute: 477 native tooltips made the grid
+                    // twitchy to move across.
                     const iso = d => d.toISOString().slice(0, 10);
 
                     function cellFor(fromDate, toDate, unit) {
-                        let peak = 0;
-                        const roles = [];
-                        for (let i = midx(fromDate); i <= midx(toDate); i++) {
-                            peak = Math.max(peak, scoreOf(i));
-                            const bucket = active.get(i);
-                            if (bucket) {
-                                bucket.labels.forEach(l => { if (!roles.includes(l)) roles.push(l); });
-                            }
+                        const from = iso(fromDate);
+                        // A published activity.json one version behind this page
+                        // has no days in it. Falling back to the month bucket
+                        // keeps the chart readable until the next refresh lands,
+                        // rather than drawing a year of blanks.
+                        if (unit === 'day' && dayCommits.size) {
+                            // Real days get to be real, blanks included. The floor
+                            // below is a month-level fact and applying it here
+                            // would light up every day of an employed month,
+                            // which is not what a day cell is read as.
+                            const level = levelFor(dayCommits.get(from), dayCuts);
+                            return `<span class="heat-cell" data-level="${level}"` +
+                                ` data-from="${from}" data-unit="day"></span>`;
                         }
-                        const attrs =
-                            ` data-from="${iso(fromDate)}" data-unit="${unit}"` +
-                            (roles.length ? ` data-roles="${roles.join('|').replace(/"/g, '&quot;')}"` : '');
-                        return `<span class="heat-cell" data-level="${toLevel(peak)}"${attrs}></span>`;
+                        let documented = 0;
+                        for (let i = midx(fromDate); i <= midx(toDate); i++) {
+                            if (scoreOf(i) > 0) documented = 1;
+                        }
+                        const level = Math.max(
+                            documented,
+                            levelFor(monthCommits.get(from.slice(0, 7)), monthCuts)
+                        );
+                        return `<span class="heat-cell" data-level="${level}"` +
+                            ` data-from="${from}" data-unit="${unit}"></span>`;
                     }
 
                     // Log axis: one cell per month for everything older than a
@@ -4847,11 +4896,6 @@
                     const tip = grid.querySelector('[data-career="tip"]');
                     const band = grid.querySelector('[data-career="rows"]');
                     if (tip && band) {
-                        const monthTotals = new Map(
-                            ((activity && (activity.monthly ||
-                                (activity.last12Months && activity.last12Months.months))) || [])
-                                .map(m => [m.month, m.total])
-                        );
                         band.setAttribute('data-readout', '');
 
                         const isDe = () =>
@@ -4883,15 +4927,18 @@
                                 isDay ? when(date, { day: 'numeric', month: 'short', year: 'numeric' }) : month
                             ));
 
-                            const total = monthTotals.get(from.slice(0, 7));
-                            if (total != null) {
-                                tip.appendChild(line('', isDe()
-                                    ? total.toLocaleString('de-DE') + ' Beiträge in ' + month
-                                    : total.toLocaleString('en-GB') + ' contributions in ' + month));
+                            // The cell's own bucket, at its own granularity.
+                            // A day with nothing recorded says nothing rather
+                            // than printing a zero it cannot stand behind.
+                            const commits = isDay
+                                ? dayCommits.get(from)
+                                : monthCommits.get(from.slice(0, 7));
+                            if (commits) {
+                                const word = isDe()
+                                    ? (commits === 1 ? 'Commit' : 'Commits')
+                                    : (commits === 1 ? 'commit' : 'commits');
+                                tip.appendChild(line('', commits.toLocaleString(locale()) + ' ' + word));
                             }
-
-                            const roles = cell.getAttribute('data-roles');
-                            if (roles) tip.appendChild(line('heat-tip-roles', roles.split('|').join(' \u00b7 ')));
                             return true;
                         }
 
