@@ -38,14 +38,19 @@ async function gql(query, variables = {}, attempt = 0) {
     body: JSON.stringify({ query, variables }),
   });
   if (!res.ok) {
-    // Secondary limits are about request RATE, not quota, so the quota can look
-    // healthy while every call is rejected. Backing off and retrying is the only
-    // way through; failing the run would leave the site on stale data.
+    // Two things worth waiting out rather than failing on, since failing just
+    // leaves the site on stale data. A secondary rate limit is about request
+    // RATE, not quota, so the quota reads healthy while every call is rejected.
+    // A 5xx is the API having a bad day: during an incident it answers 503 to
+    // perfectly good queries.
     const body = await res.text();
-    if ((res.status === 403 || res.status === 429) && /rate limit/i.test(body) && attempt < 5) {
+    const transient =
+      res.status >= 500 ||
+      ((res.status === 403 || res.status === 429) && /rate limit/i.test(body));
+    if (transient && attempt < 5) {
       const after = Number(res.headers.get('retry-after')) || 0;
       const wait = (after || Math.min(60, 5 * 2 ** attempt)) * 1000;
-      process.stderr.write(`  rate limited, waiting ${wait / 1000}s\n`);
+      process.stderr.write(`  ${res.status}, retrying in ${wait / 1000}s\n`);
       await sleep(wait);
       return gql(query, variables, attempt + 1);
     }
