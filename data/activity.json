@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-18T12:29:36Z",
+  "generated": "2026-08-18T18:29:31Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5430,
+    "total": 5472,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-08",
-        "total": 776
+        "total": 818
       }
     ]
   },
   "streakDays": 9,
   "totals": {
-    "contributions": 9195,
+    "contributions": 9237,
     "private": 96,
-    "commits": 8374,
-    "pullRequests": 491,
+    "commits": 8411,
+    "pullRequests": 496,
     "reviews": 46,
     "repositories": 40,
     "publicRepositories": 11
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 3824,
+      "total": 3866,
       "private": 0,
-      "commits": 3409,
-      "prs": 286,
+      "commits": 3446,
+      "prs": 291,
       "reviews": 14
     }
   ],
@@ -502,8 +502,8 @@
     },
     {
       "month": "2026-08",
-      "total": 776,
-      "commits": 568
+      "total": 818,
+      "commits": 605
     }
   ],
   "days": [
@@ -1904,14 +1904,14 @@
     },
     {
       "date": "2026-08-18",
-      "total": 51,
-      "commits": 33
+      "total": 93,
+      "commits": 70
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 56.6
+      "share": 56.8
     },
     {
       "name": "HTML",
@@ -1927,7 +1927,7 @@
     },
     {
       "name": "Rust",
-      "share": 4.9
+      "share": 4.8
     },
     {
       "name": "Astro",
@@ -1935,7 +1935,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-18T12:29:53Z",
+    "at": "2026-08-18T18:21:26Z",
     "repo": null,
     "url": null,
     "private": true
@@ -1944,7 +1944,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-18T11:51:34Z",
+      "pushedAt": "2026-08-18T12:31:00Z",
       "language": "HTML"
     },
     {
