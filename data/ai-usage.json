@@ -1,0 +1,296 @@
+{
+  "generated": "2026-08-18T11:09:28.838Z",
+  "since": "2026-07-08",
+  "totals": {
+    "prompts": 2290,
+    "actions": 71034,
+    "sessions": 141,
+    "activeDays": 26,
+    "actionsPerPrompt": 31,
+    "tokens": {
+      "input": 397002,
+      "output": 49198098,
+      "cacheRead": 15616639273,
+      "cacheWrite": 342590111,
+      "total": 16008824484
+    }
+  },
+  "tools": {
+    "Bash": 28203,
+    "Edit": 4603,
+    "Read": 3300,
+    "Write": 2170,
+    "other": 1098,
+    "Agent": 379,
+    "WebFetch": 254,
+    "WebSearch": 250
+  },
+  "models": {
+    "claude-opus-5": 64352,
+    "claude-opus-4-8": 3567,
+    "claude-fable-5": 2919,
+    "claude-sonnet-5": 147
+  },
+  "days": [
+    {
+      "date": "2026-07-08",
+      "prompts": 6,
+      "actions": 20,
+      "input": 17761,
+      "output": 47501,
+      "cacheRead": 734098,
+      "cacheWrite": 113514,
+      "sessions": 1
+    },
+    {
+      "date": "2026-07-09",
+      "prompts": 40,
+      "actions": 167,
+      "input": 3605,
+      "output": 301257,
+      "cacheRead": 20117360,
+      "cacheWrite": 1258348,
+      "sessions": 1
+    },
+    {
+      "date": "2026-07-17",
+      "prompts": 5,
+      "actions": 10,
+      "input": 20,
+      "output": 19496,
+      "cacheRead": 320162,
+      "cacheWrite": 34190,
+      "sessions": 1
+    },
+    {
+      "date": "2026-07-18",
+      "prompts": 29,
+      "actions": 175,
+      "input": 324,
+      "output": 521449,
+      "cacheRead": 59561380,
+      "cacheWrite": 1143407,
+      "sessions": 2
+    },
+    {
+      "date": "2026-07-19",
+      "prompts": 41,
+      "actions": 305,
+      "input": 568,
+      "output": 539295,
+      "cacheRead": 54162256,
+      "cacheWrite": 1829026,
+      "sessions": 2
+    },
+    {
+      "date": "2026-07-20",
+      "prompts": 1,
+      "actions": 6,
+      "input": 12,
+      "output": 3783,
+      "cacheRead": 1123148,
+      "cacheWrite": 998194,
+      "sessions": 1
+    },
+    {
+      "date": "2026-07-21",
+      "prompts": 41,
+      "actions": 630,
+      "input": 2413,
+      "output": 581727,
+      "cacheRead": 80900874,
+      "cacheWrite": 5078118,
+      "sessions": 6
+    },
+    {
+      "date": "2026-07-22",
+      "prompts": 100,
+      "actions": 764,
+      "input": 107794,
+      "output": 944601,
+      "cacheRead": 135324207,
+      "cacheWrite": 4265366,
+      "sessions": 7
+    },
+    {
+      "date": "2026-07-23",
+      "prompts": 7,
+      "actions": 234,
+      "input": 418,
+      "output": 201630,
+      "cacheRead": 33259105,
+      "cacheWrite": 615811,
+      "sessions": 1
+    },
+    {
+      "date": "2026-07-24",
+      "prompts": 32,
+      "actions": 120,
+      "input": 221,
+      "output": 178503,
+      "cacheRead": 8567395,
+      "cacheWrite": 1897896,
+      "sessions": 5
+    },
+    {
+      "date": "2026-08-03",
+      "prompts": 58,
+      "actions": 663,
+      "input": 1214,
+      "output": 612915,
+      "cacheRead": 58727035,
+      "cacheWrite": 3512912,
+      "sessions": 3
+    },
+    {
+      "date": "2026-08-04",
+      "prompts": 71,
+      "actions": 1989,
+      "input": 14190,
+      "output": 1666088,
+      "cacheRead": 656133194,
+      "cacheWrite": 10096870,
+      "sessions": 7
+    },
+    {
+      "date": "2026-08-05",
+      "prompts": 97,
+      "actions": 2319,
+      "input": 15818,
+      "output": 2713252,
+      "cacheRead": 440703825,
+      "cacheWrite": 7435122,
+      "sessions": 6
+    },
+    {
+      "date": "2026-08-06",
+      "prompts": 101,
+      "actions": 3228,
+      "input": 24090,
+      "output": 3713400,
+      "cacheRead": 788269860,
+      "cacheWrite": 26926785,
+      "sessions": 12
+    },
+    {
+      "date": "2026-08-07",
+      "prompts": 120,
+      "actions": 2890,
+      "input": 6938,
+      "output": 3244576,
+      "cacheRead": 1352905475,
+      "cacheWrite": 19614158,
+      "sessions": 4
+    },
+    {
+      "date": "2026-08-08",
+      "prompts": 18,
+      "actions": 271,
+      "input": 519,
+      "output": 241866,
+      "cacheRead": 102557927,
+      "cacheWrite": 5690123,
+      "sessions": 4
+    },
+    {
+      "date": "2026-08-09",
+      "prompts": 1,
+      "actions": 6,
+      "input": 10,
+      "output": 7293,
+      "cacheRead": 4564645,
+      "cacheWrite": 890347,
+      "sessions": 1
+    },
+    {
+      "date": "2026-08-10",
+      "prompts": 96,
+      "actions": 2222,
+      "input": 7862,
+      "output": 1825572,
+      "cacheRead": 510035564,
+      "cacheWrite": 10017724,
+      "sessions": 7
+    },
+    {
+      "date": "2026-08-11",
+      "prompts": 61,
+      "actions": 1466,
+      "input": 31318,
+      "output": 1331592,
+      "cacheRead": 299386674,
+      "cacheWrite": 9804243,
+      "sessions": 9
+    },
+    {
+      "date": "2026-08-12",
+      "prompts": 182,
+      "actions": 4345,
+      "input": 39753,
+      "output": 3726850,
+      "cacheRead": 1238439851,
+      "cacheWrite": 20478015,
+      "sessions": 14
+    },
+    {
+      "date": "2026-08-13",
+      "prompts": 105,
+      "actions": 2117,
+      "input": 4077,
+      "output": 1929125,
+      "cacheRead": 782796103,
+      "cacheWrite": 24957337,
+      "sessions": 5
+    },
+    {
+      "date": "2026-08-14",
+      "prompts": 181,
+      "actions": 5789,
+      "input": 35545,
+      "output": 3214025,
+      "cacheRead": 1216766718,
+      "cacheWrite": 22759302,
+      "sessions": 8
+    },
+    {
+      "date": "2026-08-15",
+      "prompts": 287,
+      "actions": 12333,
+      "input": 24638,
+      "output": 5471266,
+      "cacheRead": 1666470931,
+      "cacheWrite": 43809013,
+      "sessions": 6
+    },
+    {
+      "date": "2026-08-16",
+      "prompts": 225,
+      "actions": 11860,
+      "input": 23705,
+      "output": 7157669,
+      "cacheRead": 2507434313,
+      "cacheWrite": 42435325,
+      "sessions": 6
+    },
+    {
+      "date": "2026-08-17",
+      "prompts": 303,
+      "actions": 13371,
+      "input": 26724,
+      "output": 6892187,
+      "cacheRead": 2685160532,
+      "cacheWrite": 57192777,
+      "sessions": 16
+    },
+    {
+      "date": "2026-08-18",
+      "prompts": 82,
+      "actions": 3734,
+      "input": 7465,
+      "output": 2111180,
+      "cacheRead": 912216641,
+      "cacheWrite": 19736188,
+      "sessions": 6
+    }
+  ]
+}

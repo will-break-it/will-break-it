@@ -2955,6 +2955,16 @@
                                 </span>
                                 <div class="now-stats" data-stats="career"></div>
                             </div>
+                            <!-- Hidden until data/ai-usage.json loads. It is the
+                                 only figure block measured from outside this
+                                 repo, so it has to survive not being there. -->
+                            <div class="now-group" data-stats="ai-group" hidden>
+                                <span class="now-group-label">
+                                    <span lang="en">AI workflow</span>
+                                    <span lang="de">KI-Workflow</span>
+                                </span>
+                                <div class="now-stats" data-stats="ai"></div>
+                            </div>
                         </div>
 
                         <div id="activity" data-activity="panel">
@@ -4620,6 +4630,111 @@
                 .catch(() => {
                     // Without the file there are no numbers to show, so the rows
                     // stay empty rather than displaying placeholders.
+                });
+        })();
+
+        // ===================================================================
+        // AI workflow
+        // ===================================================================
+        // Rolled up from local Claude Code transcripts by scripts/build-ai-usage.mjs.
+        // That data lives on one machine and never reaches CI, so unlike the
+        // activity file this one is committed by hand and can be arbitrarily
+        // stale. Nothing here fails loudly if it is missing.
+        //
+        // Two token figures, deliberately. Almost all of the big one is cached
+        // context re-read on every turn of a long agentic loop, which is a real
+        // thing that happened but is not work produced. Printing only the large
+        // number would flatter; printing only the small one would undersell.
+        // Both, labelled, is the honest version.
+
+        (function () {
+            const group = document.querySelector('[data-stats="ai-group"]');
+            const row = document.querySelector('[data-stats="ai"]');
+            if (!group || !row) return;
+
+            // The page tracks language with data-lang on <html>, not the lang
+            // property, and the toggle flips it in place without a reload. So
+            // render is a function and runs again whenever it changes: the
+            // visible labels are handled by CSS like everywhere else, but the
+            // tooltips are strings and would otherwise stay in whichever
+            // language happened to be active at load.
+            const root = document.documentElement;
+            const isDe = () => root.getAttribute('data-lang') === 'de';
+
+            // Short forms, because these run to eight and ten digits and the
+            // row has to stay on one line on a phone.
+            const compact = n => {
+                if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+                if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+                if (n >= 1e3) return Math.round(n / 1e3) + 'k';
+                return String(n);
+            };
+
+            const figure = (value, en, de, title) =>
+                `<div title="${title.replace(/"/g, '&quot;')}">` +
+                `<span class="now-stat-value">${value}</span>` +
+                `<span class="now-stat-label" lang="en">${en}</span>` +
+                `<span class="now-stat-label" lang="de">${de}</span>` +
+                `</div>`;
+
+            function render(data) {
+                const t = data.totals;
+                const de = isDe();
+                const n = new Intl.NumberFormat(de ? 'de-DE' : 'en-GB');
+                const since = new Date(data.since).toLocaleDateString(de ? 'de-DE' : 'en-GB', {
+                    month: 'short',
+                    year: 'numeric',
+                });
+                const bash = n.format(data.tools?.Bash || 0);
+
+                row.innerHTML =
+                    figure(
+                        n.format(t.prompts),
+                        'Instructions',
+                        'Anweisungen',
+                        de
+                            ? `Von mir getippte Eingaben. Gemessen seit ${since}.`
+                            : `Prompts I typed. Measured since ${since}.`
+                    ) +
+                    figure(
+                        compact(t.actions),
+                        'Agent actions',
+                        'Agenten-Aktionen',
+                        de
+                            ? `${n.format(t.actions)} Werkzeugaufrufe und Antworten, davon ${bash} Shell-Befehle.`
+                            : `${n.format(t.actions)} tool calls and replies, ${bash} of them shell commands.`
+                    ) +
+                    figure(
+                        t.actionsPerPrompt + '\u00d7',
+                        'Per instruction',
+                        'Pro Anweisung',
+                        de
+                            ? 'Aktionen, die im Schnitt aus einer Anweisung werden.'
+                            : 'Actions the average instruction turns into.'
+                    ) +
+                    figure(
+                        compact(t.tokens.total),
+                        'Tokens processed',
+                        'Tokens verarbeitet',
+                        de
+                            ? `Davon ${compact(t.tokens.output)} erzeugt; der Rest ist Kontext, der in jedem Zug erneut gelesen wird.`
+                            : `${compact(t.tokens.output)} of them generated; the rest is context re-read each turn.`
+                    );
+            }
+
+            fetch('data/ai-usage.json', { cache: 'no-cache' })
+                .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+                .then(data => {
+                    if (!data.totals || !data.totals.prompts) return;
+                    render(data);
+                    group.hidden = false;
+                    new MutationObserver(() => render(data)).observe(root, {
+                        attributes: true,
+                        attributeFilter: ['data-lang'],
+                    });
+                })
+                .catch(() => {
+                    /* No file, no group. The rest of the page is unaffected. */
                 });
         })();
 
