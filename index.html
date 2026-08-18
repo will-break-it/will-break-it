@@ -421,6 +421,170 @@
             margin-left: auto;
         }
 
+        /* Mobile header menu -------------------------------------------------
+           Five controls plus the brand come to 342px, which fits a 390px phone
+           and wraps the header onto a second row at 360px. Below 768px they
+           collapse behind one button.
+
+           The controls are MOVED, not copied. #lang-toggle and #theme-toggle
+           are looked up by id elsewhere in this file, so a second copy of
+           either would leave half the page wired to whichever one the DOM
+           happened to hand back. One set, restyled. */
+
+        .menu-label { display: none; }
+        .lang-globe { display: none; }
+
+        .header-menu-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            /* 44px: the smallest target iOS treats as reliably tappable. The
+               icon inside is 20px; the rest is padding that still counts. */
+            width: 44px;
+            height: 44px;
+            margin-left: auto;
+            padding: 0;
+            border: none;
+            border-radius: 6px;
+            background: none;
+            color: var(--color-text-lighter);
+            cursor: pointer;
+        }
+
+        .header-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .header-menu-btn:hover,
+        header[data-menu-open] .header-menu-btn {
+            color: var(--color-text);
+        }
+
+        .header-menu-btn:focus-visible {
+            outline: 1px solid var(--color-live);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .header-menu-btn { display: flex; }
+
+            .header-controls {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                z-index: 101;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                min-width: 180px;
+                margin-left: 0;
+                padding: var(--spacing-xs) 0;
+                border: 1px solid var(--color-border);
+                border-radius: 8px;
+                background: var(--color-bg);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+            }
+
+            header[data-menu-open] .header-controls { display: flex; }
+
+            /* Every row is a full-width 44px target. The controls were sized
+               for a dense toolbar and came out at 25px, which is under both
+               platform minimums and was wrong at every width, not just this
+               one. */
+            .header-controls > * ,
+            .header-controls .header-social-links {
+                width: 100%;
+            }
+
+            .header-controls .mode-switch,
+            .header-controls .header-social-links {
+                display: flex;
+                justify-content: flex-start;
+                gap: 0;
+                margin: 0;
+            }
+
+            .header-controls .mode-switch button,
+            .header-controls .header-social-link,
+            .header-controls .header-pdf-btn,
+            .header-controls .lang-toggle,
+            .header-controls .theme-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                width: 100%;
+                min-height: 44px;
+                padding: 0 var(--spacing-md);
+                border-radius: 0;
+                text-align: left;
+            }
+
+            .header-controls .mode-switch button { flex: 1; }
+            .header-controls .mode-sep { display: none; }
+
+            /* Stacked in a panel the icons lose the context a toolbar row gave
+               them, so each gets its name. Desktop keeps the icons bare. */
+            .header-controls .menu-label { display: inline; }
+
+            .header-controls .header-social-link,
+            .header-controls .header-pdf-btn,
+            .header-controls .lang-toggle,
+            .header-controls .theme-toggle {
+                gap: var(--spacing-sm);
+            }
+
+            /* The pill and the word say the same thing once there is room for
+               the word, and "DE Deutsch" also wrapped the row past 44px. */
+            .header-controls .lang-label { display: none; }
+
+            /* Every other row leads with an icon; without one the language
+               label started in the icon column and broke the alignment. */
+            .header-controls .lang-globe { display: block; }
+
+            /* The icons were sized per control for the toolbar -- 16px social,
+               18px elsewhere -- which left the labels 4px out of line down the
+               column. One slot for all of them. */
+            .header-controls .header-social-link svg,
+            .header-controls .header-pdf-btn svg,
+            .header-controls .theme-toggle .theme-icon,
+            .header-controls .lang-globe {
+                width: 18px;
+                height: 18px;
+                flex: none;
+            }
+
+            /* These lift 5% on hover, which suits a small square in a toolbar
+               and not a full-width row: the row would grow past the panel edge.
+               Only reachable with a pointer on a narrow window, but that is a
+               real way to see this menu. */
+            .header-controls .lang-toggle:hover,
+            .header-controls .theme-toggle:hover,
+            .header-controls .header-pdf-btn:hover {
+                transform: none;
+            }
+
+            /* Socials are display:none off this breakpoint unless the CV nav is
+               up. In the menu they are always listed. */
+            .header-controls .header-social-links { display: flex; }
+            .header-controls .header-social-link { height: auto; }
+
+            .header-controls .header-social-links,
+            .header-controls .header-pdf-btn {
+                border-top: 1px solid var(--color-border);
+            }
+
+            .header-controls .header-social-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
         .theme-toggle,
         .lang-toggle {
             background: none;
@@ -2776,7 +2940,17 @@
             </div>
 
 
-            <div class="header-controls">
+            <button class="header-menu-btn" id="header-menu" type="button"
+                    aria-expanded="false" aria-controls="header-controls"
+                    aria-label="Menu" aria-haspopup="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="17" x2="20" y2="17"></line>
+                </svg>
+            </button>
+
+            <div class="header-controls" id="header-controls">
                 <div class="mode-switch" role="group" aria-label="View mode">
                     <button type="button" data-choose-mode="pow" aria-pressed="false">work</button>
                     <span class="mode-sep" aria-hidden="true">/</span>
@@ -2788,16 +2962,22 @@
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
                         </svg>
+                    
+                        <span class="menu-label">GitHub</span>
                     </a>
                     <a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener" class="social-link header-social-link" title="LinkedIn">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                         </svg>
+                    
+                        <span class="menu-label">LinkedIn</span>
                     </a>
                     <a href="https://x.com/will_break_it" target="_blank" rel="noopener" class="social-link header-social-link" title="X/Twitter">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                         </svg>
+                    
+                        <span class="menu-label">X</span>
                     </a>
                 </div>
 
@@ -2807,10 +2987,16 @@
                         <polyline points="7 10 12 15 17 10"></polyline>
                         <line x1="12" y1="15" x2="12" y2="3"></line>
                     </svg>
+                
+                    <span class="menu-label"><span lang="en">CV (PDF)</span><span lang="de">Lebenslauf (PDF)</span></span>
                 </a>
 
                 <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language">
+                    <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"></path></svg>
                     <span class="lang-label">DE</span>
+                    <!-- Inverted on purpose: the row names the language it switches TO, so
+                         the German word is the one shown while the site is English. -->
+                    <span class="menu-label"><span lang="en">Deutsch</span><span lang="de">English</span></span>
                 </button>
 
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
@@ -2828,6 +3014,8 @@
                     <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
+                
+                    <span class="menu-label"><span lang="en">Theme</span><span lang="de">Design</span></span>
                 </button>
             </div>
         </header>
@@ -4243,6 +4431,55 @@
                 moonIcon.style.display = 'none';
             }
         });
+
+        // ===================================================================
+        // Mobile header menu
+        // ===================================================================
+        // Collapses the header controls behind one button below 768px. The
+        // controls themselves are untouched -- this only opens and closes the
+        // container they already live in, so every listener bound to them
+        // elsewhere keeps working.
+
+        (function () {
+            const header = document.getElementById('header');
+            const btn = document.getElementById('header-menu');
+            const panel = document.getElementById('header-controls');
+            if (!header || !btn || !panel) return;
+
+            const setOpen = open => {
+                header.toggleAttribute('data-menu-open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            };
+
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                setOpen(!header.hasAttribute('data-menu-open'));
+            });
+
+            panel.addEventListener('click', e => {
+                // Picking a mode or following a link ends the interaction, so
+                // the menu gets out of the way. Theme and language do not:
+                // both are things you flip, look at, and often flip back, and
+                // closing the menu each time turns that into a chore.
+                if (e.target.closest('a[href], [data-choose-mode]')) setOpen(false);
+            });
+
+            document.addEventListener('click', e => {
+                if (!header.contains(e.target)) setOpen(false);
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key !== 'Escape' || !header.hasAttribute('data-menu-open')) return;
+                setOpen(false);
+                // Focus goes back to the button that opened it, or it lands on
+                // the body and the next Tab restarts from the top of the page.
+                btn.focus();
+            });
+
+            // Dragging the window past the breakpoint would otherwise leave
+            // data-menu-open set on a header that no longer has a menu.
+            window.matchMedia('(max-width: 768px)').addEventListener('change', () => setOpen(false));
+        })();
 
         // Language Toggle
         const langToggle = document.getElementById('lang-toggle');
