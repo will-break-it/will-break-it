@@ -3,6 +3,12 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [main]
+  # The activity cron commits data/activity.json with GITHUB_TOKEN, and GitHub
+  # does not raise a push event for those commits, so this workflow would never
+  # see the refreshed data. Chain off that run instead.
+  workflow_run:
+    workflows: ['Refresh activity data']
+    types: [completed]
   workflow_dispatch:
 
 concurrency:
@@ -17,7 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     # The repo is mirrored to will-break-it.github.io; only deploy from the primary repo
     # to avoid a duplicate deploy when the same commit is pushed to both remotes.
-    if: github.repository == 'will-break-it/will-break-it'
+    if: |
+      github.repository == 'will-break-it/will-break-it' &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     permissions:
       contents: read
     steps:
