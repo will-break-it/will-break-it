@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-21T18:29:18Z",
+  "generated": "2026-08-22T00:30:27Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5590,
+    "total": 5642,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-08",
-        "total": 966
+        "total": 1019
       }
     ]
   },
   "streakDays": 12,
   "totals": {
-    "contributions": 9385,
+    "contributions": 9438,
     "private": 96,
-    "commits": 8532,
-    "pullRequests": 523,
+    "commits": 8570,
+    "pullRequests": 538,
     "reviews": 46,
     "repositories": 40,
     "publicRepositories": 11
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 4014,
+      "total": 4067,
       "private": 0,
-      "commits": 3567,
-      "prs": 318,
+      "commits": 3605,
+      "prs": 333,
       "reviews": 14
     }
   ],
@@ -502,16 +502,11 @@
     },
     {
       "month": "2026-08",
-      "total": 966,
-      "commits": 726
+      "total": 1019,
+      "commits": 764
     }
   ],
   "days": [
-    {
-      "date": "2025-07-21",
-      "total": 12,
-      "commits": 12
-    },
     {
       "date": "2025-07-22",
       "total": 4,
@@ -1909,8 +1904,8 @@
     },
     {
       "date": "2026-08-21",
-      "total": 38,
-      "commits": 27
+      "total": 91,
+      "commits": 65
     }
   ],
   "languages": [
@@ -1924,7 +1919,7 @@
     },
     {
       "name": "PLpgSQL",
-      "share": 5.8
+      "share": 6
     },
     {
       "name": "Dart",
@@ -1940,7 +1935,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-21T18:28:40Z",
+    "at": "2026-08-21T21:25:53Z",
     "repo": null,
     "url": null,
     "private": true
@@ -1949,7 +1944,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-21T12:31:12Z",
+      "pushedAt": "2026-08-21T18:30:42Z",
       "language": "HTML"
     },
     {
