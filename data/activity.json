@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-24T06:30:47Z",
+  "generated": "2026-08-24T12:30:00Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5725,
+    "total": 5806,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,17 +54,17 @@
       },
       {
         "month": "2026-08",
-        "total": 1110
+        "total": 1191
       }
     ]
   },
-  "streakDays": 14,
+  "streakDays": 15,
   "totals": {
-    "contributions": 9529,
+    "contributions": 9610,
     "private": 96,
-    "commits": 8632,
-    "pullRequests": 567,
-    "reviews": 46,
+    "commits": 8681,
+    "pullRequests": 598,
+    "reviews": 47,
     "repositories": 40,
     "publicRepositories": 11
   },
@@ -167,11 +167,11 @@
     },
     {
       "year": 2026,
-      "total": 4158,
+      "total": 4239,
       "private": 0,
-      "commits": 3667,
-      "prs": 362,
-      "reviews": 14
+      "commits": 3716,
+      "prs": 393,
+      "reviews": 15
     }
   ],
   "monthly": [
@@ -502,8 +502,8 @@
     },
     {
       "month": "2026-08",
-      "total": 1110,
-      "commits": 826
+      "total": 1191,
+      "commits": 875
     }
   ],
   "days": [
@@ -1909,22 +1909,27 @@
     },
     {
       "date": "2026-08-23",
-      "total": 71,
-      "commits": 42
+      "total": 80,
+      "commits": 51
+    },
+    {
+      "date": "2026-08-24",
+      "total": 72,
+      "commits": 40
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 57.8
+      "share": 58
     },
     {
       "name": "HTML",
-      "share": 7
+      "share": 6.9
     },
     {
       "name": "PLpgSQL",
-      "share": 6.3
+      "share": 6.5
     },
     {
       "name": "Dart",
@@ -1940,16 +1945,16 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-24T00:31:54Z",
-    "repo": "will-break-it",
-    "url": "https://github.com/will-break-it/will-break-it",
-    "private": false
+    "at": "2026-08-24T12:29:45Z",
+    "repo": null,
+    "url": null,
+    "private": true
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-24T00:31:54Z",
+      "pushedAt": "2026-08-24T06:32:07Z",
       "language": "HTML"
     },
     {
