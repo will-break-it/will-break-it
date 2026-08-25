@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-24T18:29:35Z",
+  "generated": "2026-08-25T00:30:53Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5826,
+    "total": 5860,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-08",
-        "total": 1211
+        "total": 1261
       }
     ]
   },
-  "streakDays": 15,
+  "streakDays": 16,
   "totals": {
-    "contributions": 9630,
+    "contributions": 9680,
     "private": 96,
-    "commits": 8690,
-    "pullRequests": 609,
+    "commits": 8723,
+    "pullRequests": 626,
     "reviews": 47,
     "repositories": 40,
     "publicRepositories": 11
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 4259,
+      "total": 4309,
       "private": 0,
-      "commits": 3725,
-      "prs": 404,
+      "commits": 3758,
+      "prs": 421,
       "reviews": 15
     }
   ],
@@ -502,16 +502,11 @@
     },
     {
       "month": "2026-08",
-      "total": 1211,
-      "commits": 884
+      "total": 1261,
+      "commits": 917
     }
   ],
   "days": [
-    {
-      "date": "2025-07-24",
-      "total": 8,
-      "commits": 7
-    },
     {
       "date": "2025-07-25",
       "total": 8,
@@ -1914,26 +1909,31 @@
     },
     {
       "date": "2026-08-24",
-      "total": 92,
-      "commits": 49
+      "total": 132,
+      "commits": 77
+    },
+    {
+      "date": "2026-08-25",
+      "total": 10,
+      "commits": 5
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 58
-    },
-    {
-      "name": "HTML",
-      "share": 6.9
+      "share": 58.2
     },
     {
       "name": "PLpgSQL",
-      "share": 6.7
+      "share": 6.9
+    },
+    {
+      "name": "HTML",
+      "share": 6.8
     },
     {
       "name": "Dart",
-      "share": 4.8
+      "share": 4.7
     },
     {
       "name": "Rust",
@@ -1945,7 +1945,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-24T18:20:37Z",
+    "at": "2026-08-24T22:48:21Z",
     "repo": null,
     "url": null,
     "private": true
@@ -1954,7 +1954,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-24T12:31:33Z",
+      "pushedAt": "2026-08-24T18:31:06Z",
       "language": "HTML"
     },
     {
