@@ -1,10 +1,10 @@
 {
-  "generated": "2026-08-31T12:38:45Z",
+  "generated": "2026-08-31T18:32:18Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5870,
+    "total": 5872,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
@@ -46,7 +46,7 @@
       },
       {
         "month": "2026-06",
-        "total": 221
+        "total": 220
       },
       {
         "month": "2026-07",
@@ -54,18 +54,18 @@
       },
       {
         "month": "2026-08",
-        "total": 1342
+        "total": 1345
       }
     ]
   },
   "streakDays": 1,
   "totals": {
-    "contributions": 9762,
+    "contributions": 9764,
     "private": 96,
     "commits": 8777,
     "pullRequests": 652,
-    "reviews": 47,
-    "repositories": 40,
+    "reviews": 49,
+    "repositories": 39,
     "publicRepositories": 11
   },
   "years": [
@@ -167,11 +167,11 @@
     },
     {
       "year": 2026,
-      "total": 4390,
+      "total": 4392,
       "private": 0,
       "commits": 3812,
       "prs": 447,
-      "reviews": 15
+      "reviews": 17
     }
   ],
   "monthly": [
@@ -492,7 +492,7 @@
     },
     {
       "month": "2026-06",
-      "total": 221,
+      "total": 220,
       "commits": 204
     },
     {
@@ -502,7 +502,7 @@
     },
     {
       "month": "2026-08",
-      "total": 1342,
+      "total": 1345,
       "commits": 971
     }
   ],
@@ -1659,7 +1659,7 @@
     },
     {
       "date": "2026-06-17",
-      "total": 15,
+      "total": 14,
       "commits": 12
     },
     {
@@ -1919,14 +1919,14 @@
     },
     {
       "date": "2026-08-31",
-      "total": 7,
+      "total": 10,
       "commits": 3
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 57.8
+      "share": 57.6
     },
     {
       "name": "PLpgSQL",
@@ -1950,16 +1950,16 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-31T09:48:07Z",
-    "repo": null,
-    "url": null,
-    "private": true
+    "at": "2026-08-31T12:40:17Z",
+    "repo": "will-break-it",
+    "url": "https://github.com/will-break-it/will-break-it",
+    "private": false
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-31T06:52:40Z",
+      "pushedAt": "2026-08-31T12:40:17Z",
       "language": "HTML"
     },
     {
