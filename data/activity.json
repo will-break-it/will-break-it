@@ -1,17 +1,13 @@
 {
-  "generated": "2026-08-31T18:32:18Z",
+  "generated": "2026-09-01T01:11:41Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 5872,
+    "total": 5863,
     "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
-      {
-        "month": "2025-09",
-        "total": 27
-      },
       {
         "month": "2025-10",
         "total": 206
@@ -55,6 +51,10 @@
       {
         "month": "2026-08",
         "total": 1345
+      },
+      {
+        "month": "2026-09",
+        "total": 0
       }
     ]
   },
@@ -507,11 +507,6 @@
     }
   ],
   "days": [
-    {
-      "date": "2025-07-31",
-      "total": 2,
-      "commits": 2
-    },
     {
       "date": "2025-08-01",
       "total": 4,
@@ -1950,7 +1945,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-08-31T12:40:17Z",
+    "at": "2026-08-31T18:33:42Z",
     "repo": "will-break-it",
     "url": "https://github.com/will-break-it/will-break-it",
     "private": false
@@ -1959,7 +1954,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-08-31T12:40:17Z",
+      "pushedAt": "2026-08-31T18:33:42Z",
       "language": "HTML"
     },
     {
