@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-15T01:02:07Z",
+  "generated": "2026-09-15T06:43:24Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
@@ -1970,16 +1970,16 @@
     }
   ],
   "lastPush": {
-    "at": "2026-09-14T19:57:04Z",
-    "repo": null,
-    "url": null,
-    "private": true
+    "at": "2026-09-15T01:03:35Z",
+    "repo": "will-break-it",
+    "url": "https://github.com/will-break-it/will-break-it",
+    "private": false
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-09-14T18:33:04Z",
+      "pushedAt": "2026-09-15T01:03:35Z",
       "language": "HTML"
     },
     {
