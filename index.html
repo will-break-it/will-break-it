@@ -950,6 +950,15 @@
             transform: translateY(-1px);
         }
         .project-status b { font-weight: 650; color: var(--text); }
+        .project-metric {
+            position: relative;
+            z-index: 2;
+            margin-top: var(--s-2);
+            font-size: 0.88rem;
+            font-weight: 650;
+            color: var(--brand-strong);
+            font-variant-numeric: tabular-nums;
+        }
         .project-status[data-state="live"]::before { background: #16a34a; }
         .project-status[data-state="building"]::before { background: var(--brand); }
         .project-status[data-state="failed"]::before { background: var(--signal); }
@@ -1580,6 +1589,7 @@
                                 <span class="tech-tag">Own Product</span>
                             </div>
                         </div>
+                        <p class="project-metric"><span lang="en">40,000+ player profiles and growing</span><span lang="de">Über 40.000 Spielerprofile, Tendenz steigend</span></p>
                         <p class="project-description">
                             <span lang="en">A social network for Berlin's beach volleyball scene: players find coaches, sessions and each other across the city's sand courts.</span>
                             <span lang="de">Ein soziales Netzwerk für Berlins Beachvolleyball-Szene: Spieler finden Trainer, Trainings und einander auf den Sandplätzen der Stadt.</span>
@@ -1611,6 +1621,7 @@
                                 <span class="tech-tag">KV</span>
                             </div>
                         </div>
+                        <p class="project-metric"><span lang="en">1,000+ listings analysed</span><span lang="de">Über 1.000 analysierte Inserate</span></p>
                         <p class="project-description">Screening tool for German residential investment listings. Leads with monthly cashflow before tax, keeps after-tax estimates separate, and calculates the equity needed to reach positive cashflow plus cash-on-cash return. Paste a listing link and the figures get extracted for you. Every tax and financing assumption stays visible and editable.</p>
                     </div>
                         <div class="project-card" id="p-dump-it" data-tags="web,mobile,ai,architecture">
@@ -1820,6 +1831,7 @@
                                 <span class="tech-tag">Tailwind CSS</span>
                             </div>
                         </div>
+                        <p class="project-metric"><span lang="en">Dozens of new bookings · 150k+ impressions in six months</span><span lang="de">Dutzende neue Buchungen · 150.000+ Impressionen in sechs Monaten</span></p>
                         <p class="project-description">Modern website and booking system for a dive center in Cyprus. Mobile-first design with focus on user experience and easy booking management.</p>
                     </div>
                         <div class="project-card" id="p-tokenriot" data-tags="blockchain,web">
@@ -2842,7 +2854,8 @@
                         line.innerHTML =
                             `<span lang="en"><b>${st.en}${year}</b>${why.en}</span>` +
                             `<span lang="de"><b>${st.de}${year}</b>${why.de}</span>`;
-                        desc.parentNode.insertBefore(line, desc);
+                        const anchor = card.querySelector('.project-metric') || desc;
+                        anchor.parentNode.insertBefore(line, anchor);
                     });
 
                     projectRow.addEventListener('click', function (e) {
