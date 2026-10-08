@@ -938,9 +938,10 @@
             border-radius: var(--radius);
             background: var(--surface);
             box-shadow: inset 0 0 0 1px var(--border);
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
         }
-        .project-card:hover .project-logo { transform: translateY(-3px); box-shadow: var(--shadow); }
+        /* Hover zooms the preview inside its frame; the card itself stays put. */
+        .project-logo > * { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .project-card:hover .project-logo > * { transform: scale(1.04); }
 
         .project-logo-img { max-width: 60%; max-height: 64px; object-fit: contain; }
         .project-logo-img.cover { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
@@ -1061,7 +1062,7 @@
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
             .now-pulse, .company.present::after { animation: none; }
-            .project-card:hover .project-logo { transform: none; }
+            .project-card:hover .project-logo > * { transform: none; }
             .job-content, .job-toggle { transition: none; }
         }
 
@@ -1299,7 +1300,7 @@
             .content { padding: 0; max-width: none; }
             .job-content { max-height: none !important; }
             .job, .project-card, .education-item, .tech-category { box-shadow: none; break-inside: avoid; }
-            .project-card:hover .project-logo { transform: none; }
+            .project-card:hover .project-logo > * { transform: none; }
             a { color: inherit; }
         }
     </style>
