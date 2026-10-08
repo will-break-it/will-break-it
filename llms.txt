@@ -9,7 +9,7 @@
 ## About
 
 Range across enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), mobile and
-IoT. Founder DNA: two companies of his own. Deep in distributed systems, distributed ledger
+IoT. Founder DNA: two companies of his own. High agency. Deep in distributed systems, distributed ledger
 technology (DLT), consensus protocols, event-driven architecture and secure application
 development. Works end to end: builds a rough working version early, finds the risks, then
 iterates. Best in small teams on hard problems, and takes on more than pure engineering when
