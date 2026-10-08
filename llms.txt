@@ -17,16 +17,15 @@ a project needs it. Berlin, Germany. German and English, both fluent.
 
 ## Site structure
 
-One page, two presentations of the same content, chosen at entry and switchable in the
-header. `?mode=pow` shows the proof-of-work view; `?mode=cv` shows the traditional CV and is
-what crawlers and visitors without JavaScript get by default.
+One page. On desktop the screen splits: who he is and what he is building now stay pinned
+on the left, the work scrolls on the right. Phones and tablets get one column, hero first.
 
-- `/#now` — summary figures and what he is building right now (proof-of-work view)
-- `/#experience` — timeline: roles, studies and side work on one rail
-- `/#projects` — project wall, filterable by area and by status
+- `/#now` — track record: project and career figures, plus a month-by-month career heatmap
+- `/#experience` — timeline: roles and studies on one rail
+- `/#projects` — projects grouped as Research & Development, Products, Commercial and
+  Open-Source Tooling
 - `/#technologies` — stack and focus areas
 - `/#publications` — published specifications
-- `/#education` — education
 
 ## Current work
 
