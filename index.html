@@ -1774,7 +1774,7 @@
                             <div class="project-title-row">
                                 <h3>
                                     <a href="https://operando.de" target="_blank" rel="noopener" class="project-title-link">
-                                        Operando – AI Lead Intake Pipeline
+                                        Operando – AI Deal Sourcing
                                         <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                                             <polyline points="15 3 21 3 21 9"></polyline>
@@ -1792,7 +1792,10 @@
                                 <span class="tech-tag">Client Work</span>
                             </div>
                         </div>
-                        <p class="project-description">Client pipeline that turns deal emails into reviewed CRM leads: reads the mailbox, extracts figures from PDF and image attachments with a multimodal model, and creates a standardised HubSpot lead for human approval. Untrusted email content is constrained to a schema and never executed as instructions, a blocklist keeps it out of production pipelines, and processing state lives on the mail item itself so the poll runs statelessly from any machine.</p>
+                        <p class="project-description">
+                            <span lang="en">Deal-sourcing pipeline for Operando Partners. M&amp;A advisors email deal teasers; the pipeline reads the inbox, pulls the key figures out of the PDF teasers with Claude and drafts a HubSpot lead the team reviews before anything is saved. Email content is treated as untrusted data and never followed as instructions.</span>
+                            <span lang="de">Deal-Sourcing-Pipeline für Operando Partners. M&amp;A-Berater schicken Deal-Teaser per E-Mail; die Pipeline liest das Postfach, zieht mit Claude die Kennzahlen aus den PDF-Teasern und legt einen HubSpot-Lead an, den das Team vor dem Speichern prüft. E-Mail-Inhalte gelten als nicht vertrauenswürdig und werden nie als Anweisung befolgt.</span>
+                        </p>
                     </div>
                         <div class="project-card" id="p-iramodel" data-tags="web,consulting">
                         <div class="project-logo">
@@ -2851,9 +2854,9 @@
                     const failures = byStatus('failed');
 
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
-                    const why = f => (de && f.why.de) || f.why.en;
+                    const why = f => (f.why ? (de && f.why.de) || f.why.en : '');
                     const detail = failures
-                        .map(f => `${f.project || f.card.replace(/^p-/, '')} (${f.year}): ${why(f)}`)
+                        .map(f => `${f.project || f.card.replace(/^p-/, '')} (${f.year})${why(f) ? ': ' + why(f) : ''}`)
                         .join('\n');
 
                     // Counts are derived from the project list, never typed, so

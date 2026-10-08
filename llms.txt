@@ -77,7 +77,7 @@ Protocol and infrastructure:
 Products and client work:
 
 - **Hausnummer** — screening tool for German residential investment listings: monthly cashflow before tax, after-tax estimates, break-even equity, cash-on-cash return, and listing import that extracts the figures from a pasted link. Astro on Cloudflare Workers. https://hausnummer.pages.dev/
-- **Operando** — AI lead intake pipeline: reads a mailbox, extracts figures from PDF and image attachments with a multimodal model, and creates reviewed HubSpot leads. Untrusted email content is constrained to a schema and never executed as instructions. https://operando.de
+- **Operando** — AI deal sourcing for Operando Partners: reads deal teasers that M&A advisors send by email, extracts the key figures from the PDFs with Claude, and drafts HubSpot leads the team reviews. In production since September 2026. Email content is treated as untrusted data. https://operando.de
 - **AlwaysSandy** — beach volleyball coach booking across Berlin's sand courts. https://alwayssandy.com
 - **TokenRiot.IO** — lead frontend developer for a Cardano NFT marketplace, 2022–2024, roughly 80% of the frontend: Next.js, Redux Toolkit, CIP-30 wallet integration.
 - **Dump it!** — voice-first cross-platform note taking with end-to-end encryption, intent classification and semantic search. 200+ users. Shut down in 2025.

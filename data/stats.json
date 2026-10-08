@@ -19,11 +19,10 @@
     { "card": "p-alwayssandy", "status": "live", "building": true, "metric": {"en": "40,000+ player profiles and growing", "de": "Über 40.000 Spielerprofile, Tendenz steigend"} },
     { "card": "p-hausnummer", "status": "live", "metric": {"en": "1,000+ listings analysed", "de": "Über 1.000 analysierte Inserate"} },
     { "card": "p-pagebase", "status": "live" },
-    { "card": "p-operando", "status": "live" },
+    { "card": "p-operando", "status": "live", "metric": {"en": "in production since Sep 2026", "de": "produktiv seit Sep. 2026"} },
     { "card": "p-underwater-journeys", "status": "live", "metric": {"en": "Dozens of new bookings · 150k+ impressions in six months", "de": "Dutzende neue Buchungen · 150.000+ Impressionen in sechs Monaten"} },
     { "card": "p-iramodel", "status": "live" },
     { "card": "p-ugc-creator", "status": "live" },
-    { "card": "p-tokenriot", "status": "archived" },
 
     {
       "card": "p-drip-dropz",
@@ -46,6 +45,7 @@
       "year": 2024,
       "why": { "en": "stopped paying for itself", "de": "trug sich nicht mehr selbst" }
     },
+    { "card": "p-tokenriot", "status": "failed", "year": 2024 },
 
     { "card": "p-dolos", "status": "upstream" },
     { "card": "p-lucid", "status": "upstream" },
