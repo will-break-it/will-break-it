@@ -1,6 +1,7 @@
 // Master-Lebenslauf (Deutsch) — vollständige Version mit allen Details
 // Deutsche Übersetzung von master-cv.typ. Struktur identisch halten.
 
+#set document(title: "Willi Wolff – Lebenslauf", author: "Willi Wolff", keywords: ("Software Engineer", "Software Architect", "Freelance", "Berlin", "AI", "Blockchain", "Cardano", "Distributed Systems"))
 #set page(margin: (x: 1.4cm, y: 1.2cm))
 #set text(font: "Helvetica Neue", size: 9.5pt, fill: rgb("#1f2937"), lang: "de")
 #set par(justify: true, leading: 0.55em)

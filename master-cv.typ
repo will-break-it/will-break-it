@@ -1,6 +1,7 @@
 // Master CV - Complete version with all details
 // Use this as source of truth for role-specific CVs in private/
 
+#set document(title: "Willi Wolff – CV", author: "Willi Wolff", keywords: ("Software Engineer", "Software Architect", "Freelance", "Berlin", "AI", "Blockchain", "Cardano", "Distributed Systems"))
 #set page(margin: (x: 1.4cm, y: 1.2cm))
 #set text(font: "Helvetica Neue", size: 9.5pt, fill: rgb("#1f2937"))
 #set par(justify: true, leading: 0.55em)

@@ -2,8 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://wwolff.pages.dev/</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://wwolff.pages.dev/willi-wolff-cv-en.pdf</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://wwolff.pages.dev/willi-wolff-cv-de.pdf</loc>
+    <lastmod>2026-10-08</lastmod>
   </url>
 </urlset>

@@ -1,4 +1,4 @@
-# Willi Wolff — Software Engineer & Technical Architect
+# Willi Wolff — Freelance Software Engineer & Architect, Berlin
 
 > Portfolio and CV for Willi Wolff (goes by Will), a Berlin-based software engineer and
 > technical architect. Eleven years shipping professionally, writing code since 2008.
@@ -13,19 +13,24 @@ IoT. Founder DNA: two companies of his own. High agency. Deep in distributed sys
 technology (DLT), consensus protocols, event-driven architecture and secure application
 development. Works end to end: builds a rough working version early, finds the risks, then
 iterates. Best in small teams on hard problems, and takes on more than pure engineering when
-a project needs it. Berlin, Germany. German and English, both fluent.
+a project needs it. Berlin, Germany. German and English.
 
 ## Site structure
 
 One page. On desktop the screen splits: who he is and what he is building now stay pinned
 on the left, the work scrolls on the right. Phones and tablets get one column, hero first.
+Add `?lang=de` for the German version.
 
-- `/#now` — track record: project and career figures, plus a month-by-month career heatmap
-- `/#experience` — timeline: roles and studies on one rail
+- `/#now` — projects at a glance (counts that filter the project list) and a GitHub
+  contribution grid for the last 12 months
 - `/#projects` — projects grouped as Research & Development, Products, Commercial and
-  Open-Source Tooling
-- `/#technologies` — stack and focus areas
+  Open-Source Tooling, each with its status
+- `/#experience` — career timeline: roles and studies on one rail
+- `/#technologies` — tools he has worked with
 - `/#publications` — published specifications
+
+CV as PDF: https://wwolff.pages.dev/willi-wolff-cv-en.pdf (English),
+https://wwolff.pages.dev/willi-wolff-cv-de.pdf (German)
 
 ## Current work
 
