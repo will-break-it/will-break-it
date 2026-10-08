@@ -43,6 +43,7 @@ jobs:
             --exclude='master-cv.typ' \
             --exclude='master-cv-de.typ' \
             --exclude='scripts' \
+            --exclude='functions' \
             --exclude='.gitignore' \
             --exclude='.DS_Store' \
             --exclude='dist' \
