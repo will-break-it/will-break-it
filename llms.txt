@@ -132,4 +132,4 @@ Site content available in English (default) and German.
 
 ## Contact
 
-wolff.willi@gmail.com
+wolff.willi+cv@gmail.com

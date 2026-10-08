@@ -64,7 +64,7 @@
               "description": "Software engineer and technical architect working on distributed systems, consensus protocols and distributed ledger technology. Writing code since 2008, shipping professionally since 2015.",
               "url": "https://wwolff.pages.dev/",
               "image": "https://wwolff.pages.dev/assets/images/will.jpg",
-              "email": "mailto:wolff.willi@gmail.com",
+              "email": "mailto:wolff.willi+cv@gmail.com",
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Berlin",
@@ -604,8 +604,6 @@
             border-top: 1px solid var(--border);
         }
         .now-list li:first-child { border-top: none; }
-        .now-list a { font-weight: 600; font-size: 0.95rem; }
-        .now-list li > span { font-size: 0.88rem; color: var(--muted); line-height: 1.45; }
 
         .hero-meta {
             display: flex;
@@ -674,7 +672,7 @@
 
         .now-stats {
             display: flex;
-            gap: var(--s-5);
+            gap: var(--s-6);
             margin-top: var(--s-2);
             min-height: 3.6rem;
         }
@@ -710,11 +708,6 @@
             color: var(--muted);
         }
 
-        .activity-line {
-            margin-top: var(--s-3);
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
 
         /* --- timeline ----------------------------------------------------- */
         .timeline { position: relative; }
@@ -972,29 +965,8 @@
             color: var(--muted);
         }
 
-        .group-intro {
-            margin: calc(-1 * var(--s-2)) 0 var(--s-4);
-            font-size: 0.9rem;
-            color: var(--muted);
-        }
 
         /* --- stack -------------------------------------------------------- */
-        .stack-row {
-            display: flex;
-            flex-direction: column;
-            gap: var(--s-2);
-            margin-bottom: var(--s-5);
-        }
-        .activity-label { font-size: 0.85rem; color: var(--muted); }
-        .activity-langs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-        .now-lang {
-            padding: 0.2rem 0.6rem;
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            font-size: 0.75rem;
-            color: var(--text);
-        }
-        .now-lang span { color: var(--faint); }
 
         .tech-grid {
             display: grid;
@@ -1064,13 +1036,122 @@
             .job-content, .job-toggle { transition: none; }
         }
 
+        /* --- tagline: the old titles struck through ------------------------ */
+        .tagline s { color: var(--faint); text-decoration-thickness: 1.5px; margin-right: 0.35em; }
+        .tagline s, .tagline strong { white-space: nowrap; }
+        .tagline strong { color: var(--brand-strong); font-weight: 650; }
+
+        /* --- building now: each row is one link -------------------------- */
+        .now-list li { padding: 0; }
+        .now-item {
+            display: flex;
+            align-items: center;
+            gap: var(--s-3);
+            margin: 0 calc(-1 * var(--s-3));
+            padding: var(--s-2) var(--s-3);
+            border-radius: var(--radius-sm);
+            color: inherit;
+            transition: background 0.15s ease;
+        }
+        .now-item:hover { background: var(--surface); text-decoration: none; }
+        .now-item-text { display: grid; gap: 1px; flex: 1; min-width: 0; }
+        .now-item-name { font-weight: 650; font-size: 0.95rem; color: var(--brand-strong); }
+        .now-item-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.45; }
+        .now-chevron {
+            width: 18px;
+            height: 18px;
+            flex: none;
+            color: var(--brand);
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .now-item:hover .now-chevron,
+        .now-item:focus-visible .now-chevron { opacity: 1; transform: none; }
+        @media (hover: none) { .now-chevron { opacity: 0.6; transform: none; } }
+
+        /* --- digit reels ------------------------------------------------- */
+        .reel { display: inline-flex; gap: 3px; }
+        .reel-digit {
+            display: inline-block;
+            width: 0.78em;
+            height: 1.2em;
+            overflow: hidden;
+            border-radius: 6px;
+            background: var(--bg);
+            box-shadow: inset 0 0 0 1px var(--border), 0 1px 2px rgba(11, 22, 34, 0.05);
+            text-align: center;
+        }
+        .reel-strip {
+            display: flex;
+            flex-direction: column;
+            transform: translateY(0);
+            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0ms);
+        }
+        .reel-strip span { display: block; height: 1.2em; line-height: 1.2em; }
+        .reel.is-spun .reel-strip { transform: translateY(calc(var(--d) * -1.2em)); }
+        .reel--accent { color: var(--signal); }
+        .reel-sep { align-self: flex-end; padding: 0 1px; }
+
+        /* --- GitHub activity --------------------------------------------- */
+        .activity-card {
+            margin-top: var(--s-4);
+            padding: var(--s-4) var(--s-5);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+        }
+        .activity-card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s-2); }
+        .activity-scale { font-size: 0.75rem; color: var(--faint); }
+        .activity-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 96px;
+            margin-top: var(--s-5);
+        }
+        .activity-bar {
+            flex: 1;
+            min-width: 0;
+            height: calc(var(--h) * 100%);
+            border-radius: 3px 3px 1px 1px;
+            background: linear-gradient(to top, var(--brand), #38bdf8);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 8ms);
+        }
+        .activity-bar:hover { filter: brightness(1.15); }
+        .activity-chart.is-grown .activity-bar { transform: scaleY(1); }
+        .activity-axis { display: flex; gap: 2px; margin-top: 6px; font-size: 0.7rem; color: var(--faint); }
+        .activity-axis span { flex: 1; min-width: 0; white-space: nowrap; }
+
+        /* Long descriptions stay in the markup but show three lines. */
+        .project-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            padding-bottom: 0;
+            margin-bottom: var(--s-4);
+        }
+        .project-card:hover .project-description { -webkit-line-clamp: unset; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reel-strip, .activity-bar, .now-chevron { transition: none; }
+        }
+
+        @media (max-width: 640px) {
+            .site-header .btn { padding: 0 0.8rem; }
+            .now-stats { gap: var(--s-4); flex-wrap: wrap; }
+        }
+
         /* --- print: a plain CV -------------------------------------------- */
         @media print {
             :root {
                 --bg: #fff; --surface: #fff; --surface-2: #f2f2f2; --border: #ddd; --border-strong: #ccc;
                 --ink: #000; --text: #222; --muted: #444; --faint: #666; --brand: #0d9488; --brand-strong: #0d9488;
             }
-            .site-header, .hero-actions, .now-building, #now, .stack-row, .project-logo, .job-toggle, .role-links, .company-ships { display: none !important; }
+            .site-header, .hero-actions, .now-building, #now, .project-logo, .job-toggle, .role-links, .company-ships { display: none !important; }
             .page { display: block; }
             .hero { position: static; height: auto; border: none; background: none; padding: 0 0 1rem; }
             .content { padding: 0; max-width: none; }
@@ -1111,9 +1192,12 @@
                 <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"></path></svg>
                 <span class="lang-label">DE</span>
             </button>
-            <a href="willi-wolff-cv-en.pdf" download id="cv-download" class="btn btn-primary">
+            <a href="willi-wolff-cv-en.pdf" download id="cv-download" class="btn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 <span>CV<span class="btn-label-long"> (PDF)</span></span>
+            </a>
+            <a href="mailto:wolff.willi+cv@gmail.com" class="btn btn-primary">
+                <span lang="en">Get in touch</span><span lang="de">Kontakt</span>
             </a>
         </div>
     </header>
@@ -1126,27 +1210,24 @@
                 <div>
                     <h1 class="hero-name">Will<span class="name-soft">i</span> Wolff</h1>
                     <p class="tagline">
-                        <span lang="en">Technical Architect · Software Engineer · Berlin</span>
-                        <span lang="de">Technischer Architekt · Software Engineer · Berlin</span>
+                        <span lang="en"><s>Senior Software Engineer</s> <s>Technical Architect</s> <strong>Agent Wrangler</strong></span>
+                        <span lang="de"><s>Senior Software Engineer</s> <s>Technischer Architekt</s> <strong>Agenten-Dompteur</strong></span>
                     </p>
                 </div>
             </div>
 
             <p class="hero-title">
-                <span lang="en">I take hard distributed-systems problems from <em>research to production</em>.</span>
-                <span lang="de">Ich bringe schwierige Probleme verteilter Systeme von der <em>Forschung in Produktion</em>.</span>
+                <span lang="en">Hard software problems, <em>shipped</em>.</span>
+                <span lang="de">Schwierige Software-Probleme, <em>gelöst</em>.</span>
             </p>
             <p class="hero-sub">
-                <span lang="en">High agency, founder DNA, 11 years shipping. Currently leading a Byzantine-resistant pub/sub network at IOG.</span>
-                <span lang="de">High Agency, Gründer-DNA, 11 Jahre im Einsatz. Aktuell leite ich ein Byzantine-resistentes Pub/Sub-Netzwerk bei IOG.</span>
+                <span lang="en">AI, blockchain, web or mobile. Freelance with high agency, currently on contract with IOG.</span>
+                <span lang="de">KI, Blockchain, Web oder Mobile. Freelancer mit High Agency, aktuell auf Vertragsbasis bei IOG.</span>
             </p>
 
             <div class="hero-actions">
                 <a href="#projects" class="btn">
                     <span lang="en">See the work</span><span lang="de">Zur Arbeit</span>
-                </a>
-                <a href="mailto:wolff.willi@gmail.com" class="btn">
-                    <span lang="en">Get in touch</span><span lang="de">Kontakt</span>
                 </a>
                 <div class="social-links">
                     <a href="https://github.com/will-break-it" target="_blank" rel="noopener" class="social-link" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
@@ -1166,19 +1247,34 @@
                 </div>
                 <ul class="now-list">
                     <li>
-                        <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener">Cardano PubSub</a>
-                        <span lang="en">Byzantine-resistant publish/subscribe layer, formally verified</span>
-                        <span lang="de">Byzantine-resistente Publish/Subscribe-Schicht, formal verifiziert</span>
+                        <a class="now-item" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener">
+                            <span class="now-item-text">
+                                <span class="now-item-name">Ouroboros Leios</span>
+                                <span class="now-item-desc" lang="en">Higher throughput for Cardano without weaker settlement</span>
+                                <span class="now-item-desc" lang="de">Mehr Durchsatz für Cardano bei gleichen Settlement-Garantien</span>
+                            </span>
+                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                        </a>
                     </li>
                     <li>
-                        <a href="https://alwayssandy.com" target="_blank" rel="noopener">AlwaysSandy</a>
-                        <span lang="en">Social network for Berlin's beach volleyball players and coaches</span>
-                        <span lang="de">Soziales Netzwerk für Berlins Beachvolleyball-Spieler und Trainer</span>
+                        <a class="now-item" href="https://alwayssandy.com" target="_blank" rel="noopener">
+                            <span class="now-item-text">
+                                <span class="now-item-name">AlwaysSandy</span>
+                                <span class="now-item-desc" lang="en">Social network for Berlin's beach volleyball players and coaches</span>
+                                <span class="now-item-desc" lang="de">Soziales Netzwerk für Berlins Beachvolleyball-Spieler und Trainer</span>
+                            </span>
+                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                        </a>
                     </li>
                     <li>
-                        <a href="https://pagebase.dev" target="_blank" rel="noopener">Pagebase</a>
-                        <span lang="en">My studio: websites, Supabase backends and AI automation for clients</span>
-                        <span lang="de">Mein Studio: Websites, Supabase-Backends und KI-Automatisierung für Kunden</span>
+                        <a class="now-item" href="https://pagebase.dev" target="_blank" rel="noopener">
+                            <span class="now-item-text">
+                                <span class="now-item-name">Pagebase</span>
+                                <span class="now-item-desc" lang="en">My studio: websites, Supabase backends and AI automation</span>
+                                <span class="now-item-desc" lang="de">Mein Studio: Websites, Supabase-Backends und KI-Automatisierung</span>
+                            </span>
+                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -1203,7 +1299,7 @@
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                             <polyline points="22,6 12,13 2,6"></polyline>
                         </svg>
-                        <a href="mailto:wolff.willi@gmail.com" class="cv-meta-link">wolff.willi@gmail.com</a>
+                        <a href="mailto:wolff.willi+cv@gmail.com" class="cv-meta-link">wolff.willi+cv@gmail.com</a>
                     </span>
                 </div>
         </aside>
@@ -1225,7 +1321,15 @@
                     </div>
                 </div>
 
-                <p class="activity-line" data-activity="panel" hidden><span data-activity="stats"></span></p>
+                <div class="activity-card" data-activity="panel" hidden>
+                    <div class="activity-card-head">
+                        <span class="now-group-label"><span lang="en">GitHub activity</span><span lang="de">GitHub-Aktivität</span></span>
+                        <span class="activity-scale"><span lang="en">contributions per month, log scale</span><span lang="de">Beiträge pro Monat, logarithmisch</span></span>
+                    </div>
+                    <div class="now-stats" data-activity="figures"></div>
+                    <div class="activity-chart" data-activity="chart" role="img"></div>
+                    <div class="activity-axis" data-activity="axis" aria-hidden="true"></div>
+                </div>
             </section>
 
             <section id="experience" aria-labelledby="experience-title">
@@ -1723,7 +1827,6 @@
                             <h3><span lang="en">Research &amp; Development</span><span lang="de">Forschung &amp; Entwicklung</span></h3>
                             <span class="group-count">4</span>
                         </div>
-                        <p class="group-intro"><span lang="en">Protocol design and architecture at the frontier of distributed systems.</span><span lang="de">Protokolldesign und Architektur an der Front verteilter Systeme.</span></p>
                         <div class="projects-grid">
                         <div class="project-card" id="p-pubsub" data-tags="blockchain,architecture">
                         <div class="project-logo">
@@ -1841,7 +1944,6 @@
                             <h3><span lang="en">Products</span><span lang="de">Produkte</span></h3>
                             <span class="group-count">5</span>
                         </div>
-                        <p class="group-intro"><span lang="en">Things I started myself, including the ones that did not make it.</span><span lang="de">Was ich selbst gestartet habe, auch das, was es nicht geschafft hat.</span></p>
                         <div class="projects-grid">
                         <div class="project-card" id="p-alwayssandy" data-tags="web,mobile">
                         <div class="project-logo">
@@ -1975,7 +2077,6 @@
                             <h3><span lang="en">Commercial</span><span lang="de">Kundenprojekte</span></h3>
                             <span class="group-count">6</span>
                         </div>
-                        <p class="group-intro"><span lang="en">Client work through Pagebase and on contract: websites, pipelines, marketplaces.</span><span lang="de">Kundenarbeit über Pagebase und auf Vertragsbasis: Websites, Pipelines, Marktplätze.</span></p>
                         <div class="projects-grid">
                         <div class="project-card" id="p-pagebase" data-tags="web,architecture,consulting">
                         <div class="project-logo">
@@ -2138,7 +2239,6 @@
                             <h3><span lang="en">Open-Source Tooling</span><span lang="de">Open-Source-Tools</span></h3>
                             <span class="group-count">5</span>
                         </div>
-                        <p class="group-intro"><span lang="en">Libraries and indexer extensions, most of them merged into other projects.</span><span lang="de">Bibliotheken und Indexer-Erweiterungen, die meisten in andere Projekte eingeflossen.</span></p>
                         <div class="projects-grid">
                         <div class="project-card" id="p-dolos" data-tags="blockchain,infrastructure,architecture">
                         <div class="project-logo">
@@ -2276,16 +2376,24 @@
             <section id="technologies" aria-labelledby="tech-title">
                 <div class="section-head">
                     <p class="section-kicker"><span lang="en">Stack</span><span lang="de">Stack</span></p>
-                    <h2 id="tech-title"><span lang="en">Tools I reach for</span><span lang="de">Meine Werkzeuge</span></h2>
-                </div>
-                <div class="stack-row">
-                    <span class="activity-label">
-                        <span lang="en">Where the code has gone, estimated across 11 years</span>
-                        <span lang="de">Wohin der Code ging, geschätzt über 11 Jahre</span>
-                    </span>
-                    <span class="activity-langs" data-stats="stack"></span>
+                    <h2 id="tech-title"><span lang="en">Tools I've worked with</span><span lang="de">Womit ich gearbeitet habe</span></h2>
                 </div>
                 <div class="tech-grid">
+                            <div class="tech-category">
+                                <h3>
+                                    <span lang="en">AI & Agents</span>
+                                    <span lang="de">KI & Agenten</span>
+                                </h3>
+                                <div class="tech-items">
+                                    <span class="tech-item">Claude Code</span>
+                                    <span class="tech-item">Codex</span>
+                                    <span class="tech-item">OpenCode</span>
+                                    <span class="tech-item">OpenRouter</span>
+                                    <span class="tech-item">Claude API</span>
+                                    <span class="tech-item">Whisper</span>
+                                    <span class="tech-item">pgvector</span>
+                                </div>
+                            </div>
                             <div class="tech-category">
                                 <h3>
                                     <span lang="en">Languages</span>
@@ -2351,6 +2459,34 @@
                     <p class="section-kicker"><span lang="en">Writing</span><span lang="de">Publikationen</span></p>
                     <h2 id="pub-title"><span lang="en">Published specifications</span><span lang="de">Veröffentlichte Spezifikationen</span></h2>
                 </div>
+                <div class="education-item">
+                    <h3>
+                        <a href="https://github.com/cardano-foundation/CIPs/pull/1271" target="_blank" rel="noopener">CIP: Decentralised Pub/Sub Message Dissemination</a>
+                    </h3>
+                    <p class="education-meta">
+                        <span lang="en">Cardano Improvement Proposal · status: proposed · lead author</span>
+                        <span lang="de">Cardano Improvement Proposal · Status: proposed · Hauptautor</span>
+                    </p>
+                    <p>
+                        <span lang="en">The protocol behind Cardano PubSub: identifiable publishers, verifiable events and on-chain registered topics, disseminated over a Byzantine-resistant overlay.</span>
+                        <span lang="de">Das Protokoll hinter Cardano PubSub: identifizierbare Publisher, verifizierbare Events und on-chain registrierte Topics, verteilt über ein Byzantine-resistentes Overlay.</span>
+                    </p>
+                </div>
+
+                <div class="education-item">
+                    <h3>
+                        <a href="https://github.com/cardano-foundation/CIPs/pull/1270" target="_blank" rel="noopener">CPS: Trustworthy Off-chain Message Dissemination</a>
+                    </h3>
+                    <p class="education-meta">
+                        <span lang="en">Cardano Problem Statement · companion to the PubSub CIP</span>
+                        <span lang="de">Cardano Problem Statement · Begleitdokument zum PubSub-CIP</span>
+                    </p>
+                    <p>
+                        <span lang="en">Why Cardano needs a way to spread off-chain messages that participants can trust, and what any solution has to guarantee.</span>
+                        <span lang="de">Warum Cardano einen Weg braucht, Off-chain-Nachrichten vertrauenswürdig zu verbreiten, und was jede Lösung garantieren muss.</span>
+                    </p>
+                </div>
+
                 <!-- Claimed as co-author on Willi's instruction. Note the
                              published Authors list still reads Polina Vinogradova, Will
                              Gould and Alexey Kuleshevich, and this card links straight
@@ -2388,8 +2524,8 @@
             </section>
 
             <footer class="site-foot">
-                <span lang="en">Willi Wolff · Berlin · <a href="mailto:wolff.willi@gmail.com">wolff.willi@gmail.com</a></span>
-                <span lang="de">Willi Wolff · Berlin · <a href="mailto:wolff.willi@gmail.com">wolff.willi@gmail.com</a></span>
+                <span lang="en">Willi Wolff · Berlin · <a href="mailto:wolff.willi+cv@gmail.com">wolff.willi+cv@gmail.com</a></span>
+                <span lang="de">Willi Wolff · Berlin · <a href="mailto:wolff.willi+cv@gmail.com">wolff.willi+cv@gmail.com</a></span>
             </footer>
         </div>
     </main>
@@ -2441,6 +2577,43 @@
         });
 
         // ===================================================================
+        // Digit reels
+        // ===================================================================
+        // Key numbers render one tile per digit. Each tile holds a 0-9 strip
+        // that spins to its digit the first time the number scrolls into view,
+        // right-most digit first (after transitions.dev's spinning counter).
+
+        const reelObserver = 'IntersectionObserver' in window
+            ? new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (!e.isIntersecting) return;
+                    e.target.classList.add('is-spun');
+                    reelObserver.unobserve(e.target);
+                });
+            }, { threshold: 0.4 })
+            : null;
+
+        function reel(value, opts) {
+            const o = opts || {};
+            const text = String(value);
+            const digits = text.split('');
+            const strip = Array.from({ length: 10 }, (_, i) => `<span>${i}</span>`).join('');
+            const tiles = digits.map((ch, i) => {
+                if (!/[0-9]/.test(ch)) return `<span class="reel-sep">${ch}</span>`;
+                const delay = (digits.length - 1 - i) * 70;
+                return `<span class="reel-digit" style="--d:${ch};--delay:${delay}ms">` +
+                    `<span class="reel-strip">${strip}</span></span>`;
+            }).join('');
+            return `<span class="reel${o.accent ? ' reel--accent' : ''}" aria-label="${text}">${tiles}</span>`;
+        }
+
+        function spinReels(root) {
+            root.querySelectorAll('.reel').forEach(r => {
+                if (reelObserver) reelObserver.observe(r); else r.classList.add('is-spun');
+            });
+        }
+
+        // ===================================================================
         // Career stats
         // ===================================================================
         // Numbers live in data/stats.json so they can be edited without going
@@ -2466,10 +2639,9 @@
             // plain text. Nothing looks clickable unless it is.
             function figure(key, value, opts) {
                 const o = opts || {};
-                const classes = 'now-stat-value' + (o.accent ? ' now-stat-failed' : '');
                 const title = o.title ? ` title="${o.title.replace(/"/g, '&quot;')}"` : '';
                 const inner =
-                    `<span class="${classes}">${value}</span>` +
+                    `<span class="now-stat-value">${reel(value, { accent: o.accent })}</span>` +
                     `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
                     `<span class="now-stat-label" lang="de">${LABELS[key].de}</span>`;
                 if (!o.filter) return `<div${title}>${inner}</div>`;
@@ -2510,15 +2682,8 @@
                         // Derived, so it cannot go stale in a hand-edited file.
                         figure('years', new Date().getFullYear() - data.since);
 
-                    // Career-wide estimate, deliberately not the GitHub language
-                    // bytes: those cannot see the Deloitte Java at all and
-                    // undercount the mobile work.
-                    const stack = document.querySelector('[data-stats="stack"]');
-                    if (stack && data.stack) {
-                        stack.innerHTML = data.stack
-                            .map(l => `<span class="now-lang">${l.name} <span>${l.share}%</span></span>`)
-                            .join('');
-                    }
+                    spinReels(projectRow);
+                    spinReels(careerRow);
 
                     // Tag every card with its status, which is what the status
                     // filters match on, and badge the failures.
@@ -2593,30 +2758,57 @@
                     const de = lang() === 'de';
                     const window12 = data.last12Months;
 
-                    // One compact line rather than a row of tiles: the big
-                    // numbers at the top of the page are the career ones, and
-                    // two competing stat rows read as a dashboard.
-                    // Both figures, both labelled. An unqualified count sitting
-                    // under a chart that spans 2015 to today reads as a lifetime
-                    // total when it is only the trailing year.
-                    const sinceYear = (data.since || '').slice(0, 4);
-                    const parts = [
-                        de
-                            ? `${data.totals.contributions.toLocaleString('de-DE')} Beiträge seit ${sinceYear}`
-                            : `${data.totals.contributions.toLocaleString()} contributions since ${sinceYear}`,
-                        de
-                            ? `${window12.total.toLocaleString('de-DE')} in den letzten 12 Monaten`
-                            : `${window12.total.toLocaleString()} in the last 12 months`,
-                        `${window12.activeWeeks}/${window12.weeksInWindow} ${de ? 'Wochen mit Commits' : 'weeks with commits'}`,
-                        `${data.totals.pullRequests} ${de ? 'Pull Requests' : 'pull requests'}`,
-                    ];
-                    // A short streak says nothing useful and reads as a slump, so
-                    // it only earns a mention once it is actually notable.
-                    if (data.streakDays >= 7) {
-                        parts.push(`${data.streakDays} ${de ? 'Tage Serie' : 'day streak'}`);
+                    const LABELS = {
+                        contributions: { en: 'Contributions', de: 'Beiträge' },
+                        prs: { en: 'Pull requests', de: 'Pull Requests' },
+                        year: { en: 'Last 12 months', de: 'Letzte 12 Monate' },
+                    };
+                    const fig = (key, value) =>
+                        `<div><span class="now-stat-value">${reel(value)}</span>` +
+                        `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
+                        `<span class="now-stat-label" lang="de">${LABELS[key].de}</span></div>`;
+                    const figures = panel.querySelector('[data-activity="figures"]');
+                    figures.innerHTML =
+                        fig('contributions', data.totals.contributions) +
+                        fig('prs', data.totals.pullRequests) +
+                        fig('year', window12.total);
+                    spinReels(figures);
+
+                    // Monthly contributions on a log scale, so a 3,000-commit month
+                    // does not flatten every ordinary one into the axis. Months with
+                    // nothing stay as an empty slot rather than being skipped.
+                    const byMonth = new Map((data.monthly || []).map(m => [m.month, m.total]));
+                    const now = new Date();
+                    const months = [];
+                    for (let y = 2020; y <= now.getFullYear(); y++) {
+                        for (let m = 1; m <= 12; m++) {
+                            if (y === now.getFullYear() && m > now.getMonth() + 1) break;
+                            const key = `${y}-${String(m).padStart(2, '0')}`;
+                            months.push({ key, y, m, total: byMonth.get(key) || 0 });
+                        }
                     }
-                    const statsEl = panel.querySelector('[data-activity="stats"]');
-                    if (statsEl) statsEl.textContent = parts.join(' · ');
+                    const max = Math.max(1, ...months.map(m => m.total));
+                    const scale = v => (v > 0 ? Math.max(0.06, Math.log10(1 + v) / Math.log10(1 + max)) : 0);
+                    const fmt = v => v.toLocaleString(de ? 'de-DE' : 'en-US');
+                    const monthName = (y, m) => new Date(y, m - 1, 1)
+                        .toLocaleString(de ? 'de-DE' : 'en-US', { month: 'short', year: 'numeric' });
+                    const chart = panel.querySelector('[data-activity="chart"]');
+                    chart.setAttribute('aria-label', de
+                        ? `Monatliche GitHub-Beiträge seit 2020, Höchstwert ${fmt(max)}`
+                        : `Monthly GitHub contributions since 2020, peak ${fmt(max)}`);
+                    chart.innerHTML = months.map((m, i) =>
+                        `<span class="activity-bar" style="--h:${scale(m.total).toFixed(3)};--i:${i}"` +
+                        ` title="${monthName(m.y, m.m)}: ${fmt(m.total)}"></span>`).join('');
+                    panel.querySelector('[data-activity="axis"]').innerHTML = months
+                        .map(m => `<span>${m.m === 1 ? m.y : ''}</span>`).join('');
+                    if (reelObserver) {
+                        const grow = new IntersectionObserver(es => es.forEach(e => {
+                            if (e.isIntersecting) { chart.classList.add('is-grown'); grow.disconnect(); }
+                        }), { threshold: 0.3 });
+                        grow.observe(chart);
+                    } else {
+                        chart.classList.add('is-grown');
+                    }
 
 
 
