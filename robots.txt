@@ -1,4 +1,4 @@
-# robots.txt for wwolff.pages.dev (canonical host)
+# robots.txt for williwolff.com (canonical host)
 
 User-agent: *
 Allow: /
@@ -32,4 +32,4 @@ User-agent: OAI-SearchBot
 Allow: /
 
 # Sitemap
-Sitemap: https://wwolff.pages.dev/sitemap.xml
+Sitemap: https://williwolff.com/sitemap.xml

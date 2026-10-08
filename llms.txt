@@ -29,8 +29,8 @@ Add `?lang=de` for the German version.
 - `/#technologies` — tools he has worked with
 - `/#publications` — published specifications
 
-CV as PDF: https://wwolff.pages.dev/willi-wolff-cv-en.pdf (English),
-https://wwolff.pages.dev/willi-wolff-cv-de.pdf (German)
+CV as PDF: https://williwolff.com/willi-wolff-cv-en.pdf (English),
+https://williwolff.com/willi-wolff-cv-de.pdf (German)
 
 ## Current work
 
@@ -125,8 +125,8 @@ Commercial web and product work goes through Pagebase (https://pagebase.dev).
 
 ## Links
 
-- Portfolio & CV: https://wwolff.pages.dev
-- CV as PDF: https://wwolff.pages.dev/willi-wolff-cv-en.pdf (English), https://wwolff.pages.dev/willi-wolff-cv-de.pdf (German)
+- Portfolio & CV: https://williwolff.com
+- CV as PDF: https://williwolff.com/willi-wolff-cv-en.pdf (English), https://williwolff.com/willi-wolff-cv-de.pdf (German)
 - GitHub: https://github.com/will-break-it
 - LinkedIn: https://linkedin.com/in/wwolff
 - X: https://x.com/will_break_it
