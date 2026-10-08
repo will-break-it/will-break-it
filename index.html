@@ -500,9 +500,17 @@
         }
 
         .tagline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.15rem 0.7rem;
+            margin-top: var(--s-1);
+            padding: 0;
+            list-style: none;
             font-size: 0.85rem;
             color: var(--muted);
         }
+        .tagline li { display: inline-flex; align-items: center; }
+
 
         .hero-title {
             margin-top: var(--s-5);
@@ -550,12 +558,9 @@
         /* Current work: the part of the old proof-of-work view worth seeing
            in the first viewport. */
         .now-building {
-            margin-top: var(--s-5);
-            padding: var(--s-4) var(--s-5);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--bg);
-            box-shadow: var(--shadow);
+            margin-top: var(--s-6);
+            padding-top: var(--s-4);
+            border-top: 1px solid var(--border);
         }
 
         .now-building-head {
@@ -648,65 +653,12 @@
         }
 
         /* --- numbers ------------------------------------------------------ */
-        .now-groups {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: var(--s-4);
-        }
 
-        .now-group {
-            padding: var(--s-4) var(--s-5);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-        }
 
-        .now-group-label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--faint);
-        }
 
-        .now-stats {
-            display: flex;
-            gap: var(--s-6);
-            margin-top: var(--s-2);
-            min-height: 3.6rem;
-        }
 
-        .now-stats > div,
-        .now-stat-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 0;
-            border: none;
-            background: none;
-            font: inherit;
-            color: inherit;
-            text-align: left;
-        }
-        .now-stat-btn { cursor: pointer; }
-        .now-stat-btn:hover .now-stat-value { color: var(--brand); }
 
-        .now-stat-value {
-            font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.3rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            color: var(--ink);
-            font-variant-numeric: tabular-nums;
-            transition: color 0.15s ease;
-        }
-        .now-stat-failed { color: var(--signal); }
 
-        .now-stat-label {
-            font-size: 0.78rem;
-            color: var(--muted);
-        }
 
 
         /* --- timeline ----------------------------------------------------- */
@@ -801,17 +753,11 @@
         .milestone::before { background: var(--bg); border: 2px solid var(--border-strong); }
 
         /* Roles: a card per role, collapsed to title, date and one line. */
-        .job {
-            margin-bottom: var(--s-3);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--bg);
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-        .job:hover { border-color: var(--border-strong); }
-        .job.expanded { box-shadow: var(--shadow); }
+        .job { border-top: 1px solid var(--border); }
+        .job:last-child { border-bottom: 1px solid var(--border); }
 
-        .job-header { padding: var(--s-4) var(--s-5); cursor: pointer; user-select: none; }
+        .job-header { padding: var(--s-4) 0; cursor: pointer; user-select: none; }
+        .job-header:hover .job-title h3 { color: var(--brand-strong); }
 
         .job-title { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-3); }
         .job-title h3 { flex: 1; font-size: 1rem; font-weight: 650; }
@@ -834,9 +780,9 @@
 
         .job-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
         .job.expanded .job-content { max-height: 2400px; }
-        .job-content-inner { padding: 0 var(--s-5) var(--s-5); }
+        .job-content-inner { padding: 0 0 var(--s-5); }
 
-        .job ul { list-style: none; border-top: 1px solid var(--border); padding-top: var(--s-3); }
+        .job ul { list-style: none; }
         .job li {
             position: relative;
             padding-left: 1.2rem;
@@ -890,30 +836,33 @@
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: var(--s-4);
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: var(--s-6) var(--s-5);
         }
 
-        .project-card {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--bg);
-            transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-        }
-        .project-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow); transform: translateY(-2px); }
-        .project-card:target { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+        .project-card { position: relative; display: flex; flex-direction: column; }
+        /* The title link stretches over the whole card, so image and title
+           both open the project. Description and its toggle sit above it. */
+        .project-title-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+        h3.project-title-link::after { content: none; }
+        .project-card:has(a.project-title-link) { cursor: pointer; }
+        .project-card:hover a.project-title-link { color: var(--brand-strong); }
+        .project-description, .project-more, .project-status { position: relative; z-index: 2; }
+        .project-card[hidden] { display: none; }
+        .project-card:target .project-logo { box-shadow: 0 0 0 3px var(--brand-line); }
 
         .project-logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 140px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: var(--radius);
             background: var(--surface);
-            border-bottom: 1px solid var(--border);
+            box-shadow: inset 0 0 0 1px var(--border);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
         }
+        .project-card:hover .project-logo { transform: translateY(-3px); box-shadow: var(--shadow); }
 
         .project-logo-img { max-width: 60%; max-height: 64px; object-fit: contain; }
         .project-logo-img.cover { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
@@ -934,7 +883,7 @@
             letter-spacing: -0.02em;
         }
 
-        .project-header { padding: var(--s-4) var(--s-4) 0; }
+        .project-header { padding: var(--s-3) 0 0; }
         .project-title-row h3 { font-size: 1rem; font-weight: 700; line-height: 1.3; }
         .project-title-link { color: var(--ink); }
         .external-link-icon { width: 13px; height: 13px; margin-left: 2px; vertical-align: -1px; color: var(--faint); }
@@ -950,17 +899,31 @@
         }
         .tech-tag--oss { background: var(--brand-soft); color: var(--brand-strong); font-weight: 600; }
 
-        .ended-tag {
-            padding: 0.1rem 0.5rem;
-            border: 1px solid var(--signal);
-            border-radius: 999px;
-            font-size: 0.68rem;
-            color: var(--signal);
+        .project-status {
+            display: flex;
+            align-items: baseline;
+            gap: 0.45rem;
+            margin-top: var(--s-3);
+            font-size: 0.78rem;
+            color: var(--muted);
         }
-        .ended-tag--neutral { border-color: var(--border-strong); color: var(--muted); }
+        .project-status::before {
+            content: "";
+            flex: none;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--faint);
+            transform: translateY(-1px);
+        }
+        .project-status b { font-weight: 650; color: var(--text); }
+        .project-status[data-state="live"]::before { background: #16a34a; }
+        .project-status[data-state="building"]::before { background: var(--brand); }
+        .project-status[data-state="failed"]::before { background: var(--signal); }
+        .project-status[data-state="failed"] b { color: var(--signal); }
 
         .project-description {
-            padding: var(--s-3) var(--s-4) var(--s-4);
+            padding: var(--s-2) 0 0;
             font-size: 0.88rem;
             line-height: 1.55;
             color: var(--muted);
@@ -974,34 +937,38 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: var(--s-4);
         }
-        .tech-category {
-            padding: var(--s-4) var(--s-5);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-        }
+        .tech-category { padding-top: var(--s-3); border-top: 2px solid var(--ink); }
         .tech-category h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: var(--s-3); }
         .tech-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
         .tech-item {
             padding: 0.2rem 0.6rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: var(--bg);
+            border-radius: 999px;
+            background: var(--surface-2);
             font-size: 0.82rem;
             color: var(--text);
         }
 
         /* --- writing ------------------------------------------------------ */
-        .education-item {
-            padding: var(--s-4) var(--s-5);
-            margin-bottom: var(--s-3);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
+        .education-item { padding: var(--s-4) 0; border-top: 1px solid var(--border); }
         .education-item h3 { font-size: 1rem; font-weight: 700; }
         .education-meta { margin: 2px 0 var(--s-2); font-size: 0.82rem; color: var(--faint); }
         .education-item p:not(.education-meta) { font-size: 0.92rem; color: var(--muted); }
 
+        /* Language switch as a speech bubble: the label is the bubble. */
+        .lang-toggle { width: auto; padding: 0 6px; }
+        .lang-label {
+            position: relative;
+            display: inline-block;
+            padding: 3px 8px;
+            border: 1.5px solid currentColor;
+            border-radius: 10px 10px 10px 3px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 1100px) { .site-foot { display: none; } }
         .site-foot {
             margin-top: var(--s-8);
             padding-top: var(--s-5);
@@ -1021,24 +988,21 @@
             .btn-label-long { display: none; }
             .hero { padding-top: var(--s-6); }
             .hero-title { margin-top: var(--s-5); }
-            .now-groups { grid-template-columns: minmax(0, 1fr); }
             .timeline::before { left: 6px; }
             .company { padding-left: 28px; }
             .company::before, .company.present::after { left: 1px; }
             .company-marker { position: static; width: auto; text-align: left; margin-bottom: 2px; }
-            .job-header { padding: var(--s-3) var(--s-4); }
-            .job-content-inner { padding: 0 var(--s-4) var(--s-4); }
         }
 
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
             .now-pulse, .company.present::after { animation: none; }
-            .project-card:hover { transform: none; }
+            .project-card:hover .project-logo { transform: none; }
             .job-content, .job-toggle { transition: none; }
         }
 
         /* --- tagline: the old titles struck through ------------------------ */
-        .tagline s { color: var(--faint); text-decoration-thickness: 1.5px; margin-right: 0.35em; }
+        .tagline s { color: var(--faint); text-decoration-thickness: 1.5px; }
         .tagline s, .tagline strong { white-space: nowrap; }
         .tagline strong { color: var(--brand-strong); font-weight: 650; }
 
@@ -1079,8 +1043,7 @@
             height: 1.2em;
             overflow: hidden;
             border-radius: 6px;
-            background: var(--bg);
-            box-shadow: inset 0 0 0 1px var(--border), 0 1px 2px rgba(11, 22, 34, 0.05);
+            background: var(--surface);
             text-align: center;
         }
         .reel-strip {
@@ -1095,36 +1058,6 @@
         .reel-sep { align-self: flex-end; padding: 0 1px; }
 
         /* --- GitHub activity --------------------------------------------- */
-        .activity-card {
-            margin-top: var(--s-4);
-            padding: var(--s-4) var(--s-5);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-        }
-        .activity-card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s-2); }
-        .activity-scale { font-size: 0.75rem; color: var(--faint); }
-        .activity-chart {
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            height: 96px;
-            margin-top: var(--s-5);
-        }
-        .activity-bar {
-            flex: 1;
-            min-width: 0;
-            height: calc(var(--h) * 100%);
-            border-radius: 3px 3px 1px 1px;
-            background: linear-gradient(to top, var(--brand), #38bdf8);
-            transform: scaleY(0);
-            transform-origin: bottom;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 8ms);
-        }
-        .activity-bar:hover { filter: brightness(1.15); }
-        .activity-chart.is-grown .activity-bar { transform: scaleY(1); }
-        .activity-axis { display: flex; gap: 2px; margin-top: 6px; font-size: 0.7rem; color: var(--faint); }
-        .activity-axis span { flex: 1; min-width: 0; white-space: nowrap; }
 
         /* Long descriptions stay in the markup but show three lines. */
         .project-description {
@@ -1133,17 +1066,149 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             padding-bottom: 0;
-            margin-bottom: var(--s-4);
         }
-        .project-card:hover .project-description { -webkit-line-clamp: unset; }
+        .project-card.is-open .project-description { -webkit-line-clamp: unset; }
+        .project-more {
+            align-self: flex-start;
+            margin-top: var(--s-1);
+            padding: 0;
+            border: none;
+            background: none;
+            font: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--brand-strong);
+            cursor: pointer;
+        }
+        .project-more:hover { text-decoration: underline; }
+        .project-more[hidden] { display: none; }
 
         @media (prefers-reduced-motion: reduce) {
-            .reel-strip, .activity-bar, .now-chevron { transition: none; }
+            .reel-strip, .contrib-grid i, .now-chevron { transition: none; }
         }
 
         @media (max-width: 640px) {
             .site-header .btn { padding: 0 0.8rem; }
-            .now-stats { gap: var(--s-4); flex-wrap: wrap; }
+        }
+
+        /* --- figures: big numbers, no boxes, each one a filter ----------- */
+        .figures {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .figure {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--s-2);
+            padding: var(--s-5) var(--s-4);
+            border: none;
+            border-left: 1px solid var(--border);
+            background: none;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .figure:first-child { border-left: none; padding-left: 0; }
+        .figure:hover { background: var(--surface); }
+        .figure:first-child:hover { background: none; }
+        .figure:hover .figure-label,
+        .figure[aria-pressed="true"] .figure-label { color: var(--brand-strong); }
+        .figure[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--brand); }
+        .figure-value {
+            font-size: clamp(1.7rem, 1.2rem + 1.3vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+        .figure-label { font-size: 0.85rem; font-weight: 500; color: var(--muted); }
+
+        .filter-note {
+            display: flex;
+            align-items: center;
+            gap: var(--s-3);
+            margin: calc(-1 * var(--s-2)) 0 var(--s-5);
+            font-size: 0.88rem;
+            color: var(--muted);
+        }
+        .filter-note[hidden] { display: none; }
+        .filter-clear {
+            padding: 0.2rem 0.7rem;
+            border: 1px solid var(--border-strong);
+            border-radius: 999px;
+            background: none;
+            font: inherit;
+            font-size: 0.82rem;
+            color: var(--ink);
+            cursor: pointer;
+        }
+        .filter-clear:hover { border-color: var(--ink); }
+        .project-group[hidden] { display: none; }
+
+        /* --- GitHub contribution grid ------------------------------------ */
+        .contrib { margin-top: var(--s-6); }
+        .contrib-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: var(--s-2);
+            margin-bottom: var(--s-3);
+        }
+        .contrib-title { font-weight: 650; color: var(--ink); }
+        .contrib-summary { font-size: 0.85rem; color: var(--muted); }
+        .contrib-scroll { overflow-x: auto; padding-bottom: 2px; }
+        .contrib-months,
+        .contrib-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--weeks, 53), minmax(9px, 1fr));
+            gap: 3px;
+            min-width: 560px;
+        }
+        .contrib-months { margin-bottom: 4px; font-size: 0.7rem; color: var(--faint); }
+        .contrib-months span { white-space: nowrap; overflow: visible; }
+        .contrib-grid { grid-template-rows: repeat(7, auto); grid-auto-flow: column; }
+        .contrib-grid i,
+        .contrib-legend i {
+            display: block;
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: var(--surface-2);
+        }
+        .contrib-grid i {
+            opacity: 0;
+            transform: scale(0.4);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: calc(var(--i) * 12ms);
+        }
+        .contrib-grid.is-in i { opacity: 1; transform: none; }
+        [data-level="1"] { background: #ccfbf1 !important; }
+        [data-level="2"] { background: #5eead4 !important; }
+        [data-level="3"] { background: #14b8a6 !important; }
+        [data-level="4"] { background: #0f766e !important; }
+        .contrib-legend {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 3px;
+            margin-top: var(--s-2);
+            font-size: 0.72rem;
+            color: var(--faint);
+        }
+        .contrib-legend i { width: 11px; }
+        .contrib-legend span:first-of-type { margin-right: 4px; }
+        .contrib-legend span:last-of-type { margin-left: 4px; }
+
+        @media (max-width: 640px) {
+            .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .figure:nth-child(3) { border-left: none; padding-left: 0; }
+            .figure:nth-child(n+3) { border-top: 1px solid var(--border); }
         }
 
         /* --- print: a plain CV -------------------------------------------- */
@@ -1158,7 +1223,7 @@
             .content { padding: 0; max-width: none; }
             .job-content { max-height: none !important; }
             .job, .project-card, .education-item, .tech-category { box-shadow: none; break-inside: avoid; }
-            .project-card:hover { transform: none; }
+            .project-card:hover .project-logo { transform: none; }
             a { color: inherit; }
         }
     </style>
@@ -1181,7 +1246,7 @@
         <a href="#top" class="logo">Will<span class="name-soft">i</span> Wolff</a>
 
         <nav class="site-nav" aria-label="Sections">
-            <a href="#now"><span lang="en">Now</span><span lang="de">Aktuell</span></a>
+            <a href="#now"><span lang="en">Overview</span><span lang="de">Überblick</span></a>
             <a href="#experience"><span lang="en">Timeline</span><span lang="de">Werdegang</span></a>
             <a href="#projects"><span lang="en">Projects</span><span lang="de">Projekte</span></a>
             <a href="#technologies"><span lang="en">Stack</span><span lang="de">Stack</span></a>
@@ -1190,7 +1255,6 @@
 
         <div class="header-controls">
             <button class="icon-btn lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">
-                <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"></path></svg>
                 <span class="lang-label">DE</span>
             </button>
             <a href="willi-wolff-cv-en.pdf" download id="cv-download" class="btn">
@@ -1210,16 +1274,20 @@
                 <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
                 <div>
                     <h1 class="hero-name">Will<span class="name-soft">i</span> Wolff</h1>
-                    <p class="tagline">
-                        <span lang="en"><s>Senior Software Engineer</s> <s>Technical Architect</s> <strong>Agent Wrangler</strong></span>
-                        <span lang="de"><s>Senior Software Engineer</s> <s>Technischer Architekt</s> <strong>Agenten-Dompteur</strong></span>
-                    </p>
+                    <ol class="tagline" aria-label="Titles over time">
+                        <li><s><span lang="en">Co-founder</span><span lang="de">Mitgründer</span></s></li>
+                        <li><s>Lead Engineer</s></li>
+                        <li><s>Senior Software Engineer</s></li>
+                        <li><s><span lang="en">Technical Architect</span><span lang="de">Technischer Architekt</span></s></li>
+                        <li><s><span lang="en">Project Lead</span><span lang="de">Projektleiter</span></s></li>
+                        <li><strong><span lang="en">Team lead of eight AI agents</span><span lang="de">Teamleiter von acht KI-Agenten</span></strong></li>
+                    </ol>
                 </div>
             </div>
 
             <p class="hero-title">
-                <span lang="en">Hard software problems, <em>shipped</em>.</span>
-                <span lang="de">Schwierige Software-Probleme, <em>gelöst</em>.</span>
+                <span lang="en">Always <em>shipping</em>.</span>
+                <span lang="de">Immer am <em>Liefern</em>.</span>
             </p>
             <p class="hero-sub">
                 <span lang="en">AI, blockchain, web or mobile. Freelance with high agency, currently on contract with IOG.</span>
@@ -1282,8 +1350,8 @@
                         <svg class="cv-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
-                        <span lang="en">German & English (fluent)</span>
-                        <span lang="de">Deutsch & Englisch (fließend)</span>
+                        <span lang="en">German & English</span>
+                        <span lang="de">Deutsch & Englisch</span>
                     </span>
                     <span class="cv-meta-item">
                         <svg class="cv-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1299,27 +1367,24 @@
             <section id="now" aria-labelledby="now-title">
                 <div class="section-head">
                     <p class="section-kicker"><span lang="en">Track record</span><span lang="de">Bilanz</span></p>
-                    <h2 id="now-title"><span lang="en">Eleven years of shipping</span><span lang="de">Elf Jahre Auslieferung</span></h2>
+                    <h2 id="now-title"><span lang="en">Projects at a glance</span><span lang="de">Projekte im Überblick</span></h2>
                 </div>
-                <div class="now-groups">
-                    <div class="now-group">
-                        <span class="now-group-label"><span lang="en">Projects</span><span lang="de">Projekte</span></span>
-                        <div class="now-stats" data-stats="projects"></div>
-                    </div>
-                    <div class="now-group">
-                        <span class="now-group-label"><span lang="en">Career</span><span lang="de">Werdegang</span></span>
-                        <div class="now-stats" data-stats="career"></div>
-                    </div>
-                </div>
+                <div class="figures" data-stats="projects"></div>
 
-                <div class="activity-card" data-activity="panel" hidden>
-                    <div class="activity-card-head">
-                        <span class="now-group-label"><span lang="en">GitHub activity</span><span lang="de">GitHub-Aktivität</span></span>
-                        <span class="activity-scale"><span lang="en">contributions per month, log scale</span><span lang="de">Beiträge pro Monat, logarithmisch</span></span>
+                <div class="contrib" data-activity="panel" hidden>
+                    <div class="contrib-head">
+                        <span class="contrib-title"><span lang="en">GitHub contributions, last 12 months</span><span lang="de">GitHub-Beiträge, letzte 12 Monate</span></span>
+                        <span class="contrib-summary" data-activity="summary"></span>
                     </div>
-                    <div class="now-stats" data-activity="figures"></div>
-                    <div class="activity-chart" data-activity="chart" role="img"></div>
-                    <div class="activity-axis" data-activity="axis" aria-hidden="true"></div>
+                    <div class="contrib-scroll">
+                        <div class="contrib-months" data-activity="months" aria-hidden="true"></div>
+                        <div class="contrib-grid" data-activity="grid" role="img"></div>
+                    </div>
+                    <div class="contrib-legend" aria-hidden="true">
+                        <span lang="en">Less</span><span lang="de">Weniger</span>
+                        <i data-level="0"></i><i data-level="1"></i><i data-level="2"></i><i data-level="3"></i><i data-level="4"></i>
+                        <span lang="en">More</span><span lang="de">Mehr</span>
+                    </div>
                 </div>
             </section>
 
@@ -1810,8 +1875,13 @@
             <section id="projects" aria-labelledby="projects-title">
                 <div class="section-head">
                     <p class="section-kicker"><span lang="en">Projects</span><span lang="de">Projekte</span></p>
-                    <h2 id="projects-title"><span lang="en">What I have built</span><span lang="de">Was ich gebaut habe</span></h2>
+                    <h2 id="projects-title"><span lang="en">Things I've worked on</span><span lang="de">Woran ich gearbeitet habe</span></h2>
+                    <p><span lang="en">Some solo, most with clients or great teams.</span><span lang="de">Manches allein, das meiste mit Kunden oder großartigen Teams.</span></p>
                 </div>
+                <p class="filter-note" data-filter-note hidden>
+                    <span data-filter-label></span>
+                    <button type="button" class="filter-clear" data-filter-clear><span lang="en">Show all</span><span lang="de">Alle zeigen</span></button>
+                </p>
 
                     <div class="project-group" id="group-research">
                         <div class="group-head">
@@ -2614,29 +2684,51 @@
 
         (function () {
             const projectRow = document.querySelector('[data-stats="projects"]');
-            const careerRow = document.querySelector('[data-stats="career"]');
-            if (!projectRow || !careerRow) return;
+            if (!projectRow) return;
 
             const LABELS = {
-                built: { en: 'Built', de: 'Gebaut' },
-                live: { en: 'Live', de: 'Laufen' },
+                all: { en: 'Projects', de: 'Projekte' },
+                live: { en: 'Live', de: 'Live' },
+                building: { en: 'In progress', de: 'In Arbeit' },
                 failed: { en: 'Failed', de: 'Gescheitert' },
-                employers: { en: 'Employers', de: 'Arbeitgeber' },
-                founded: { en: 'Founded', de: 'Gegründet' },
-                years: { en: 'Years', de: 'Jahre' },
             };
 
-            // A figure that filters the wall is a button; one that does not is
-            // plain text. Nothing looks clickable unless it is.
+            // Every figure is also a filter for the project grid below.
             function figure(key, value, opts) {
                 const o = opts || {};
                 const title = o.title ? ` title="${o.title.replace(/"/g, '&quot;')}"` : '';
-                const inner =
-                    `<span class="now-stat-value">${reel(value, { accent: o.accent })}</span>` +
-                    `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
-                    `<span class="now-stat-label" lang="de">${LABELS[key].de}</span>`;
-                if (!o.filter) return `<div${title}>${inner}</div>`;
-                return `<button type="button" class="now-stat-btn" data-jump="${o.filter}"${title}>${inner}</button>`;
+                return `<button type="button" class="figure" data-filter="${key}"${title}>` +
+                    `<span class="figure-value">${reel(value, { accent: o.accent })}</span>` +
+                    `<span class="figure-label" lang="en">${LABELS[key].en}</span>` +
+                    `<span class="figure-label" lang="de">${LABELS[key].de}</span></button>`;
+            }
+
+            const cards = Array.from(document.querySelectorAll('.project-card'));
+            const groups = Array.from(document.querySelectorAll('.project-group'));
+            const note = document.querySelector('[data-filter-note]');
+            const noteLabel = note && note.querySelector('[data-filter-label]');
+
+            function applyFilter(key) {
+                const matches = card => key === 'all' ||
+                    (key === 'building' ? card.dataset.building === 'true' : card.dataset.status === key);
+                cards.forEach(card => { card.hidden = !matches(card); });
+                groups.forEach(g => {
+                    const shown = g.querySelectorAll('.project-card:not([hidden])').length;
+                    g.hidden = !shown;
+                    const count = g.querySelector('.group-count');
+                    if (count) count.textContent = shown;
+                });
+                projectRow.querySelectorAll('.figure').forEach(b => {
+                    b.setAttribute('aria-pressed', b.dataset.filter === key && key !== 'all' ? 'true' : 'false');
+                });
+                if (!note) return;
+                note.hidden = key === 'all';
+                if (key !== 'all') {
+                    const n = cards.filter(c => !c.hidden).length;
+                    noteLabel.innerHTML =
+                        `<span lang="en">Showing ${n} ${LABELS[key].en.toLowerCase()}</span>` +
+                        `<span lang="de">${n} × ${LABELS[key].de}</span>`;
+                }
             }
 
             fetch('data/stats.json', { cache: 'no-cache' })
@@ -2646,73 +2738,63 @@
                     const byStatus = s => projects.filter(p => p.status === s);
                     const failures = byStatus('failed');
 
-                    // Counts are derived from the project list, never typed, so
-                    // the number and what the filter shows cannot disagree.
-                    const built = projects.length;
-                    const live = byStatus('live').length;
-
                     const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
                     const why = f => (de && f.why.de) || f.why.en;
                     const detail = failures
                         .map(f => `${f.project || f.card.replace(/^p-/, '')} (${f.year}): ${why(f)}`)
                         .join('\n');
 
+                    // Counts are derived from the project list, never typed, so
+                    // the number and what the filter shows cannot disagree.
                     projectRow.innerHTML =
-                        figure('built', built, { filter: 'projects' }) +
-                        figure('live', live) +
-                        figure('failed', failures.length, {
-                            filter: 'group-products', accent: true, title: detail,
-                        });
-
-                    const c = data.career || {};
-                    careerRow.innerHTML =
-                        figure('employers', c.employers, {
-                            title: `${c.employed} employed, ${c.contract} on contract`,
-                        }) +
-                        figure('founded', c.founded) +
-                        // Derived, so it cannot go stale in a hand-edited file.
-                        figure('years', new Date().getFullYear() - data.since);
-
+                        figure('all', projects.length) +
+                        figure('live', byStatus('live').length) +
+                        figure('building', projects.filter(p => p.building).length) +
+                        figure('failed', failures.length, { accent: true, title: detail });
                     spinReels(projectRow);
-                    spinReels(careerRow);
 
-                    // Tag every card with its status, which is what the status
-                    // filters match on, and badge the failures.
-                                        projects.forEach(p => {
+                    projects.forEach(p => {
                         const card = p.card && document.getElementById(p.card);
                         if (!card) return;
                         card.dataset.status = p.status;
+                        if (p.building) card.dataset.building = 'true';
 
-                        // Both failed and handed-over projects say so on the card,
-                        // but they are different claims and must not look alike:
+                        // One plain status line above the description. Failed and
+                        // handed over are different claims and must not read alike:
                         // handed over means it still runs, just not by me.
-                        const LEAD = {
-                            failed: { en: 'failed', de: 'gescheitert', cls: 'ended-tag' },
-                            'handed-over': { en: 'handed over', de: 'übergeben', cls: 'ended-tag ended-tag--neutral' },
-                        }[p.status];
-                        if (!LEAD) return;
-
-                        const tech = card.querySelector('.project-tech');
-                        if (!tech) return;
-                        const tag = document.createElement('span');
-                        tag.className = LEAD.cls;
-                        tag.innerHTML =
-                            `<span lang="en">${LEAD.en} ${p.year} · ${p.why.en}</span>` +
-                            `<span lang="de">${LEAD.de} ${p.year} · ${p.why.de || p.why.en}</span>`;
-                        tech.insertBefore(tag, tech.firstChild);
+                        const STATUS = {
+                            live: { en: 'Live', de: 'Live' },
+                            'handed-over': { en: 'Handed over', de: 'Übergeben' },
+                            failed: { en: 'Failed', de: 'Gescheitert' },
+                            upstream: { en: 'Merged upstream', de: 'Upstream übernommen' },
+                            archived: { en: 'Archived', de: 'Archiviert' },
+                        };
+                        const st = p.building ? { en: 'In progress', de: 'In Arbeit' } : STATUS[p.status];
+                        const desc = card.querySelector('.project-description');
+                        if (!st || !desc) return;
+                        const year = p.year ? ` ${p.year}` : '';
+                        const why = p.why ? { en: ` · ${p.why.en}`, de: ` · ${p.why.de || p.why.en}` } : { en: '', de: '' };
+                        const line = document.createElement('p');
+                        line.className = 'project-status';
+                        line.dataset.state = p.building ? 'building' : p.status;
+                        line.innerHTML =
+                            `<span lang="en"><b>${st.en}${year}</b>${why.en}</span>` +
+                            `<span lang="de"><b>${st.de}${year}</b>${why.de}</span>`;
+                        desc.parentNode.insertBefore(line, desc);
                     });
 
-
-                    // A figure that points somewhere scrolls there.
                     projectRow.addEventListener('click', function (e) {
-                        const btn = e.target.closest('[data-jump]');
-                        const target = btn && document.getElementById(btn.dataset.jump);
-                        if (target) target.scrollIntoView({ behavior: 'smooth' });
+                        const btn = e.target.closest('[data-filter]');
+                        if (!btn) return;
+                        applyFilter(btn.dataset.filter);
+                        document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
                     });
+                    const clear = document.querySelector('[data-filter-clear]');
+                    if (clear) clear.addEventListener('click', () => applyFilter('all'));
                 })
                 .catch(() => {
-                    // Without the file there are no numbers to show, so the rows
-                    // stay empty rather than displaying placeholders.
+                    // Without the file there are no numbers to show, so the row
+                    // stays empty rather than displaying placeholders.
                 });
         })();
 
@@ -2749,56 +2831,52 @@
                     const de = lang() === 'de';
                     const window12 = data.last12Months;
 
-                    const LABELS = {
-                        contributions: { en: 'Contributions', de: 'Beiträge' },
-                        prs: { en: 'Pull requests', de: 'Pull Requests' },
-                        year: { en: 'Last 12 months', de: 'Letzte 12 Monate' },
-                    };
-                    const fig = (key, value) =>
-                        `<div><span class="now-stat-value">${reel(value)}</span>` +
-                        `<span class="now-stat-label" lang="en">${LABELS[key].en}</span>` +
-                        `<span class="now-stat-label" lang="de">${LABELS[key].de}</span></div>`;
-                    const figures = panel.querySelector('[data-activity="figures"]');
-                    figures.innerHTML =
-                        fig('contributions', data.totals.contributions) +
-                        fig('prs', data.totals.pullRequests) +
-                        fig('year', window12.total);
-                    spinReels(figures);
-
-                    // Monthly contributions on a log scale, so a 3,000-commit month
-                    // does not flatten every ordinary one into the axis. Months with
-                    // nothing stay as an empty slot rather than being skipped.
-                    const byMonth = new Map((data.monthly || []).map(m => [m.month, m.total]));
-                    const now = new Date();
-                    const months = [];
-                    for (let y = 2020; y <= now.getFullYear(); y++) {
-                        for (let m = 1; m <= 12; m++) {
-                            if (y === now.getFullYear() && m > now.getMonth() + 1) break;
-                            const key = `${y}-${String(m).padStart(2, '0')}`;
-                            months.push({ key, y, m, total: byMonth.get(key) || 0 });
-                        }
-                    }
-                    const max = Math.max(1, ...months.map(m => m.total));
-                    const scale = v => (v > 0 ? Math.max(0.06, Math.log10(1 + v) / Math.log10(1 + max)) : 0);
                     const fmt = v => v.toLocaleString(de ? 'de-DE' : 'en-US');
-                    const monthName = (y, m) => new Date(y, m - 1, 1)
-                        .toLocaleString(de ? 'de-DE' : 'en-US', { month: 'short', year: 'numeric' });
-                    const chart = panel.querySelector('[data-activity="chart"]');
-                    chart.setAttribute('aria-label', de
-                        ? `Monatliche GitHub-Beiträge seit 2020, Höchstwert ${fmt(max)}`
-                        : `Monthly GitHub contributions since 2020, peak ${fmt(max)}`);
-                    chart.innerHTML = months.map((m, i) =>
-                        `<span class="activity-bar" style="--h:${scale(m.total).toFixed(3)};--i:${i}"` +
-                        ` title="${monthName(m.y, m.m)}: ${fmt(m.total)}"></span>`).join('');
-                    panel.querySelector('[data-activity="axis"]').innerHTML = months
-                        .map(m => `<span>${m.m === 1 ? m.y : ''}</span>`).join('');
+                    const sinceYear = (data.since || '').slice(0, 4);
+                    panel.querySelector('[data-activity="summary"]').textContent = de
+                        ? `${fmt(data.totals.contributions)} seit ${sinceYear} · ${fmt(data.totals.pullRequests)} Pull Requests`
+                        : `${fmt(data.totals.contributions)} since ${sinceYear} · ${fmt(data.totals.pullRequests)} pull requests`;
+
+                    // GitHub's own layout: one column per week, Sunday on top,
+                    // the current week on the right. Levels follow a log scale so
+                    // a 500-commit day does not wash out every ordinary one.
+                    const byDay = new Map((data.days || []).map(d => [d.date, d.total]));
+                    const iso = d => d.toISOString().slice(0, 10);
+                    const today = new Date();
+                    today.setUTCHours(0, 0, 0, 0);
+                    const start = new Date(today);
+                    start.setUTCDate(start.getUTCDate() - 52 * 7 - today.getUTCDay());
+                    const days = [];
+                    for (let d = new Date(start); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
+                        days.push({ date: iso(d), total: byDay.get(iso(d)) || 0, month: d.getUTCMonth(), dom: d.getUTCDate() });
+                    }
+                    const max = Math.max(1, ...days.map(d => d.total));
+                    const level = v => (v <= 0 ? 0 : Math.max(1, Math.ceil(4 * Math.log(1 + v) / Math.log(1 + max))));
+                    const grid = panel.querySelector('[data-activity="grid"]');
+                    const weeks = Math.ceil(days.length / 7);
+                    grid.style.setProperty('--weeks', weeks);
+                    grid.setAttribute('aria-label', de
+                        ? `${fmt(window12.total)} GitHub-Beiträge in den letzten 12 Monaten`
+                        : `${fmt(window12.total)} GitHub contributions in the last 12 months`);
+                    grid.innerHTML = days.map((d, i) =>
+                        `<i data-level="${level(d.total)}" style="--i:${Math.floor(i / 7)}"` +
+                        ` title="${d.date}: ${fmt(d.total)}"></i>`).join('');
+                    const monthNames = Array.from({ length: 12 }, (_, m) =>
+                        new Date(Date.UTC(2020, m, 1)).toLocaleString(de ? 'de-DE' : 'en-US', { month: 'short', timeZone: 'UTC' }));
+                    const months = panel.querySelector('[data-activity="months"]');
+                    months.style.setProperty('--weeks', weeks);
+                    months.innerHTML = Array.from({ length: weeks }, (_, w) => {
+                        const first = days[w * 7];
+                        const label = first && first.dom <= 7 && w > 0 && w < weeks - 2 ? monthNames[first.month] : '';
+                        return `<span>${label}</span>`;
+                    }).join('');
                     if (reelObserver) {
                         const grow = new IntersectionObserver(es => es.forEach(e => {
-                            if (e.isIntersecting) { chart.classList.add('is-grown'); grow.disconnect(); }
+                            if (e.isIntersecting) { grid.classList.add('is-in'); grow.disconnect(); }
                         }), { threshold: 0.3 });
-                        grow.observe(chart);
+                        grow.observe(grid);
                     } else {
-                        chart.classList.add('is-grown');
+                        grid.classList.add('is-in');
                     }
 
 
@@ -2841,5 +2919,30 @@
             sections.forEach(s => observer.observe(s));
         })();
     </script>
-</body></body>
+    <script>
+        // Descriptions show three lines; "More" expands one card at a time.
+        (function () {
+            const de = () => document.documentElement.getAttribute('data-lang') === 'de';
+            document.querySelectorAll('.project-description').forEach(desc => {
+                const card = desc.closest('.project-card');
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'project-more';
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = '<span lang="en">More</span><span lang="de">Mehr</span>';
+                desc.after(btn);
+                const sync = () => { btn.hidden = !card.classList.contains('is-open') && desc.scrollHeight <= desc.clientHeight + 1; };
+                btn.addEventListener('click', () => {
+                    const open = card.classList.toggle('is-open');
+                    btn.setAttribute('aria-expanded', String(open));
+                    btn.innerHTML = open
+                        ? '<span lang="en">Less</span><span lang="de">Weniger</span>'
+                        : '<span lang="en">More</span><span lang="de">Mehr</span>';
+                });
+                sync();
+                window.addEventListener('resize', sync, { passive: true });
+            });
+        })();
+    </script>
+</body>
 </html>
