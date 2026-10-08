@@ -56,16 +56,20 @@
 
 #section("Profile")
 
-Software engineer with 10+ years across enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), mobile, and IoT. Currently technical architect for a Byzantine-resistant pub/sub network at IOG. Founder DNA and high agency, at home in distributed systems and secure software. I like to own problems end-to-end: build a rough working version early, find the risks, then iterate. My best work happens in small teams on hard problems, and I gladly take on more than pure engineering when a project needs it.
+Software engineer with 10+ years across enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), mobile, and IoT. Currently software engineer and architect on Ouroboros Leios at IOG. Founder DNA and high agency, at home in distributed systems and secure software. I like to own problems end-to-end: build a rough working version early, find the risks, then iterate. My best work happens in small teams on hard problems, and I gladly take on more than pure engineering when a project needs it.
 
 #section("Experience")
 
-#exp("Technical Architect – Byzantine-Resistant PubSub Network", "Feb 2026 – Present", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Contract])[
-  Leading research and development of #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], a Byzantine-resistant publish/subscribe network, taking a team through formal verification of a research proposal and building the prototype.
+#exp("Software Engineer & Architect – Ouroboros Leios", "Oct 2026 – Present", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Contract])[
+  Back on #link("http://leios.cardano-scaling.org/")[#text(fill: accent)[Ouroboros Leios]], building Cardano's high-throughput protocol towards mainnet.
+]
+
+#exp("Technical Architect – Byzantine-Resistant PubSub Network", "Feb 2026 – Oct 2026", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Contract])[
+  Led research and development of #link("https://pubsub.cardano-scaling.org/")[#text(fill: accent)[Cardano PubSub]], a Byzantine-resistant publish/subscribe network, taking a team through formal verification of a research proposal and building the prototype.
   #v(2pt)
-  #b[*Technical Leadership:* Lead a team of 4 engineers and researchers designing a Byzantine-resistant pub/sub overlay network]
-  #b[*Formal Verification:* Leading a team through formal verification of the #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] peer-sampling protocol stack, and building the working prototype via spec-driven development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
-  #b[*Protocol Security:* Reevaluating peer-sampling protocols that come with specific security properties]
+  #b[*Technical Leadership:* Led a team of 4 engineers and researchers designing a Byzantine-resistant pub/sub overlay network]
+  #b[*Formal Verification:* Took a team through formal verification of the #link("https://www.iog.io/papers/securecyclon-dependable-peer-sampling")[#text(fill: accent)[SecureCyclon]] peer-sampling protocol stack and built the working prototype via spec-driven development (#link("https://github.com/github/spec-kit")[#text(fill: accent)[spec-kit]])]
+  #b[*Protocol Security:* Reevaluated peer-sampling protocols for specific security properties]
 ]
 
 #exp("Technical Architect – Ouroboros Leios", "Nov 2024 – Feb 2026", [#link("https://www.iog.io/")[Input Output Global (IOG)] · Contract])[

@@ -2,9 +2,9 @@
 
 > Portfolio and CV for Willi Wolff (goes by Will), a Berlin-based software engineer and
 > technical architect. Eleven years shipping professionally, writing code since 2008.
-> Currently technical architect for a Byzantine-resistant publish/subscribe network at
-> Input Output Global (IOG), leading the team through formal verification of the
-> SecureCyclon peer-sampling stack and building the prototype.
+> Since October 2026 back on Ouroboros Leios as software engineer and architect at
+> Input Output Global (IOG), after leading a Byzantine-resistant publish/subscribe
+> network through formal verification and a working prototype.
 
 ## About
 
@@ -29,9 +29,8 @@ on the left, the work scrolls on the right. Phones and tablets get one column, h
 
 ## Current work
 
-Technical Architect, Byzantine-Resistant PubSub Network, IOG (Feb 2026–present). Leads a team
-through formal verification of a research proposal and builds the prototype; evaluates
-peer-sampling protocols for specific security properties. https://pubsub.cardano-scaling.org/
+Software Engineer & Architect, Ouroboros Leios, IOG (Oct 2026–present): back on Cardano's high-throughput
+protocol, building it towards mainnet. https://leios.cardano-scaling.org/
 
 Also building, on his own time:
 
@@ -40,7 +39,8 @@ Also building, on his own time:
 
 ## Experience
 
-- **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–present): leads the team through formal verification of the SecureCyclon peer-sampling stack and builds the prototype via spec-driven development.
+- **Software Engineer & Architect — Ouroboros Leios**, IOG (Oct 2026–present): back on Leios, building it towards mainnet.
+- **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–Oct 2026): led the team through formal verification of the SecureCyclon peer-sampling stack and built the prototype via spec-driven development.
 - **Technical Architect — Ouroboros Leios**, IOG (Nov 2024–Feb 2026): led R&D for Cardano's high-throughput overlay protocol; principal author of CIP-0164; ran monthly public demo and review sessions (~5k views per session, sustained over 1.5 years).
 - **Technical Architect — Lace Wallet**, IOG (Nov 2022–Nov 2024): event-driven re-architecture using CQRS and event sourcing (45% latency reduction, 60%+ infrastructure savings), custom chain indexer with bloom filters and credential-based indexing (2,000+ tx/s, sub-second wallet sync), led a 7-person team delivering the MetaDex swap feature.
 - **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture for a collateralised debt position platform; workshops for 100+ Amazon engineers on the eUTxO model.

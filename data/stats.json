@@ -12,7 +12,7 @@
     "publishedCips": 1
   },
   "projects": [
-    { "card": "p-pubsub", "status": "live", "building": true },
+    { "card": "p-pubsub", "status": "live" },
     { "card": "p-ouroboros-leios", "status": "live", "building": true },
     { "card": "p-lace-architecture", "status": "live" },
     { "card": "p-leios-mempool-simulation", "status": "live" },

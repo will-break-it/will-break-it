@@ -1101,7 +1101,7 @@
         .figure {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             gap: var(--s-2);
             padding: var(--s-5) var(--s-4);
             border: none;
@@ -1109,13 +1109,12 @@
             background: none;
             font: inherit;
             color: inherit;
-            text-align: left;
+            text-align: center;
             cursor: pointer;
             transition: background 0.15s ease;
         }
-        .figure:first-child { border-left: none; padding-left: 0; }
+        .figure:first-child { border-left: none; }
         .figure:hover { background: var(--surface); }
-        .figure:first-child:hover { background: none; }
         .figure:hover .figure-label,
         .figure[aria-pressed="true"] .figure-label { color: var(--brand-strong); }
         .figure[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--brand); }
@@ -1163,7 +1162,21 @@
         }
         .contrib-title { font-weight: 650; color: var(--ink); }
         .contrib-summary { font-size: 0.85rem; color: var(--muted); }
-        .contrib-scroll { overflow-x: auto; padding-bottom: 2px; }
+        .contrib-scroll { position: relative; overflow-x: auto; padding-top: 34px; margin-top: -34px; padding-bottom: 2px; }
+        .contrib-tip {
+            position: absolute;
+            z-index: 3;
+            transform: translate(-50%, -100%);
+            padding: 4px 9px;
+            border-radius: 6px;
+            background: var(--ink);
+            color: #fff;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .contrib-tip[hidden] { display: none; }
+        .contrib-grid i:hover { outline: 1px solid var(--ink); outline-offset: 0; }
         .contrib-months,
         .contrib-grid {
             display: grid;
@@ -1207,7 +1220,7 @@
 
         @media (max-width: 640px) {
             .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .figure:nth-child(3) { border-left: none; padding-left: 0; }
+            .figure:nth-child(3) { border-left: none; }
             .figure:nth-child(n+3) { border-top: 1px solid var(--border); }
         }
 
@@ -1247,8 +1260,8 @@
 
         <nav class="site-nav" aria-label="Sections">
             <a href="#now"><span lang="en">Overview</span><span lang="de">Überblick</span></a>
-            <a href="#experience"><span lang="en">Timeline</span><span lang="de">Werdegang</span></a>
             <a href="#projects"><span lang="en">Projects</span><span lang="de">Projekte</span></a>
+            <a href="#experience"><span lang="en">Timeline</span><span lang="de">Werdegang</span></a>
             <a href="#technologies"><span lang="en">Stack</span><span lang="de">Stack</span></a>
             <a href="#publications"><span lang="en">Writing</span><span lang="de">Publikationen</span></a>
         </nav>
@@ -1377,6 +1390,7 @@
                         <span class="contrib-summary" data-activity="summary"></span>
                     </div>
                     <div class="contrib-scroll">
+                        <div class="contrib-tip" data-activity="tip" role="status" hidden></div>
                         <div class="contrib-months" data-activity="months" aria-hidden="true"></div>
                         <div class="contrib-grid" data-activity="grid" role="img"></div>
                     </div>
@@ -1386,490 +1400,6 @@
                         <span lang="en">More</span><span lang="de">Mehr</span>
                     </div>
                 </div>
-            </section>
-
-            <section id="experience" aria-labelledby="experience-title">
-                <div class="section-head">
-                    <p class="section-kicker"><span lang="en">Timeline</span><span lang="de">Zeitachse</span></p>
-                    <h2 id="experience-title"><span lang="en">Where I have worked</span><span lang="de">Wo ich gearbeitet habe</span></h2>
-                </div>
-                <div class="timeline">
-
-                        <!-- Education sits on the rail as milestones, so it needs no section of its own. -->
-
-
-
-
-
-
-
-                        <div class="company present">
-                            <div class="company-marker">2021</div>
-                            <div class="company-head">
-                                <h3 class="company-name"><a href="https://www.iog.io/" target="_blank">Input Output Global (IOG)</a></h3>
-                                <span class="company-span">
-                                    <span lang="en">4 yrs 7 mo · Remote · Contract · Nov 2021 – Present</span>
-                                    <span lang="de">4 Jahre, 7 Monate · Remote · Auf Vertragsbasis · Nov 2021 – Heute</span>
-                                </span>
-                                <div class="company-ships">
-                                    <a class="ship-chip" href="#p-pubsub">pubsub</a>
-                                    <a class="ship-chip" href="#p-ouroboros-leios">leios</a>
-                                    <a class="ship-chip" href="#p-leios-mempool-simulation">mempool sim</a>
-                                    <a class="ship-chip" href="#p-lace-architecture">lace architecture</a>
-                                    <a class="ship-chip" href="#p-dolos">dolos</a>
-                                    <a class="ship-chip" href="#p-scrolls">scrolls</a>
-                                    <a class="ship-chip" href="#p-lucid">lucid</a>
-                                    <a class="ship-chip" href="#p-dex-order-serialization-library">dex serialization</a>
-                                </div>
-                                <p class="company-alongside">
-                                    <span lang="en">Alongside, on my own time: <a href="#p-berlin-pool">Berlin Pool</a>, <a href="#p-drip-dropz">Drip Dropz</a>, <a href="#p-dump-it">Dump it!</a>, <a href="#p-pagebase">Pagebase</a>, <a href="#p-hausnummer">Hausnummer</a>, <a href="#p-operando">Operando</a> and five client sites. CIP-0164 published 2025.</span>
-                                    <span lang="de">Nebenbei, in eigener Zeit: <a href="#p-berlin-pool">Berlin Pool</a>, <a href="#p-drip-dropz">Drip Dropz</a>, <a href="#p-dump-it">Dump it!</a>, <a href="#p-pagebase">Pagebase</a>, <a href="#p-hausnummer">Hausnummer</a>, <a href="#p-operando">Operando</a> und fünf Kundenseiten. CIP-0164 veröffentlicht 2025.</span>
-                                </p>
-                            </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Technical Architect – Byzantine-Resistant PubSub Network</span>
-                                        <span lang="de">Technischer Architekt – Byzantine-Resistant PubSub Network</span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Feb 2026 - Present</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Leading R&D for a Byzantine-resistant pub/sub network — formal verification and prototyping</span>
-                                    <span lang="de">Leite R&D für ein Byzantine-resistentes Pub/Sub-Netzwerk — formale Verifikation und Prototyping</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Lead a team of 4 engineers & researchers designing a Byzantine-resistant pub/sub overlay network</span>
-                                            <span lang="de">Leite ein Team von 4 Ingenieuren & Forschern beim Entwurf eines Byzantine-resistenten Pub/Sub-Overlay-Netzwerks</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Leading a team through formal verification of the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> peer-sampling protocol stack, and building the working prototype via spec-driven development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
-                                            <span lang="de">Leite ein Team durch die formale Verifikation des <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> Peer-Sampling-Protokoll-Stacks und entwickle den funktionsfähigen Prototyp mittels Spec-Driven Development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Reevaluating peer-sampling protocols for specific security properties</span>
-                                            <span lang="de">Neubewertung von Peer-Sampling-Protokollen hinsichtlich spezifischer Sicherheitseigenschaften</span>
-                                        </li>
-                                    </ul>
-                                    <div class="role-links">
-                                        <a href="https://github.com/input-output-hk/cardano-pubsub" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                                            Repository
-                                        </a>
-                                        <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                            Website
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Technical Architect – <a href="http://leios.cardano-scaling.org/" target="_blank">Ouroboros Leios</a></span>
-                                        <span lang="de">Technischer Architekt – <a href="http://leios.cardano-scaling.org/" target="_blank">Ouroboros Leios</a></span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Nov 2024 - Feb 2026</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Led R&D for Ouroboros Leios, a high-throughput protocol for Cardano blockchain</span>
-                                    <span lang="de">Leitete R&D für Ouroboros Leios, ein Hochdurchsatz-Protokoll für die Cardano Blockchain</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Direct team of 8 researchers & engineers exploring high-throughput overlay protocol</span>
-                                            <span lang="de">Leite Team von 8 Forschern & Engineers bei der Erforschung eines Hochdurchsatz-Overlay-Protokolls</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Authored comprehensive <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164</a> specification and architecture documentation</span>
-                                            <span lang="de">Verfasste umfassende <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164</a> Spezifikation und Architekturdokumentation</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Hosted monthly public demo and review sessions on YouTube (<strong>~5k views per session</strong>, sustained over 1.5 years) with live Q&A, translating complex research into accessible developer content</span>
-                                            <span lang="de">Veranstaltete monatliche öffentliche Demo- und Review-Sessions auf YouTube (<strong>~5k Aufrufe pro Session</strong>, über 1,5 Jahre) mit Live Q&A, übersetzte komplexe Forschung in zugänglichen Developer Content</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Organized week-long technical workshop bringing together researchers, engineers, and community members</span>
-                                            <span lang="de">Organisierte einwöchigen technischen Workshop mit Forschern, Engineers und Community-Mitgliedern</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Technical point of contact for the project, presenting progress and findings in large internal reviews and publicly at <a href="http://leios.cardano-scaling.org/" target="_blank">leios.cardano-scaling.org</a></span>
-                                            <span lang="de">Technischer Ansprechpartner des Projekts, präsentiere Fortschritte und Ergebnisse in großen internen Reviews und öffentlich unter <a href="http://leios.cardano-scaling.org/" target="_blank">leios.cardano-scaling.org</a></span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Investigated <a href="https://ethereum.org/en/developers/docs/mev/" target="_blank">MEV</a> (Miner Extractable Value) impact on Leios via <a href="https://leios.cardano-scaling.org/mempool-viz/" target="_blank">mempool analysis and simulation</a></span>
-                                            <span lang="de">Untersuchte <a href="https://ethereum.org/en/developers/docs/mev/" target="_blank">MEV</a>-Auswirkungen (Miner Extractable Value) auf Leios mittels <a href="https://leios.cardano-scaling.org/mempool-viz/" target="_blank">Mempool-Analyse und -Simulation</a></span>
-                                        </li>
-                                    </ul>
-                                    <div class="role-links">
-                                        <a href="https://github.com/input-output-hk/ouroboros-leios" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                                            Repository
-                                        </a>
-                                        <a href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                            Website
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Technical Architect – <a href="https://www.lace.io/" target="_blank">Lace Wallet</a></span>
-                                        <span lang="de">Technischer Architekt – <a href="https://www.lace.io/" target="_blank">Lace Wallet</a></span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Nov 2022 - Nov 2024</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Led technical architecture for Lace with Event-Driven Architecture, delivering 45% performance improvement</span>
-                                    <span lang="de">Leitete technische Architektur für Lace mit Event-Driven Architecture, erreichte 45% Leistungsverbesserung</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Re-engineered wallet backend to <strong>event-driven architecture</strong> with <strong>CQRS</strong> pattern → 45% latency reduction, >60% cost savings</span>
-                                            <span lang="de">Entwickelte Wallet-Backend zu <strong>event-driven architecture</strong> mit <strong>CQRS</strong>-Pattern um → 45% Latenzreduktion, >60% Kosteneinsparungen</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Took the re-architected backend to production for the public <strong>Lace 1.0 go-live</strong></span>
-                                            <span lang="de">Brachte das neu aufgebaute Backend für den öffentlichen <strong>Lace 1.0 Go-Live</strong> in Produktion</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Built custom chain indexer with bloom filters achieving >2,000 tx/s ingest capacity</span>
-                                            <span lang="de">Entwickelte Custom Chain Indexer mit Bloom-Filtern mit >2.000 tx/s Ingest-Kapazität</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Led 7-person cross-functional team delivering MetaDex swap feature integrating Plutus smart contracts</span>
-                                            <span lang="de">Leitete 7-köpfiges cross-funktionales Team bei der Entwicklung des MetaDex Swap Features mit Plutus Smart Contracts</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Authored CIP proposal for wallet indexing standards following <strong>DDD</strong> bounded context principles</span>
-                                            <span lang="de">Verfasste CIP-Vorschlag für Wallet-Indexing-Standards nach <strong>DDD</strong> Bounded-Context-Prinzipien</span>
-                                        </li>
-                                    </ul>
-                                    <div class="role-links">
-                                        <a href="https://github.com/input-output-hk/lace" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-                                            Repository
-                                        </a>
-                                        <a href="https://lace.io/" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                            Website
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Solutions Architect</span>
-                                        <span lang="de">Solutions Architect</span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Nov 2021 - Nov 2022</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Designed blockchain solutions and educated enterprise partners on Cardano architecture</span>
-                                    <span lang="de">Entwarf Blockchain-Lösungen und schulte Enterprise-Partner in Cardano-Architektur</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Designed complete Plutus smart-contract stack for collateralized debt position (CDP) platform</span>
-                                            <span lang="de">Entwarf vollständigen Plutus Smart-Contract Stack für Collateralized Debt Position (CDP) Plattform</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Delivered technical workshops and hands-on training for <strong>100+ Amazon engineers</strong> on distributed systems architecture</span>
-                                            <span lang="de">Führte technische Workshops und Hands-on Training für <strong>100+ Amazon Engineers</strong> zu Distributed Systems Architektur durch</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Created educational content and documentation enabling developer adoption of complex technical concepts</span>
-                                            <span lang="de">Erstellte Educational Content und Dokumentation zur Förderung der Developer Adoption komplexer technischer Konzepte</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div><!-- /company IOG -->
-
-                        <div class="company">
-                            <div class="company-marker">2020</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Mobility Data Lab GmbH</h3>
-                                <span class="company-span">
-                                    <span lang="en">1 yr 9 mo · Berlin, DE · Feb 2020 – Nov 2021</span>
-                                    <span lang="de">1 Jahr, 9 Monate · Berlin, DE · Feb 2020 – Nov 2021</span>
-                                </span>
-                            </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Senior Software Engineer</span>
-                                        <span lang="de">Senior Software Engineer</span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Feb 2020 - Nov 2021</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Built IoT and data processing systems for connected vehicle platform</span>
-                                    <span lang="de">Entwickelte IoT- und Datenverarbeitungssysteme für Connected-Vehicle-Plattform</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Delivered complete over-the-air (OTA) fleet-update pipeline for connected vehicle hardware</span>
-                                            <span lang="de">Lieferte vollständige Over-the-Air (OTA) Flotten-Update-Pipeline für Connected-Vehicle-Hardware</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Built WiFi audience-tracking system using embedded devices (Rust) in vehicles</span>
-                                            <span lang="de">Entwickelte WiFi-Audience-Tracking-System mit Embedded Devices (Rust) in Fahrzeugen</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en"><strong>Go-live</strong> of the pilot with 20+ vehicles for Miles and Share Now car-sharing services</span>
-                                            <span lang="de"><strong>Go-Live</strong> des Piloten mit 20+ Fahrzeugen für Miles und Share Now Carsharing-Services</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Developed real-time ad pricing based on audience measurement (Vert.x, ELK stack)</span>
-                                            <span lang="de">Entwickelte Echtzeit-Werbepreis-Berechnung basierend auf Audience-Messung (Vert.x, ELK Stack)</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div><!-- /company Mobility -->
-
-                        <div class="company">
-                            <div class="company-marker">2016</div>
-                            <div class="company-head">
-                                <h3 class="company-name"><a href="https://www.deloitte.com/global/en/services/consulting/services/systems-delivery-modernization.html" target="_blank">Deloitte US</a></h3>
-                                <span class="company-span">
-                                    <span lang="en">3 yrs 2 mo · Sep 2016 – Nov 2019</span>
-                                    <span lang="de">3 Jahre, 2 Monate · Sep 2016 – Nov 2019</span>
-                                </span>
-                            </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Lead Engineer & Senior Software Engineer</span>
-                                        <span lang="de">Lead Engineer & Senior Software Engineer</span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">2018 - Nov 2019</span>
-                                    <span class="job-location">Ulm, Germany</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Led migration of 16M lines of code, saving €6M annually in licensing costs</span>
-                                    <span lang="de">Leitete Migration von 16M Zeilen Code, sparte €6M jährlich an Lizenzkosten</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Cut annual license costs by €6M for major German insurance company</span>
-                                            <span lang="de">Reduzierte jährliche Lizenzkosten um €6M für großes deutsches Versicherungsunternehmen</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Grew team from 3 → 20 engineers after promotion to lead</span>
-                                            <span lang="de">Vergrößerte Team von 3 → 20 Engineers nach Beförderung zum Lead</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Took the migrated insurance platform to its production <strong>go-live</strong></span>
-                                            <span lang="de">Führte die migrierte Versicherungsplattform zum Produktiv-<strong>Go-Live</strong></span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Achieved >99.9% compatibility through differential testing framework</span>
-                                            <span lang="de">Erreichte >99,9% Kompatibilität durch Differential-Testing-Framework</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Software Engineer</span>
-                                        <span lang="de">Software Engineer</span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Sep 2016 - 2018</span>
-                                    <span class="job-location">Austin, TX</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Built the migration toolchain that moved 16M lines of legacy code to Java</span>
-                                    <span lang="de">Entwickelte die Migrations-Toolchain, die 16M Zeilen Legacy-Code nach Java migrierte</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Architected 3-stage migration toolchain (parser → converter → runtime) for 16M LoC transformation</span>
-                                            <span lang="de">Entwarf 3-stufige Migrations-Toolchain (Parser → Converter → Runtime) für 16M LoC Transformation</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Moved 16M lines of code from a legacy DSL to Java 8</span>
-                                            <span lang="de">Migrierte 16M Zeilen Code von einer Legacy-DSL nach Java 8</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Production <strong>go-live</strong> for a US state pension fund and social security agency</span>
-                                            <span lang="de">Produktiv-<strong>Go-Live</strong> für Pensionsfonds und Sozialversicherung eines US-Bundesstaats</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div><!-- /company Deloitte -->
-
-                        <div class="company">
-                            <div class="company-marker">2015</div>
-                            <div class="company-head">
-                                <h3 class="company-name"><a href="https://cityxcape.com/" target="_blank">CityXcape Inc.</a></h3>
-                                <span class="company-span">
-                                    <span lang="en">1 yr 7 mo · San Francisco, CA · Feb 2015 – Sep 2016</span>
-                                    <span lang="de">1 Jahr, 7 Monate · San Francisco, CA · Feb 2015 – Sep 2016</span>
-                                </span>
-                                <p class="company-alongside">
-                                    <span lang="en">Founded while finishing the M.A. at Hult in San Francisco.</span>
-                                    <span lang="de">Gegründet während des M.A. an der Hult in San Francisco.</span>
-                                </p>
-                            </div>
-
-                        <div class="job role">
-                            <div class="job-header">
-                                <div class="job-title">
-                                    <h3>
-                                        <span lang="en">Co-Founder & CTO</span>
-                                        <span lang="de">Co-Founder & CTO</span>
-                                    </h3>
-                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </div>
-                                <div class="job-meta">
-                                    <span class="job-date">Feb 2015 - Sep 2016</span>
-                                </div>
-                                <p class="job-summary">
-                                    <span lang="en">Co-founded social discovery platform, raised €150k seed funding</span>
-                                    <span lang="de">Co-gründete Social-Discovery-Plattform, sammelte €150k Seed-Funding</span>
-                                </p>
-                            </div>
-                            <div class="job-content">
-                                <div class="job-content-inner">
-                                    <ul>
-                                        <li>
-                                            <span lang="en">Co-founded social discovery platform for exploring cities through community recommendations</span>
-                                            <span lang="de">Co-gründete Social-Discovery-Plattform zum Erkunden von Städten durch Community-Empfehlungen</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Raised ~€150k in seed funding from angel investors</span>
-                                            <span lang="de">Sammelte ~€150k Seed-Funding von Angel-Investoren</span>
-                                        </li>
-                                        <li>
-                                            <span lang="en">Built iOS native app (Swift) and Django/Ruby on Rails backend from concept to App Store launch</span>
-                                            <span lang="de">Entwickelte iOS Native App (Swift) und Django/Ruby on Rails Backend vom Konzept bis zum App Store Launch</span>
-                                        </li>
-                                    </ul>
-                                    <div class="role-links">
-                                        <a href="https://cityxcape.com/" target="_blank" rel="noopener" class="role-link">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                            Website
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        </div><!-- /company CityXcape -->
-
-                        <div class="company milestone">
-                            <div class="company-marker">2014</div>
-                            <div class="company-head">
-                                <h3 class="company-name">Hult International Business School</h3>
-                                <span class="company-span">
-                                    <span lang="en">M.A. International Business · San Francisco, CA · 2014 – 2015</span>
-                                    <span lang="de">M.A. International Business · San Francisco, CA · 2014 – 2015</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="company milestone">
-                            <div class="company-marker">2011</div>
-                            <div class="company-head">
-                                <h3 class="company-name">DHBW Stuttgart</h3>
-                                <span class="company-span">
-                                    <span lang="en">B.Sc. Computer Science · Germany · 2011 – 2014</span>
-                                    <span lang="de">B.Sc. Informatik · Deutschland · 2011 – 2014</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        </div><!-- /timeline -->
             </section>
 
             <section id="projects" aria-labelledby="projects-title">
@@ -1914,7 +1444,7 @@
                                 <span class="tech-tag tech-tag--oss">Open Source</span>
                             </div>
                         </div>
-                        <p class="project-description">Technical architect for a Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, and on-chain registered topics. Leading a team through formal verification of the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank" rel="noopener">SecureCyclon</a> peer-sampling protocol stack, and building the working prototype.</p>
+                        <p class="project-description">Technical architect for a Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, and on-chain registered topics. Led a team through formal verification of the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank" rel="noopener">SecureCyclon</a> peer-sampling protocol stack and built the working prototype.</p>
                     </div>
                         <div class="project-card" id="p-ouroboros-leios" data-tags="blockchain,architecture">
                         <div class="project-logo">
@@ -2434,6 +1964,519 @@
                     </div>
             </section>
 
+            <section id="experience" aria-labelledby="experience-title">
+                <div class="section-head">
+                    <p class="section-kicker"><span lang="en">Timeline</span><span lang="de">Zeitachse</span></p>
+                    <h2 id="experience-title"><span lang="en">Where I have worked</span><span lang="de">Wo ich gearbeitet habe</span></h2>
+                </div>
+                <div class="timeline">
+
+                        <!-- Education sits on the rail as milestones, so it needs no section of its own. -->
+
+
+
+
+
+
+
+                        <div class="company present">
+                            <div class="company-marker">2021</div>
+                            <div class="company-head">
+                                <h3 class="company-name"><a href="https://www.iog.io/" target="_blank">Input Output Global (IOG)</a></h3>
+                                <span class="company-span">
+                                    <span lang="en">4 yrs 11 mo · Remote · Contract · Nov 2021 – Present</span>
+                                    <span lang="de">4 Jahre, 11 Monate · Remote · Auf Vertragsbasis · Nov 2021 – Heute</span>
+                                </span>
+                                <div class="company-ships">
+                                    <a class="ship-chip" href="#p-ouroboros-leios">leios</a>
+                                    <a class="ship-chip" href="#p-pubsub">pubsub</a>
+                                    <a class="ship-chip" href="#p-leios-mempool-simulation">mempool sim</a>
+                                    <a class="ship-chip" href="#p-lace-architecture">lace architecture</a>
+                                    <a class="ship-chip" href="#p-dolos">dolos</a>
+                                    <a class="ship-chip" href="#p-scrolls">scrolls</a>
+                                    <a class="ship-chip" href="#p-lucid">lucid</a>
+                                    <a class="ship-chip" href="#p-dex-order-serialization-library">dex serialization</a>
+                                </div>
+                                <p class="company-alongside">
+                                    <span lang="en">Alongside, on my own time: <a href="#p-berlin-pool">Berlin Pool</a>, <a href="#p-drip-dropz">Drip Dropz</a>, <a href="#p-dump-it">Dump it!</a>, <a href="#p-pagebase">Pagebase</a>, <a href="#p-hausnummer">Hausnummer</a>, <a href="#p-operando">Operando</a> and five client sites. CIP-0164 published 2025.</span>
+                                    <span lang="de">Nebenbei, in eigener Zeit: <a href="#p-berlin-pool">Berlin Pool</a>, <a href="#p-drip-dropz">Drip Dropz</a>, <a href="#p-dump-it">Dump it!</a>, <a href="#p-pagebase">Pagebase</a>, <a href="#p-hausnummer">Hausnummer</a>, <a href="#p-operando">Operando</a> und fünf Kundenseiten. CIP-0164 veröffentlicht 2025.</span>
+                                </p>
+                            </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Software Engineer &amp; Architect – <a href="http://leios.cardano-scaling.org/" target="_blank">Ouroboros Leios</a></span>
+                                        <span lang="de">Software Engineer &amp; Architekt – <a href="http://leios.cardano-scaling.org/" target="_blank">Ouroboros Leios</a></span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Oct 2026 - Present</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Back on Leios, building Cardano's high-throughput protocol towards mainnet</span>
+                                    <span lang="de">Zurück bei Leios, Arbeit am Hochdurchsatz-Protokoll für Cardano auf dem Weg ins Mainnet</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <div class="role-links">
+                                        <a href="https://github.com/input-output-hk/ouroboros-leios" target="_blank" rel="noopener" class="role-link">Repository</a>
+                                        <a href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener" class="role-link">Website</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Technical Architect – Byzantine-Resistant PubSub Network</span>
+                                        <span lang="de">Technischer Architekt – Byzantine-Resistant PubSub Network</span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Feb 2026 - Oct 2026</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Led R&D for a Byzantine-resistant pub/sub network, from formal verification to a working prototype</span>
+                                    <span lang="de">Leitete R&D für ein Byzantine-resistentes Pub/Sub-Netzwerk, von formaler Verifikation bis zum funktionsfähigen Prototyp</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Led a team of 4 engineers & researchers designing a Byzantine-resistant pub/sub overlay network</span>
+                                            <span lang="de">Leitete ein Team von 4 Ingenieuren & Forschern beim Entwurf eines Byzantine-resistenten Pub/Sub-Overlay-Netzwerks</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Took the team through formal verification of the <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> peer-sampling protocol stack and built the working prototype via spec-driven development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
+                                            <span lang="de">Führte das Team durch die formale Verifikation des <a href="https://www.iog.io/papers/securecyclon-dependable-peer-sampling" target="_blank">SecureCyclon</a> Peer-Sampling-Protokoll-Stacks und entwickelte den funktionsfähigen Prototyp mittels Spec-Driven Development (<a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Reevaluated peer-sampling protocols for specific security properties</span>
+                                            <span lang="de">Neubewertung von Peer-Sampling-Protokollen hinsichtlich spezifischer Sicherheitseigenschaften</span>
+                                        </li>
+                                    </ul>
+                                    <div class="role-links">
+                                        <a href="https://github.com/input-output-hk/cardano-pubsub" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                                            Repository
+                                        </a>
+                                        <a href="https://pubsub.cardano-scaling.org/" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                            Website
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Technical Architect – <a href="http://leios.cardano-scaling.org/" target="_blank">Ouroboros Leios</a></span>
+                                        <span lang="de">Technischer Architekt – <a href="http://leios.cardano-scaling.org/" target="_blank">Ouroboros Leios</a></span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Nov 2024 - Feb 2026</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Led R&D for Ouroboros Leios, a high-throughput protocol for Cardano blockchain</span>
+                                    <span lang="de">Leitete R&D für Ouroboros Leios, ein Hochdurchsatz-Protokoll für die Cardano Blockchain</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Direct team of 8 researchers & engineers exploring high-throughput overlay protocol</span>
+                                            <span lang="de">Leite Team von 8 Forschern & Engineers bei der Erforschung eines Hochdurchsatz-Overlay-Protokolls</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Authored comprehensive <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164</a> specification and architecture documentation</span>
+                                            <span lang="de">Verfasste umfassende <a href="https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md" target="_blank">CIP-0164</a> Spezifikation und Architekturdokumentation</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Hosted monthly public demo and review sessions on YouTube (<strong>~5k views per session</strong>, sustained over 1.5 years) with live Q&A, translating complex research into accessible developer content</span>
+                                            <span lang="de">Veranstaltete monatliche öffentliche Demo- und Review-Sessions auf YouTube (<strong>~5k Aufrufe pro Session</strong>, über 1,5 Jahre) mit Live Q&A, übersetzte komplexe Forschung in zugänglichen Developer Content</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Organized week-long technical workshop bringing together researchers, engineers, and community members</span>
+                                            <span lang="de">Organisierte einwöchigen technischen Workshop mit Forschern, Engineers und Community-Mitgliedern</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Technical point of contact for the project, presenting progress and findings in large internal reviews and publicly at <a href="http://leios.cardano-scaling.org/" target="_blank">leios.cardano-scaling.org</a></span>
+                                            <span lang="de">Technischer Ansprechpartner des Projekts, präsentiere Fortschritte und Ergebnisse in großen internen Reviews und öffentlich unter <a href="http://leios.cardano-scaling.org/" target="_blank">leios.cardano-scaling.org</a></span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Investigated <a href="https://ethereum.org/en/developers/docs/mev/" target="_blank">MEV</a> (Miner Extractable Value) impact on Leios via <a href="https://leios.cardano-scaling.org/mempool-viz/" target="_blank">mempool analysis and simulation</a></span>
+                                            <span lang="de">Untersuchte <a href="https://ethereum.org/en/developers/docs/mev/" target="_blank">MEV</a>-Auswirkungen (Miner Extractable Value) auf Leios mittels <a href="https://leios.cardano-scaling.org/mempool-viz/" target="_blank">Mempool-Analyse und -Simulation</a></span>
+                                        </li>
+                                    </ul>
+                                    <div class="role-links">
+                                        <a href="https://github.com/input-output-hk/ouroboros-leios" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                                            Repository
+                                        </a>
+                                        <a href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                            Website
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Technical Architect – <a href="https://www.lace.io/" target="_blank">Lace Wallet</a></span>
+                                        <span lang="de">Technischer Architekt – <a href="https://www.lace.io/" target="_blank">Lace Wallet</a></span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Nov 2022 - Nov 2024</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Led technical architecture for Lace with Event-Driven Architecture, delivering 45% performance improvement</span>
+                                    <span lang="de">Leitete technische Architektur für Lace mit Event-Driven Architecture, erreichte 45% Leistungsverbesserung</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Re-engineered wallet backend to <strong>event-driven architecture</strong> with <strong>CQRS</strong> pattern → 45% latency reduction, >60% cost savings</span>
+                                            <span lang="de">Entwickelte Wallet-Backend zu <strong>event-driven architecture</strong> mit <strong>CQRS</strong>-Pattern um → 45% Latenzreduktion, >60% Kosteneinsparungen</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Took the re-architected backend to production for the public <strong>Lace 1.0 go-live</strong></span>
+                                            <span lang="de">Brachte das neu aufgebaute Backend für den öffentlichen <strong>Lace 1.0 Go-Live</strong> in Produktion</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Built custom chain indexer with bloom filters achieving >2,000 tx/s ingest capacity</span>
+                                            <span lang="de">Entwickelte Custom Chain Indexer mit Bloom-Filtern mit >2.000 tx/s Ingest-Kapazität</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Led 7-person cross-functional team delivering MetaDex swap feature integrating Plutus smart contracts</span>
+                                            <span lang="de">Leitete 7-köpfiges cross-funktionales Team bei der Entwicklung des MetaDex Swap Features mit Plutus Smart Contracts</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Authored CIP proposal for wallet indexing standards following <strong>DDD</strong> bounded context principles</span>
+                                            <span lang="de">Verfasste CIP-Vorschlag für Wallet-Indexing-Standards nach <strong>DDD</strong> Bounded-Context-Prinzipien</span>
+                                        </li>
+                                    </ul>
+                                    <div class="role-links">
+                                        <a href="https://github.com/input-output-hk/lace" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                                            Repository
+                                        </a>
+                                        <a href="https://lace.io/" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                            Website
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Solutions Architect</span>
+                                        <span lang="de">Solutions Architect</span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Nov 2021 - Nov 2022</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Designed blockchain solutions and educated enterprise partners on Cardano architecture</span>
+                                    <span lang="de">Entwarf Blockchain-Lösungen und schulte Enterprise-Partner in Cardano-Architektur</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Designed complete Plutus smart-contract stack for collateralized debt position (CDP) platform</span>
+                                            <span lang="de">Entwarf vollständigen Plutus Smart-Contract Stack für Collateralized Debt Position (CDP) Plattform</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Delivered technical workshops and hands-on training for <strong>100+ Amazon engineers</strong> on distributed systems architecture</span>
+                                            <span lang="de">Führte technische Workshops und Hands-on Training für <strong>100+ Amazon Engineers</strong> zu Distributed Systems Architektur durch</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Created educational content and documentation enabling developer adoption of complex technical concepts</span>
+                                            <span lang="de">Erstellte Educational Content und Dokumentation zur Förderung der Developer Adoption komplexer technischer Konzepte</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div><!-- /company IOG -->
+
+                        <div class="company">
+                            <div class="company-marker">2020</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Mobility Data Lab GmbH</h3>
+                                <span class="company-span">
+                                    <span lang="en">1 yr 9 mo · Berlin, DE · Feb 2020 – Nov 2021</span>
+                                    <span lang="de">1 Jahr, 9 Monate · Berlin, DE · Feb 2020 – Nov 2021</span>
+                                </span>
+                            </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Senior Software Engineer</span>
+                                        <span lang="de">Senior Software Engineer</span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Feb 2020 - Nov 2021</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Built IoT and data processing systems for connected vehicle platform</span>
+                                    <span lang="de">Entwickelte IoT- und Datenverarbeitungssysteme für Connected-Vehicle-Plattform</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Delivered complete over-the-air (OTA) fleet-update pipeline for connected vehicle hardware</span>
+                                            <span lang="de">Lieferte vollständige Over-the-Air (OTA) Flotten-Update-Pipeline für Connected-Vehicle-Hardware</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Built WiFi audience-tracking system using embedded devices (Rust) in vehicles</span>
+                                            <span lang="de">Entwickelte WiFi-Audience-Tracking-System mit Embedded Devices (Rust) in Fahrzeugen</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en"><strong>Go-live</strong> of the pilot with 20+ vehicles for Miles and Share Now car-sharing services</span>
+                                            <span lang="de"><strong>Go-Live</strong> des Piloten mit 20+ Fahrzeugen für Miles und Share Now Carsharing-Services</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Developed real-time ad pricing based on audience measurement (Vert.x, ELK stack)</span>
+                                            <span lang="de">Entwickelte Echtzeit-Werbepreis-Berechnung basierend auf Audience-Messung (Vert.x, ELK Stack)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div><!-- /company Mobility -->
+
+                        <div class="company">
+                            <div class="company-marker">2016</div>
+                            <div class="company-head">
+                                <h3 class="company-name"><a href="https://www.deloitte.com/global/en/services/consulting/services/systems-delivery-modernization.html" target="_blank">Deloitte US</a></h3>
+                                <span class="company-span">
+                                    <span lang="en">3 yrs 2 mo · Sep 2016 – Nov 2019</span>
+                                    <span lang="de">3 Jahre, 2 Monate · Sep 2016 – Nov 2019</span>
+                                </span>
+                            </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Lead Engineer & Senior Software Engineer</span>
+                                        <span lang="de">Lead Engineer & Senior Software Engineer</span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">2018 - Nov 2019</span>
+                                    <span class="job-location">Ulm, Germany</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Led migration of 16M lines of code, saving €6M annually in licensing costs</span>
+                                    <span lang="de">Leitete Migration von 16M Zeilen Code, sparte €6M jährlich an Lizenzkosten</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Cut annual license costs by €6M for major German insurance company</span>
+                                            <span lang="de">Reduzierte jährliche Lizenzkosten um €6M für großes deutsches Versicherungsunternehmen</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Grew team from 3 → 20 engineers after promotion to lead</span>
+                                            <span lang="de">Vergrößerte Team von 3 → 20 Engineers nach Beförderung zum Lead</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Took the migrated insurance platform to its production <strong>go-live</strong></span>
+                                            <span lang="de">Führte die migrierte Versicherungsplattform zum Produktiv-<strong>Go-Live</strong></span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Achieved >99.9% compatibility through differential testing framework</span>
+                                            <span lang="de">Erreichte >99,9% Kompatibilität durch Differential-Testing-Framework</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Software Engineer</span>
+                                        <span lang="de">Software Engineer</span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Sep 2016 - 2018</span>
+                                    <span class="job-location">Austin, TX</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Built the migration toolchain that moved 16M lines of legacy code to Java</span>
+                                    <span lang="de">Entwickelte die Migrations-Toolchain, die 16M Zeilen Legacy-Code nach Java migrierte</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Architected 3-stage migration toolchain (parser → converter → runtime) for 16M LoC transformation</span>
+                                            <span lang="de">Entwarf 3-stufige Migrations-Toolchain (Parser → Converter → Runtime) für 16M LoC Transformation</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Moved 16M lines of code from a legacy DSL to Java 8</span>
+                                            <span lang="de">Migrierte 16M Zeilen Code von einer Legacy-DSL nach Java 8</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Production <strong>go-live</strong> for a US state pension fund and social security agency</span>
+                                            <span lang="de">Produktiv-<strong>Go-Live</strong> für Pensionsfonds und Sozialversicherung eines US-Bundesstaats</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div><!-- /company Deloitte -->
+
+                        <div class="company">
+                            <div class="company-marker">2015</div>
+                            <div class="company-head">
+                                <h3 class="company-name"><a href="https://cityxcape.com/" target="_blank">CityXcape Inc.</a></h3>
+                                <span class="company-span">
+                                    <span lang="en">1 yr 7 mo · San Francisco, CA · Feb 2015 – Sep 2016</span>
+                                    <span lang="de">1 Jahr, 7 Monate · San Francisco, CA · Feb 2015 – Sep 2016</span>
+                                </span>
+                                <p class="company-alongside">
+                                    <span lang="en">Founded while finishing the M.A. at Hult in San Francisco.</span>
+                                    <span lang="de">Gegründet während des M.A. an der Hult in San Francisco.</span>
+                                </p>
+                            </div>
+
+                        <div class="job role">
+                            <div class="job-header">
+                                <div class="job-title">
+                                    <h3>
+                                        <span lang="en">Co-Founder & CTO</span>
+                                        <span lang="de">Co-Founder & CTO</span>
+                                    </h3>
+                                    <svg class="job-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="job-meta">
+                                    <span class="job-date">Feb 2015 - Sep 2016</span>
+                                </div>
+                                <p class="job-summary">
+                                    <span lang="en">Co-founded social discovery platform, raised €150k seed funding</span>
+                                    <span lang="de">Co-gründete Social-Discovery-Plattform, sammelte €150k Seed-Funding</span>
+                                </p>
+                            </div>
+                            <div class="job-content">
+                                <div class="job-content-inner">
+                                    <ul>
+                                        <li>
+                                            <span lang="en">Co-founded social discovery platform for exploring cities through community recommendations</span>
+                                            <span lang="de">Co-gründete Social-Discovery-Plattform zum Erkunden von Städten durch Community-Empfehlungen</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Raised ~€150k in seed funding from angel investors</span>
+                                            <span lang="de">Sammelte ~€150k Seed-Funding von Angel-Investoren</span>
+                                        </li>
+                                        <li>
+                                            <span lang="en">Built iOS native app (Swift) and Django/Ruby on Rails backend from concept to App Store launch</span>
+                                            <span lang="de">Entwickelte iOS Native App (Swift) und Django/Ruby on Rails Backend vom Konzept bis zum App Store Launch</span>
+                                        </li>
+                                    </ul>
+                                    <div class="role-links">
+                                        <a href="https://cityxcape.com/" target="_blank" rel="noopener" class="role-link">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                            Website
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div><!-- /company CityXcape -->
+
+                        <div class="company milestone">
+                            <div class="company-marker">2014</div>
+                            <div class="company-head">
+                                <h3 class="company-name">Hult International Business School</h3>
+                                <span class="company-span">
+                                    <span lang="en">M.A. International Business · San Francisco, CA · 2014 – 2015</span>
+                                    <span lang="de">M.A. International Business · San Francisco, CA · 2014 – 2015</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="company milestone">
+                            <div class="company-marker">2011</div>
+                            <div class="company-head">
+                                <h3 class="company-name">DHBW Stuttgart</h3>
+                                <span class="company-span">
+                                    <span lang="en">B.Sc. Computer Science · Germany · 2011 – 2014</span>
+                                    <span lang="de">B.Sc. Informatik · Deutschland · 2011 – 2014</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        </div><!-- /timeline -->
+            </section>
+
             <section id="technologies" aria-labelledby="tech-title">
                 <div class="section-head">
                     <p class="section-kicker"><span lang="en">Stack</span><span lang="de">Stack</span></p>
@@ -2859,8 +2902,30 @@
                         ? `${fmt(window12.total)} GitHub-Beiträge in den letzten 12 Monaten`
                         : `${fmt(window12.total)} GitHub contributions in the last 12 months`);
                     grid.innerHTML = days.map((d, i) =>
-                        `<i data-level="${level(d.total)}" style="--i:${Math.floor(i / 7)}"` +
-                        ` title="${d.date}: ${fmt(d.total)}"></i>`).join('');
+                        `<i data-level="${level(d.total)}" data-i="${i}" style="--i:${Math.floor(i / 7)}"></i>`).join('');
+
+                    // Hover (or tap) a day for its count, the way GitHub does.
+                    const tip = panel.querySelector('[data-activity="tip"]');
+                    const dayFmt = new Intl.DateTimeFormat(de ? 'de-DE' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+                    const showTip = cell => {
+                        const d = days[+cell.dataset.i];
+                        const when = dayFmt.format(new Date(d.date + 'T00:00:00Z'));
+                        const n = d.total;
+                        tip.textContent = de
+                            ? `${n ? fmt(n) : 'Keine'} ${n === 1 ? 'Beitrag' : 'Beiträge'} am ${when}`
+                            : `${n ? fmt(n) : 'No'} contribution${n === 1 ? '' : 's'} on ${when}`;
+                        tip.hidden = false;
+                        const host = tip.parentElement.getBoundingClientRect();
+                        const r = cell.getBoundingClientRect();
+                        const x = r.left - host.left + tip.parentElement.scrollLeft + r.width / 2;
+                        const half = tip.offsetWidth / 2;
+                        const max = tip.parentElement.scrollWidth - half;
+                        tip.style.left = `${Math.min(Math.max(x, half), max)}px`;
+                        tip.style.top = `${r.top - host.top - 6}px`;
+                    };
+                    grid.addEventListener('mouseover', e => { if (e.target.matches('i')) showTip(e.target); });
+                    grid.addEventListener('click', e => { if (e.target.matches('i')) showTip(e.target); });
+                    grid.addEventListener('mouseleave', () => { tip.hidden = true; });
                     const monthNames = Array.from({ length: 12 }, (_, m) =>
                         new Date(Date.UTC(2020, m, 1)).toLocaleString(de ? 'de-DE' : 'en-US', { month: 'short', timeZone: 'UTC' }));
                     const months = panel.querySelector('[data-activity="months"]');
