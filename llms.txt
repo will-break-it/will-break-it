@@ -118,10 +118,17 @@ Delivered client sites: https://ugc.astridmunkwitz.de/ (UGC creator), https://un
 
 Typical stack: Astro, TypeScript, Tailwind, Supabase, PostgreSQL, Cloudflare Workers, React Native.
 
-## Availability
+## How to work with him
 
-Open to technical architect roles and selected contract work. Based in Berlin, works remote.
-Commercial web and product work goes through Pagebase (https://pagebase.dev).
+- **What:** freelance software engineering and architecture: AI agents and automation,
+  blockchain and distributed systems, web and mobile. Delivery is scaled with AI agents and
+  every result is reviewed by him before it ships.
+- **Rate:** 90 EUR per hour, billed as a freelancer on a contract basis.
+- **Availability:** currently on contract with IOG (Ouroboros Leios); open to selected
+  additional contract work. Based in Berlin, works remote, German or English.
+- **Websites and small products:** fixed-price packages go through Pagebase (https://pagebase.dev).
+- **How to start:** email wolff.willi+cv@gmail.com with what you need, the timeline and the
+  budget. A person reads and answers every request; there is no automated booking.
 
 ## Links
 
