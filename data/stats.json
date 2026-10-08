@@ -1,5 +1,5 @@
 {
-  "_note": "Hand-maintained figures for proof-of-work mode. Nothing generates this file. The project counts at the top of the page are DERIVED from the list below, so add or move an entry here and the numbers, the filter chips and the card badges all follow. Every 'card' must match an id in index.html. Statuses: live (still running and mine), handed-over (still running, maintained by someone else now), failed (needs year + why), upstream (a library or extension built into someone else's project), archived (experiment, not maintained). handed-over and failed both need year + why. Only live counts as live and only failed counts as failed; everything counts as built.",
+  "_note": "Hand-maintained figures for the track-record section. Nothing generates this file. The project counts at the top of the page are DERIVED from the list below, so add or move an entry here and the numbers, the filter chips and the card badges all follow. Every 'card' must match an id in index.html. Statuses: live (still running and mine), handed-over (still running, maintained by someone else now), failed (needs year + why), upstream (a library or extension built into someone else's project), archived (experiment, not maintained). handed-over and failed both need year + why. Only live counts as live and only failed counts as failed; everything counts as a project. Optional metric {en, de} is a headline figure shown after the status. Set building: true on anything currently in progress; it feeds the In progress count and filter.",
   "codingSince": 2008,
   "since": 2015,
   "career": {
@@ -11,32 +11,18 @@
   "context": {
     "publishedCips": 1
   },
-  "_stack": "Hand-maintained weighting across the whole career, NOT measured from GitHub. GitHub only sees code pushed to GitHub, so it misses the Deloitte Java entirely and undercounts the mobile work. Adjust these freely; they are an estimate and the page says so.",
-  "stack": [
-    { "name": "TypeScript", "share": 28 },
-    { "name": "Java", "share": 12 },
-    { "name": "Swift", "share": 10 },
-    { "name": "React / React Native", "share": 9 },
-    { "name": "Kotlin", "share": 8 },
-    { "name": "Rust", "share": 8 },
-    { "name": "Plutus / Haskell", "share": 7 },
-    { "name": "Python", "share": 6 },
-    { "name": "Agda", "share": 4 },
-    { "name": "Dart / Flutter", "share": 4 },
-    { "name": "Astro", "share": 4 }
-  ],
   "projects": [
     { "card": "p-pubsub", "status": "live" },
-    { "card": "p-ouroboros-leios", "status": "live" },
+    { "card": "p-ouroboros-leios", "status": "live", "building": true },
     { "card": "p-lace-architecture", "status": "live" },
     { "card": "p-leios-mempool-simulation", "status": "live" },
-    { "card": "p-hausnummer", "status": "live" },
+    { "card": "p-alwayssandy", "status": "live", "building": true, "metric": {"en": "40,000+ player profiles and growing", "de": "Über 40.000 Spielerprofile, Tendenz steigend"} },
+    { "card": "p-hausnummer", "status": "live", "metric": {"en": "1,000+ listings analysed", "de": "Über 1.000 analysierte Inserate"} },
     { "card": "p-pagebase", "status": "live" },
-    { "card": "p-operando", "status": "live" },
-    { "card": "p-underwater-journeys", "status": "live" },
+    { "card": "p-operando", "status": "live", "metric": {"en": "in production since Sep 2026", "de": "produktiv seit Sep. 2026"} },
+    { "card": "p-underwater-journeys", "status": "live", "metric": {"en": "Dozens of new bookings · 150k+ impressions in six months", "de": "Dutzende neue Buchungen · 150.000+ Impressionen in sechs Monaten"} },
     { "card": "p-iramodel", "status": "live" },
     { "card": "p-ugc-creator", "status": "live" },
-    { "card": "p-tokenriot", "status": "archived" },
 
     {
       "card": "p-drip-dropz",
@@ -59,6 +45,7 @@
       "year": 2024,
       "why": { "en": "stopped paying for itself", "de": "trug sich nicht mehr selbst" }
     },
+    { "card": "p-tokenriot", "status": "failed", "year": 2024 },
 
     { "card": "p-dolos", "status": "upstream" },
     { "card": "p-lucid", "status": "upstream" },
