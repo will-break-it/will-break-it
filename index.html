@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<!-- data-lang and data-theme carry static defaults so a visitor without JS
-     gets one language and one theme. The head script overrides both before
-     first paint. -->
-<html lang="en" data-lang="en" data-theme="light">
+<!-- data-lang carries a static default so a visitor without JS gets one
+     language. The head script overrides it before first paint. -->
+<html lang="en" data-lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,12 +41,11 @@
     <meta name="twitter:creator" content="@will_break_it">
 
     <!-- Additional Meta Tags -->
-    <meta name="theme-color" content="#09090b">
-    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="color-scheme" content="light">
 
     <!-- Favicons -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" media="(prefers-color-scheme: dark)">
-    <link rel="icon" type="image/svg+xml" href="favicon-light.svg" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
     <!-- Structured Data / JSON-LD -->
@@ -263,7 +261,7 @@
     </script>
     <style>
         /* ===================================================================
-           One design, one palette.
+           One design, one bright palette.
            -------------------------------------------------------------------
            Every colour on the page comes from the tokens below; nothing else in
            this sheet names a hex value. Teal is the brand colour because it is
@@ -290,17 +288,12 @@
             /* Second colour, used sparingly: failures and warnings only. */
             --signal: #c2410c;
 
-            --heat-1: rgba(13, 148, 136, 0.18);
-            --heat-2: rgba(13, 148, 136, 0.38);
-            --heat-3: rgba(13, 148, 136, 0.62);
-            --heat-4: rgba(13, 148, 136, 0.9);
 
             --shadow: 0 1px 2px rgba(11, 22, 34, 0.04), 0 8px 24px rgba(11, 22, 34, 0.06);
-            --radius: 12px;
-            --radius-sm: 8px;
+            --radius: 16px;
+            --radius-sm: 10px;
 
             --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            --font-mono: "SF Mono", ui-monospace, Menlo, Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
 
             --header-h: 64px;
             --gutter: clamp(1rem, 3vw, 2.5rem);
@@ -312,32 +305,6 @@
             --s-6: 2rem;
             --s-7: 3rem;
             --s-8: 4.5rem;
-        }
-
-        [data-theme="dark"] {
-            --bg: #0b1016;
-            --surface: #111821;
-            --surface-2: #17202b;
-            --border: #1f2a36;
-            --border-strong: #2c3a49;
-            --ink: #f1f5f9;
-            --text: #d3dbe4;
-            --muted: #94a3b4;
-            --faint: #66768a;
-
-            --brand: #2dd4bf;
-            --brand-strong: #5eead4;
-            --brand-ink: #04221f;
-            --brand-soft: rgba(45, 212, 191, 0.1);
-            --brand-line: rgba(45, 212, 191, 0.4);
-            --signal: #fb923c;
-
-            --heat-1: rgba(45, 212, 191, 0.2);
-            --heat-2: rgba(45, 212, 191, 0.4);
-            --heat-3: rgba(45, 212, 191, 0.65);
-            --heat-4: rgba(45, 212, 191, 0.92);
-
-            --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.35);
         }
 
         /* --- base --------------------------------------------------------- */
@@ -364,7 +331,6 @@
 
         a { color: var(--brand-strong); text-decoration: none; }
         a:hover { text-decoration: underline; text-underline-offset: 3px; }
-        [data-theme="dark"] a { color: var(--brand); }
 
         h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.015em; }
 
@@ -399,7 +365,6 @@
             white-space: nowrap;
         }
         .logo:hover { text-decoration: none; }
-        [data-theme="dark"] .logo { color: var(--ink); }
 
         .site-nav { display: flex; gap: var(--s-1); }
         .site-nav a {
@@ -438,17 +403,14 @@
         .icon-btn:hover { color: var(--ink); background: var(--surface); }
         .icon-btn svg { width: 18px; height: 18px; }
 
-        .theme-toggle .moon-icon { display: none; }
-        [data-theme="dark"] .theme-toggle .sun-icon { display: none; }
-        [data-theme="dark"] .theme-toggle .moon-icon { display: block; }
 
         .btn {
             display: inline-flex;
             align-items: center;
             gap: var(--s-2);
             height: 40px;
-            padding: 0 1rem;
-            border-radius: var(--radius-sm);
+            padding: 0 1.1rem;
+            border-radius: 999px;
             border: 1px solid var(--border-strong);
             background: var(--bg);
             color: var(--ink);
@@ -458,11 +420,9 @@
             transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
         }
         .btn:hover { text-decoration: none; border-color: var(--ink); }
-        [data-theme="dark"] .btn { color: var(--ink); }
         .btn svg { width: 16px; height: 16px; flex: none; }
 
-        .btn-primary,
-        [data-theme="dark"] .btn-primary {
+        .btn-primary {
             background: var(--brand);
             border-color: var(--brand);
             color: var(--brand-ink);
@@ -481,8 +441,10 @@
             padding: var(--s-7) var(--gutter) var(--s-6);
             border-bottom: 1px solid var(--border);
             background:
-                radial-gradient(1200px 400px at 0% 0%, var(--brand-soft), transparent 60%),
-                var(--bg);
+                radial-gradient(700px 360px at 0% 0%, rgba(13, 148, 136, 0.12), transparent 70%),
+                radial-gradient(600px 320px at 100% 100%, rgba(56, 189, 248, 0.12), transparent 70%),
+                radial-gradient(500px 260px at 90% 10%, rgba(251, 191, 36, 0.10), transparent 70%),
+                var(--surface);
         }
 
         .content {
@@ -522,8 +484,8 @@
         }
 
         .profile-image {
-            width: 64px;
-            height: 64px;
+            width: 76px;
+            height: 76px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--bg);
@@ -582,7 +544,6 @@
             border-radius: var(--radius-sm);
             color: var(--muted);
         }
-        [data-theme="dark"] .social-link { color: var(--muted); }
         .social-link:hover { color: var(--ink); background: var(--surface); }
         .social-link svg { width: 18px; height: 18px; fill: currentColor; }
 
@@ -609,14 +570,12 @@
             display: inline-flex;
             align-items: center;
             gap: var(--s-2);
-            font-family: var(--font-mono);
             font-size: 0.72rem;
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--brand-strong);
         }
-        [data-theme="dark"] .now-label { color: var(--brand); }
 
         .now-pulse {
             width: 8px;
@@ -633,7 +592,6 @@
         }
 
         .now-push {
-            font-family: var(--font-mono);
             font-size: 0.7rem;
             color: var(--faint);
         }
@@ -671,14 +629,12 @@
         .section-head { margin-bottom: var(--s-5); }
 
         .section-kicker {
-            font-family: var(--font-mono);
             font-size: 0.72rem;
             font-weight: 600;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--brand-strong);
         }
-        [data-theme="dark"] .section-kicker { color: var(--brand); }
 
         .section-head h2 {
             margin-top: var(--s-1);
@@ -693,7 +649,7 @@
             color: var(--muted);
         }
 
-        /* --- numbers + heatmap -------------------------------------------- */
+        /* --- numbers ------------------------------------------------------ */
         .now-groups {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -709,10 +665,9 @@
 
         .now-group-label {
             display: block;
-            font-family: var(--font-mono);
             font-size: 0.7rem;
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--faint);
         }
@@ -755,95 +710,11 @@
             color: var(--muted);
         }
 
-        #activity { margin-top: var(--s-4); }
-
-        .heat {
-            padding: var(--s-4) var(--s-5);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .heat-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--s-3);
-            flex-wrap: wrap;
-            margin-bottom: var(--s-3);
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--muted);
-        }
-
-        .heat-legend { display: flex; align-items: center; gap: 3px; color: var(--faint); }
-
-        .heat-band {
-            display: grid;
-            grid-auto-flow: column;
-            grid-template-rows: repeat(7, 1fr);
-            gap: 2px;
-            width: 100%;
-        }
-
-        .heat-cell {
-            aspect-ratio: 1 / 1;
-            min-width: 0;
-            border-radius: 2px;
-            background: var(--surface-2);
-        }
-        .heat-cell[data-level="1"] { background: var(--heat-1); }
-        .heat-cell[data-level="2"] { background: var(--heat-2); }
-        .heat-cell[data-level="3"] { background: var(--heat-3); }
-        .heat-cell[data-level="4"] { background: var(--heat-4); }
-
-        .heat-key { width: 10px; height: 10px; border-radius: 2px; background: var(--surface-2); }
-
-        .heat-band[data-readout] .heat-cell { cursor: pointer; }
-        .heat-cell.is-probed { outline: 1px solid var(--ink); outline-offset: 1px; }
-
-        .heat-axis {
-            display: flex;
-            margin-top: 4px;
-            font-family: var(--font-mono);
-            font-size: 0.56rem;
-            color: var(--faint);
-        }
-        .heat-axis span {
-            border-left: 1px solid var(--border);
-            padding-left: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .heat-foot {
+        .activity-line {
             margin-top: var(--s-3);
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             color: var(--muted);
         }
-
-        .heat-tip {
-            position: fixed;
-            z-index: 60;
-            left: 0;
-            top: 0;
-            max-width: min(260px, calc(100vw - 24px));
-            padding: 6px 9px;
-            border-radius: 6px;
-            background: var(--ink);
-            color: var(--bg);
-            font-family: var(--font-mono);
-            font-size: 0.66rem;
-            line-height: 1.4;
-            box-shadow: var(--shadow);
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 110ms ease;
-        }
-        .heat-tip[data-open="1"] { opacity: 1; visibility: visible; }
-        .heat-tip span { display: block; }
-        .heat-tip .heat-tip-when { font-weight: 600; }
 
         /* --- timeline ----------------------------------------------------- */
         .timeline { position: relative; }
@@ -903,7 +774,6 @@
             top: 1px;
             width: 44px;
             text-align: right;
-            font-family: var(--font-mono);
             font-size: 0.8rem;
             font-weight: 600;
             color: var(--muted);
@@ -923,11 +793,9 @@
             padding: 0.15rem 0.6rem;
             border: 1px solid var(--border);
             border-radius: 999px;
-            font-family: var(--font-mono);
             font-size: 0.7rem;
             color: var(--muted);
         }
-        [data-theme="dark"] .ship-chip { color: var(--muted); }
         .ship-chip::before { content: "\2197"; color: var(--brand); font-weight: 700; }
         .ship-chip:hover { border-color: var(--brand); color: var(--ink); text-decoration: none; }
 
@@ -968,7 +836,7 @@
 
         .job-meta { margin-top: 2px; font-size: 0.82rem; color: var(--faint); }
         .job-meta .job-location::before { content: "·"; margin: 0 0.4em; }
-        .job-date { font-family: var(--font-mono); font-size: 0.78rem; }
+        .job-date { font-size: 0.82rem; }
         .job-summary { margin-top: var(--s-2); font-size: 0.92rem; color: var(--muted); }
 
         .job-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
@@ -1005,7 +873,6 @@
             font-size: 0.82rem;
             color: var(--text);
         }
-        [data-theme="dark"] .role-link { color: var(--text); }
         .role-link:hover { border-color: var(--brand); text-decoration: none; }
         .role-link svg { width: 14px; height: 14px; flex: none; }
 
@@ -1024,7 +891,6 @@
         .group-head p { font-size: 0.88rem; color: var(--muted); }
         .group-count {
             margin-left: auto;
-            font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--faint);
         }
@@ -1073,12 +939,10 @@
             font-size: 1.2rem;
             letter-spacing: -0.02em;
         }
-        [data-theme="dark"] .project-logo-placeholder { color: var(--brand); }
 
         .project-header { padding: var(--s-4) var(--s-4) 0; }
         .project-title-row h3 { font-size: 1rem; font-weight: 700; line-height: 1.3; }
         .project-title-link { color: var(--ink); }
-        [data-theme="dark"] .project-title-link { color: var(--ink); }
         .external-link-icon { width: 13px; height: 13px; margin-left: 2px; vertical-align: -1px; color: var(--faint); }
 
         .project-tech { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: var(--s-2); }
@@ -1091,13 +955,11 @@
             color: var(--muted);
         }
         .tech-tag--oss { background: var(--brand-soft); color: var(--brand-strong); font-weight: 600; }
-        [data-theme="dark"] .tech-tag--oss { color: var(--brand); }
 
         .ended-tag {
             padding: 0.1rem 0.5rem;
             border: 1px solid var(--signal);
             border-radius: 999px;
-            font-family: var(--font-mono);
             font-size: 0.68rem;
             color: var(--signal);
         }
@@ -1129,7 +991,6 @@
             padding: 0.2rem 0.6rem;
             border: 1px solid var(--border);
             border-radius: 999px;
-            font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--text);
         }
@@ -1200,12 +1061,12 @@
             html { scroll-behavior: auto; }
             .now-pulse, .company.present::after { animation: none; }
             .project-card:hover { transform: none; }
-            .heat-tip, .job-content, .job-toggle { transition: none; }
+            .job-content, .job-toggle { transition: none; }
         }
 
         /* --- print: a plain CV -------------------------------------------- */
         @media print {
-            :root, [data-theme="dark"] {
+            :root {
                 --bg: #fff; --surface: #fff; --surface-2: #f2f2f2; --border: #ddd; --border-strong: #ccc;
                 --ink: #000; --text: #222; --muted: #444; --faint: #666; --brand: #0d9488; --brand-strong: #0d9488;
             }
@@ -1220,16 +1081,11 @@
         }
     </style>
     <script>
-        // Theme and language are resolved before first paint. Keep this small;
+        // Language is resolved before first paint. Keep this small;
         // it blocks rendering by design.
         (function () {
             var root = document.documentElement;
             var get = function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } };
-            var theme = get('theme');
-            if (theme !== 'light' && theme !== 'dark') {
-                theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            root.setAttribute('data-theme', theme);
             var lang = get('lang');
             if (lang !== 'en' && lang !== 'de') {
                 lang = (navigator.language || 'en').indexOf('de') === 0 ? 'de' : 'en';
@@ -1254,22 +1110,6 @@
             <button class="icon-btn lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">
                 <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"></path></svg>
                 <span class="lang-label">DE</span>
-            </button>
-            <button class="icon-btn theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">
-                <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
             </button>
             <a href="willi-wolff-cv-en.pdf" download id="cv-download" class="btn btn-primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -1385,21 +1225,7 @@
                     </div>
                 </div>
 
-                <div id="activity" data-activity="panel">
-                    <div class="heat" data-career="grid" hidden>
-                        <div class="heat-head">
-                            <span class="heat-note">
-                                <span lang="en">Each cell is a month of documented work. Dimmest step: no public commits</span>
-                                <span lang="de">Jede Zelle ist ein Monat dokumentierter Arbeit. Dunkelste Stufe: keine öffentlichen Commits</span>
-                            </span>
-                            <span class="heat-legend" data-career="legend" aria-hidden="true"></span>
-                        </div>
-                        <div class="heat-band" data-career="rows"></div>
-                        <div class="heat-tip" data-career="tip" aria-hidden="true"></div>
-                        <div class="heat-axis" data-career="axis" aria-hidden="true"></div>
-                        <p class="heat-foot"><span class="activity-stats" data-activity="stats"></span></p>
-                    </div>
-                </div>
+                <p class="activity-line" data-activity="panel" hidden><span data-activity="stats"></span></p>
             </section>
 
             <section id="experience" aria-labelledby="experience-title">
@@ -2569,15 +2395,7 @@
     </main>
 
     <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
-
-        themeToggle.addEventListener('click', function() {
-            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', theme);
-            try { localStorage.setItem('theme', theme); } catch (e) {}
-        });
 
         // Language Toggle
         const langToggle = document.getElementById('lang-toggle');
@@ -2824,309 +2642,6 @@
                     // Nothing to say, so say nothing. Better than a graph of zeros.
                 });
         })();
-
-        // ===================================================================
-        // Career heatmap
-        // ===================================================================
-        // A contribution-graph grid whose cells are months of documented work
-        // rather than commits. Built from dated spans in data/career.json, all
-        // of which appear on the timeline below, which is why it can start in
-        // 2015: none of it depends on GitHub having existed for him yet.
-        //
-        // Nothing here is generated or smoothed. A month with nothing recorded
-        // in it stays empty, including the gap between Deloitte and Mobility
-        // Data Lab, because inventing a value there would be inventing work.
-
-        (function () {
-            const grid = document.querySelector('[data-career="grid"]');
-            if (!grid) return;
-
-            const monthIndex = m => {
-                const [y, mo] = m.split('-').map(Number);
-                return y * 12 + (mo - 1);
-            };
-            const label = i => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
-
-            const grab = (url, required) =>
-                fetch(url, { cache: 'no-cache' })
-                    .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-                    // The grid is career data. Contribution counts only decorate
-                    // it, so a missing activity.json costs a line in the readout,
-                    // not the whole chart.
-                    .catch(err => { if (required) throw err; return null; });
-
-            Promise.all([grab('data/career.json', true), grab('data/activity.json', false)])
-                .then(([data, activity]) => {
-                    const now = new Date();
-                    const first = monthIndex(data.from);
-                    const last = now.getFullYear() * 12 + now.getMonth();
-
-                    // Count what was running in each month.
-                    const active = new Map();
-                    data.items.forEach(item => {
-                        const start = monthIndex(item.from);
-                        const end = item.to ? monthIndex(item.to) : last;
-                        for (let i = Math.max(start, first); i <= Math.min(end, last); i++) {
-                            if (!active.has(i)) active.set(i, { labels: [], score: 0 });
-                            const bucket = active.get(i);
-                            bucket.labels.push(item.label);
-                            bucket.score += item.weight || 1;
-                        }
-                    });
-
-                    const de = (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
-
-                    // Brightness is activity, with the career record as a floor.
-                    // Counting overlapping roles the way this used to only ever
-                    // ratcheted upward -- side projects accumulate and several
-                    // never end -- so it pinned at maximum from 2023 on and read
-                    // as a smooth ramp rather than a record of anything.
-                    //
-                    // The floor is what keeps 2015-2021 on the chart at all.
-                    // GitHub has almost nothing there and the work is real, so a
-                    // documented month is never darker than level 1, and the
-                    // legend says what that dimmest step means.
-                    const scoreOf = i => { const b = active.get(i); return b ? b.score : 0; };
-
-                    const dayCommits = new Map(
-                        ((activity && activity.days) || []).map(d => [d.date, d.commits])
-                    );
-                    const monthCommits = new Map(
-                        ((activity && activity.monthly) || [])
-                            .filter(m => typeof m.commits === 'number')
-                            .map(m => [m.month, m.commits])
-                    );
-
-                    // Quartiles per granularity. A busy day and a busy month are
-                    // different magnitudes, and one shared scale would leave every
-                    // month cell dim next to the day cells beside it.
-                    const cutsFor = values => {
-                        const v = values.filter(n => n > 0).sort((a, b) => a - b);
-                        return v.length ? [0.25, 0.5, 0.75].map(q => v[Math.floor(v.length * q)]) : null;
-                    };
-                    const dayCuts = cutsFor([...dayCommits.values()]);
-                    const monthCuts = cutsFor([...monthCommits.values()]);
-                    const levelFor = (n, cuts) =>
-                        (!n || !cuts ? 0 : 1 + cuts.filter(c => n > c).length);
-
-                    const today = new Date();
-                    today.setUTCHours(0, 0, 0, 0);
-                    const midx = d => d.getUTCFullYear() * 12 + d.getUTCMonth();
-
-                    // A bucket reports the peak of the months it covers, so
-                    // compressing time never averages a busy stretch away and
-                    // never invents a value for a gap.
-                    // Each cell carries the period it stands for, so the readout
-                    // below can answer for it without rebuilding any of this.
-                    // Still no title attribute: 477 native tooltips made the grid
-                    // twitchy to move across.
-                    const iso = d => d.toISOString().slice(0, 10);
-
-                    function cellFor(fromDate, toDate, unit) {
-                        const from = iso(fromDate);
-                        // A published activity.json one version behind this page
-                        // has no days in it. Falling back to the month bucket
-                        // keeps the chart readable until the next refresh lands,
-                        // rather than drawing a year of blanks.
-                        if (unit === 'day' && dayCommits.size) {
-                            // Real days get to be real, blanks included. The floor
-                            // below is a month-level fact and applying it here
-                            // would light up every day of an employed month,
-                            // which is not what a day cell is read as.
-                            const level = levelFor(dayCommits.get(from), dayCuts);
-                            return `<span class="heat-cell" data-level="${level}"` +
-                                ` data-from="${from}" data-unit="day"></span>`;
-                        }
-                        let documented = 0;
-                        for (let i = midx(fromDate); i <= midx(toDate); i++) {
-                            if (scoreOf(i) > 0) documented = 1;
-                        }
-                        const level = Math.max(
-                            documented,
-                            levelFor(monthCommits.get(from.slice(0, 7)), monthCuts)
-                        );
-                        return `<span class="heat-cell" data-level="${level}"` +
-                            ` data-from="${from}" data-unit="${unit}"></span>`;
-                    }
-
-                    // Log axis: one cell per month for everything older than a
-                    // year, one cell per day for the last twelve months. Same
-                    // uniform cell, progressively less time inside it.
-                    const cells = [];
-                    const starts = [];   // cell index where each year begins
-
-                    const noteYear = (y, idx) => {
-                        if (!starts.length || starts[starts.length - 1].year !== y) {
-                            starts.push({ year: y, at: idx });
-                        }
-                    };
-
-                    const coarseEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 11, 1));
-                    for (let i = first; i < midx(coarseEnd); i++) {
-                        const y = Math.floor(i / 12), mo = i % 12;
-                        noteYear(y, cells.length);
-                        cells.push(cellFor(
-                            new Date(Date.UTC(y, mo, 1)),
-                            new Date(Date.UTC(y, mo + 1, 0)),
-                            'month'
-                        ));
-                    }
-                    for (let d = new Date(coarseEnd); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
-                        noteYear(d.getUTCFullYear(), cells.length);
-                        cells.push(cellFor(d, d, 'day'));
-                    }
-
-                    grid.querySelector('[data-career="rows"]').innerHTML = cells.join('');
-
-                    // Ticks sized by how many columns each year takes. A year of
-                    // months is narrow, a year of days is wide, and that spacing
-                    // is the axis explaining itself.
-                    const axis = grid.querySelector('[data-career="axis"]');
-                    if (axis) {
-                        const col = i => Math.floor(i / 7);
-                        const total = col(cells.length - 1) + 1;
-                        axis.innerHTML = starts.map((s, i) => {
-                            const from = col(s.at);
-                            const to = i + 1 < starts.length ? col(starts[i + 1].at) : total;
-                            const width = Math.max(1, to - from);
-                            // Two bare digits in the narrow slots: an apostrophe
-                            // is a third character and the label clipped to "'1".
-                            const text = width >= 4 ? s.year : String(s.year).slice(2);
-                            return `<span style="flex: ${width} 1 0">${text}</span>`;
-                        }).join('');
-                    }
-
-                    const legend = grid.querySelector('[data-career="legend"]');
-                    if (legend) {
-                        legend.innerHTML =
-                            `<span>${de ? 'weniger' : 'less'}</span>` +
-                            [0, 1, 2, 3, 4].map(l => `<span class="heat-cell heat-key" data-level="${l}"></span>`).join('') +
-                            `<span>${de ? 'mehr' : 'more'}</span>`;
-                    }
-
-                    // --- hover / tap readout ------------------------------
-                    // Two facts per bucket: which roles were running in it, and
-                    // how much landed on GitHub. The second is always a MONTH
-                    // figure and is labelled as one, even on a day cell, because
-                    // activity.json holds no days on purpose -- see the note at
-                    // the top of scripts/build-activity.mjs. A day cell reporting
-                    // its month is honest; a day cell reporting a day would be
-                    // claiming an idle Tuesday nothing here can actually know.
-                    const tip = grid.querySelector('[data-career="tip"]');
-                    const band = grid.querySelector('[data-career="rows"]');
-                    if (tip && band) {
-                        band.setAttribute('data-readout', '');
-
-                        const isDe = () =>
-                            (document.documentElement.getAttribute('data-lang') || 'en') === 'de';
-                        const locale = () => (isDe() ? 'de-DE' : 'en-GB');
-                        const when = (date, opts) =>
-                            new Intl.DateTimeFormat(locale(), Object.assign({ timeZone: 'UTC' }, opts)).format(date);
-
-                        let probed = null;
-                        let pinned = null;
-
-                        const line = (cls, text) => {
-                            const el = document.createElement('span');
-                            if (cls) el.className = cls;
-                            el.textContent = text;
-                            return el;
-                        };
-
-                        function fill(cell) {
-                            const from = cell.getAttribute('data-from');
-                            if (!from) return false;
-                            const date = new Date(from + 'T00:00:00Z');
-                            const isDay = cell.getAttribute('data-unit') === 'day';
-                            const month = when(date, { month: 'short', year: 'numeric' });
-
-                            tip.textContent = '';
-                            tip.appendChild(line(
-                                'heat-tip-when',
-                                isDay ? when(date, { day: 'numeric', month: 'short', year: 'numeric' }) : month
-                            ));
-
-                            // The cell's own bucket, at its own granularity.
-                            // A day with nothing recorded says nothing rather
-                            // than printing a zero it cannot stand behind.
-                            const commits = isDay
-                                ? dayCommits.get(from)
-                                : monthCommits.get(from.slice(0, 7));
-                            if (commits) {
-                                const word = isDe()
-                                    ? (commits === 1 ? 'Commit' : 'Commits')
-                                    : (commits === 1 ? 'commit' : 'commits');
-                                tip.appendChild(line('', commits.toLocaleString(locale()) + ' ' + word));
-                            }
-                            return true;
-                        }
-
-                        function show(cell) {
-                            if (!fill(cell)) return hide();
-                            if (probed) probed.classList.remove('is-probed');
-                            probed = cell;
-                            cell.classList.add('is-probed');
-                            tip.setAttribute('data-open', '1');
-
-                            // Measured after the content is in, so a two-line and
-                            // a three-line readout both sit clear of the cell.
-                            const box = cell.getBoundingClientRect();
-                            const own = tip.getBoundingClientRect();
-                            const left = Math.max(8, Math.min(
-                                box.left + box.width / 2 - own.width / 2,
-                                window.innerWidth - own.width - 8
-                            ));
-                            const above = box.top - own.height - 8;
-                            tip.style.left = Math.round(left) + 'px';
-                            tip.style.top = Math.round(above < 8 ? box.bottom + 8 : above) + 'px';
-                        }
-
-                        function hide() {
-                            pinned = null;
-                            tip.removeAttribute('data-open');
-                            if (probed) probed.classList.remove('is-probed');
-                            probed = null;
-                        }
-
-                        const cellUnder = e => {
-                            const el = e.target;
-                            return el && el.classList && el.classList.contains('heat-cell') ? el : null;
-                        };
-
-                        band.addEventListener('pointermove', e => {
-                            if (pinned || e.pointerType === 'touch') return;
-                            const cell = cellUnder(e);
-                            if (!cell) return hide();
-                            if (cell !== probed) show(cell);
-                        });
-                        band.addEventListener('pointerleave', () => { if (!pinned) hide(); });
-
-                        // Tap, and anything without a hover state, gets the same
-                        // readout by pinning it until the next tap elsewhere.
-                        band.addEventListener('click', e => {
-                            const cell = cellUnder(e);
-                            if (!cell) return hide();
-                            if (pinned === cell) return hide();
-                            pinned = cell;
-                            show(cell);
-                        });
-                        document.addEventListener('click', e => {
-                            if (pinned && !band.contains(e.target)) hide();
-                        });
-                        document.addEventListener('keydown', e => { if (e.key === 'Escape') hide(); });
-                        // Fixed positioning: the readout would otherwise drift off
-                        // its cell the moment the page moves under it.
-                        window.addEventListener('scroll', () => { if (probed) hide(); }, { passive: true });
-                        window.addEventListener('resize', () => { if (probed) hide(); });
-                    }
-
-                    grid.hidden = false;
-                })
-                .catch(() => {
-                    // No file, no grid. Better than an empty year.
-                });
-        })();
-
 
         // Header nav: mark the section currently being read.
         (function () {
