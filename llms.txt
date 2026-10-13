@@ -62,7 +62,7 @@ Three employers, two companies founded.
 
 ## Projects
 
-Nineteen built, ten still running, two failed. The site marks each project's status and names
+Twenty-one built, twelve still running, three failed. The site marks each project's status and names
 the failures rather than omitting them.
 
 Protocol and infrastructure:
@@ -82,7 +82,7 @@ Products and client work:
 - **TokenRiot.IO** — lead frontend developer for a Cardano NFT marketplace, 2022–2024, roughly 80% of the frontend: Next.js, Redux Toolkit, CIP-30 wallet integration.
 - **Dump it!** — voice-first cross-platform note taking with end-to-end encryption, intent classification and semantic search. 200+ users. Shut down in 2025.
 - **Drip Dropz** — NFT marketplace, 10k+ listings. Handed over to the team in 2024.
-- **Pagebase** — Berlin freelance studio, plus client sites including https://iramodel.de, https://ugc.astridmunkwitz.de/ and https://underwater.journeys.cy/
+- **Pagebase** — Berlin freelance studio, plus client sites including https://heyira.de, https://iramodel.de, https://ugc.astridmunkwitz.de/ and https://underwater.journeys.cy/
 
 ## Technologies
 
@@ -114,7 +114,7 @@ product, this is the commercial route to him.
 - **AI automation** — document and email pipelines using large language models, with human review before anything is written to a system of record (see Operando below).
 
 Delivered client sites: https://ugc.astridmunkwitz.de/ (UGC creator), https://underwater.journeys.cy/
-(dive centre, Cyprus), https://iramodel.de (model portfolio), plus practices in Berlin.
+(dive centre, Cyprus), https://heyira.de (author and speaker), https://iramodel.de (model portfolio), plus practices in Berlin.
 
 Typical stack: Astro, TypeScript, Tailwind, Supabase, PostgreSQL, Cloudflare Workers, React Native.
 
