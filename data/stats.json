@@ -22,6 +22,7 @@
     { "card": "p-operando", "status": "live", "metric": {"en": "in production since Sep 2026", "de": "produktiv seit Sep. 2026"} },
     { "card": "p-underwater-journeys", "status": "live", "metric": {"en": "Dozens of new bookings · 150k+ impressions in six months", "de": "Dutzende neue Buchungen · 150.000+ Impressionen in sechs Monaten"} },
     { "card": "p-iramodel", "status": "live" },
+    { "card": "p-heyira", "status": "live" },
     { "card": "p-ugc-creator", "status": "live" },
 
     {
