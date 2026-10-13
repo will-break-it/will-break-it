@@ -1,10 +1,10 @@
 {
-  "generated": "2026-10-13T14:16:44Z",
+  "generated": "2026-10-13T22:48:19Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 11717,
+    "total": 11795,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -54,18 +54,18 @@
       },
       {
         "month": "2026-10",
-        "total": 1650
+        "total": 1728
       }
     ]
   },
   "streakDays": 31,
   "totals": {
-    "contributions": 15637,
+    "contributions": 15715,
     "private": 94,
-    "commits": 12902,
-    "pullRequests": 2052,
+    "commits": 12957,
+    "pullRequests": 2072,
     "reviews": 76,
-    "repositories": 40,
+    "repositories": 41,
     "publicRepositories": 11
   },
   "years": [
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 10267,
+      "total": 10345,
       "private": 0,
-      "commits": 7937,
-      "prs": 1847,
+      "commits": 7992,
+      "prs": 1867,
       "reviews": 44
     }
   ],
@@ -512,8 +512,8 @@
     },
     {
       "month": "2026-10",
-      "total": 1650,
-      "commits": 1169
+      "total": 1728,
+      "commits": 1224
     }
   ],
   "days": [
@@ -2004,52 +2004,52 @@
     },
     {
       "date": "2026-10-12",
-      "total": 79,
-      "commits": 48
+      "total": 80,
+      "commits": 49
     },
     {
       "date": "2026-10-13",
-      "total": 48,
-      "commits": 29
+      "total": 125,
+      "commits": 83
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 66.3
+      "share": 65.7
     },
     {
       "name": "HTML",
-      "share": 10.4
+      "share": 10.3
     },
     {
       "name": "PLpgSQL",
-      "share": 8.1
+      "share": 8
+    },
+    {
+      "name": "Rust",
+      "share": 2.5
+    },
+    {
+      "name": "JavaScript",
+      "share": 2.3
     },
     {
       "name": "Dart",
       "share": 2.2
-    },
-    {
-      "name": "Rust",
-      "share": 2.1
-    },
-    {
-      "name": "Astro",
-      "share": 1.9
     }
   ],
   "lastPush": {
-    "at": "2026-10-13T13:16:52Z",
-    "repo": "will-break-it",
-    "url": "https://github.com/will-break-it/will-break-it",
-    "private": false
+    "at": "2026-10-13T21:07:08Z",
+    "repo": null,
+    "url": null,
+    "private": true
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-10-13T13:16:52Z",
+      "pushedAt": "2026-10-13T14:18:34Z",
       "language": "HTML"
     },
     {
