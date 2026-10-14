@@ -1,10 +1,10 @@
 {
-  "generated": "2026-10-14T17:15:22Z",
+  "generated": "2026-10-14T21:44:04Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 11905,
+    "total": 11943,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -54,19 +54,19 @@
       },
       {
         "month": "2026-10",
-        "total": 1839
+        "total": 1877
       }
     ]
   },
   "streakDays": 32,
   "totals": {
-    "contributions": 15826,
+    "contributions": 15864,
     "private": 94,
-    "commits": 13009,
-    "pullRequests": 2129,
+    "commits": 13033,
+    "pullRequests": 2142,
     "reviews": 76,
-    "repositories": 41,
-    "publicRepositories": 11
+    "repositories": 42,
+    "publicRepositories": 12
   },
   "years": [
     {
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 10456,
+      "total": 10494,
       "private": 0,
-      "commits": 8044,
-      "prs": 1924,
+      "commits": 8068,
+      "prs": 1937,
       "reviews": 44
     }
   ],
@@ -512,8 +512,8 @@
     },
     {
       "month": "2026-10",
-      "total": 1839,
-      "commits": 1276
+      "total": 1877,
+      "commits": 1300
     }
   ],
   "days": [
@@ -2009,13 +2009,13 @@
     },
     {
       "date": "2026-10-13",
-      "total": 127,
-      "commits": 85
+      "total": 128,
+      "commits": 86
     },
     {
       "date": "2026-10-14",
-      "total": 109,
-      "commits": 50
+      "total": 146,
+      "commits": 73
     }
   ],
   "languages": [
@@ -2045,16 +2045,22 @@
     }
   ],
   "lastPush": {
-    "at": "2026-10-14T16:41:45Z",
+    "at": "2026-10-14T21:42:13Z",
     "repo": null,
     "url": null,
     "private": true
   },
   "recentPublic": [
     {
+      "name": "txflow",
+      "url": "https://github.com/will-break-it/txflow",
+      "pushedAt": "2026-10-14T21:09:40Z",
+      "language": "Rust"
+    },
+    {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-10-14T12:00:05Z",
+      "pushedAt": "2026-10-14T17:17:02Z",
       "language": "HTML"
     },
     {
@@ -2080,12 +2086,6 @@
       "url": "https://github.com/will-break-it/agda-web-docs-lib",
       "pushedAt": "2026-01-07T15:21:37Z",
       "language": "JavaScript"
-    },
-    {
-      "name": "wallet-architecture",
-      "url": "https://github.com/will-break-it/wallet-architecture",
-      "pushedAt": "2024-09-07T13:47:31Z",
-      "language": null
     }
   ]
 }
