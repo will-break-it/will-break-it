@@ -1409,6 +1409,16 @@
                         </a>
                     </li>
                     <li>
+                        <a class="now-item" href="#p-txflow">
+                            <span class="now-item-text">
+                                <span class="now-item-name">txflow</span>
+                                <span class="now-item-desc" lang="en">Describe a transaction flow, run it on the Leios test network</span>
+                                <span class="now-item-desc" lang="de">Transaktionsfolgen beschreiben und im Leios-Testnetz ausführen</span>
+                            </span>
+                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                        </a>
+                    </li>
+                    <li>
                         <a class="now-item" href="https://alwayssandy.com" target="_blank" rel="noopener">
                             <span class="now-item-text">
                                 <span class="now-item-name">AlwaysSandy</span>
@@ -1567,6 +1577,26 @@
                             </div>
                         </div>
                         <p class="project-description">Interactive mempool visualization tool for the Leios protocol. Explores front-running opportunities and attack vectors to build educational resources for community understanding of protocol security.</p>
+                    </div>
+                        <div class="project-card" id="p-txflow" data-tags="blockchain,ai,infrastructure">
+                        <div class="project-logo">
+                            <img src="assets/previews/txflow.jpg" alt="txflow transaction graph" class="project-logo-img cover shot" loading="lazy">
+                        </div>
+                        <div class="project-header">
+                            <div class="project-title-row">
+                                <h3>txflow – Transaction Flow Experiments</h3>
+                            </div>
+                            <div class="project-tech">
+                                <span class="tech-tag">Rust</span>
+                                <span class="tech-tag">WebAssembly</span>
+                                <span class="tech-tag">Leios</span>
+                                <span class="tech-tag">Claude</span>
+                            </div>
+                        </div>
+                        <p class="project-description">
+                            <span lang="en">Describe a transaction flow in plain language and run it on the Leios Musashi test network. The model writes a declarative spec (chains, double spends, competing chains), the page checks it with the same Rust code compiled to WebAssembly and draws the UTxO graph, then the real transactions go to relays on three continents. Specs carry no transaction ids, so an experiment reruns on the next node build.</span>
+                            <span lang="de">Eine Transaktionsfolge in Alltagssprache beschreiben und auf dem Leios-Testnetz Musashi ausführen. Das Modell schreibt eine deklarative Spezifikation (Ketten, Double Spends, konkurrierende Ketten), die Seite prüft sie mit demselben Rust-Code als WebAssembly und zeichnet den UTxO-Graphen, dann gehen die echten Transaktionen an Relays auf drei Kontinenten. Specs enthalten keine Transaktions-IDs, also läuft ein Experiment auf dem nächsten Node-Build erneut.</span>
+                        </p>
                     </div>
                         <div class="project-card" id="p-lace-architecture" data-tags="blockchain,architecture,infrastructure">
                         <div class="project-logo">

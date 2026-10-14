@@ -62,13 +62,14 @@ Three employers, two companies founded.
 
 ## Projects
 
-Twenty-one built, twelve still running, three failed. The site marks each project's status and names
+Twenty-two built, thirteen still running, three failed. The site marks each project's status and names
 the failures rather than omitting them.
 
 Protocol and infrastructure:
 
 - **Byzantine-Resistant PubSub** — Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, on-chain registered topics. https://pubsub.cardano-scaling.org/
 - **Ouroboros Leios** — protocol architecture and CIP-0164, interactive simulator, Agda specification rendered for the web. http://leios.cardano-scaling.org/
+- **txflow** — declarative transaction-flow experiments for the Leios test network: describe a flow in plain language, check the spec with Rust compiled to WebAssembly, see the UTxO graph and send the transactions to relays on three continents. In progress.
 - **Lace Wallet indexing architecture** — the CQRS and event-sourcing design behind Cardano's light wallet, published as a CIP and a problem statement. https://github.com/will-break-it/wallet-architecture
 - **Leios mempool simulation** — interactive mempool visualisation exploring front-running and attack vectors. https://leios.cardano-scaling.org/mempool-viz/
 - **Upstream Cardano libraries** — extensions to Dolos (chain indexer), Lucid (UTXO chaining), Scrolls (multi-DEX indexing), and a DEX order serialization library.

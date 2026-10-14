@@ -16,6 +16,7 @@
     { "card": "p-ouroboros-leios", "status": "live", "building": true },
     { "card": "p-lace-architecture", "status": "live" },
     { "card": "p-leios-mempool-simulation", "status": "live" },
+    { "card": "p-txflow", "status": "live", "building": true },
     { "card": "p-alwayssandy", "status": "live", "building": true, "metric": {"en": "40,000+ player profiles and growing", "de": "Über 40.000 Spielerprofile, Tendenz steigend"} },
     { "card": "p-hausnummer", "status": "live", "metric": {"en": "1,000+ listings analysed", "de": "Über 1.000 analysierte Inserate"} },
     { "card": "p-pagebase", "status": "live" },
