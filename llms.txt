@@ -39,6 +39,7 @@ protocol, building it towards mainnet. https://leios.cardano-scaling.org/
 
 Also building, on his own time:
 
+- https://txflow.fun — Cardano transaction-flow experiments on the Leios test network: describe a flow, see its UTxO graph, run it on relays across three continents
 - https://alwayssandy.com — matches beach volleyball players with coaches across Berlin's sand courts
 - https://pagebase.dev — his freelance studio: Supabase and PostgreSQL backends, web and mobile, AI automation
 
@@ -69,7 +70,7 @@ Protocol and infrastructure:
 
 - **Byzantine-Resistant PubSub** — Cardano-anchored publish/subscribe layer: identifiable publishers, verifiable events, on-chain registered topics. https://pubsub.cardano-scaling.org/
 - **Ouroboros Leios** — protocol architecture and CIP-0164, interactive simulator, Agda specification rendered for the web. http://leios.cardano-scaling.org/
-- **txflow** — declarative transaction-flow experiments for the Leios test network: describe a flow in plain language, check the spec with Rust compiled to WebAssembly, see the UTxO graph and send the transactions to relays on three continents. In progress.
+- **txflow** — Cardano transaction-flow experiments on the Leios Musashi test network: describe a flow in plain words, get a checked spec (Rust compiled to WebAssembly) and its UTxO graph, then run it: the site funds and signs the transactions, sends each to a relay in Frankfurt, Virginia or Tokyo on schedule and shows where it landed. In progress. https://txflow.fun
 - **Lace Wallet indexing architecture** — the CQRS and event-sourcing design behind Cardano's light wallet, published as a CIP and a problem statement. https://github.com/will-break-it/wallet-architecture
 - **Leios mempool simulation** — interactive mempool visualisation exploring front-running and attack vectors. https://leios.cardano-scaling.org/mempool-viz/
 - **Upstream Cardano libraries** — extensions to Dolos (chain indexer), Lucid (UTXO chaining), Scrolls (multi-DEX indexing), and a DEX order serialization library.

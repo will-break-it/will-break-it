@@ -1409,7 +1409,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="now-item" href="#p-txflow">
+                        <a class="now-item" href="https://txflow.fun" target="_blank" rel="noopener">
                             <span class="now-item-text">
                                 <span class="now-item-name">txflow</span>
                                 <span class="now-item-desc" lang="en">Describe a transaction flow, run it on the Leios test network</span>
@@ -1580,11 +1580,20 @@
                     </div>
                         <div class="project-card" id="p-txflow" data-tags="blockchain,ai,infrastructure">
                         <div class="project-logo">
-                            <img src="assets/previews/txflow.jpg" alt="txflow transaction graph" class="project-logo-img cover shot" loading="lazy">
+                            <img src="assets/previews/txflow.jpg" alt="txflow: describe a transaction flow, run it on Musashi" class="project-logo-img cover" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
-                                <h3>txflow – Transaction Flow Experiments</h3>
+                                <h3>
+                                    <a href="https://txflow.fun" target="_blank" rel="noopener" class="project-title-link">
+                                        txflow – Transaction Flow Experiments
+                                        <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                            <polyline points="15 3 21 3 21 9"></polyline>
+                                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        </svg>
+                                    </a>
+                                </h3>
                             </div>
                             <div class="project-tech">
                                 <span class="tech-tag">Rust</span>
@@ -1594,8 +1603,8 @@
                             </div>
                         </div>
                         <p class="project-description">
-                            <span lang="en">Describe a transaction flow in plain language and run it on the Leios Musashi test network. The model writes a declarative spec (chains, double spends, competing chains), the page checks it with the same Rust code compiled to WebAssembly and draws the UTxO graph, then the real transactions go to relays on three continents. Specs carry no transaction ids, so an experiment reruns on the next node build.</span>
-                            <span lang="de">Eine Transaktionsfolge in Alltagssprache beschreiben und auf dem Leios-Testnetz Musashi ausführen. Das Modell schreibt eine deklarative Spezifikation (Ketten, Double Spends, konkurrierende Ketten), die Seite prüft sie mit demselben Rust-Code als WebAssembly und zeichnet den UTxO-Graphen, dann gehen die echten Transaktionen an Relays auf drei Kontinenten. Specs enthalten keine Transaktions-IDs, also läuft ein Experiment auf dem nächsten Node-Build erneut.</span>
+                            <span lang="en">Describe a Cardano transaction flow in plain words and run it on the Leios Musashi test network. The model writes a declarative spec (chains, double spends, competing chains), the page checks it with the same Rust code compiled to WebAssembly and draws the UTxO graph. A run funds the experiment, signs every transaction, sends each to its relay in Frankfurt, Virginia or Tokyo on schedule, and shows when it reached each mempool and which block it landed in. Specs carry no transaction ids, so an experiment reruns on the next node build.</span>
+                            <span lang="de">Eine Cardano-Transaktionsfolge in Alltagssprache beschreiben und im Leios-Testnetz Musashi ausführen. Das Modell schreibt eine deklarative Spezifikation (Ketten, Double Spends, konkurrierende Ketten), die Seite prüft sie mit demselben Rust-Code als WebAssembly und zeichnet den UTxO-Graphen. Ein Lauf finanziert das Experiment, signiert jede Transaktion, schickt sie planmäßig an ihr Relay in Frankfurt, Virginia oder Tokio und zeigt, wann sie welchen Mempool erreicht hat und in welchem Block sie gelandet ist. Specs enthalten keine Transaktions-IDs, also läuft ein Experiment auf dem nächsten Node-Build erneut.</span>
                         </p>
                     </div>
                         <div class="project-card" id="p-lace-architecture" data-tags="blockchain,architecture,infrastructure">
