@@ -52,7 +52,7 @@ Also building, on his own time:
 - **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture for a collateralised debt position platform; workshops for 100+ Amazon engineers on the eUTxO model.
 - **Senior Software Engineer**, Mobility Data Lab, Berlin (Feb 2020–Nov 2021): IoT and connected-vehicle systems; OTA fleet-update pipeline (Rust embedded, Vert.x backend).
 - **Software Engineer → Lead Engineer**, Deloitte, Austin TX then Ulm (Sep 2016–Nov 2019): toolchain that migrated 16M lines of legacy code to Java; €6M/yr license savings.
-- **Co-Founder & CTO**, CityXcape, San Francisco (Feb 2015–Sep 2016): social discovery platform; raised ~€150k seed; iOS app and Django/Rails backend from concept to App Store launch.
+- **Co-Founder & CTO**, CityXcape, San Francisco (Feb 2015–Sep 2016): social discovery platform; raised ~€150k seed; native iOS (Swift) and Android apps and the Django/Rails backend, from concept to App Store launch.
 
 Three employers, two companies founded.
 
@@ -80,9 +80,9 @@ Products and client work:
 
 - **Hausnummer** — screening tool for German residential investment listings: monthly cashflow before tax, after-tax estimates, break-even equity, cash-on-cash return, and listing import that extracts the figures from a pasted link. Astro on Cloudflare Workers. https://hausnummer.pages.dev/
 - **Operando** — AI deal sourcing for Operando Partners: reads deal teasers that M&A advisors send by email, extracts the key figures from the PDFs with Claude, and drafts HubSpot leads the team reviews. In production since September 2026. Email content is treated as untrusted data. https://operando.de
-- **AlwaysSandy** — beach volleyball coach booking across Berlin's sand courts. https://alwayssandy.com
+- **AlwaysSandy** — beach volleyball coach booking across Berlin's sand courts. Web, iOS and Android from one React Native codebase. https://alwayssandy.com
 - **TokenRiot.IO** — lead frontend developer for a Cardano NFT marketplace, 2022–2024, roughly 80% of the frontend: Next.js, Redux Toolkit, CIP-30 wallet integration.
-- **Dump it!** — voice-first cross-platform note taking with end-to-end encryption, intent classification and semantic search. 200+ users. Shut down in 2025.
+- **Dump it!** — voice-first note taking on web, iOS and Android with end-to-end encryption, intent classification and semantic search. Native iOS (Swift) first, then rewritten in Flutter for iOS and Android. 200+ users. Shut down in 2025.
 - **Drip Dropz** — NFT marketplace, 10k+ listings. Handed over to the team in 2024.
 - **Pagebase** — Berlin freelance studio, plus client sites including https://heyira.de, https://iramodel.de, https://ugc.astridmunkwitz.de/ and https://underwater.journeys.cy/
 
@@ -95,6 +95,10 @@ Focus areas: distributed ledger technology (DLT), Cardano and the eUTxO model, P
 contracts, consensus protocols, formal methods, distributed systems, event-driven
 architecture and CQRS, chain indexing, cryptography, end-to-end encryption, secure
 application development.
+
+Mobile: native iOS (Swift, SwiftUI) and Android (Kotlin, Jetpack Compose), plus cross-platform with
+React Native and Flutter. Apps: CityXcape (native iOS and Android), Dump it! (Swift, then
+Flutter), AlwaysSandy (React Native for web, iOS and Android).
 
 Infrastructure: PostgreSQL, Supabase, Redis, Docker, Terraform, Ansible, GitHub Actions,
 Cloudflare Workers, AWS.
