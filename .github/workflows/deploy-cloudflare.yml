@@ -32,6 +32,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # `npx wrangler` below otherwise runs on whichever Node the runner image ships.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
       - name: Assemble static site
         run: |
           rm -rf dist
@@ -45,6 +51,7 @@ jobs:
             --exclude='scripts' \
             --exclude='functions' \
             --exclude='.gitignore' \
+            --exclude='.nvmrc' \
             --exclude='.DS_Store' \
             --exclude='dist' \
             ./ dist/
