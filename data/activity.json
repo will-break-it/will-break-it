@@ -1,10 +1,10 @@
 {
-  "generated": "2026-10-22T21:39:48Z",
+  "generated": "2026-10-23T04:56:34Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 13747,
+    "total": 13745,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -2070,23 +2070,23 @@
     }
   ],
   "lastPush": {
-    "at": "2026-10-22T20:30:30Z",
-    "repo": null,
-    "url": null,
-    "private": true
+    "at": "2026-10-22T21:41:27Z",
+    "repo": "will-break-it",
+    "url": "https://github.com/will-break-it/will-break-it",
+    "private": false
   },
   "recentPublic": [
+    {
+      "name": "will-break-it",
+      "url": "https://github.com/will-break-it/will-break-it",
+      "pushedAt": "2026-10-22T21:41:27Z",
+      "language": "HTML"
+    },
     {
       "name": "txflow",
       "url": "https://github.com/will-break-it/txflow",
       "pushedAt": "2026-10-22T19:53:52Z",
       "language": "Rust"
-    },
-    {
-      "name": "will-break-it",
-      "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-10-22T17:15:35Z",
-      "language": "HTML"
     },
     {
       "name": "will-break-it.github.io",
