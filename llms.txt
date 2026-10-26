@@ -133,7 +133,7 @@ Typical stack: Astro, TypeScript, Tailwind, Supabase, PostgreSQL, Cloudflare Wor
 - **Availability:** currently on contract with IOG (Ouroboros Leios); open to selected
   additional contract work. Based in Berlin, works remote, German or English.
 - **Websites and small products:** fixed-price packages go through Pagebase (https://pagebase.dev).
-- **How to start:** email wolff.willi+cv@gmail.com with what you need, the timeline and the
+- **How to start:** email contact@williwolff.com with what you need, the timeline and the
   budget. A person reads and answers every request; there is no automated booking.
 
 ## Links
@@ -150,4 +150,4 @@ Site content available in English (default) and German.
 
 ## Contact
 
-wolff.willi+cv@gmail.com
+contact@williwolff.com
