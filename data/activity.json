@@ -1,10 +1,10 @@
 {
-  "generated": "2026-10-28T22:38:05Z",
+  "generated": "2026-10-29T05:52:46Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 14375,
+    "total": 14329,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -2090,16 +2090,16 @@
     }
   ],
   "lastPush": {
-    "at": "2026-10-28T18:25:47Z",
-    "repo": null,
-    "url": null,
-    "private": true
+    "at": "2026-10-28T22:39:40Z",
+    "repo": "will-break-it",
+    "url": "https://github.com/will-break-it/will-break-it",
+    "private": false
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-10-28T13:02:57Z",
+      "pushedAt": "2026-10-28T22:39:40Z",
       "language": "HTML"
     },
     {
