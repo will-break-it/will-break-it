@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-07T13:08:55Z",
+  "generated": "2026-11-07T21:54:31Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 14416,
+    "total": 14673,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-11",
-        "total": 249
+        "total": 506
       }
     ]
   },
   "streakDays": 56,
   "totals": {
-    "contributions": 18712,
+    "contributions": 18969,
     "private": 85,
-    "commits": 14878,
-    "pullRequests": 3036,
+    "commits": 15116,
+    "pullRequests": 3055,
     "reviews": 82,
     "repositories": 44,
     "publicRepositories": 12
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 13351,
+      "total": 13608,
       "private": 0,
-      "commits": 9913,
-      "prs": 2831,
+      "commits": 10151,
+      "prs": 2850,
       "reviews": 50
     }
   ],
@@ -517,8 +517,8 @@
     },
     {
       "month": "2026-11",
-      "total": 249,
-      "commits": 169
+      "total": 506,
+      "commits": 407
     }
   ],
   "days": [
@@ -2104,35 +2104,35 @@
     },
     {
       "date": "2026-11-06",
-      "total": 72,
-      "commits": 47
+      "total": 177,
+      "commits": 152
     },
     {
       "date": "2026-11-07",
-      "total": 7,
-      "commits": 3
+      "total": 159,
+      "commits": 136
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 66.4
+      "share": 66.7
     },
     {
       "name": "HTML",
-      "share": 10.5
+      "share": 10
     },
     {
       "name": "PLpgSQL",
-      "share": 9.2
+      "share": 9.9
     },
     {
       "name": "JavaScript",
-      "share": 2.5
+      "share": 2.4
     },
     {
       "name": "Rust",
-      "share": 2.3
+      "share": 2.2
     },
     {
       "name": "Dart",
@@ -2140,23 +2140,23 @@
     }
   ],
   "lastPush": {
-    "at": "2026-11-07T11:51:18Z",
+    "at": "2026-11-07T21:13:24Z",
     "repo": null,
     "url": null,
     "private": true
   },
   "recentPublic": [
     {
-      "name": "will-break-it",
-      "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-11-07T06:05:18Z",
-      "language": "HTML"
-    },
-    {
       "name": "txflow",
       "url": "https://github.com/will-break-it/txflow",
-      "pushedAt": "2026-11-05T16:48:51Z",
+      "pushedAt": "2026-11-07T14:05:50Z",
       "language": "Rust"
+    },
+    {
+      "name": "will-break-it",
+      "url": "https://github.com/will-break-it/will-break-it",
+      "pushedAt": "2026-11-07T13:10:37Z",
+      "language": "HTML"
     },
     {
       "name": "will-break-it.github.io",
