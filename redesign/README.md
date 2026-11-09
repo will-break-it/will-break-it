@@ -10,3 +10,9 @@ Open them locally from the repo root, e.g. `npx live-server` then `/redesign/a-b
 
 `enquiry.js` composes an email to contact@williwolff.com (no backend). All striped or
 gradient boxes marked "Placeholder" need real footage or stills.
+
+Round 2, built on B's altitude idea (air above, sea level for the beach and software, water below):
+
+- `b1-descent.html`: the page scrolls from +120 m to −30 m with a live altitude gauge; booking sits on the seabed.
+- `b2-cross-section.html`: a drawn coast cross-section is the hero and the menu; one section per zone.
+- `b3-logbook.html`: every project and shot is a log entry sorted by elevation, with an elevation profile and Air/Land/Water filter.

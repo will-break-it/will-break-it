@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Descent</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Variant B1, "Descent". Layout: the page is one trip from sky to seabed. Each band carries an
+   altitude; a fixed gauge reads it out as you scroll. Sky = drone footage, sea level = the beach,
+   volleyball and software, underwater = dives and Underwater Journeys, seabed = booking. */
+:root {
+  --sky-1: #d8eef4; --sky-2: #b4dde8;
+  --sand-1: #f1e5c9; --sand-2: #e7d4a9;
+  --sea-1: #2aaabb; --sea-2: #0e6f86;
+  --deep: #083a4b; --abyss: #04202a;
+  --ink: #062a36; --ink-soft: #3b5a66;
+  --lagoon: #0f9fb0; --lagoon-deep: #0b7684; --sun: #f0d48a;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--sky-1); color: var(--ink); font: 17px/1.6 var(--font-body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(72px, env(safe-area-inset-right, 0px)); }
+.alt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1.3rem; border-radius: 999px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+.btn-ink { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn-sun { background: var(--sun); border-color: var(--sun); color: var(--abyss); }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within, .card:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 3px; }
+.ph-note { font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed currentColor; padding: .2rem .45rem; border-radius: 5px; opacity: .8; }
+
+/* Gauge */
+.gauge { position: fixed; right: max(14px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); z-index: 20; display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+.gauge .track { position: relative; width: 4px; height: 46vh; border-radius: 4px; background: linear-gradient(var(--sky-2), var(--sand-2) 42%, var(--sea-1) 52%, var(--abyss)); }
+.gauge .marker { position: absolute; left: 50%; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid var(--ink); transform: translate(-50%, -50%); top: 0; transition: border-color .3s; }
+.gauge .read { font: 700 .82rem var(--font-body); font-variant-numeric: tabular-nums; background: #fff; color: var(--ink); border-radius: 999px; padding: .25rem .55rem; box-shadow: 0 2px 10px rgba(4,32,42,.15); min-width: 64px; text-align: center; }
+.gauge .zone { font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); writing-mode: vertical-rl; transform: rotate(180deg); }
+.gauge.under .zone { color: #cfe6ec; }
+
+/* Bands */
+.band { position: relative; padding-block: 4.5rem; }
+.band-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; margin-bottom: 2rem; }
+.band-head h2 { font-size: clamp(1.9rem, 4.2vw, 3rem); line-height: 1.02; max-width: 20ch; }
+.band-head p { margin: 0; max-width: 44ch; }
+
+.sky { background: linear-gradient(var(--sky-1), var(--sky-2)); }
+.topbar { display: flex; align-items: center; gap: 1rem; padding-block: 1.1rem; }
+.topbar .name { font-family: var(--font-display); font-weight: 800; text-decoration: none; font-size: 1.1rem; }
+.topbar nav { margin-left: auto; display: flex; gap: 1.25rem; font-size: .92rem; }
+.topbar nav a { text-decoration: none; color: var(--ink-soft); }
+.hero { padding-block: 3.5rem 3rem; }
+.hero h1 { font-size: clamp(2.8rem, 8vw, 6rem); line-height: .95; font-weight: 800; max-width: 12ch; }
+.hero p { font-size: 1.15rem; color: var(--ink-soft); max-width: 50ch; margin: 1.25rem 0 1.75rem; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.aerials { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-auto-rows: 260px; gap: .75rem; }
+.aerial { min-width: 0; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: .8rem; color: #fff; background: linear-gradient(160deg, #9fd3df, #4aa7b8 60%, #2f8c8f); }
+.aerial:nth-child(2) { background: linear-gradient(160deg, #bfd9d3, #5fa9a2 55%, #c9b98f); }
+.aerial:nth-child(3) { background: linear-gradient(170deg, #a8d8e0, #5aaec0 60%, #d8c99f); }
+.aerial strong { font-variant-numeric: tabular-nums; }
+
+/* Sea level */
+.beach { background: linear-gradient(var(--sky-2) 0, var(--sand-1) 6rem, var(--sand-2)); }
+.horizon { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; color: var(--lagoon-deep); }
+.horizon::before, .horizon::after { content: ""; flex: 1; height: 2px; background: currentColor; opacity: .4; }
+.feature { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: center; margin-bottom: 3.5rem; }
+.feature .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.feature .pair > * { width: 100%; max-width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 14px; }
+.court { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: .8rem; color: var(--ink); background: repeating-linear-gradient(-45deg, #ead9b0 0 10px, #e2cc9b 10px 20px); border: 1.5px dashed #b89f65; }
+.feature h3 { font-size: 2rem; }
+.feature p { color: var(--ink-soft); max-width: 46ch; }
+.feature a.go { font-weight: 700; color: var(--lagoon-deep); text-decoration: none; }
+.builds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 2.5rem; }
+.card { display: grid; gap: .45rem; text-decoration: none; min-width: 0; padding-top: 1rem; border-top: 1.5px solid rgba(6,42,54,.18); }
+.card .kind { font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lagoon-deep); }
+.card h3 { font-size: 1.25rem; }
+.card p { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+.card:hover h3 { color: var(--lagoon-deep); }
+
+/* Underwater */
+.sea { background: linear-gradient(var(--sea-1), var(--sea-2) 45%, var(--deep)); color: #fff; }
+.sea .band-head p { color: rgba(255,255,255,.82); }
+.surface { position: absolute; inset: 0 0 auto; height: 18px; transform: translateY(-17px);
+  background: radial-gradient(14px 10px at 14px 18px, var(--sea-1) 98%, transparent) 0 0 / 28px 18px repeat-x; }
+.uj { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; margin-bottom: 3rem; }
+.uj img { width: 100%; max-width: 100%; border-radius: 14px; aspect-ratio: 16 / 10; object-fit: cover; }
+.uj h3 { font-size: 1.9rem; }
+.uj p { color: rgba(255,255,255,.85); max-width: 46ch; }
+.uj a { color: var(--sun); font-weight: 700; text-decoration: none; }
+.dives { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+.dive { aspect-ratio: 3 / 4; max-width: 100%; border-radius: 14px; padding: .8rem; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; background: linear-gradient(170deg, #1a8aa0, #0b5a71); }
+.dive:nth-child(3) { background: linear-gradient(170deg, #0f6e86, #073e50); }
+.dive:nth-child(4) { background: linear-gradient(170deg, #0b4a5f, #04222d); }
+.dive strong { font-variant-numeric: tabular-nums; }
+
+/* Seabed */
+.seabed { background: linear-gradient(var(--deep), var(--abyss) 30%); color: #fff; }
+.seabed .grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; }
+.seabed h2 { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1; }
+.seabed h2 span { color: var(--sun); }
+.seabed p { color: rgba(255,255,255,.82); max-width: 40ch; }
+.addr { color: var(--sun); font-weight: 600; user-select: all; }
+form { display: grid; gap: 1rem; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.3); cursor: pointer; font-size: .92rem; }
+.chip input:checked + span { background: var(--sun); color: var(--abyss); border-color: var(--sun); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .75rem .9rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; width: 100%; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.5); }
+textarea { min-height: 110px; resize: vertical; }
+.composed { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; opacity: .8; margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { background: var(--abyss); color: rgba(255,255,255,.6); font-size: .85rem; padding-block: 1.5rem 2.5rem; border-top: 1px solid rgba(255,255,255,.12); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+footer a { color: rgba(255,255,255,.85); }
+
+@media (max-width: 900px) {
+  .wrap { padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .topbar nav { display: none; }
+  .gauge { top: auto; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: none; flex-direction: row; }
+  .gauge .track, .gauge .zone { display: none; }
+  .aerials, .builds, .feature, .uj, .seabed .grid, .row { grid-template-columns: 1fr; gap: 1.5rem; }
+  .dives { grid-template-columns: repeat(2, 1fr); }
+  .aerials { grid-auto-rows: 200px; }
+}
+</style>
+</head>
+<body>
+<div class="gauge" id="gauge" aria-hidden="true">
+  <span class="read" id="gauge-read">+120 m</span>
+  <div class="track"><span class="marker" id="gauge-marker"></span></div>
+  <span class="zone" id="gauge-zone">In the air</span>
+</div>
+
+<main>
+  <section class="band sky" data-alt="120" data-zone="In the air" style="padding-top:0">
+    <div class="wrap">
+      <div class="topbar">
+        <a class="name" href="#top">Will Wolff</a>
+        <nav aria-label="Sections"><a href="#air">Air</a><a href="#sea-level">Sea level</a><a href="#underwater">Underwater</a><a href="#book">Book me</a></nav>
+      </div>
+      <div class="hero" id="top">
+        <span class="alt" style="color:var(--lagoon-deep)">+120 m · start of the descent</span>
+        <h1 style="margin-top:.75rem">From 120 m up to 30 m down.</h1>
+        <p>I'm Will. I film from the air and underwater, and in between I play beach volleyball and build software. Scroll down through all of it, or skip straight to booking.</p>
+        <div class="actions"><a class="btn btn-ink" href="#book">Book a project</a><a class="btn" href="#sea-level">See what I build</a></div>
+      </div>
+      <div class="band-head" id="air" style="margin-top:2rem">
+        <div><span class="alt" style="color:var(--lagoon-deep)">+120 to +5 m</span><h2>In the air</h2></div>
+        <p style="color:var(--ink-soft)">Drone footage of coastlines and dive sites, for dive centers, tourism and nature projects.</p>
+      </div>
+      <div class="aerials">
+        <div class="aerial"><span class="ph-note">Placeholder</span><span><strong>+120 m</strong><br>Coastline, wide</span></div>
+        <div class="aerial"><span class="ph-note">Placeholder</span><span><strong>+40 m</strong><br>Bay, top-down</span></div>
+        <div class="aerial"><span class="ph-note">Placeholder</span><span><strong>+5 m</strong><br>Boat over the site</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band beach" id="sea-level" data-alt="0" data-zone="Sea level">
+    <div class="wrap">
+      <div class="horizon"><span class="alt">0 m · sea level</span></div>
+      <div class="band-head">
+        <div><h2>On the sand, and at the desk</h2></div>
+        <p style="color:var(--ink-soft)">Between flights and dives: beach volleyball, and the software I build for clients and for myself.</p>
+      </div>
+      <div class="feature">
+        <div class="pair">
+          <div class="court"><span class="ph-note">Placeholder</span><span>You on the court, portrait</span></div>
+          <img src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app screens" loading="lazy">
+        </div>
+        <div>
+          <span class="alt" style="color:var(--lagoon-deep)">Own product · live</span>
+          <h3 style="margin:.4rem 0 .6rem">AlwaysSandy</h3>
+          <p>I play beach volleyball, so I built a social network for Berlin's scene. Players find coaches, sessions and each other across the city's sand courts.</p>
+          <a class="go" href="https://alwayssandy.com" target="_blank" rel="noopener">alwayssandy.com ↗</a>
+        </div>
+      </div>
+      <div class="builds">
+        <a class="card" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener"><span class="kind">Contract · IOG</span><h3>Ouroboros Leios</h3><p>Software engineer and architect on Cardano's high-throughput protocol.</p></a>
+        <a class="card" href="https://txflow.fun" target="_blank" rel="noopener"><span class="kind">Side project · in progress</span><h3>txflow</h3><p>Describe a transaction flow in plain words and run it on the Leios test network.</p></a>
+        <a class="card" href="https://hausnummer.pages.dev/" target="_blank" rel="noopener"><span class="kind">Own product</span><h3>Hausnummer</h3><p>Quick screening of German residential property listings: cashflow, tax and return.</p></a>
+        <a class="card" href="https://operando.de" target="_blank" rel="noopener"><span class="kind">Client · in production</span><h3>Operando</h3><p>AI deal sourcing: reads M&amp;A teasers from email and drafts leads the team reviews.</p></a>
+        <a class="card" href="https://pagebase.dev" target="_blank" rel="noopener"><span class="kind">Studio</span><h3>Pagebase</h3><p>Fixed-price websites for small businesses, with hosting and support.</p></a>
+        <a class="card" href="../willi-wolff-cv-en.pdf"><span class="kind">Eleven years</span><h3>Full CV</h3><p>Career, publications and everything else, as a PDF.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sea" id="underwater" data-alt="-12" data-zone="Underwater">
+    <span class="surface" aria-hidden="true"></span>
+    <div class="wrap">
+      <div class="band-head">
+        <div><span class="alt" style="color:var(--sun)">−5 to −30 m</span><h2>Underwater</h2></div>
+        <p>Dive sites, reefs and wildlife on underwater cameras, and the dive center I build for.</p>
+      </div>
+      <div class="uj">
+        <img src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+        <div>
+          <span class="alt" style="color:var(--sun)">Client · ongoing support</span>
+          <h3 style="margin:.4rem 0 .6rem">Underwater Journeys</h3>
+          <p>A dive center in Cyprus. I built their website and booking system and keep supporting them as they grow.</p>
+          <a href="https://underwater.journeys.cy/" target="_blank" rel="noopener">underwater.journeys.cy ↗</a>
+        </div>
+      </div>
+      <div class="dives">
+        <div class="dive"><span class="ph-note">Placeholder</span><span><strong>−4 m</strong><br>Shore entry</span></div>
+        <div class="dive"><span class="ph-note">Placeholder</span><span><strong>−12 m</strong><br>Reef wall</span></div>
+        <div class="dive"><span class="ph-note">Placeholder</span><span><strong>−18 m</strong><br>Wildlife</span></div>
+        <div class="dive"><span class="ph-note">Placeholder</span><span><strong>−30 m</strong><br>Wreck or cave</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band seabed" id="book" data-alt="-30" data-zone="Seabed">
+    <div class="wrap grid">
+      <div>
+        <span class="alt" style="color:var(--sun)">−30 m · the bottom</span>
+        <h2 style="margin-top:.6rem">You made it down. Let's <span>make</span> something.</h2>
+        <p>Footage, software, a website or another kind of collaboration. A few lines are enough.</p>
+        <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      </div>
+      <form id="enquiry">
+        <fieldset>
+          <legend>I'm looking for</legend>
+          <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+        </fieldset>
+        <div class="row">
+          <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+          <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+        </div>
+        <label>What you have in mind<textarea id="enq-msg" placeholder="Where, what, and roughly when"></textarea></label>
+        <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. next dive season"></label>
+        <div><button class="btn btn-sun" type="submit">Write the email</button></div>
+        <div class="composed" id="composed" hidden>
+          <strong class="composed-subject"></strong>
+          <pre class="composed-body"></pre>
+          <div class="btns"><a class="btn btn-sun composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></div></footer>
+<script src="enquiry.js"></script>
+<script>
+// Altitude gauge: interpolate between the altitudes of the bands around the viewport centre.
+(function () {
+  var bands = Array.prototype.slice.call(document.querySelectorAll('[data-alt]'));
+  var read = document.getElementById('gauge-read'), marker = document.getElementById('gauge-marker');
+  var zone = document.getElementById('gauge-zone'), gauge = document.getElementById('gauge');
+  var TOP = 120, BOTTOM = -30;
+  function fmt(a) { var r = Math.round(a); return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r) + ' m'; }
+  function update() {
+    var y = window.scrollY + window.innerHeight / 2, alt = TOP, z = bands[0].dataset.zone;
+    for (var i = 0; i < bands.length; i++) {
+      var b = bands[i], top = b.offsetTop, next = bands[i + 1];
+      if (y >= top) {
+        z = b.dataset.zone;
+        var a0 = +b.dataset.alt, a1 = next ? +next.dataset.alt : a0;
+        var end = next ? next.offsetTop : top + b.offsetHeight;
+        alt = a0 + (a1 - a0) * Math.min(1, (y - top) / Math.max(1, end - top));
+      }
+    }
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) { alt = BOTTOM; z = 'Seabed'; }
+    read.textContent = fmt(alt);
+    zone.textContent = z;
+    marker.style.top = ((TOP - alt) / (TOP - BOTTOM) * 100) + '%';
+    gauge.classList.toggle('under', alt < 0);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>

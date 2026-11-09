@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Logbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Variant B3, "Logbook". Layout: like a dive or flight log. Left column pins the intro, an
+   elevation profile of every entry, and the Air / Land / Water filter. Right column lists the
+   entries sorted by elevation: flights on top, Berlin at +34 m, the Cyprus shore at 0 m, dives below. */
+:root {
+  --bg: #fafcfc;
+  --ink: #062a36;
+  --ink-soft: #4a6772;
+  --line: #dbe6e9;
+  --lagoon: #0f9fb0;
+  --lagoon-deep: #0b7684;
+  --air: #6fb9cf;
+  --land: #c9a24f;
+  --water: #0e6f86;
+  --sand-wash: #f5ecd6;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font-body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.25rem; border-radius: 999px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+.btn-ink { background: var(--ink); color: #fff; }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within, .entry:focus-visible, .filter button:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 2px; }
+
+.layout { display: grid; grid-template-columns: 380px 1fr; gap: 3.5rem; padding-block: 2rem 4rem; }
+.side { position: sticky; top: 1.5rem; align-self: start; display: grid; gap: 1.5rem; }
+.who { display: flex; align-items: center; gap: .9rem; }
+.who img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+.who b { font-family: var(--font-display); font-size: 1.15rem; display: block; }
+.who span { color: var(--ink-soft); font-size: .88rem; }
+.side h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.02; font-weight: 800; }
+.side p { margin: 0; color: var(--ink-soft); }
+.side .actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+.profile { border-top: 1px solid var(--line); padding-top: 1rem; }
+.profile svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.profile .cap { font-size: .78rem; color: var(--ink-soft); }
+.filter { display: flex; flex-wrap: wrap; gap: .4rem; }
+.filter button { font: 600 .88rem var(--font-body); padding: .4rem .85rem; border-radius: 999px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; }
+.filter button i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.filter button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: #fff; }
+
+/* Log */
+.log-head { display: grid; grid-template-columns: 110px 1fr 160px; gap: 1.25rem; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); padding-bottom: .6rem; border-bottom: 2px solid var(--ink); }
+.entry { display: grid; grid-template-columns: 110px 1fr 160px; gap: 1.25rem; padding-block: 1.25rem; border-bottom: 1px solid var(--line); text-decoration: none; align-items: start; }
+.entry:hover h3 { color: var(--lagoon-deep); }
+.elev { display: grid; gap: .1rem; }
+.elev strong { font-family: var(--font-display); font-size: 1.5rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.elev span { font-size: .76rem; color: var(--ink-soft); }
+.entry .body { min-width: 0; display: grid; gap: .3rem; }
+.entry .kind { display: inline-flex; align-items: center; gap: .4rem; font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+.entry .kind i { width: 8px; height: 8px; border-radius: 50%; }
+.entry h3 { font-size: 1.2rem; }
+.entry p { margin: 0; color: var(--ink-soft); font-size: .95rem; max-width: 56ch; }
+.thumb { width: 100%; max-width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; }
+.thumb.ph { display: flex; align-items: flex-start; padding: .45rem; color: #fff; }
+.ph-note { font-size: .58rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed currentColor; padding: .1rem .35rem; border-radius: 4px; opacity: .9; }
+.sea-line { display: flex; align-items: center; gap: .75rem; padding-block: .5rem; color: var(--lagoon-deep); font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.sea-line::after { content: ""; flex: 1; height: 0; border-top: 2px dashed currentColor; opacity: .5; }
+.i-air { background: var(--air); } .i-land { background: var(--land); } .i-water { background: var(--water); }
+.g-air1 { background: linear-gradient(160deg, #9fd3df, #4aa7b8 60%, #2f8c8f); }
+.g-air2 { background: linear-gradient(160deg, #bfd9d3, #5fa9a2 55%, #c9b98f); }
+.g-court { background: repeating-linear-gradient(-45deg, #e9d6a8 0 8px, #dfc68f 8px 16px); color: var(--ink); }
+.g-w1 { background: linear-gradient(170deg, #1a8aa0, #0b5a71); }
+.g-w2 { background: linear-gradient(170deg, #0f6e86, #073e50); }
+.g-w3 { background: linear-gradient(170deg, #0b4a5f, #04222d); }
+
+/* Booking */
+.book { border-top: 1px solid var(--line); padding-block: 4rem; background: var(--sand-wash); }
+.book .grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3.5rem; }
+.book h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.02; }
+.book p { color: var(--ink-soft); max-width: 40ch; }
+.addr { font-weight: 700; user-select: all; }
+form { display: grid; gap: 1rem; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .45rem .95rem; border-radius: 999px; border: 1.5px solid #d6c79f; cursor: pointer; font-size: .92rem; background: #fffdf7; }
+.chip input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .7rem .85rem; border-radius: 10px; border: 1.5px solid #d6c79f; background: #fffdf7; color: var(--ink); width: 100%; }
+textarea { min-height: 110px; resize: vertical; }
+.composed { border-top: 1px solid #d6c79f; padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; color: var(--ink-soft); margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { padding-block: 1.5rem 2.5rem; font-size: .85rem; color: var(--ink-soft); border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+
+@media (max-width: 960px) {
+  .layout { grid-template-columns: 1fr; gap: 2rem; }
+  .side { position: static; }
+  .log-head { display: none; }
+  .entry { grid-template-columns: 84px 1fr; }
+  .entry .thumb { grid-column: 2; max-width: 240px; }
+  .book .grid, .row { grid-template-columns: 1fr; gap: 2rem; }
+}
+</style>
+</head>
+<body>
+<main id="top">
+  <div class="wrap layout">
+    <aside class="side">
+      <div class="who"><img src="../assets/images/will.jpg" alt=""><div><b>Will Wolff</b><span>Berlin · German &amp; English</span></div></div>
+      <h1>My logbook, from 120 m up to 30 m down.</h1>
+      <p>Drone flights, beach volleyball, software and dives, sorted by elevation. Everything here is something you can book me for.</p>
+      <div class="actions"><a class="btn btn-ink" href="#book">Book a project</a><a class="btn" href="../willi-wolff-cv-en.pdf">CV (PDF)</a></div>
+      <div class="profile">
+        <svg id="profile" viewBox="0 0 380 190" role="img" aria-label="Elevation of each log entry, from +120 m to −30 m"></svg>
+        <span class="cap">Each dot is one entry below. Dashed line: sea level.</span>
+      </div>
+      <div class="filter" role="group" aria-label="Filter entries">
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="air" aria-pressed="false"><i class="i-air"></i>Air</button>
+        <button type="button" data-f="land" aria-pressed="false"><i class="i-land"></i>Land</button>
+        <button type="button" data-f="water" aria-pressed="false"><i class="i-water"></i>Water</button>
+      </div>
+    </aside>
+
+    <div class="log" id="log">
+      <div class="log-head"><span>Elevation</span><span>Entry</span><span>Media</span></div>
+
+      <a class="entry" data-zone="air" data-elev="120" href="#book" data-kind="Footage">
+        <div class="elev"><strong>+120 m</strong><span>Drone</span></div>
+        <div class="body"><span class="kind"><i class="i-air"></i>Footage · ongoing</span><h3>Coastlines from above</h3><p>Wide aerial footage of coastlines and bays, for tourism and nature projects.</p></div>
+        <div class="thumb ph g-air1"><span class="ph-note">Placeholder</span></div>
+      </a>
+      <a class="entry" data-zone="air" data-elev="40" href="#book" data-kind="Footage">
+        <div class="elev"><strong>+40 m</strong><span>Drone</span></div>
+        <div class="body"><span class="kind"><i class="i-air"></i>Footage · ongoing</span><h3>Dive sites, top-down</h3><p>Overhead shots that show divers where the site is before they get in.</p></div>
+        <div class="thumb ph g-air2"><span class="ph-note">Placeholder</span></div>
+      </a>
+      <a class="entry" data-zone="land" data-elev="34" href="https://alwayssandy.com" target="_blank" rel="noopener">
+        <div class="elev"><strong>+34 m</strong><span>Berlin sand courts</span></div>
+        <div class="body"><span class="kind"><i class="i-land"></i>Own product · live</span><h3>AlwaysSandy ↗</h3><p>I play beach volleyball, so I built a social network for Berlin's scene: players find coaches, sessions and each other.</p></div>
+        <img class="thumb" src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app screens" loading="lazy">
+      </a>
+      <a class="entry" data-zone="land" data-elev="34" href="#book" data-kind="Something else">
+        <div class="elev"><strong>+34 m</strong><span>Berlin sand courts</span></div>
+        <div class="body"><span class="kind"><i class="i-land"></i>Beach volleyball</span><h3>On the court</h3><p>I play on Berlin's sand courts. It's the reason AlwaysSandy exists.</p></div>
+        <div class="thumb ph g-court"><span class="ph-note">Placeholder</span></div>
+      </a>
+      <a class="entry" data-zone="land" data-elev="34" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener">
+        <div class="elev"><strong>+34 m</strong><span>Berlin desk</span></div>
+        <div class="body"><span class="kind"><i class="i-land"></i>Contract · IOG</span><h3>Ouroboros Leios ↗</h3><p>Software engineer and architect on Cardano's high-throughput protocol.</p></div>
+        <img class="thumb" src="../leios-thumbnail.jpg" alt="Ouroboros Leios simulator" loading="lazy">
+      </a>
+      <a class="entry" data-zone="land" data-elev="34" href="https://txflow.fun" target="_blank" rel="noopener">
+        <div class="elev"><strong>+34 m</strong><span>Berlin desk</span></div>
+        <div class="body"><span class="kind"><i class="i-land"></i>Side project · in progress</span><h3>txflow ↗</h3><p>Describe a transaction flow in plain words and run it on the Leios test network.</p></div>
+        <img class="thumb" src="../assets/previews/txflow.jpg" alt="txflow" loading="lazy">
+      </a>
+      <a class="entry" data-zone="land" data-elev="34" href="https://pagebase.dev" target="_blank" rel="noopener">
+        <div class="elev"><strong>+34 m</strong><span>Berlin desk</span></div>
+        <div class="body"><span class="kind"><i class="i-land"></i>Studio</span><h3>Pagebase ↗</h3><p>Fixed-price websites for small businesses, with hosting and support.</p></div>
+        <img class="thumb" src="../assets/previews/pagebase.jpg" alt="Pagebase" loading="lazy">
+      </a>
+
+      <div class="sea-line">0 m · sea level</div>
+
+      <a class="entry" data-zone="water" data-elev="0" href="https://underwater.journeys.cy/" target="_blank" rel="noopener">
+        <div class="elev"><strong>0 m</strong><span>Cyprus shore</span></div>
+        <div class="body"><span class="kind"><i class="i-water"></i>Client · ongoing support</span><h3>Underwater Journeys ↗</h3><p>A dive center in Cyprus. I built their website and booking system and keep supporting them.</p></div>
+        <img class="thumb" src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+      </a>
+      <a class="entry" data-zone="water" data-elev="-12" href="#book" data-kind="Footage">
+        <div class="elev"><strong>−12 m</strong><span>Dive</span></div>
+        <div class="body"><span class="kind"><i class="i-water"></i>Footage · ongoing</span><h3>Reef wall</h3><p>Underwater video and stills of reefs and wildlife.</p></div>
+        <div class="thumb ph g-w1"><span class="ph-note">Placeholder</span></div>
+      </a>
+      <a class="entry" data-zone="water" data-elev="-18" href="#book" data-kind="Footage">
+        <div class="elev"><strong>−18 m</strong><span>Dive</span></div>
+        <div class="body"><span class="kind"><i class="i-water"></i>Footage · ongoing</span><h3>Wildlife</h3><p>Whatever turns up on the dive.</p></div>
+        <div class="thumb ph g-w2"><span class="ph-note">Placeholder</span></div>
+      </a>
+      <a class="entry" data-zone="water" data-elev="-30" href="#book" data-kind="Footage">
+        <div class="elev"><strong>−30 m</strong><span>Dive</span></div>
+        <div class="body"><span class="kind"><i class="i-water"></i>Footage · ongoing</span><h3>Wreck or cave</h3><p>Deeper sites, for experienced divers.</p></div>
+        <div class="thumb ph g-w3"><span class="ph-note">Placeholder</span></div>
+      </a>
+    </div>
+  </div>
+
+  <section class="book" id="book">
+    <div class="wrap grid">
+      <div>
+        <h2>Add your project to the log</h2>
+        <p>Footage, software, a website or another kind of collaboration. A few lines are enough.</p>
+        <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      </div>
+      <form id="enquiry">
+        <fieldset>
+          <legend>What is it?</legend>
+          <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+        </fieldset>
+        <div class="row">
+          <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+          <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+        </div>
+        <label>What you have in mind<textarea id="enq-msg" placeholder="What, where, and roughly when"></textarea></label>
+        <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. spring 2027"></label>
+        <div><button class="btn btn-ink" type="submit">Write the email</button></div>
+        <div class="composed" id="composed" hidden>
+          <strong class="composed-subject"></strong>
+          <pre class="composed-body"></pre>
+          <div class="btns"><a class="btn btn-ink composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></div></footer>
+<script src="enquiry.js"></script>
+<script>
+(function () {
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  var svg = document.getElementById('profile'), NS = 'http://www.w3.org/2000/svg';
+  var W = 380, H = 190, L = 44, R = 10, T = 10, B = 14, TOP = 120, BOT = -30;
+  var col = { air: '#6fb9cf', land: '#c9a24f', water: '#0e6f86' };
+  function y(e) { return T + (TOP - e) / (TOP - BOT) * (H - T - B); }
+  function el(n, a) { var x = document.createElementNS(NS, n); for (var k in a) x.setAttribute(k, a[k]); return x; }
+  [120, 60, 0, -30].forEach(function (v) {
+    svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: '#062a36', 'stroke-opacity': v === 0 ? .5 : .1, 'stroke-dasharray': v === 0 ? '4 4' : '' }));
+    var t = el('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end', 'font-size': 11, 'font-weight': 700, fill: '#4a6772', 'font-family': 'Figtree, sans-serif' });
+    t.textContent = (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + ' m'; svg.appendChild(t);
+  });
+  var step = (W - L - R - 16) / Math.max(1, entries.length - 1), pts = [];
+  entries.forEach(function (en, i) { pts.push([L + 8 + i * step, y(+en.dataset.elev), en.dataset.zone]); });
+  svg.appendChild(el('polyline', { points: pts.map(function (p) { return p[0] + ',' + p[1]; }).join(' '), fill: 'none', stroke: '#062a36', 'stroke-opacity': .25, 'stroke-width': 1.5 }));
+  var dots = pts.map(function (p) { var c = el('circle', { cx: p[0], cy: p[1], r: 5, fill: col[p[2]], stroke: '#fff', 'stroke-width': 1.5 }); svg.appendChild(c); return c; });
+  document.querySelectorAll('.filter button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.dataset.f;
+      document.querySelectorAll('.filter button').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      entries.forEach(function (en, i) { var on = f === 'all' || en.dataset.zone === f; en.hidden = !on; dots[i].setAttribute('opacity', on ? 1 : .2); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
