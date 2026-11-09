@@ -22,3 +22,7 @@ Round 3, iterations on B1 Descent:
 - `d1-descent-refined.html`: one continuous colour gradient, a ruler gauge with 10 m ticks, a floating booking pill.
 - `d2-descent-cinematic.html`: full-screen footage scenes, dive-computer readout, sea level as a bright sand panel with a sideways project strip.
 - `d3-descent-column.html`: light portfolio; a pinned drawn water column marks every item at its elevation.
+
+Round 4, a bolder concept:
+
+- `e1-one-breath.html`: the page is one take and one breath. Scroll scrubs a top-down shot from 100 m down onto the court, through the surface and down the freediving line to 30 m. Projects ride on the line as depth tags; contact is the ascent. The canvas is a rendered stand-in; real footage drops in as an image sequence (`SEQ` in the script).
