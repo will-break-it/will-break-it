@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Descent Column</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* D3, "Descent column". Layout: a portfolio that stays light and dense. The left column pins a
+   drawn water column from sky to seabed with every item marked at its elevation; the right column
+   scrolls through those items, and the marker for the one you are reading lights up. */
+:root {
+  --bg: #f7fafb;
+  --ink: #062a36;
+  --ink-soft: #4a6772;
+  --line: #dbe6e9;
+  --lagoon: #0f9fb0;
+  --lagoon-deep: #0b7684;
+  --sand: #e8d5a6;
+  --sun: #f0d48a;
+  --abyss: #04202a;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font-body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+.wrap { max-width: 1220px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.alt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; color: var(--lagoon-deep); }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.25rem; border-radius: 999px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+.btn-ink { background: var(--ink); color: #fff; }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within, .mark:focus-visible { outline: 2px solid var(--lagoon); outline-offset: 2px; }
+.ph-note { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed currentColor; padding: .15rem .4rem; border-radius: 5px; opacity: .85; }
+
+.layout { display: grid; grid-template-columns: 320px 1fr; gap: 4rem; }
+
+/* Column */
+.col { position: sticky; top: 0; height: 100vh; padding-block: 1.5rem; display: grid; grid-template-rows: auto 1fr auto; gap: 1.25rem; }
+.who { display: flex; align-items: center; gap: .8rem; text-decoration: none; }
+.who img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.who b { font-family: var(--font-display); font-size: 1.1rem; }
+.water { position: relative; display: grid; grid-template-columns: 56px 1fr; min-height: 0; }
+.strip { position: relative; border-radius: 28px; overflow: hidden; background: var(--line); }
+.strip svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.marks { position: relative; }
+.mark { position: absolute; left: 0; right: 0; transform: translateY(-50%); display: flex; align-items: center; gap: .6rem; text-decoration: none; font-size: .84rem; color: var(--ink-soft); padding-left: .9rem; }
+.mark::before { content: ""; position: absolute; left: -34px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--ink); transition: transform .2s, background .2s; }
+.mark b { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); min-width: 3.6em; }
+.mark.on { color: var(--ink); font-weight: 600; }
+.mark.on::before { background: var(--sun); transform: scale(1.35); }
+.col .btn { justify-self: start; }
+
+/* Content */
+.content { padding-block: 2rem 4rem; min-width: 0; }
+.intro { padding-block: 2rem 3rem; border-bottom: 1px solid var(--line); }
+.intro h1 { font-size: clamp(2.6rem, 5.5vw, 4.4rem); line-height: .98; font-weight: 800; max-width: 13ch; margin: .6rem 0 1rem; }
+.intro p { color: var(--ink-soft); max-width: 52ch; margin: 0 0 1.5rem; font-size: 1.1rem; }
+.intro .actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.item { display: grid; grid-template-columns: 1fr 1.1fr; gap: 2rem; padding-block: 2.5rem; border-bottom: 1px solid var(--line); align-items: center; scroll-margin-top: 1rem; }
+.item .vis { width: 100%; max-width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: .75rem; color: #fff; font-size: .82rem; }
+.item h2 { font-size: 1.6rem; margin: .35rem 0 .45rem; }
+.item p { margin: 0 0 .6rem; color: var(--ink-soft); max-width: 46ch; }
+.item .go { color: var(--lagoon-deep); font-weight: 700; text-decoration: none; font-size: .95rem; }
+.group { padding-block: 2.5rem; border-bottom: 1px solid var(--line); scroll-margin-top: 1rem; }
+.group h2 { font-size: 1.6rem; margin: .35rem 0 1.25rem; }
+.list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+.li { display: grid; gap: .15rem; padding-block: .85rem; border-top: 1px solid var(--line); text-decoration: none; }
+.li b { font-family: var(--font-display); font-size: 1.08rem; }
+.li span { color: var(--ink-soft); font-size: .92rem; }
+.li:hover b { color: var(--lagoon-deep); }
+.g-air1 { background: linear-gradient(160deg, #9fd3df, #4aa7b8 60%, #2f8c8f); }
+.g-air2 { background: linear-gradient(160deg, #bfd9d3, #5fa9a2 55%, #c9b98f); }
+.g-court { background: repeating-linear-gradient(-45deg, #ecdcb5 0 10px, #e3cd9f 10px 20px); color: var(--ink) !important; border: 1.5px dashed #b89f65; }
+.g-w1 { background: linear-gradient(170deg, #1a8aa0, #0b5a71); }
+.g-w2 { background: linear-gradient(170deg, #0b4a5f, #04222d); }
+
+.book { background: var(--abyss); color: #fff; border-radius: 20px; padding: clamp(1.5rem, 4vw, 3rem); margin-top: 3rem; display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; scroll-margin-top: 1rem; }
+.book .alt { color: var(--sun); }
+.book h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.02; margin-top: .5rem; }
+.book h2 span { color: var(--sun); }
+.book p { color: rgba(255,255,255,.82); }
+.addr { color: var(--sun); font-weight: 600; user-select: all; }
+form { display: grid; gap: 1rem; min-width: 0; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .45rem .95rem; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.3); cursor: pointer; font-size: .9rem; }
+.chip input:checked + span { background: var(--sun); color: var(--abyss); border-color: var(--sun); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .7rem .85rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; width: 100%; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.5); }
+textarea { min-height: 100px; resize: vertical; }
+.book .btn { background: var(--sun); border-color: var(--sun); color: var(--abyss); }
+.book .composed-copy { background: transparent !important; color: #fff !important; border-color: rgba(255,255,255,.5) !important; }
+.composed { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; opacity: .8; margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { padding-block: 2rem 3rem; color: var(--ink-soft); font-size: .85rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 0; }
+  .col { position: sticky; top: env(safe-area-inset-top, 0px); height: auto; z-index: 5; background: var(--bg); grid-template-rows: auto; grid-template-columns: 1fr auto; padding-block: .75rem; border-bottom: 1px solid var(--line); }
+  .water { display: none; }
+  .item, .list, .book, .row { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap layout">
+  <aside class="col">
+    <a class="who" href="#top"><img src="../assets/images/will.jpg" alt=""><b>Will Wolff</b></a>
+    <nav class="water" aria-label="Jump by elevation">
+      <div class="strip"><svg id="strip-svg" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+      <div class="marks" id="marks"></div>
+    </nav>
+    <a class="btn btn-ink" href="#book">Book a project</a>
+  </aside>
+
+  <main class="content" id="top">
+    <section class="intro" data-elev="120" data-label="Start" id="start">
+      <span class="alt">+120 m → −30 m</span>
+      <h1>Everything I make, by elevation.</h1>
+      <p>I'm Will, from Berlin. I film from the air and underwater, play beach volleyball, and build software. The column on the left is the whole page: pick a depth, or book me for any of it.</p>
+      <div class="actions"><a class="btn btn-ink" href="#book">Book a project</a><a class="btn" href="../willi-wolff-cv-en.pdf">CV (PDF)</a></div>
+    </section>
+
+    <article class="item" id="aerial" data-elev="120" data-label="Coastlines">
+      <div class="vis g-air1"><span class="ph-note">Placeholder</span><span>+120 m · coastline</span></div>
+      <div><span class="alt">+120 m · drone</span><h2>Coastlines from above</h2><p>Wide aerial footage for tourism and nature projects.</p><a class="go" href="#book" data-kind="Footage">Ask about footage →</a></div>
+    </article>
+    <article class="item" id="sites" data-elev="40" data-label="Dive sites">
+      <div class="vis g-air2"><span class="ph-note">Placeholder</span><span>+40 m · top-down</span></div>
+      <div><span class="alt">+40 m · drone</span><h2>Dive sites, top-down</h2><p>Overhead shots that show divers where the site is before they get in.</p><a class="go" href="#book" data-kind="Footage">Ask about footage →</a></div>
+    </article>
+    <article class="item" id="sandy" data-elev="34" data-label="AlwaysSandy">
+      <img class="vis" src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app" loading="lazy">
+      <div><span class="alt">+34 m · Berlin sand courts</span><h2>AlwaysSandy</h2><p>I play beach volleyball, so I built a social network for Berlin's scene: players find coaches, sessions and each other.</p><a class="go" href="https://alwayssandy.com" target="_blank" rel="noopener">alwayssandy.com ↗</a></div>
+    </article>
+    <article class="item" id="court" data-elev="34" data-label="On the court">
+      <div class="vis g-court"><span class="ph-note">Placeholder</span><span>You on the court</span></div>
+      <div><span class="alt">+34 m · Berlin sand courts</span><h2>On the court</h2><p>Where I play, and the reason AlwaysSandy exists.</p></div>
+    </article>
+    <section class="group" id="software" data-elev="34" data-label="Software">
+      <span class="alt">+34 m · Berlin desk</span>
+      <h2>Software I build</h2>
+      <div class="list">
+        <a class="li" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener"><b>Ouroboros Leios ↗</b><span>Engineer and architect at IOG on Cardano's high-throughput protocol.</span></a>
+        <a class="li" href="https://txflow.fun" target="_blank" rel="noopener"><b>txflow ↗</b><span>Describe a transaction flow and run it on the Leios test network.</span></a>
+        <a class="li" href="https://hausnummer.pages.dev/" target="_blank" rel="noopener"><b>Hausnummer ↗</b><span>Screening tool for German residential property listings.</span></a>
+        <a class="li" href="https://operando.de" target="_blank" rel="noopener"><b>Operando ↗</b><span>AI deal sourcing from M&amp;A teasers, reviewed by the team.</span></a>
+        <a class="li" href="https://pagebase.dev" target="_blank" rel="noopener"><b>Pagebase ↗</b><span>My studio for fixed-price small-business websites.</span></a>
+        <a class="li" href="../willi-wolff-cv-en.pdf"><b>Full CV</b><span>Eleven years of engineering and publications.</span></a>
+      </div>
+    </section>
+    <article class="item" id="uj" data-elev="0" data-label="Underwater Journeys">
+      <img class="vis" src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+      <div><span class="alt">0 m · Cyprus shore</span><h2>Underwater Journeys</h2><p>A dive center in Cyprus. I built their website and booking system and keep supporting them.</p><a class="go" href="https://underwater.journeys.cy/" target="_blank" rel="noopener">underwater.journeys.cy ↗</a></div>
+    </article>
+    <article class="item" id="reef" data-elev="-12" data-label="Reef wall">
+      <div class="vis g-w1"><span class="ph-note">Placeholder</span><span>−12 m · reef wall</span></div>
+      <div><span class="alt">−12 m · dive</span><h2>Reefs and wildlife</h2><p>Underwater video and stills of reefs and whatever turns up on the dive.</p><a class="go" href="#book" data-kind="Footage">Ask about footage →</a></div>
+    </article>
+    <article class="item" id="wreck" data-elev="-30" data-label="Wreck or cave">
+      <div class="vis g-w2"><span class="ph-note">Placeholder</span><span>−30 m · wreck or cave</span></div>
+      <div><span class="alt">−30 m · dive</span><h2>Deeper sites</h2><p>Wrecks and caves for experienced divers.</p><a class="go" href="#book" data-kind="Footage">Ask about footage →</a></div>
+    </article>
+
+    <section class="book" id="book" data-elev="-30" data-label="Book me">
+      <div>
+        <span class="alt">The bottom</span>
+        <h2>Let's <span>make</span> something.</h2>
+        <p>Footage, software, a website or another kind of collaboration. A few lines are enough.</p>
+        <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      </div>
+      <form id="enquiry">
+        <fieldset>
+          <legend>I'm looking for</legend>
+          <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+        </fieldset>
+        <div class="row">
+          <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+          <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+        </div>
+        <label>What you have in mind<textarea id="enq-msg" placeholder="Where, what, and roughly when"></textarea></label>
+        <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. spring 2027"></label>
+        <div><button class="btn" type="submit">Write the email</button></div>
+        <div class="composed" id="composed" hidden>
+          <strong class="composed-subject"></strong>
+          <pre class="composed-body"></pre>
+          <div class="btns"><a class="btn composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+<footer><div class="wrap"><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></div></footer>
+<script src="enquiry.js"></script>
+<script>
+(function () {
+  // Markers are spaced evenly (land would otherwise squash into one point) and the colours of the
+  // strip are placed at the markers, so sea level sits exactly at the 0 m entry.
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-elev]')).filter(function (el) { return el.id !== 'start'; });
+  var marks = document.getElementById('marks'), svg = document.getElementById('strip-svg'), NS = 'http://www.w3.org/2000/svg';
+  var n = items.length, pos = function (i) { return 4 + i * (92 / (n - 1)); };
+  var links = items.map(function (el, i) {
+    var e = +el.dataset.elev, a = document.createElement('a');
+    a.className = 'mark'; a.href = '#' + el.id; a.style.top = pos(i) + '%';
+    a.innerHTML = '<b>' + (e > 0 ? '+' : e < 0 ? '−' : '') + Math.abs(e) + ' m</b><span></span>';
+    a.lastChild.textContent = el.dataset.label;
+    marks.appendChild(a); return a;
+  });
+  var seaIdx = items.findIndex(function (el) { return +el.dataset.elev <= 0; });
+  var landIdx = items.findIndex(function (el) { return +el.dataset.elev <= 34; });
+  var defs = document.createElementNS(NS, 'defs'), g = document.createElementNS(NS, 'linearGradient');
+  g.setAttribute('id', 'wc'); g.setAttribute('x1', 0); g.setAttribute('y1', 0); g.setAttribute('x2', 0); g.setAttribute('y2', 1);
+  [[0, '#dcf0f5'], [pos(landIdx) - 6, '#b9dfe9'], [pos(landIdx) - 3, '#ecdcb0'], [pos(seaIdx) - 4, '#dcc48c'], [pos(seaIdx) - 1, '#2aaabb'], [80, '#0e6f86'], [100, '#04202a']].forEach(function (s) {
+    var st = document.createElementNS(NS, 'stop'); st.setAttribute('offset', s[0] + '%'); st.setAttribute('stop-color', s[1]); g.appendChild(st);
+  });
+  defs.appendChild(g); svg.appendChild(defs);
+  var r = document.createElementNS(NS, 'rect'); r.setAttribute('width', '100%'); r.setAttribute('height', '100%'); r.setAttribute('fill', 'url(#wc)'); svg.appendChild(r);
+  function update() {
+    var y = window.innerHeight * 0.4, on = 0;
+    items.forEach(function (el, i) { if (el.getBoundingClientRect().top <= y) on = i; });
+    links.forEach(function (a, i) { a.classList.toggle('on', i === on); });
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+</body>
+</html>

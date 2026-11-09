@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Descent Cinematic</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* D2, "Descent cinematic". Each stop fills the screen with footage and one line of text, like
+   scenes in a film. A dive-computer readout in the corner shows altitude or depth, the zone and the
+   next stop. Sea level breaks the pattern with a bright sand panel holding the projects. */
+:root {
+  --night: #04202a; --ink: #062a36; --ink-soft: #46636e;
+  --sand: #efe2c2; --sand-deep: #b89f65;
+  --foam: #ffffff; --foam-soft: rgba(255,255,255,.8);
+  --sun: #f0d48a; --lagoon: #0f9fb0; --lagoon-deep: #0b7684;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--night); color: var(--foam); font: 17px/1.6 var(--font-body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.02em; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.alt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--sun); }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.35rem; border-radius: 999px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+.btn-sun { background: var(--sun); border-color: var(--sun); color: var(--night); }
+.btn-ink { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within, .proj:focus-visible { outline: 2px solid var(--sun); outline-offset: 3px; }
+.ph-note { font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed currentColor; padding: .2rem .5rem; border-radius: 5px; opacity: .8; }
+
+header.top { position: absolute; inset: 0 0 auto; z-index: 10; padding-top: env(safe-area-inset-top, 0px); }
+header.top .wrap { display: flex; align-items: center; gap: 1rem; padding-block: 1.2rem; }
+header .name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; text-decoration: none; }
+header .btn { margin-left: auto; }
+
+/* Scenes */
+.scene { position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; isolation: isolate; }
+.scene .bg { position: absolute; inset: 0; z-index: -1; }
+.scene .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(4,32,42,.65)); }
+.scene .bg .ph-note { position: absolute; top: calc(5rem + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); color: var(--foam); z-index: 1; }
+.scene .copy { padding-block: 4rem 5.5rem; max-width: 760px; display: grid; gap: 1rem; }
+.scene h1 { font-size: clamp(3rem, 9vw, 7.2rem); line-height: .92; font-weight: 800; }
+.scene h2 { font-size: clamp(2.4rem, 6.5vw, 5rem); line-height: .95; font-weight: 800; }
+.scene p { margin: 0; color: var(--foam-soft); font-size: 1.15rem; max-width: 48ch; }
+.scene .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem; }
+.s-sky .bg { background: linear-gradient(170deg, #b4e0ea 0%, #5fb3c4 45%, #2f8c8f 75%, #c9b98f 100%); }
+.s-low .bg { background: linear-gradient(175deg, #8fcad6, #3f9fae 50%, #d4c18f 100%); }
+.s-sea .bg { background: radial-gradient(90% 60% at 50% 0%, rgba(120,220,230,.5), transparent 70%), linear-gradient(#1fa3b6, #0b5f76 60%, #073a4b); }
+.s-deep .bg { background: radial-gradient(60% 40% at 30% 10%, rgba(80,180,200,.25), transparent 70%), linear-gradient(#0a4a5f, #04222d 70%); }
+.scene .meta { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: .92rem; }
+.scene .meta a { color: var(--sun); font-weight: 700; text-decoration: none; }
+.s-sea .copy { max-width: min(760px, 52%); }
+.inset { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 5.5rem; width: min(38vw, 440px); border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+
+/* Sea level panel */
+.beach { background: var(--sand); color: var(--ink); padding-block: 5rem; }
+.beach .alt { color: var(--lagoon-deep); }
+.beach-top { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.court { aspect-ratio: 5 / 4; max-width: 100%; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: .9rem; background: repeating-linear-gradient(-45deg, #e6d3a6 0 10px, #dcc591 10px 20px); border: 1.5px dashed var(--sand-deep); position: relative; justify-content: flex-start; gap: .5rem; }
+.court img { position: absolute; right: -1.25rem; bottom: -1.25rem; width: 58%; border-radius: 12px; box-shadow: 0 12px 30px rgba(6,42,54,.2); }
+.beach h2 { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: .98; margin: .5rem 0 1rem; }
+.beach p { color: var(--ink-soft); max-width: 44ch; margin: 0 0 1rem; }
+.beach .go { color: var(--lagoon-deep); font-weight: 700; text-decoration: none; }
+.strip-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 1rem; margin: 4.5rem 0 1.25rem; }
+.strip-head h3 { font-size: 1.6rem; }
+.strip-head span { color: var(--ink-soft); font-size: .9rem; }
+.strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr); gap: 1rem; overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; }
+.proj { scroll-snap-align: start; display: grid; gap: .5rem; text-decoration: none; min-width: 0; }
+.proj img, .proj .tile { width: 100%; max-width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; }
+.proj .tile { display: grid; place-items: center; background: var(--ink); color: var(--sun); font: 800 1.3rem var(--font-display); }
+.proj .kind { font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lagoon-deep); }
+.proj h4 { margin: 0; font: 700 1.15rem var(--font-display); }
+.proj p { margin: 0; font-size: .93rem; color: var(--ink-soft); }
+.proj:hover h4 { color: var(--lagoon-deep); }
+
+/* Booking */
+.book { background: var(--night); padding-block: 5rem; }
+.book .grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; }
+.book h2 { font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1; margin-top: .5rem; }
+.book h2 span { color: var(--sun); }
+.book p { color: var(--foam-soft); max-width: 40ch; }
+.addr { color: var(--sun); font-weight: 600; user-select: all; }
+form { display: grid; gap: 1rem; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.3); cursor: pointer; font-size: .92rem; }
+.chip input:checked + span { background: var(--sun); color: var(--night); border-color: var(--sun); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .75rem .9rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; width: 100%; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.5); }
+textarea { min-height: 110px; resize: vertical; }
+.composed { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; opacity: .8; margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { color: rgba(255,255,255,.6); font-size: .85rem; padding-block: 1.5rem 7rem; border-top: 1px solid rgba(255,255,255,.12); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+
+/* Dive computer */
+.hud { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30; display: grid; grid-template-columns: auto auto; gap: .1rem 1.1rem; align-items: end; padding: .7rem 1rem .75rem; border-radius: 16px; background: rgba(4,32,42,.78); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.14); color: var(--foam); box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.hud .lbl { font-size: .6rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.hud .big { grid-row: span 2; font: 800 2.2rem/1 var(--font-display); font-variant-numeric: tabular-nums; min-width: 4.6ch; }
+.hud .big small { font-size: .9rem; font-weight: 700; margin-left: .15rem; }
+.hud .zone { font-weight: 700; font-size: .9rem; }
+.hud .next { grid-column: 1 / -1; font-size: .78rem; color: var(--sun); border-top: 1px solid rgba(255,255,255,.14); padding-top: .35rem; margin-top: .3rem; }
+
+@media (max-width: 900px) {
+  .scene { min-height: 78vh; }
+  .inset { position: static; width: 100%; margin-top: 1rem; }
+  .s-sea { flex-direction: column; align-items: stretch; justify-content: flex-end; padding-bottom: 2rem; }
+  .s-sea .copy { max-width: none; padding-bottom: 1rem; }
+  .beach-top, .book .grid, .row { grid-template-columns: 1fr; gap: 2rem; }
+  .court img { right: .75rem; bottom: .75rem; }
+  .hud .big { font-size: 1.7rem; }
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><a class="name" href="#top">Will Wolff</a><a class="btn" href="#book">Book a project</a></div></header>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <span class="lbl" id="hud-lbl">Altitude</span>
+  <span class="big" id="hud-big">120<small>m</small></span>
+  <span class="zone" id="hud-zone">In the air</span>
+  <span class="next" id="hud-next">Next: coming down ↓</span>
+</div>
+
+<main id="top">
+  <section class="scene s-sky" data-alt="120" data-zone="In the air" data-next="Coming down">
+    <div class="bg"><span class="ph-note">Placeholder · muted drone loop, widest shot</span></div>
+    <div class="wrap copy">
+      <span class="alt">+120 m</span>
+      <h1>From 120 m up to 30 m down.</h1>
+      <p>I'm Will. I film from the air and underwater, play beach volleyball, and build software. Scroll to come down with me.</p>
+      <div class="actions"><a class="btn btn-sun" href="#book">Book a project</a><a class="btn" href="#sea-level">Skip to sea level</a></div>
+    </div>
+  </section>
+
+  <section class="scene s-low" data-alt="30" data-zone="In the air" data-next="Sea level">
+    <div class="bg"><span class="ph-note">Placeholder · low drone pass over a boat or reef</span></div>
+    <div class="wrap copy">
+      <span class="alt">+30 m · drone</span>
+      <h2>Footage from above.</h2>
+      <p>Aerial video of coastlines, bays and dive sites, for dive centers, tourism and nature projects.</p>
+      <div class="meta"><a href="#book" data-kind="Footage">Ask about drone footage →</a></div>
+    </div>
+  </section>
+
+  <section class="beach" id="sea-level" data-alt="0" data-zone="Sea level" data-next="Underwater">
+    <div class="wrap">
+      <div class="beach-top">
+        <div class="court"><span class="ph-note">Placeholder</span><span>You on the court</span><img src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app" loading="lazy"></div>
+        <div>
+          <span class="alt">0 m · on the sand</span>
+          <h2>Then I play beach volleyball.</h2>
+          <p>Enough that I built AlwaysSandy, a social network for Berlin's scene. Players find coaches, sessions and each other across the city's sand courts.</p>
+          <a class="go" href="https://alwayssandy.com" target="_blank" rel="noopener">alwayssandy.com ↗</a>
+        </div>
+      </div>
+      <div class="strip-head"><h3>And I build software</h3><span>Scroll sideways →</span></div>
+      <div class="strip">
+        <a class="proj" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener"><img src="../leios-thumbnail.jpg" alt="" loading="lazy"><span class="kind">Contract · IOG</span><h4>Ouroboros Leios</h4><p>Engineer and architect on Cardano's high-throughput protocol.</p></a>
+        <a class="proj" href="https://txflow.fun" target="_blank" rel="noopener"><img src="../assets/previews/txflow.jpg" alt="" loading="lazy"><span class="kind">Side project</span><h4>txflow</h4><p>Describe a transaction flow and run it on the Leios test network.</p></a>
+        <a class="proj" href="https://hausnummer.pages.dev/" target="_blank" rel="noopener"><span class="tile">Hausnummer</span><span class="kind">Own product</span><h4>Hausnummer</h4><p>Screening tool for German residential property listings.</p></a>
+        <a class="proj" href="https://operando.de" target="_blank" rel="noopener"><span class="tile">Operando</span><span class="kind">Client</span><h4>Operando</h4><p>AI deal sourcing from M&amp;A teasers, reviewed by the team.</p></a>
+        <a class="proj" href="https://pagebase.dev" target="_blank" rel="noopener"><img src="../assets/previews/pagebase.jpg" alt="" loading="lazy"><span class="kind">Studio</span><h4>Pagebase</h4><p>Fixed-price websites for small businesses.</p></a>
+        <a class="proj" href="../willi-wolff-cv-en.pdf"><span class="tile">CV</span><span class="kind">PDF</span><h4>Full CV</h4><p>Eleven years of engineering and publications.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene s-sea" id="underwater" data-alt="-8" data-zone="Underwater" data-next="Deeper">
+    <div class="bg"><span class="ph-note">Placeholder · underwater loop near the surface</span></div>
+    <div class="wrap copy">
+      <span class="alt">−8 m · client</span>
+      <h2>Underwater Journeys.</h2>
+      <p>A dive center in Cyprus. I built their website and booking system and keep supporting them.</p>
+      <div class="meta"><a href="https://underwater.journeys.cy/" target="_blank" rel="noopener">underwater.journeys.cy ↗</a></div>
+    </div>
+    <img class="inset" src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+  </section>
+
+  <section class="scene s-deep" data-alt="-30" data-zone="Underwater" data-next="The bottom">
+    <div class="bg"><span class="ph-note">Placeholder · reef, wildlife or wreck at depth</span></div>
+    <div class="wrap copy">
+      <span class="alt">−30 m · camera</span>
+      <h2>Footage from below.</h2>
+      <p>Underwater video and stills of reefs, wildlife and wrecks.</p>
+      <div class="meta"><a href="#book" data-kind="Footage">Ask about underwater footage →</a></div>
+    </div>
+  </section>
+
+  <section class="book" id="book" data-alt="-30" data-zone="The bottom" data-next="Time to write">
+    <div class="wrap grid">
+      <div>
+        <span class="alt">−30 m · the bottom</span>
+        <h2>You made it down. Let's <span>make</span> something.</h2>
+        <p>Footage, software, a website or another kind of collaboration. A few lines are enough.</p>
+        <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      </div>
+      <form id="enquiry">
+        <fieldset>
+          <legend>I'm looking for</legend>
+          <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+        </fieldset>
+        <div class="row">
+          <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+          <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+        </div>
+        <label>What you have in mind<textarea id="enq-msg" placeholder="Where, what, and roughly when"></textarea></label>
+        <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. next dive season"></label>
+        <div><button class="btn btn-sun" type="submit">Write the email</button></div>
+        <div class="composed" id="composed" hidden>
+          <strong class="composed-subject"></strong>
+          <pre class="composed-body"></pre>
+          <div class="btns"><a class="btn btn-sun composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></div></footer>
+<script src="enquiry.js"></script>
+<script>
+(function () {
+  var stops = Array.prototype.slice.call(document.querySelectorAll('[data-alt]'));
+  var lbl = document.getElementById('hud-lbl'), big = document.getElementById('hud-big'), zone = document.getElementById('hud-zone'), next = document.getElementById('hud-next');
+  function update() {
+    var y = window.scrollY + window.innerHeight * 0.6, alt = +stops[0].dataset.alt, cur = stops[0];
+    for (var i = 0; i < stops.length; i++) {
+      var s = stops[i], n = stops[i + 1];
+      if (y >= s.offsetTop) {
+        cur = s;
+        var a0 = +s.dataset.alt, a1 = n ? +n.dataset.alt : a0, end = n ? n.offsetTop : s.offsetTop + s.offsetHeight;
+        alt = a0 + (a1 - a0) * Math.min(1, (y - s.offsetTop) / Math.max(1, end - s.offsetTop));
+      }
+    }
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) { alt = -30; cur = stops[stops.length - 1]; }
+    var r = Math.round(alt);
+    lbl.textContent = r < 0 ? 'Depth' : 'Altitude';
+    big.firstChild.nodeValue = String(Math.abs(r));
+    zone.textContent = cur.dataset.zone;
+    next.textContent = 'Next: ' + cur.dataset.next + (cur.id === 'book' ? '' : ' ↓');
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>

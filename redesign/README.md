@@ -16,3 +16,9 @@ Round 2, built on B's altitude idea (air above, sea level for the beach and soft
 - `b1-descent.html`: the page scrolls from +120 m to −30 m with a live altitude gauge; booking sits on the seabed.
 - `b2-cross-section.html`: a drawn coast cross-section is the hero and the menu; one section per zone.
 - `b3-logbook.html`: every project and shot is a log entry sorted by elevation, with an elevation profile and Air/Land/Water filter.
+
+Round 3, iterations on B1 Descent:
+
+- `d1-descent-refined.html`: one continuous colour gradient, a ruler gauge with 10 m ticks, a floating booking pill.
+- `d2-descent-cinematic.html`: full-screen footage scenes, dive-computer readout, sea level as a bright sand panel with a sideways project strip.
+- `d3-descent-column.html`: light portfolio; a pinned drawn water column marks every item at its elevation.
