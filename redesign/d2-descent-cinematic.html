@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
 /* D2, "Descent cinematic". Each stop fills the screen with footage and one line of text, like
-   scenes in a film. A dive-computer readout in the corner shows altitude or depth, the zone and the
+   scenes in a film. A dive-computer readout on the right edge shows altitude or depth, the zone and the
    next stop. Sea level breaks the pattern with a bright sand panel holding the projects. */
 :root {
   --night: #04202a; --ink: #062a36; --ink-soft: #46636e;
@@ -41,8 +41,9 @@ header .btn { margin-left: auto; }
 .scene { position: relative; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; isolation: isolate; }
 .scene .bg { position: absolute; inset: 0; z-index: -1; }
 .scene .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(4,32,42,.65)); }
-.scene .bg .ph-note { position: absolute; top: calc(5rem + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); color: var(--foam); z-index: 1; }
-.scene .copy { padding-block: 4rem 5.5rem; max-width: 760px; display: grid; gap: 1rem; }
+.scene .bg .ph-note { position: absolute; top: calc(5rem + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); color: var(--foam); z-index: 1; }
+.scene .copy { padding-block: 4rem 5.5rem; width: 100%; display: grid; gap: 1rem; }
+.scene .copy > * { max-width: 760px; }
 .scene h1 { font-size: clamp(3rem, 9vw, 7.2rem); line-height: .92; font-weight: 800; }
 .scene h2 { font-size: clamp(2.4rem, 6.5vw, 5rem); line-height: .95; font-weight: 800; }
 .scene p { margin: 0; color: var(--foam-soft); font-size: 1.15rem; max-width: 48ch; }
@@ -53,7 +54,6 @@ header .btn { margin-left: auto; }
 .s-deep .bg { background: radial-gradient(60% 40% at 30% 10%, rgba(80,180,200,.25), transparent 70%), linear-gradient(#0a4a5f, #04222d 70%); }
 .scene .meta { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: .92rem; }
 .scene .meta a { color: var(--sun); font-weight: 700; text-decoration: none; }
-.s-sea .copy { max-width: min(760px, 52%); }
 .inset { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 5.5rem; width: min(38vw, 440px); border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
 
 /* Sea level panel */
@@ -103,21 +103,31 @@ footer { color: rgba(255,255,255,.6); font-size: .85rem; padding-block: 1.5rem 7
 footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
 
 /* Dive computer */
-.hud { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30; display: grid; grid-template-columns: auto auto; gap: .1rem 1.1rem; align-items: end; padding: .7rem 1rem .75rem; border-radius: 16px; background: rgba(4,32,42,.78); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.14); color: var(--foam); box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.hud { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); z-index: 30; width: 150px; display: grid; grid-template-columns: 6px 1fr; gap: 0 .8rem; padding: .85rem .9rem; border-radius: 16px; background: rgba(4,32,42,.78); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.14); color: var(--foam); box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+.hud .track { grid-row: 1 / span 4; position: relative; border-radius: 3px; background: linear-gradient(#b4e0ea, #efe2c2 45%, #1fa3b6 55%, #04202a); }
+.hud .dot { position: absolute; left: 50%; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--night); transform: translate(-50%, -50%); }
 .hud .lbl { font-size: .6rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.6); }
-.hud .big { grid-row: span 2; font: 800 2.2rem/1 var(--font-display); font-variant-numeric: tabular-nums; min-width: 4.6ch; }
-.hud .big small { font-size: .9rem; font-weight: 700; margin-left: .15rem; }
-.hud .zone { font-weight: 700; font-size: .9rem; }
-.hud .next { grid-column: 1 / -1; font-size: .78rem; color: var(--sun); border-top: 1px solid rgba(255,255,255,.14); padding-top: .35rem; margin-top: .3rem; }
+.hud .big { font: 800 2rem/1.05 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hud .big small { font-size: .85rem; font-weight: 700; margin-left: .15rem; }
+.hud .zone { font-weight: 700; font-size: .88rem; }
+.hud .next { font-size: .74rem; color: var(--sun); border-top: 1px solid rgba(255,255,255,.14); padding-top: .35rem; margin-top: .35rem; }
+@media (min-width: 901px) {
+  .wrap { padding-right: max(196px, env(safe-area-inset-right, 0px)); }
+  header.top .wrap { padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .inset { right: max(196px, env(safe-area-inset-right, 0px)); width: min(30vw, 400px); }
+  .s-sea .copy > * { max-width: min(560px, 46%); }
+}
 
 @media (max-width: 900px) {
   .scene { min-height: 78vh; }
   .inset { position: static; width: 100%; margin-top: 1rem; }
   .s-sea { flex-direction: column; align-items: stretch; justify-content: flex-end; padding-bottom: 2rem; }
-  .s-sea .copy { max-width: none; padding-bottom: 1rem; }
+  .s-sea .copy { padding-bottom: 1rem; }
   .beach-top, .book .grid, .row { grid-template-columns: 1fr; gap: 2rem; }
   .court img { right: .75rem; bottom: .75rem; }
-  .hud .big { font-size: 1.7rem; }
+  .hud { top: auto; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: none; width: auto; grid-template-columns: auto auto; align-items: baseline; gap: 0 .6rem; padding: .5rem .8rem; }
+  .hud .track, .hud .lbl, .hud .next { display: none; }
+  .hud .big { font-size: 1.4rem; }
 }
 </style>
 </head>
@@ -125,8 +135,9 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
 <header class="top"><div class="wrap"><a class="name" href="#top">Will Wolff</a><a class="btn" href="#book">Book a project</a></div></header>
 
 <div class="hud" id="hud" aria-hidden="true">
+  <span class="track"><span class="dot" id="hud-dot"></span></span>
   <span class="lbl" id="hud-lbl">Altitude</span>
-  <span class="big" id="hud-big">120<small>m</small></span>
+  <span class="big" id="hud-big">+120<small>m</small></span>
   <span class="zone" id="hud-zone">In the air</span>
   <span class="next" id="hud-next">Next: coming down ↓</span>
 </div>
@@ -241,13 +252,15 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
       if (y >= s.offsetTop) {
         cur = s;
         var a0 = +s.dataset.alt, a1 = n ? +n.dataset.alt : a0, end = n ? n.offsetTop : s.offsetTop + s.offsetHeight;
-        alt = a0 + (a1 - a0) * Math.min(1, (y - s.offsetTop) / Math.max(1, end - s.offsetTop));
+        var hold = s.offsetTop + (end - s.offsetTop) * 0.75; // stay on this stop's altitude, then move
+        alt = a0 + (a1 - a0) * Math.max(0, Math.min(1, (y - hold) / Math.max(1, end - hold)));
       }
     }
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) { alt = -30; cur = stops[stops.length - 1]; }
     var r = Math.round(alt);
     lbl.textContent = r < 0 ? 'Depth' : 'Altitude';
-    big.firstChild.nodeValue = String(Math.abs(r));
+    big.firstChild.nodeValue = (r > 0 ? '+' : r < 0 ? '\u2212' : '') + Math.abs(r);
+    document.getElementById('hud-dot').style.top = ((120 - alt) / 150 * 100) + '%';
     zone.textContent = cur.dataset.zone;
     next.textContent = 'Next: ' + cur.dataset.next + (cur.id === 'book' ? '' : ' ↓');
   }

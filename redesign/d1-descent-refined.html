@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
 /* D1, "Descent refined". Same trip as B1, smoother: one continuous colour gradient for the whole
-   page (no hard band edges), a ruler on the left with a tick every 10 m, and a booking pill that
+   page (no hard band edges), a ruler on the right with a tick every 10 m, and a booking pill that
    rides along until you reach the seabed. Light above the surface, dark below. */
 :root {
   --sky: #dcf0f5; --sky-low: #c2e3ec; --sand: #efe0bd; --sand-wet: #e2cc96;
@@ -25,7 +25,7 @@ body { margin: 0; background: var(--abyss); color: var(--ink); font: 17px/1.6 va
 main { background: linear-gradient(var(--sky), var(--sky-low) 25%, var(--sand) 33%, var(--sand-wet) 52%, var(--shallow) 56%, var(--mid) 70%, var(--deep) 84%, var(--abyss)); }
 a { color: inherit; }
 h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
-.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(96px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(128px, env(safe-area-inset-right, 0px)); }
 .alt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--lagoon-deep); }
 .under .alt { color: var(--sun); }
 .under { color: var(--foam); }
@@ -39,18 +39,19 @@ h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; le
 .media strong { font-variant-numeric: tabular-nums; }
 
 /* Ruler */
-.ruler { position: fixed; left: max(20px, env(safe-area-inset-left, 0px)); top: 0; bottom: 0; width: 56px; z-index: 20; pointer-events: none; display: flex; align-items: center; }
+.ruler { position: fixed; right: max(20px, env(safe-area-inset-right, 0px)); top: 0; bottom: 0; width: 56px; z-index: 20; pointer-events: none; display: flex; align-items: center; }
 .ruler .scale { position: relative; height: 70vh; width: 100%; }
-.ruler .tick { position: absolute; left: 0; height: 1px; width: 10px; background: currentColor; opacity: .35; }
+.ruler .tick { position: absolute; right: 0; height: 1px; width: 10px; background: currentColor; opacity: .35; }
 .ruler .tick.major { width: 18px; opacity: .7; }
-.ruler .tick span { position: absolute; left: 24px; top: -8px; font: 700 .68rem var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ruler .needle { position: absolute; left: -4px; height: 2px; width: 30px; background: currentColor; transition: top .08s linear; }
-.ruler .read { position: absolute; left: 34px; transform: translateY(-50%); font: 800 .95rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ruler .tick span { position: absolute; right: 24px; top: -8px; font: 700 .68rem var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ruler .needle { position: absolute; right: -4px; height: 2px; width: 30px; background: currentColor; transition: top .08s linear; }
+.ruler .read { position: absolute; right: 34px; transform: translateY(-50%); font: 800 .95rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ruler { color: var(--ink); transition: color .3s; }
 .ruler.under { color: var(--foam); }
 
 /* Floating booking pill */
-.pill { position: fixed; right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 20; box-shadow: 0 6px 24px rgba(4,32,42,.25); transition: opacity .25s, transform .25s; }
+.pill { position: fixed; right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 40px); z-index: 20; box-shadow: 0 6px 24px rgba(4,32,42,.25); transition: opacity .25s, transform .25s; }
+.pill-alt { display: none; font-variant-numeric: tabular-nums; padding-right: .6rem; margin-right: .1rem; border-right: 1px solid rgba(255,255,255,.3); }
 .pill[data-off="true"] { opacity: 0; transform: translateY(12px); pointer-events: none; }
 
 .topbar { display: flex; align-items: center; gap: 1rem; padding-block: 1.25rem; }
@@ -126,7 +127,8 @@ footer a { color: rgba(255,255,255,.85); }
 
 @media (max-width: 900px) {
   .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .ruler { top: auto; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: auto; height: auto; }
+  .ruler { display: none; }
+  .pill-alt { display: inline; }
   .ruler .scale { height: auto; }
   .ruler .tick, .ruler .needle { display: none; }
   .ruler .read { position: static; transform: none; background: var(--foam); color: var(--ink); padding: .3rem .7rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(4,32,42,.2); }
@@ -141,7 +143,7 @@ footer a { color: rgba(255,255,255,.85); }
 </head>
 <body>
 <div class="ruler" id="ruler" aria-hidden="true"><div class="scale" id="scale"><span class="needle" id="needle"></span><span class="read" id="read">+120 m</span></div></div>
-<a class="btn btn-ink pill" id="pill" href="#book">Book a project</a>
+<a class="btn btn-ink pill" id="pill" href="#book"><span class="pill-alt" id="pill-alt" aria-hidden="true"></span>Book a project</a>
 
 <main>
   <section class="stop" data-alt="120" style="padding-top:0">
@@ -284,13 +286,15 @@ footer a { color: rgba(255,255,255,.85); }
       var s = stops[i], n = stops[i + 1];
       if (y >= s.offsetTop) {
         var a0 = +s.dataset.alt, a1 = n ? +n.dataset.alt : a0, end = n ? n.offsetTop : s.offsetTop + s.offsetHeight;
-        alt = a0 + (a1 - a0) * Math.min(1, (y - s.offsetTop) / Math.max(1, end - s.offsetTop));
+        var hold = s.offsetTop + (end - s.offsetTop) * 0.6; // stay on this stop's altitude, then move
+        alt = a0 + (a1 - a0) * Math.max(0, Math.min(1, (y - hold) / Math.max(1, end - hold)));
       }
     }
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) alt = BOT;
     var p = ((TOP - alt) / (TOP - BOT) * 100) + '%';
-    needle.style.top = p; read.style.top = p; read.textContent = fmt(alt);
+    needle.style.top = p; read.style.top = p; read.textContent = fmt(alt); document.getElementById('pill-alt').textContent = fmt(alt);
     ruler.classList.toggle('under', alt < -1);
+    scale.querySelectorAll('.tick span').forEach(function (l) { l.style.opacity = Math.abs(parseFloat(l.parentNode.style.top) - parseFloat(p)) < 5 ? 0 : 1; });
     pill.dataset.off = String(book.getBoundingClientRect().top < window.innerHeight * 0.8);
   }
   window.addEventListener('scroll', update, { passive: true });
