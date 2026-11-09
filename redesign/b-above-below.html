@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Above &amp; Below</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Variant B, "Above & below". Layout: a full-bleed reel opens the page, then a gallery read
+   along an altitude/depth rail (drone above sea level, dives below), then the things he builds,
+   then one big booking band. Creative work leads; engineering is the second act. */
+:root {
+  --mist: #f3f7f8;      /* page */
+  --foam: #ffffff;      /* raised surfaces */
+  --abyss: #062a36;     /* ink and the reel band */
+  --current: #3b5a66;   /* secondary text */
+  --lagoon: #0f9fb0;    /* accent, a shade bluer than today's teal */
+  --lagoon-deep: #0b7684;
+  --sand: #e6d3a8;      /* highlight on the abyss band */
+  --line: #d6e2e6;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--mist); color: var(--abyss); font: 17px/1.6 var(--font-body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.label { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--lagoon-deep); }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1.3rem; border-radius: 999px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+.btn-fill { background: var(--lagoon); border-color: var(--lagoon); color: #fff; }
+.btn-fill:hover { background: var(--lagoon-deep); border-color: var(--lagoon-deep); }
+.btn-sand { background: var(--sand); border-color: var(--sand); color: var(--abyss); }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within { outline: 2px solid var(--lagoon); outline-offset: 3px; }
+
+/* Reel band */
+.reel { position: relative; background: var(--abyss); color: #fff; overflow: hidden; }
+.reel-media { position: absolute; inset: 0; display: grid; place-items: end end; padding: 1rem;
+  background:
+    radial-gradient(120% 80% at 70% 0%, rgba(25, 179, 196, .45), transparent 60%),
+    linear-gradient(180deg, #0c4b5e 0%, #073344 55%, #041d27 100%); }
+.reel-media::after { content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(-45deg, transparent 0 14px, rgba(255,255,255,.035) 14px 28px); }
+.reel-tag { position: relative; z-index: 1; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sand); border: 1.5px dashed rgba(230, 211, 168, .6); padding: .4rem .7rem; border-radius: 6px; margin: 0 max(0px, env(safe-area-inset-right, 0px)) 0 0; }
+.reel-top { position: relative; z-index: 2; display: flex; align-items: center; gap: 1rem; padding-block: 1.1rem; }
+.reel-top .name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; text-decoration: none; }
+.reel-top nav { margin-left: auto; display: flex; gap: 1.5rem; font-size: .92rem; }
+.reel-top nav a { text-decoration: none; opacity: .8; }
+.reel-top nav a:hover { opacity: 1; }
+.reel-body { position: relative; z-index: 2; padding-block: 5.5rem 4.5rem; max-width: 760px; }
+.reel-body h1 { font-size: clamp(2.8rem, 8vw, 6.2rem); line-height: .95; font-weight: 800; }
+.reel-body h1 span { color: var(--sand); }
+.reel-body p { font-size: 1.15rem; max-width: 46ch; opacity: .88; margin: 1.4rem 0 2rem; }
+.reel-body .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+/* Altitude/depth gallery */
+section { padding-block: 4.5rem; }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 2.5rem; }
+.head h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.05; max-width: 18ch; }
+.head p { margin: 0; color: var(--current); max-width: 42ch; }
+.gallery { display: grid; grid-template-columns: 64px 1fr; gap: 1.25rem; }
+.rail { position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; font-size: .78rem; font-weight: 600; color: var(--current); font-variant-numeric: tabular-nums; padding-block: .25rem; }
+.rail::after { content: ""; position: absolute; right: -11px; top: 0; bottom: 0; width: 2px; background: linear-gradient(var(--sand), var(--lagoon) 45%, var(--abyss)); border-radius: 2px; }
+.rail .sea { color: var(--lagoon-deep); }
+.tiles { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 120px; gap: .75rem; min-width: 0; }
+.tile { position: relative; border-radius: 14px; overflow: hidden; display: flex; align-items: flex-end; padding: .8rem; color: #fff; font-size: .82rem; }
+.tile .ph-note { position: absolute; top: .7rem; left: .7rem; font-size: .66rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed rgba(255,255,255,.55); padding: .2rem .45rem; border-radius: 5px; }
+.tile .cap { position: relative; display: grid; gap: .1rem; }
+.tile .cap strong { font-variant-numeric: tabular-nums; font-size: .95rem; }
+.sky { background: linear-gradient(160deg, #9fd3df, #4aa7b8 60%, #2f8c8f); }
+.coast { background: linear-gradient(160deg, #bfd9d3, #5fa9a2 55%, #c9b98f); }
+.shallow { background: linear-gradient(170deg, #36b6c4, #127f97); }
+.reef { background: linear-gradient(170deg, #1a8aa0, #0b5a71); }
+.deep { background: linear-gradient(170deg, #0b4a5f, #04222d); }
+.t1 { grid-column: span 4; grid-row: span 2; }
+.t2 { grid-column: span 2; grid-row: span 2; }
+.t3 { grid-column: span 2; grid-row: span 2; }
+.t4 { grid-column: span 2; grid-row: span 2; }
+.t5 { grid-column: span 2; grid-row: span 2; }
+.t6 { grid-column: span 3; grid-row: span 2; }
+.t7 { grid-column: span 3; grid-row: span 2; }
+.offer-line { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 1.5rem; }
+.offer-line p { margin: 0; max-width: 60ch; color: var(--current); }
+.offer-line .btn { color: var(--lagoon-deep); }
+
+/* Builds */
+.builds { background: var(--foam); border-block: 1px solid var(--line); }
+.build-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+.build { display: flex; flex-direction: column; gap: .7rem; min-width: 0; text-decoration: none; }
+.build img, .build .shot { width: 100%; max-width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 14px; }
+.build .shot { display: grid; place-items: center; background: linear-gradient(140deg, #0c4b5e, #062a36); color: var(--sand); font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; }
+.build .kind { font-size: .78rem; font-weight: 700; color: var(--lagoon-deep); letter-spacing: .06em; text-transform: uppercase; }
+.build h3 { font-size: 1.35rem; }
+.build p { margin: 0; color: var(--current); }
+.build:hover h3 { color: var(--lagoon-deep); }
+.cv-line { margin-top: 2.5rem; color: var(--current); font-size: .95rem; }
+.cv-line a { color: var(--lagoon-deep); font-weight: 600; }
+
+/* Booking band */
+.book { background: var(--abyss); color: #fff; }
+.book .grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; align-items: start; }
+.book h2 { font-size: clamp(2.2rem, 5.5vw, 4rem); line-height: 1; }
+.book h2 span { color: var(--sand); }
+.book p { opacity: .85; max-width: 40ch; }
+.addr { color: var(--sand); font-weight: 600; user-select: all; }
+form { display: grid; gap: 1rem; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.3); cursor: pointer; font-size: .92rem; }
+.chip input:checked + span { background: var(--sand); color: var(--abyss); border-color: var(--sand); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .75rem .9rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; width: 100%; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.5); }
+textarea { min-height: 120px; resize: vertical; }
+.composed { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; opacity: .8; margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { background: var(--abyss); color: rgba(255,255,255,.6); font-size: .85rem; padding-block: 1.5rem 2.5rem; border-top: 1px solid rgba(255,255,255,.12); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+footer a { color: rgba(255,255,255,.8); }
+
+@media (max-width: 900px) {
+  .reel-top nav { display: none; }
+  .reel-body { padding-block: 3.5rem 3rem; }
+  .gallery { grid-template-columns: 1fr; }
+  .rail { display: none; }
+  .tiles { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; }
+  .t1 { grid-column: span 2; }
+  .t2, .t3, .t4, .t5, .t6, .t7 { grid-column: span 1; }
+  .build-list, .book .grid, .row { grid-template-columns: 1fr; gap: 2rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .reel-media { animation: drift 18s ease-in-out infinite alternate; }
+  @keyframes drift { from { background-position: 0 0, 0 0; } to { background-position: 0 40px, 0 0; } }
+}
+</style>
+</head>
+<body>
+<header class="reel">
+  <div class="reel-media" aria-hidden="true"><span class="reel-tag">Placeholder · 20–30 s showreel, muted loop, drone into underwater</span></div>
+  <div class="wrap reel-top">
+    <a class="name" href="#top">Will Wolff</a>
+    <nav aria-label="Sections"><a href="#footage">Footage</a><a href="#builds">Builds</a><a href="#book">Book me</a></nav>
+  </div>
+  <div class="wrap reel-body" id="top">
+    <h1>Above and <span>below</span> the water.</h1>
+    <p>I film coastlines and dive sites from the air and underwater, and I build software for a living. Bring me either kind of project.</p>
+    <div class="actions">
+      <a class="btn btn-sand" href="#book">Book a project</a>
+      <a class="btn" href="#footage">Watch the footage</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="footage">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="label">Footage</span><h2>From 120 metres up to 30 metres down</h2></div>
+        <p>Drone and underwater work, sorted by where the camera was. Every frame here is a placeholder until the real stills go in.</p>
+      </div>
+      <div class="gallery">
+        <div class="rail" aria-hidden="true">
+          <span>+120 m</span><span>+60 m</span><span class="sea">0 m</span><span>−10 m</span><span>−20 m</span><span>−30 m</span>
+        </div>
+        <div class="tiles">
+          <figure class="tile sky t1" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>+120 m · drone</strong>Coastline at golden hour</figcaption></figure>
+          <figure class="tile coast t2" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>+40 m · drone</strong>Bay, top-down</figcaption></figure>
+          <figure class="tile coast t3" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>+5 m · drone</strong>Boat over the site</figcaption></figure>
+          <figure class="tile shallow t4" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>−4 m</strong>Shore entry</figcaption></figure>
+          <figure class="tile reef t5" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>−12 m</strong>Reef wall</figcaption></figure>
+          <figure class="tile reef t6" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>−18 m</strong>Turtle or other wildlife</figcaption></figure>
+          <figure class="tile deep t7" style="margin:0"><span class="ph-note">Placeholder</span><figcaption class="cap"><strong>−30 m</strong>Wreck or cave</figcaption></figure>
+        </div>
+      </div>
+      <div class="offer-line">
+        <p>Footage for dive centers, tourism and nature projects: raw clips, short edits for web and social, or stills.</p>
+        <a class="btn" href="#book" data-kind="Footage">Ask about footage</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="builds" class="builds">
+    <div class="wrap">
+      <div class="head">
+        <div><span class="label">Builds</span><h2>And the software side</h2></div>
+        <p>Eleven years of engineering, from my own products to protocol research.</p>
+      </div>
+      <div class="build-list">
+        <a class="build" href="https://underwater.journeys.cy/" target="_blank" rel="noopener">
+          <img src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+          <span class="kind">Client · ongoing</span>
+          <h3>Underwater Journeys</h3>
+          <p>Website and booking system for a dive center in Cyprus, which I keep supporting.</p>
+        </a>
+        <a class="build" href="https://alwayssandy.com" target="_blank" rel="noopener">
+          <img src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app screens" loading="lazy">
+          <span class="kind">Own product · live</span>
+          <h3>AlwaysSandy</h3>
+          <p>A social network for Berlin's beach volleyball players and coaches.</p>
+        </a>
+        <a class="build" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener">
+          <img src="../leios-thumbnail.jpg" alt="Ouroboros Leios" loading="lazy">
+          <span class="kind">Contract · IOG</span>
+          <h3>Ouroboros Leios</h3>
+          <p>Software engineer and architect on Cardano's high-throughput protocol.</p>
+        </a>
+      </div>
+      <p class="cv-line">Websites through my studio <a href="https://pagebase.dev" target="_blank" rel="noopener">Pagebase</a>. Career and publications in the <a href="../willi-wolff-cv-en.pdf">CV (PDF)</a>.</p>
+    </div>
+  </section>
+
+  <section id="book" class="book">
+    <div class="wrap grid">
+      <div>
+        <span class="label" style="color:var(--sand)">Book me</span>
+        <h2 style="margin-top:.5rem">Got something to <span>make</span>?</h2>
+        <p>A shoot, an app, a website, or an idea that doesn't fit a box. Tell me a little and I'll get back to you.</p>
+        <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      </div>
+      <form id="enquiry">
+        <fieldset>
+          <legend>I'm looking for</legend>
+          <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+        </fieldset>
+        <div class="row">
+          <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+          <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+        </div>
+        <label>What you have in mind<textarea id="enq-msg" placeholder="Where, what, and roughly when"></textarea></label>
+        <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. next dive season"></label>
+        <div><button class="btn btn-sand" type="submit">Write the email</button></div>
+        <div class="composed" id="composed" hidden>
+          <strong class="composed-subject"></strong>
+          <pre class="composed-body"></pre>
+          <div class="btns"><a class="btn btn-sand composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></div></footer>
+<script src="enquiry.js"></script>
+</body>
+</html>

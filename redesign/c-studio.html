@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400;62..125,500;62..125,600;100..125,800&display=swap">
+<style>
+/* Variant C, "Studio". Layout: the enquiry is the hero, written as a letter the visitor fills in.
+   Below it, three services each with proof, how a project runs, side work, and a footer with the CV.
+   Keeps the teal brand; widened Archivo gives it a studio-sign voice. */
+:root {
+  --paper: #fbfcfc;
+  --ink: #0d1b1e;
+  --slate: #52626a;
+  --rule: #dde5e8;
+  --teal: #0d9488;
+  --teal-deep: #0f766e;
+  --teal-wash: #e3f3f1;
+  --font: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--font); font-stretch: 100%; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; text-wrap: balance; font-stretch: 125%; font-weight: 800; letter-spacing: -.01em; line-height: 1.02; }
+.wrap { max-width: 1140px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.tag { font-size: .74rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--teal-deep); font-stretch: 112%; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.25rem; border-radius: 8px; font: 600 .95rem var(--font); text-decoration: none; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+.btn-teal { background: var(--teal); border-color: var(--teal); color: #fff; }
+.btn-teal:hover { background: var(--teal-deep); border-color: var(--teal-deep); }
+.btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+header.bar .wrap { display: flex; align-items: center; gap: 1rem; padding-block: 1.25rem; }
+.mark { display: flex; align-items: center; gap: .7rem; text-decoration: none; font-weight: 800; font-stretch: 125%; }
+.mark img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+header nav { margin-left: auto; display: flex; gap: 1.5rem; font-size: .92rem; color: var(--slate); }
+header nav a { text-decoration: none; }
+header nav a:hover { color: var(--ink); }
+
+/* Hero letter */
+.hero { padding-block: 3rem 4.5rem; display: grid; grid-template-columns: 1fr 1.25fr; gap: 3.5rem; align-items: start; }
+.hero h1 { font-size: clamp(2.6rem, 6.5vw, 5rem); }
+.hero h1 span { color: var(--teal); }
+.hero .intro { color: var(--slate); max-width: 40ch; margin: 1.2rem 0 1.5rem; font-size: 1.1rem; }
+.kinds { display: flex; flex-wrap: wrap; gap: .4rem .9rem; padding: 0; margin: 0; list-style: none; font-size: .9rem; font-weight: 600; }
+.kinds li::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--teal); margin-right: .45rem; vertical-align: .05em; }
+.letter { background: #fff; border: 1px solid var(--rule); border-radius: 14px; padding: clamp(1.25rem, 3vw, 2.25rem); box-shadow: 0 1px 2px rgba(13,27,30,.04), 0 12px 32px rgba(13,27,30,.06); }
+.letter p { margin: 0 0 1rem; font-size: 1.12rem; line-height: 2.1; }
+.letter .fill { font: inherit; color: var(--teal-deep); font-weight: 600; border: 0; border-bottom: 1.5px dashed var(--teal); background: var(--teal-wash); border-radius: 4px 4px 0 0; padding: .05rem .4rem; max-width: 100%; }
+.letter input.fill { width: 12ch; }
+.letter input.fill.wide { width: 20ch; }
+.letter select.fill { cursor: pointer; }
+.letter textarea.fill { display: block; width: 100%; min-height: 84px; line-height: 1.5; padding: .5rem .6rem; resize: vertical; margin-top: .25rem; }
+.letter .send { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; border-top: 1px solid var(--rule); padding-top: 1rem; margin-top: .5rem; font-size: .88rem; color: var(--slate); }
+.addr { user-select: all; font-weight: 600; color: var(--ink); }
+.composed { border-top: 1px solid var(--rule); margin-top: 1rem; padding-top: 1rem; font-size: .92rem; }
+.composed pre { white-space: pre-wrap; font: inherit; color: var(--slate); margin: .5rem 0 1rem; }
+.composed .btns { display: flex; gap: .5rem; flex-wrap: wrap; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Services */
+section { padding-block: 4rem; border-top: 1px solid var(--rule); }
+.sec-title { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 2.5rem; }
+.sec-title h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.services { display: grid; gap: 0; }
+.service { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 2rem; padding-block: 2rem; border-bottom: 1px solid var(--rule); align-items: start; }
+.service:last-child { border-bottom: 0; }
+.service h3 { font-size: 1.5rem; }
+.service .what { margin: 0; color: var(--slate); }
+.service ul { margin: .75rem 0 0; padding: 0; list-style: none; display: grid; gap: .2rem; font-size: .92rem; }
+.service ul li::before { content: "→ "; color: var(--teal); }
+.proof { display: grid; gap: .6rem; min-width: 0; }
+.proof img, .proof .ph { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; }
+.proof small { color: var(--slate); font-size: .82rem; }
+.proof small a { color: var(--teal-deep); font-weight: 600; }
+.ph { display: grid; place-items: center; text-align: center; padding: 1rem; font-size: .8rem; font-weight: 600; color: var(--slate);
+  background: repeating-linear-gradient(-45deg, #f1f5f6 0 10px, #e8eef0 10px 20px); border: 1.5px dashed #b8c6cb; }
+.ph b { display: block; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-deep); }
+.service .go { font-weight: 600; color: var(--teal-deep); text-decoration: none; font-size: .92rem; display: inline-block; margin-top: 1rem; }
+
+/* Process: a real sequence, so it is numbered */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; counter-reset: step; padding: 0; margin: 0; list-style: none; }
+.steps li { counter-increment: step; display: grid; gap: .4rem; }
+.steps li::before { content: counter(step); font-weight: 800; font-stretch: 125%; font-size: 2.4rem; color: var(--teal); line-height: 1; }
+.steps h3 { font-size: 1.15rem; font-stretch: 112%; }
+.steps p { margin: 0; color: var(--slate); }
+
+/* Side */
+.side { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+.side a { text-decoration: none; display: grid; gap: .6rem; }
+.side img, .side .ph { width: 100%; max-width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; }
+.side h3 { font-size: 1.3rem; }
+.side p { margin: 0; color: var(--slate); }
+.side a:hover h3 { color: var(--teal-deep); }
+
+footer { border-top: 1px solid var(--rule); padding-block: 2rem 3rem; font-size: .9rem; color: var(--slate); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: center; }
+footer .cv { margin-left: auto; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+footer a { color: var(--ink); font-weight: 600; text-decoration: none; }
+
+@media (max-width: 900px) {
+  header nav { display: none; }
+  .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 1.5rem 3rem; }
+  .service { grid-template-columns: 1fr; gap: 1rem; }
+  .steps, .side { grid-template-columns: 1fr; gap: 1.75rem; }
+  footer .cv { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top"><img src="../assets/images/will.jpg" alt="">Will Wolff</a>
+    <nav aria-label="Sections"><a href="#services">Services</a><a href="#how">How it works</a><a href="#side">On the side</a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <span class="tag">Berlin · available for projects</span>
+      <h1 style="margin-top:.75rem">Let's make <span>something</span>.</h1>
+      <p class="intro">I'm Will, a freelance engineer who also films with a drone and underwater cameras. Tell me what you need and I'll reply personally.</p>
+      <ul class="kinds"><li>Software</li><li>Websites</li><li>Footage</li><li>Other collaborations</li></ul>
+    </div>
+    <form class="letter" id="enquiry" aria-label="Project enquiry">
+      <p>
+        Hi Will, I'm <label class="sr" for="enq-name">Your name</label><input class="fill" type="text" id="enq-name" placeholder="your name" autocomplete="name">
+        and I'd like help with <label class="sr" for="enq-kind">Kind of project</label><select class="fill" id="enq-kind">
+          <option value="Software engineering">software engineering</option>
+          <option value="Website">a website</option>
+          <option value="Footage">drone or underwater footage</option>
+          <option value="Something else">something else</option>
+        </select>.
+        Ideally <label class="sr" for="enq-when">Timing</label><input class="fill" type="text" id="enq-when" placeholder="by when">.
+      </p>
+      <p>
+        <label for="enq-msg">Here's the idea:</label>
+        <textarea class="fill" id="enq-msg" placeholder="A few lines are enough"></textarea>
+      </p>
+      <p>You can reach me at <label class="sr" for="enq-email">Your email</label><input class="fill wide" type="email" id="enq-email" placeholder="you@example.com" autocomplete="email">.</p>
+      <div class="send">
+        <span>Goes to <span class="addr">contact@williwolff.com</span></span>
+        <button class="btn btn-teal" type="submit">Send to Will</button>
+      </div>
+      <div class="composed" id="composed" hidden>
+        <strong class="composed-subject"></strong>
+        <pre class="composed-body"></pre>
+        <div class="btns"><a class="btn btn-teal composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+      </div>
+    </form>
+  </div>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-title"><div><span class="tag">Services</span><h2 style="margin-top:.5rem">What I can take on</h2></div></div>
+      <div class="services">
+        <div class="service">
+          <div><h3>Software engineering</h3><a class="go" href="#top" data-kind="Software engineering">Enquire →</a></div>
+          <div>
+            <p class="what">Architecture and hands-on delivery for systems that have to be right: distributed systems, blockchain, web and mobile, AI automation.</p>
+            <ul><li>Technical architecture and specs</li><li>Prototypes that find the risks early</li><li>Delivery with a small team or AI agents</li></ul>
+          </div>
+          <div class="proof"><img src="../leios-thumbnail.jpg" alt="Ouroboros Leios" loading="lazy"><small>Now: Ouroboros Leios at IOG. <a href="../willi-wolff-cv-en.pdf">Full CV</a></small></div>
+        </div>
+        <div class="service">
+          <div><h3>Websites</h3><a class="go" href="#top" data-kind="Website">Enquire →</a></div>
+          <div>
+            <p class="what">Fixed-price websites for small businesses through my studio Pagebase, with booking, enquiries, hosting and support.</p>
+            <ul><li>Design and build, German or English</li><li>Booking and contact flows</li><li>Hosting and updates</li></ul>
+          </div>
+          <div class="proof"><img src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy"><small>Underwater Journeys, a dive center in Cyprus. <a href="https://underwater.journeys.cy/" target="_blank" rel="noopener">Visit ↗</a></small></div>
+        </div>
+        <div class="service">
+          <div><h3>Drone &amp; underwater footage</h3><a class="go" href="#top" data-kind="Footage">Enquire →</a></div>
+          <div>
+            <p class="what">Aerial and underwater video and stills of coastlines, reefs and dive sites, for dive centers, tourism and nature projects.</p>
+            <ul><li>Drone flights</li><li>Underwater video and stills</li><li>Short edits for web and social</li></ul>
+          </div>
+          <div class="proof"><div class="ph"><span><b>Placeholder</b>Best drone or underwater still, 16:9</span></div><small>A short reel will go here.</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-title"><div><span class="tag">How it works</span><h2 style="margin-top:.5rem">From first message to start</h2></div></div>
+      <ol class="steps">
+        <li><h3>You write</h3><p>A few lines about the project through the form or by email.</p></li>
+        <li><h3>We talk</h3><p>A short call to understand what you need and whether I'm the right fit.</p></li>
+        <li><h3>I send a proposal</h3><p>Scope, timeline and price in writing, so you know what you get.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="side">
+    <div class="wrap">
+      <div class="sec-title"><div><span class="tag">On the side</span><h2 style="margin-top:.5rem">What I make for myself</h2></div></div>
+      <div class="side">
+        <a href="https://alwayssandy.com" target="_blank" rel="noopener">
+          <img src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app screens" loading="lazy">
+          <span class="tag">Own product · live</span>
+          <h3>AlwaysSandy ↗</h3>
+          <p>A social network for Berlin's beach volleyball players and coaches.</p>
+        </a>
+        <a href="#top" data-kind="Footage">
+          <div class="ph"><span><b>Placeholder</b>Dive site or wildlife still</span></div>
+          <span class="tag">Footage · ongoing</span>
+          <h3>Nature and dive sites</h3>
+          <p>Drone and underwater footage I shoot whenever I'm near the water.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <span>Willi Wolff · Berlin · German &amp; English</span>
+    <span class="cv"><a href="../willi-wolff-cv-en.pdf">CV (PDF)</a><a href="https://pagebase.dev" target="_blank" rel="noopener">Pagebase</a><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a></span>
+  </div>
+</footer>
+<script src="enquiry.js"></script>
+</body>
+</html>
