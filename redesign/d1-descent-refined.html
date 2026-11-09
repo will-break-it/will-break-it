@@ -44,13 +44,14 @@ h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; le
 .ruler .tick { position: absolute; right: 0; height: 1px; width: 10px; background: currentColor; opacity: .35; }
 .ruler .tick.major { width: 18px; opacity: .7; }
 .ruler .tick span { position: absolute; right: 24px; top: -8px; font: 700 .68rem var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ruler .needle { position: absolute; right: -4px; height: 2px; width: 30px; background: currentColor; transition: top .08s linear; }
-.ruler .read { position: absolute; right: 34px; transform: translateY(-50%); font: 800 .95rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ruler { color: var(--ink); transition: color .3s; }
-.ruler.under { color: var(--foam); }
+.ruler .needle { position: absolute; right: -4px; top: 0; height: 2px; width: 30px; background: currentColor; will-change: transform; }
+.ruler .read { position: absolute; right: 34px; top: 0; transform: translateY(-50%); will-change: transform; font: 800 .95rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ruler { color: var(--ink); }
+.ruler .tick span { transition: opacity .25s; }
+.ruler.lit .tick span, .ruler.lit .read { text-shadow: 0 1px 3px rgba(4,32,42,.45); }
 
 /* Floating booking pill */
-.pill { position: fixed; right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 40px); z-index: 20; box-shadow: 0 6px 24px rgba(4,32,42,.25); transition: opacity .25s, transform .25s; }
+.pill { position: fixed; transition-timing-function: cubic-bezier(.2,.7,.2,1); right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 40px); z-index: 20; box-shadow: 0 6px 24px rgba(4,32,42,.25); transition: opacity .25s, transform .25s; }
 .pill-alt { display: none; font-variant-numeric: tabular-nums; padding-right: .6rem; margin-right: .1rem; border-right: 1px solid rgba(255,255,255,.3); }
 .pill[data-off="true"] { opacity: 0; transform: translateY(12px); pointer-events: none; }
 
@@ -138,7 +139,23 @@ footer a { color: rgba(255,255,255,.85); }
   .feature .court img { right: .75rem; bottom: .75rem; }
   .dives { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
 }
-@media (prefers-reduced-motion: reduce) { .ruler .needle, .pill { transition: none; } }
+[data-drift] { will-change: transform; }
+.media, .card, .feature img, .uj img { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.card:hover { transform: translateY(-2px); }
+#underwater { position: relative; isolation: isolate; }
+.surface { position: absolute; left: 0; right: 0; top: -10px; height: 20px; pointer-events: none; z-index: -1; opacity: .4;
+  background: radial-gradient(30px 5px at 50% 50%, rgba(255,255,255,.7), transparent 75%) 0 50% / 64px 20px repeat-x; }
+.rays { position: absolute; inset: 0 0 35% 0; pointer-events: none; z-index: -1; opacity: .35;
+  background: repeating-linear-gradient(100deg, rgba(255,255,255,.14) 0 3%, transparent 3% 11%);
+  -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .surface { animation: shimmer 9s linear infinite; }
+  .rays { animation: rays 14s ease-in-out infinite alternate; }
+  @keyframes shimmer { to { background-position: 460px 50%; } }
+  @keyframes rays { from { background-position: 0 0; opacity: .25; } to { background-position: 120px 0; opacity: .4; } }
+}
+@media (prefers-reduced-motion: reduce) { .pill, .media, .card { transition: none; } }
 </style>
 </head>
 <body>
@@ -157,7 +174,7 @@ footer a { color: rgba(255,255,255,.85); }
         <h1>From 120 m up to 30 m down.</h1>
         <p>I'm Will. I film from the air and underwater, and in between I play beach volleyball and build software. Scroll down for all of it, or book me for any of it.</p>
         <div class="actions"><a class="btn btn-ink" href="#book">Book a project</a><a class="btn" href="#sea-level">See what I build</a></div>
-        <div class="media hero-shot"><span class="ph-note">Placeholder · widest drone shot, 21:9, or a muted loop</span><span><strong>+120 m</strong> · coastline</span></div>
+        <div class="media hero-shot" data-drift><span class="ph-note">Placeholder · widest drone shot, 21:9, or a muted loop</span><span><strong>+120 m</strong> · coastline</span></div>
       </div>
     </div>
   </section>
@@ -169,7 +186,7 @@ footer a { color: rgba(255,255,255,.85); }
         <p>Drone footage of bays, boats and dive sites from above. For dive centers, tourism and nature projects.</p>
       </div>
       <div class="pair">
-        <div class="media a1"><span class="ph-note">Placeholder</span><span><strong>+40 m</strong> · bay, top-down</span></div>
+        <div class="media a1" data-drift><span class="ph-note">Placeholder</span><span><strong>+40 m</strong> · bay, top-down</span></div>
         <div class="media a2"><span class="ph-note">Placeholder</span><span><strong>+5 m</strong> · boat over the site</span></div>
       </div>
     </div>
@@ -203,6 +220,7 @@ footer a { color: rgba(255,255,255,.85); }
   </section>
 
   <section class="stop under" id="underwater" data-alt="-12">
+    <span class="surface" aria-hidden="true"></span><span class="rays" aria-hidden="true"></span>
     <div class="wrap">
       <div class="uj">
         <img src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
@@ -218,7 +236,7 @@ footer a { color: rgba(255,255,255,.85); }
         <p>Underwater video and stills of reefs, wildlife and wrecks.</p>
       </div>
       <div class="dives">
-        <div class="media d1"><span class="ph-note">Placeholder</span><span><strong>−4 m</strong> · shore entry</span></div>
+        <div class="media d1" data-drift><span class="ph-note">Placeholder</span><span><strong>−4 m</strong> · shore entry</span></div>
         <div class="media d2"><span class="ph-note">Placeholder</span><span><strong>−12 m</strong> · reef wall</span></div>
         <div class="media d3"><span class="ph-note">Placeholder</span><span><strong>−18 m</strong> · wildlife</span></div>
         <div class="media d5"><span class="ph-note">Placeholder</span><span><strong>−24 m</strong> · close-up</span></div>
@@ -263,44 +281,83 @@ footer a { color: rgba(255,255,255,.85); }
 <script src="enquiry.js"></script>
 <script>
 (function () {
-  var TOP = 120, BOT = -30, stops = Array.prototype.slice.call(document.querySelectorAll('[data-alt]'));
+  var TOP = 120, BOT = -30;
+  var stops = Array.prototype.slice.call(document.querySelectorAll('[data-alt]'));
   var scale = document.getElementById('scale'), needle = document.getElementById('needle'), read = document.getElementById('read');
-  var ruler = document.getElementById('ruler'), pill = document.getElementById('pill'), book = document.getElementById('book');
-  var main = document.querySelector('main');
+  var ruler = document.getElementById('ruler'), pill = document.getElementById('pill'), pillAlt = document.getElementById('pill-alt');
+  var book = document.getElementById('book'), main = document.querySelector('main');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var drift = Array.prototype.slice.call(document.querySelectorAll('[data-drift]'));
+  var labels = [];
+
   for (var a = TOP; a >= BOT; a -= 10) {
     var t = document.createElement('span'); t.className = 'tick' + (a % 30 === 0 ? ' major' : '');
     t.style.top = ((TOP - a) / (TOP - BOT) * 100) + '%';
-    if (a % 30 === 0) { var l = document.createElement('span'); l.textContent = (a > 0 ? '+' : a < 0 ? '−' : '') + Math.abs(a); t.appendChild(l); }
+    if (a % 30 === 0) { var l = document.createElement('span'); l.textContent = (a > 0 ? '+' : a < 0 ? '−' : '') + Math.abs(a); t.appendChild(l); labels.push([a, l]); }
     scale.appendChild(t);
   }
-  // Paint the page gradient so its colour stops land on the real section edges.
+
+  // Layout is measured once per resize, never inside the scroll path.
+  var geo = [], docH = 0, viewH = 0, scaleH = 0, bookTop = 0;
+  function measure() {
+    viewH = window.innerHeight; docH = document.documentElement.scrollHeight; scaleH = scale.offsetHeight;
+    geo = stops.map(function (s) { return { top: s.offsetTop, h: s.offsetHeight, alt: +s.dataset.alt }; });
+    bookTop = book.offsetTop;
+    drift.forEach(function (el) { el._mid = el.getBoundingClientRect().top + window.scrollY + el.offsetHeight / 2; });
+    paint();
+  }
+  // Colour stops land on the real section edges, so the sky becomes sand becomes sea exactly where the content does.
   function paint() {
     var h = main.offsetHeight, pct = function (el, f) { return ((el.offsetTop - main.offsetTop + el.offsetHeight * (f || 0)) / h * 100).toFixed(2) + '%'; };
     var sea = document.getElementById('sea-level'), under = document.getElementById('underwater');
-    main.style.background = 'linear-gradient(var(--sky) 0%, var(--sky-low) ' + pct(sea, -0.15) + ', var(--sand) ' + pct(sea, 0.05) + ', var(--sand-wet) ' + pct(sea, 0.97) + ', var(--shallow) ' + pct(under) + ', var(--mid) ' + pct(under, 0.5) + ', var(--deep) ' + pct(book) + ', var(--abyss) 100%)';
+    main.style.background = 'linear-gradient(var(--sky) 0%, var(--sky-low) ' + pct(sea, -0.2) + ', var(--sand) ' + pct(sea, 0.08) + ', var(--sand-wet) ' + pct(sea, 0.92) + ', var(--shallow) ' + pct(under, 0.02) + ', var(--mid) ' + pct(under, 0.5) + ', var(--deep) ' + pct(book) + ', var(--abyss) 100%)';
+  }
+
+  // Each stop holds its own altitude for most of its height, then eases towards the next one.
+  function ease(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+  function target(scrollY) {
+    if (scrollY + viewH >= docH - 4) return BOT;
+    var y = scrollY + viewH / 2, alt = TOP;
+    for (var i = 0; i < geo.length; i++) {
+      var g = geo[i], n = geo[i + 1];
+      if (y < g.top) break;
+      var end = n ? n.top : g.top + g.h, hold = g.top + (end - g.top) * 0.55;
+      var k = Math.max(0, Math.min(1, (y - hold) / Math.max(1, end - hold)));
+      alt = g.alt + ((n ? n.alt : g.alt) - g.alt) * ease(k);
+    }
+    return alt;
   }
   function fmt(v) { var r = Math.round(v); return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r) + ' m'; }
-  function update() {
-    var y = window.scrollY + window.innerHeight / 2, alt = TOP;
-    for (var i = 0; i < stops.length; i++) {
-      var s = stops[i], n = stops[i + 1];
-      if (y >= s.offsetTop) {
-        var a0 = +s.dataset.alt, a1 = n ? +n.dataset.alt : a0, end = n ? n.offsetTop : s.offsetTop + s.offsetHeight;
-        var hold = s.offsetTop + (end - s.offsetTop) * 0.6; // stay on this stop's altitude, then move
-        alt = a0 + (a1 - a0) * Math.max(0, Math.min(1, (y - hold) / Math.max(1, end - hold)));
-      }
-    }
-    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) alt = BOT;
-    var p = ((TOP - alt) / (TOP - BOT) * 100) + '%';
-    needle.style.top = p; read.style.top = p; read.textContent = fmt(alt); document.getElementById('pill-alt').textContent = fmt(alt);
-    ruler.classList.toggle('under', alt < -1);
-    scale.querySelectorAll('.tick span').forEach(function (l) { l.style.opacity = Math.abs(parseFloat(l.parentNode.style.top) - parseFloat(p)) < 5 ? 0 : 1; });
-    pill.dataset.off = String(book.getBoundingClientRect().top < window.innerHeight * 0.8);
+  function mix(t) { // ink (6,42,54) to foam (255,255,255) as the needle passes the surface
+    var c = [6 + 249 * t, 42 + 213 * t, 54 + 201 * t].map(Math.round); return 'rgb(' + c.join(',') + ')';
   }
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', function () { paint(); update(); });
-  window.addEventListener('load', function () { paint(); update(); });
-  paint(); update();
+
+  var shown = TOP, goal = TOP, ticking = false, lastText = '';
+  function frame() {
+    var d = goal - shown;
+    shown = (still.matches || Math.abs(d) < 0.05) ? goal : shown + d * 0.16;
+    var y = (TOP - shown) / (TOP - BOT) * scaleH;
+    needle.style.transform = 'translateY(' + y + 'px)';
+    read.style.transform = 'translateY(calc(' + y + 'px - 50%))';
+    var text = fmt(shown);
+    if (text !== lastText) { read.textContent = text; pillAlt.textContent = text; lastText = text; }
+    var tc = Math.max(0, Math.min(1, (-0.5 - shown) / 4));
+    ruler.style.color = mix(tc); ruler.classList.toggle('lit', tc > 0.5);
+    labels.forEach(function (p) { p[1].style.opacity = Math.abs(p[0] - shown) < 8 ? 0 : 1; });
+    if (shown !== goal) requestAnimationFrame(frame); else ticking = false;
+  }
+  function onScroll() {
+    var sy = window.scrollY;
+    goal = target(sy);
+    pill.dataset.off = String(bookTop - sy < viewH * 0.8);
+    if (!still.matches) drift.forEach(function (el) { el.style.transform = 'translate3d(0,' + ((sy + viewH / 2 - el._mid) * -0.05).toFixed(1) + 'px,0)'; });
+    if (!ticking) { ticking = true; requestAnimationFrame(frame); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { measure(); onScroll(); });
+  window.addEventListener('load', function () { measure(); onScroll(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); onScroll(); });
+  measure(); onScroll();
 })();
 </script>
 </body>
