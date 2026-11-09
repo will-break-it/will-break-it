@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · One Breath Composed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* E2, "One breath, composed". Same dive, built from separate shots joined by scroll-driven
+   transitions: aerial tilt, a drop onto the court, a slow-motion volleyball into the lens as the cut
+   to an eye-level court shot, an over-under waterline shot, then down the line. Original E1 notes:
+   The whole page is one take and one breath: a top-down drone shot from 100 m,
+   down onto the beach volleyball court, across to the buoy, through the surface and down the
+   freediving line to the bottom plate at 30 m. Scroll position is the camera position, so the
+   footage scrubs with the visitor. Projects ride on the line as depth tags. Contact is the ascent.
+   The canvas is a rendered stand-in; real footage drops in as an image sequence (see SEQ below). */
+:root {
+  --ink: #062a36; --ink-soft: #3b5a66; --foam: #ffffff; --foam-soft: rgba(255,255,255,.82);
+  --sun: #f0d48a; --lagoon-deep: #0b7684; --abyss: #031c26;
+  --panel: rgba(255,255,255,.86); --panel-dark: rgba(3,28,38,.72);
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--abyss); color: var(--ink); font: 16px/1.55 var(--font-body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.2rem; border-radius: 999px; font: 600 .92rem var(--font-body); text-decoration: none; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+.btn-ink { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn-sun { background: var(--sun); border-color: var(--sun); color: var(--abyss); }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within { outline: 2px solid var(--sun); outline-offset: 3px; }
+.alt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--lagoon-deep); }
+.dark .alt { color: var(--sun); }
+
+/* Stage */
+.dive { position: relative; height: 1200vh; }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #e9d7a7; }
+.topbar { position: absolute; z-index: 5; inset: 0 0 auto; display: flex; align-items: center; gap: 1rem;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); }
+.topbar .name { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; text-decoration: none; background: var(--panel); padding: .35rem .8rem; border-radius: 999px; }
+.topbar .btn { margin-left: auto; background: var(--panel); border-color: transparent; }
+.standin { position: absolute; z-index: 4; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; border: 1.5px dashed rgba(255,255,255,.7); padding: .25rem .55rem; border-radius: 6px; background: rgba(3,28,38,.35); }
+
+/* Chapters fade in and out with the camera */
+.chapter { position: absolute; z-index: 3; left: max(16px, env(safe-area-inset-left, 0px)); top: 50%; transform: translateY(-50%); width: min(460px, calc(100% - 200px)); padding: 1.4rem 1.5rem; border-radius: 18px; background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 12px 40px rgba(3,28,38,.18); opacity: 0; pointer-events: none; display: grid; gap: .55rem; }
+.chapter.dark { background: var(--panel-dark); color: var(--foam); }
+.chapter.on { pointer-events: auto; }
+.chapter h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: .98; font-weight: 800; }
+.chapter h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.05; }
+.chapter p { margin: 0; color: var(--ink-soft); }
+.chapter.dark p { color: var(--foam-soft); }
+.chapter .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .3rem; }
+.chapter ul { margin: .2rem 0 0; padding: 0; list-style: none; display: grid; gap: .1rem; }
+.chapter li a { display: grid; grid-template-columns: 1fr auto; gap: .1rem 1rem; padding: .55rem 0; border-top: 1px solid rgba(6,42,54,.12); text-decoration: none; }
+.chapter li b { font-family: var(--font-display); font-size: 1.05rem; }
+.chapter li span { color: var(--ink-soft); font-size: .86rem; grid-column: 1 / -1; }
+.chapter li em { font-style: normal; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--lagoon-deep); align-self: center; }
+.chapter li a:hover b { color: var(--lagoon-deep); }
+.hint { display: inline-flex; align-items: center; gap: .5rem; font-size: .85rem; color: var(--ink-soft); }
+.hint i { width: 2px; height: 22px; background: currentColor; border-radius: 2px; animation: sink 1.6s ease-in-out infinite; }
+@keyframes sink { 0%, 100% { transform: translateY(-3px); opacity: .4; } 50% { transform: translateY(4px); opacity: 1; } }
+.ph { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed currentColor; padding: .15rem .45rem; border-radius: 5px; opacity: .8; justify-self: start; }
+
+/* Depth tags that ride on the line */
+.tag { position: absolute; z-index: 3; top: 0; left: calc(50% + 34px); width: min(380px, calc(50% - 220px)); padding: 1rem 1.1rem; border-radius: 14px; background: var(--panel-dark); color: var(--foam); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; pointer-events: none; display: grid; gap: .4rem; will-change: transform, opacity; }
+.tag.on { pointer-events: auto; }
+.tag::before { content: ""; position: absolute; left: -34px; top: 1.15rem; width: 34px; height: 2px; background: var(--sun); }
+.tag h3 { font-size: 1.25rem; }
+.tag p { margin: 0; color: var(--foam-soft); font-size: .92rem; }
+.tag img { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; }
+.tag a.go { color: var(--sun); font-weight: 700; text-decoration: none; font-size: .9rem; }
+.tag .clip { aspect-ratio: 16 / 9; border-radius: 10px; display: grid; place-items: center; text-align: center; padding: .6rem; font-size: .78rem; color: rgba(255,255,255,.8); background: repeating-linear-gradient(-45deg, rgba(255,255,255,.06) 0 10px, rgba(255,255,255,.12) 10px 20px); border: 1.5px dashed rgba(255,255,255,.4); }
+
+/* Gauge on the trailing edge */
+.gauge { position: absolute; z-index: 4; right: max(16px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); width: 132px; padding: .8rem .9rem; border-radius: 16px; background: var(--panel-dark); color: var(--foam); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: grid; grid-template-columns: 6px 1fr; gap: 0 .75rem; }
+.gauge .track { grid-row: 1 / span 4; position: relative; border-radius: 3px; background: linear-gradient(#cfeaf2, #ead7a6 38%, #2fb3c6 42%, #031c26); }
+.gauge .dot { position: absolute; left: 50%; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--abyss); transform: translate(-50%, -50%); }
+.gauge .lbl { font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.gauge .big { font: 800 1.9rem/1.05 var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gauge .big small { font-size: .8rem; margin-left: .1rem; }
+.gauge .sub { font-size: .76rem; font-variant-numeric: tabular-nums; color: var(--sun); min-height: 1.2em; }
+.gauge .zone { font-size: .8rem; font-weight: 700; }
+
+/* After the dive: surface and talk */
+.surface { position: relative; color: var(--foam); padding-block: 6rem 4rem;
+  background: radial-gradient(60% 45% at 50% 0%, rgba(223,247,251,.55), transparent 70%), linear-gradient(#0a4a5f, var(--abyss) 70%); }
+.surface .wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; grid-template-columns: 1fr 1.15fr; gap: 3rem; }
+.surface h2 { font-size: clamp(2.3rem, 5vw, 3.8rem); line-height: 1; margin-top: .5rem; }
+.surface h2 span { color: var(--sun); }
+.surface p { color: var(--foam-soft); max-width: 40ch; }
+.addr { color: var(--sun); font-weight: 600; user-select: all; }
+form { display: grid; gap: 1rem; min-width: 0; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.3); cursor: pointer; font-size: .92rem; }
+.chip input:checked + span { background: var(--sun); color: var(--abyss); border-color: var(--sun); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .75rem .9rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; width: 100%; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.5); }
+textarea { min-height: 110px; resize: vertical; }
+.composed { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; opacity: .8; margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { background: var(--abyss); color: rgba(255,255,255,.6); font-size: .85rem; padding: 1.5rem max(16px, env(safe-area-inset-right, 0px)) 2.5rem max(16px, env(safe-area-inset-left, 0px)); border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+footer a { color: rgba(255,255,255,.85); }
+
+@media (max-width: 860px) {
+  .chapter { top: auto; bottom: calc(52px + env(safe-area-inset-bottom, 0px)); transform: none; right: max(16px, env(safe-area-inset-right, 0px)); width: auto; padding: 1.1rem 1.15rem; max-height: 62vh; overflow: auto; }
+  .chapter h1 { font-size: 2.2rem; }
+  .tag { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); width: auto; }
+  .tag::before { display: none; }
+  .gauge { top: calc(64px + env(safe-area-inset-top, 0px)); transform: none; width: auto; grid-template-columns: auto auto; align-items: baseline; gap: 0 .6rem; padding: .45rem .75rem; }
+  .gauge .track, .gauge .lbl, .gauge .zone { display: none; }
+  .gauge .big { font-size: 1.3rem; }
+  .surface .wrap, .row { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .hint i { animation: none; } }
+</style>
+</head>
+<body>
+<section class="dive" id="dive" aria-label="One dive from 100 m above the sea to 30 m below it">
+  <div class="stage">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <div class="topbar"><a class="name" href="#dive">Will Wolff</a><a class="btn" href="#surface">Skip to contact</a></div>
+    <span class="standin">Rendered stand-in · your shots scrub here</span>
+
+    <div class="gauge" aria-hidden="true">
+      <span class="track"><span class="dot" id="g-dot"></span></span>
+      <span class="lbl" id="g-lbl">Altitude</span>
+      <span class="big" id="g-big">+100<small>m</small></span>
+      <span class="zone" id="g-zone">Above the sea</span>
+      <span class="sub" id="g-sub"></span>
+    </div>
+
+    <div class="chapter" data-in="-1" data-out="0.07">
+      <span class="alt">+100 m · breathe up</span>
+      <h1>Take a breath.</h1>
+      <p>I'm Will: engineer, beach volleyball player, freediver. This page is one dive, from 100 m above the sea to 30 m below it. Everything I do is somewhere on the way down.</p>
+      <div class="actions"><span class="hint"><i></i>Scroll to descend</span></div>
+    </div>
+
+    <div class="chapter" data-in="0.06" data-out="0.18">
+      <span class="alt">+100 → +30 m · drone</span>
+      <h2>I film from above.</h2>
+      <p>Straight-down drone footage of coastlines and dive sites, for dive centers, tourism and nature projects.</p>
+      <div class="actions"><a class="btn btn-ink" href="#surface" data-kind="Footage">Ask about footage</a></div>
+    </div>
+
+    <div class="chapter" data-in="0.345" data-out="0.415">
+      <span class="alt">0 m · on the sand</span>
+      <h2>I play beach volleyball, so I build for it.</h2>
+      <ul>
+        <li><a href="https://alwayssandy.com" target="_blank" rel="noopener"><b>AlwaysSandy ↗</b><em>Live</em><span>A social network for Berlin's players and coaches.</span></a></li>
+        <li><a href="#surface"><b>AlwaysBooked</b><em>Placeholder</em><span>One line from you on what it does.</span></a></li>
+      </ul>
+    </div>
+
+    <div class="chapter" data-in="0.425" data-out="0.495">
+      <span class="alt">0 m · back at the desk</span>
+      <h2>And software for everyone else.</h2>
+      <ul>
+        <li><a href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener"><b>Ouroboros Leios ↗</b><em>IOG</em><span>Engineer and architect on Cardano's high-throughput protocol.</span></a></li>
+        <li><a href="https://txflow.fun" target="_blank" rel="noopener"><b>txflow ↗</b><em>Side project</em><span>Run transaction flows on the Leios test network.</span></a></li>
+        <li><a href="https://pagebase.dev" target="_blank" rel="noopener"><b>Pagebase ↗</b><em>Studio</em><span>Fixed-price websites for small businesses.</span></a></li>
+      </ul>
+    </div>
+
+    <div class="tag" data-depth="5">
+      <span class="alt">−5 m · client</span>
+      <h3>Underwater Journeys</h3>
+      <img src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+      <p>A freediving club in Cyprus. I built their website and booking, and support the story videos about their dive sites.</p>
+      <a class="go" href="https://underwater.journeys.cy/" target="_blank" rel="noopener">underwater.journeys.cy ↗</a>
+    </div>
+    <div class="tag" data-depth="13">
+      <span class="alt">−13 m · on one breath</span>
+      <h3>Freediving</h3>
+      <div class="clip">Placeholder · your freediving clip, looking down the line</div>
+      <p>No tank, no noise. What I film when I'm in the water for myself.</p>
+    </div>
+    <div class="tag" data-depth="21">
+      <span class="alt">−21 m · footage</span>
+      <h3>Dive-site stories</h3>
+      <div class="clip">Placeholder · a dive-site story clip</div>
+      <p>Underwater video for clubs and centers: the site, the conditions, the feeling.</p>
+      <a class="go" href="#surface" data-kind="Footage">Ask about underwater footage →</a>
+    </div>
+    <div class="tag" data-depth="30">
+      <span class="alt">−30 m · bottom plate</span>
+      <h3>Take a tag.</h3>
+      <p>Freedivers bring a tag back from the bottom plate to prove they made it. Take one up with you and tell me what we should make.</p>
+      <a class="go" href="#surface">Surface and get in touch ↑</a>
+    </div>
+  </div>
+</section>
+
+<section class="surface" id="surface">
+  <div class="wrap">
+    <div>
+      <span class="alt" style="color:var(--sun)">Back at the surface</span>
+      <h2>Breathe. Then let's <span>make</span> something.</h2>
+      <p>Footage, software, a website or another kind of collaboration. A few lines are enough.</p>
+      <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      <p><a href="../willi-wolff-cv-en.pdf" style="color:var(--sun)">CV (PDF)</a></p>
+    </div>
+    <form id="enquiry">
+      <fieldset>
+        <legend>I'm looking for</legend>
+        <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+        <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+        <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+        <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+      </fieldset>
+      <div class="row">
+        <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+        <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+      </div>
+      <label>What you have in mind<textarea id="enq-msg" placeholder="Where, what, and roughly when"></textarea></label>
+      <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. next season"></label>
+      <div><button class="btn btn-sun" type="submit">Write the email</button></div>
+      <div class="composed" id="composed" hidden>
+        <strong class="composed-subject"></strong>
+        <pre class="composed-body"></pre>
+        <div class="btns"><a class="btn btn-sun composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+      </div>
+    </form>
+  </div>
+</section>
+<footer><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></footer>
+<script src="enquiry.js"></script>
+<script>
+(function () {
+  // Real footage: export the one-take shot as an image sequence and set count > 0.
+  // Frame i is loaded from url.replace('####', zero-padded i). Image sequences scrub smoothly
+  // on every browser; video.currentTime scrubbing stutters on Safari and phones.
+  var SEQ = { url: 'frames/descent-####.webp', count: 0 };
+
+  var dive = document.getElementById('dive'), cv = document.getElementById('scene'), cx = cv.getContext('2d');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  var tags = Array.prototype.slice.call(document.querySelectorAll('.tag'));
+  var gDot = document.getElementById('g-dot'), gLbl = document.getElementById('g-lbl'), gBig = document.getElementById('g-big'), gZone = document.getElementById('g-zone'), gSub = document.getElementById('g-sub');
+  var W = 0, H = 0, DPR = 1, frames = [];
+
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function lerp(a, b, k) { return a + (b - a) * k; }
+  function smooth(k) { k = clamp(k, 0, 1); return k * k * (3 - 2 * k); }
+  function band(p, a, b) { return clamp((p - a) / (b - a), 0, 1); }
+  function mixc(c1, c2, k) { return 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(lerp(c1[i], c2[i], k)); }).join(',') + ')'; }
+
+  // Sand texture tile: 128 px stands for 2 m of beach.
+  var sandTile = document.createElement('canvas'); sandTile.width = sandTile.height = 128;
+  (function () { var t = sandTile.getContext('2d'), r = rng(7); t.fillStyle = '#e8d4a2'; t.fillRect(0, 0, 128, 128);
+    for (var i = 0; i < 900; i++) { var v = r(); t.fillStyle = v < .5 ? 'rgba(170,140,85,.22)' : 'rgba(255,250,235,.35)'; t.fillRect(r() * 128, r() * 128, 1 + r() * 1.5, 1 + r() * 1.5); } })();
+  var sandPat = cx.createPattern(sandTile, 'repeat');
+  var snow = (function () { var r = rng(3), a = []; for (var i = 0; i < 160; i++) a.push({ x: r(), y: r(), z: .3 + r() * .7, ph: r() * 6.28 }); return a; })();
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth * DPR; H = cv.clientHeight * DPR; cv.width = W; cv.height = H;
+  }
+
+  // Shot 1, aerial: [progress, altitude m, x m, rotation rad]. Slow tilt and descent, then the drop
+  // accelerates towards a player on the court at x = -10.
+  var AIR = [[0, 100, 0, 0], [0.2, 30, -12, -0.2], [0.27, 2.5, -10.2, -0.32]];
+  function airCam(p) {
+    for (var i = 0; i < AIR.length - 1; i++) {
+      var a = AIR[i], b = AIR[i + 1];
+      if (p <= b[0]) {
+        var r = clamp((p - a[0]) / (b[0] - a[0]), 0, 1), k = i === 1 ? r * r * r : smooth(r); // the drop eases in, like falling
+        return { alt: lerp(a[1], b[1], k), x: lerp(a[2], b[2], k), rot: lerp(a[3], b[3], k) };
+      }
+    }
+    var l = AIR[AIR.length - 1]; return { alt: l[1], x: l[2], rot: l[3] };
+  }
+  // Depth: 0 to 1.5 m during the over-under shot, then down the line to 30 m.
+  function depthAt(p) { return p < 0.6 ? 1.5 * smooth(band(p, 0.5, 0.6)) : 1.5 + 28.5 * smooth(band(p, 0.6, 0.88)); }
+  function altitude(p) { return p < 0.27 ? airCam(p).alt : p < 0.5 ? 0 : -depthAt(p); }
+  function shore(y) { return 3 * Math.sin(y / 18) + 1.4 * Math.sin(y / 6.5); }
+
+  function drawAir(p, t) {
+    var cam = airCam(p), vw = Math.max(2.6, cam.alt * 1.45), s = W / vw;
+    cx.save(); cx.translate(W / 2, H / 2); cx.rotate(cam.rot); cx.scale(1.25, 1.25); cx.translate(-W / 2, -H / 2);
+    var X = function (x) { return W / 2 + (x - cam.x) * s; }, Y = function (y) { return H / 2 + y * s; };
+    var y0 = -H / 2 / s - 2, y1 = H / 2 / s + 2, step = Math.max(0.05, (y1 - y0) / 80);
+    // beach
+    sandPat.setTransform(new DOMMatrix().translate(X(0), Y(0)).scale(s * 2 / 128));
+    cx.fillStyle = sandPat; cx.fillRect(0, 0, W, H);
+    // wet sand
+    cx.beginPath(); for (var y = y0; y <= y1; y += step) cx.lineTo(X(shore(y) - 1.6), Y(y));
+    cx.lineTo(W + 10, Y(y1)); cx.lineTo(W + 10, Y(y0)); cx.closePath(); cx.fillStyle = '#c9b07a'; cx.fill();
+    // sea
+    cx.beginPath(); for (y = y0; y <= y1; y += step) cx.lineTo(X(shore(y)), Y(y));
+    cx.lineTo(W + 10, Y(y1)); cx.lineTo(W + 10, Y(y0)); cx.closePath();
+    var g = cx.createLinearGradient(X(0), 0, X(70), 0); g.addColorStop(0, '#7fdad8'); g.addColorStop(.12, '#3fbfca'); g.addColorStop(.45, '#168ea6'); g.addColorStop(1, '#0a5f7a');
+    cx.fillStyle = g; cx.fill();
+    // foam lines roll in towards the shore
+    [0.3, 2.2, 4.8].forEach(function (o, i) {
+      var off = o + 0.5 * Math.sin(t * 0.7 + i * 1.7);
+      cx.beginPath(); for (var y = y0; y <= y1; y += step) cx.lineTo(X(shore(y) + off + 0.25 * Math.sin(y * 0.9 + t + i)), Y(y));
+      cx.strokeStyle = 'rgba(255,255,255,' + (0.75 - i * 0.2) + ')'; cx.lineWidth = Math.max(1.2 * DPR, 0.22 * s); cx.stroke();
+    });
+    // close to the water, ripples
+    if (cam.alt < 6) {
+      cx.save(); cx.globalAlpha = smooth((6 - cam.alt) / 5) * 0.35; cx.strokeStyle = '#ffffff'; cx.lineWidth = Math.max(1, 0.03 * s);
+      for (var k = 0; k < 16; k++) { cx.beginPath(); var yy = -4 + k * 0.55; for (var x = 2; x < 20; x += 0.25) cx.lineTo(X(x), Y(yy + 0.12 * Math.sin(x * 2.3 + t * 1.6 + k))); cx.stroke(); }
+      cx.restore();
+    }
+    // court: 16 x 8 m, net across the middle
+    var c = { x: -14, w: 16, h: 8 };
+    cx.fillStyle = 'rgba(255,248,230,.25)'; cx.fillRect(X(c.x - c.w / 2), Y(-c.h / 2), c.w * s, c.h * s);
+    cx.strokeStyle = '#2a7fd4'; cx.lineWidth = Math.max(1.2 * DPR, 0.06 * s); cx.strokeRect(X(c.x - c.w / 2), Y(-c.h / 2), c.w * s, c.h * s);
+    cx.strokeStyle = 'rgba(0,0,0,.25)'; cx.lineWidth = Math.max(1.5 * DPR, 0.08 * s); cx.beginPath(); cx.moveTo(X(c.x) + 0.35 * s, Y(-4.6) + 0.35 * s); cx.lineTo(X(c.x) + 0.35 * s, Y(4.6) + 0.35 * s); cx.stroke();
+    cx.strokeStyle = '#1b2a33'; cx.lineWidth = Math.max(1.5 * DPR, 0.07 * s); cx.beginPath(); cx.moveTo(X(c.x), Y(-4.6)); cx.lineTo(X(c.x), Y(4.6)); cx.stroke();
+    var players = [[-18.5, -1.8, '#f0d48a'], [-17, 2, '#f0d48a'], [-10.5, -2.2, '#ffffff'], [-9.6, 1.6, '#ffffff']];
+    players.forEach(function (pl, i) {
+      var px = pl[0] + 0.4 * Math.sin(t * 1.3 + i), py = pl[1] + 0.3 * Math.cos(t * 1.1 + i);
+      cx.fillStyle = 'rgba(0,0,0,.22)'; cx.beginPath(); cx.ellipse(X(px) + 0.45 * s, Y(py) + 0.45 * s, 0.32 * s, 0.26 * s, 0, 0, 6.28); cx.fill();
+      cx.fillStyle = '#6b4a35'; cx.beginPath(); cx.arc(X(px), Y(py), 0.24 * s, 0, 6.28); cx.fill();
+      cx.fillStyle = pl[2]; cx.beginPath(); cx.arc(X(px), Y(py), 0.15 * s, 0, 6.28); cx.fill();
+    });
+    var bk = (Math.sin(t * 0.9) + 1) / 2, bx = lerp(-17.5, -10, bk), by = lerp(-1, 1, bk), arc = Math.sin(bk * Math.PI);
+    cx.fillStyle = 'rgba(0,0,0,.18)'; cx.beginPath(); cx.arc(X(bx) + (0.3 + arc * 1.4) * s, Y(by) + (0.3 + arc * 1.4) * s, 0.12 * s, 0, 6.28); cx.fill();
+    cx.fillStyle = '#ffffff'; cx.beginPath(); cx.arc(X(bx), Y(by), 0.12 * s, 0, 6.28); cx.fill();
+    // umbrellas and a boat
+    [[-34, 12, '#f2a65a'], [-29, -16, '#2fb3c6'], [-40, -4, '#f0d48a']].forEach(function (u) {
+      cx.fillStyle = 'rgba(0,0,0,.2)'; cx.beginPath(); cx.arc(X(u[0]) + 0.9 * s, Y(u[1]) + 0.9 * s, 1.1 * s, 0, 6.28); cx.fill();
+      for (var q = 0; q < 8; q++) { cx.beginPath(); cx.moveTo(X(u[0]), Y(u[1])); cx.arc(X(u[0]), Y(u[1]), 1.1 * s, q * 0.785, (q + 1) * 0.785); cx.closePath(); cx.fillStyle = q % 2 ? '#ffffff' : u[2]; cx.fill(); }
+    });
+    cx.save(); cx.translate(X(42), Y(-24)); cx.rotate(-0.5);
+    cx.fillStyle = 'rgba(255,255,255,.35)'; cx.beginPath(); cx.moveTo(-3 * s, 0); cx.lineTo(-14 * s, -2.2 * s); cx.lineTo(-14 * s, 2.2 * s); cx.closePath(); cx.fill();
+    cx.fillStyle = '#ffffff'; cx.beginPath(); cx.ellipse(0, 0, 3.2 * s, 1.1 * s, 0, 0, 6.28); cx.fill(); cx.restore();
+    // the buoy marking the line
+    var rip = (t * 0.6) % 1;
+    cx.strokeStyle = 'rgba(255,255,255,' + (0.6 * (1 - rip)) + ')'; cx.lineWidth = Math.max(1, 0.05 * s); cx.beginPath(); cx.arc(X(9), Y(0), (0.5 + rip * 1.6) * s, 0, 6.28); cx.stroke();
+    cx.fillStyle = '#ff7a3d'; cx.beginPath(); cx.arc(X(9), Y(0), 0.42 * s, 0, 6.28); cx.fill();
+    cx.fillStyle = '#ffd2b8'; cx.beginPath(); cx.arc(X(9) - 0.12 * s, Y(0) - 0.12 * s, 0.14 * s, 0, 6.28); cx.fill();
+    cx.restore();
+  }
+
+  function drawWater(d, t, look) {
+    var k = d / 30, pxm = H / 7;
+    var g = cx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, mixc([58, 190, 205], [10, 74, 95], k)); g.addColorStop(1, mixc([19, 129, 154], [3, 28, 38], k));
+    cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // light rays fade with depth
+    if (d < 22) {
+      cx.save(); cx.globalCompositeOperation = 'lighter'; cx.globalAlpha = (1 - d / 22) * 0.16;
+      for (var r = 0; r < 7; r++) {
+        var x0 = W * (0.1 + r * 0.14) + Math.sin(t * 0.4 + r) * W * 0.03, wdt = W * (0.03 + 0.02 * Math.sin(r * 3));
+        var rg = cx.createLinearGradient(0, 0, 0, H); rg.addColorStop(0, '#ffffff'); rg.addColorStop(1, 'rgba(255,255,255,0)');
+        cx.fillStyle = rg; cx.beginPath(); cx.moveTo(x0, 0); cx.lineTo(x0 + wdt, 0); cx.lineTo(x0 + wdt * 3 - W * 0.06, H); cx.lineTo(x0 - W * 0.08, H); cx.closePath(); cx.fill();
+      }
+      cx.restore();
+    }
+    var ropeX = W / 2;
+    // seabed and bottom plate
+    var floorY = H / 2 + (31.5 - d) * pxm;
+    if (floorY < H + 40) {
+      var fg = cx.createLinearGradient(0, floorY, 0, H); fg.addColorStop(0, '#3e5b5c'); fg.addColorStop(1, '#22383b');
+      cx.fillStyle = fg; cx.beginPath(); cx.moveTo(0, floorY + 20 * DPR);
+      for (var x = 0; x <= W; x += W / 24) cx.lineTo(x, floorY + Math.sin(x / W * 9) * 10 * DPR);
+      cx.lineTo(W, H); cx.lineTo(0, H); cx.closePath(); cx.fill();
+      cx.strokeStyle = 'rgba(255,255,255,.07)'; cx.lineWidth = 2 * DPR;
+      for (var rr = 1; rr < 6; rr++) { cx.beginPath(); for (x = 0; x <= W; x += W / 30) cx.lineTo(x, floorY + rr * 18 * DPR + Math.sin(x / W * 14 + rr) * 6 * DPR); cx.stroke(); }
+    }
+    // the line, marked every metre, a black band every 5 m
+    var top = Math.max(0, H / 2 - d * pxm), end = H / 2 + (30 - d) * pxm;
+    cx.strokeStyle = 'rgba(245,236,210,.9)'; cx.lineWidth = 3 * DPR; cx.beginPath(); cx.moveTo(ropeX, top); cx.lineTo(ropeX, Math.min(H, end)); cx.stroke();
+    cx.font = '700 ' + (11 * DPR) + 'px Figtree, sans-serif'; cx.textAlign = 'right';
+    for (var m = Math.max(1, Math.floor(d - 4)); m <= Math.min(30, Math.ceil(d + 4)); m++) {
+      var my = H / 2 + (m - d) * pxm;
+      if (m % 5 === 0) { cx.fillStyle = '#111c22'; cx.fillRect(ropeX - 4 * DPR, my - 0.12 * pxm, 8 * DPR, 0.24 * pxm); cx.fillStyle = 'rgba(255,255,255,.8)'; cx.fillText(m + ' m', ropeX - 12 * DPR, my + 4 * DPR); }
+      else { cx.fillStyle = 'rgba(17,28,34,.6)'; cx.fillRect(ropeX - 3 * DPR, my - 1 * DPR, 6 * DPR, 2 * DPR); }
+    }
+    if (end < H + 30) {
+      cx.fillStyle = '#9fb0b6'; cx.beginPath(); cx.ellipse(ropeX, end, 34 * DPR, 9 * DPR, 0, 0, 6.28); cx.fill();
+      cx.fillStyle = '#d3dde0'; cx.beginPath(); cx.ellipse(ropeX, end - 2 * DPR, 30 * DPR, 7 * DPR, 0, 0, 6.28); cx.fill();
+      ['#f0d48a', '#ff7a3d', '#ffffff'].forEach(function (c2, i) { cx.fillStyle = c2; cx.fillRect(ropeX - 22 * DPR + i * 16 * DPR, end - 14 * DPR + Math.sin(t + i) * 2 * DPR, 8 * DPR, 14 * DPR); });
+    }
+    // marine snow, nearer specks travel faster
+    snow.forEach(function (s2) {
+      var y = ((s2.y * H - d * pxm * s2.z * 0.9 - t * 6 * DPR * s2.z) % H + H) % H, x = s2.x * W + Math.sin(t * 0.5 + s2.ph) * 8 * DPR;
+      cx.fillStyle = 'rgba(230,248,250,' + (0.15 + 0.45 * s2.z) * (0.6 + 0.4 * (1 - k)) + ')';
+      cx.beginPath(); cx.arc(x, y, s2.z * 2 * DPR, 0, 6.28); cx.fill();
+    });
+    // looking up from the plate: Snell's window, the circle of sky above
+    if (look > 0) {
+      cx.save(); cx.globalAlpha = look;
+      var bg = cx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0e5d73'); bg.addColorStop(1, '#031c26'); cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
+      var R = Math.min(W, H) * (0.22 + 0.12 * look), wx = W / 2, wy = H * 0.3;
+      cx.globalCompositeOperation = 'lighter';
+      for (var b = 0; b < 12; b++) { var ang = Math.PI / 2 + (b - 5.5) * 0.11 + Math.sin(t * 0.3 + b) * 0.02; cx.fillStyle = 'rgba(200,240,248,.05)'; cx.beginPath(); cx.moveTo(wx, wy); cx.lineTo(wx + Math.cos(ang - 0.03) * H * 1.2, wy + Math.sin(ang - 0.03) * H * 1.2); cx.lineTo(wx + Math.cos(ang + 0.03) * H * 1.2, wy + Math.sin(ang + 0.03) * H * 1.2); cx.closePath(); cx.fill(); }
+      var sg = cx.createRadialGradient(wx, wy, 0, wx, wy, R); sg.addColorStop(0, 'rgba(240,252,255,.95)'); sg.addColorStop(.7, 'rgba(160,225,236,.55)'); sg.addColorStop(1, 'rgba(160,225,236,0)');
+      cx.fillStyle = sg; cx.beginPath(); cx.arc(wx, wy, R, 0, 6.28); cx.fill();
+      cx.globalCompositeOperation = 'source-over';
+      cx.strokeStyle = 'rgba(245,236,210,.7)'; cx.lineWidth = 3 * DPR; cx.beginPath(); cx.moveTo(wx, wy); cx.lineTo(wx, H); cx.stroke();
+      for (var bb = 0; bb < 9; bb++) { var by2 = H - ((t * 40 * DPR + bb * H / 9) % H); cx.strokeStyle = 'rgba(255,255,255,.5)'; cx.lineWidth = 1.5 * DPR; cx.beginPath(); cx.arc(wx + 18 * DPR + Math.sin(bb * 2 + t) * 10 * DPR, by2, (2 + bb % 3) * DPR, 0, 6.28); cx.stroke(); }
+      cx.restore();
+    }
+  }
+
+  // A beach volleyball: white, yellow and blue panels, lit from the top left.
+  function volleyball(x, y, r, rot) {
+    cx.save(); cx.translate(x, y); cx.rotate(rot);
+    cx.beginPath(); cx.arc(0, 0, r, 0, 6.28); cx.clip();
+    cx.fillStyle = '#fbfaf5'; cx.fillRect(-r, -r, 2 * r, 2 * r);
+    [['#f2c14e', 0], ['#1f6fb2', 2.09], ['#f2c14e', 4.19]].forEach(function (pn) {
+      cx.save(); cx.rotate(pn[1]);
+      cx.fillStyle = pn[0]; cx.beginPath(); cx.moveTo(-r * 1.1, -r * 0.15);
+      cx.bezierCurveTo(-r * 0.4, -r * 0.55, r * 0.4, -r * 0.55, r * 1.1, -r * 0.15);
+      cx.lineTo(r * 1.1, -r * 0.5); cx.bezierCurveTo(r * 0.4, -r * 0.95, -r * 0.4, -r * 0.95, -r * 1.1, -r * 0.5); cx.closePath(); cx.fill();
+      cx.restore();
+    });
+    cx.strokeStyle = 'rgba(30,40,50,.35)'; cx.lineWidth = Math.max(1, r * 0.02);
+    for (var q = 0; q < 3; q++) { cx.save(); cx.rotate(q * 2.09); cx.beginPath(); cx.moveTo(-r * 1.1, 0.05 * r); cx.bezierCurveTo(-r * 0.4, -r * 0.35, r * 0.4, -r * 0.35, r * 1.1, 0.05 * r); cx.stroke(); cx.restore(); }
+    cx.restore();
+    var g = cx.createRadialGradient(x - r * 0.4, y - r * 0.45, r * 0.1, x, y, r * 1.05);
+    g.addColorStop(0, 'rgba(255,255,255,.45)'); g.addColorStop(.6, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(10,30,40,.35)');
+    cx.fillStyle = g; cx.beginPath(); cx.arc(x, y, r, 0, 6.28); cx.fill();
+  }
+  // Slow-motion ball with a short smear behind it while it moves fast.
+  function ballShot(k, dir, t) {
+    var diag = Math.hypot(W, H), r = lerp(diag * 0.012, diag * 0.9, Math.pow(k, 3));
+    var x = W * lerp(0.42, 0.5, k), y = H * lerp(0.6, 0.48, k), rot = t * 0.4 + k * 2.5 * dir;
+    for (var gh = 3; gh >= 1; gh--) { cx.globalAlpha = 0.12 * gh * k; volleyball(x - gh * r * 0.05, y + gh * r * 0.06, r * (1 - gh * 0.04), rot - gh * 0.05); }
+    cx.globalAlpha = 1; volleyball(x, y, r, rot);
+  }
+
+  // Shot 2, eye level on the court: sky, a strip of sea, sand, the net and players, in parallax.
+  function player(x, ground, h, phase, col, t) {
+    var j = Math.max(0, Math.sin(t * 1.6 + phase)) * h * 0.25, y = ground - j;
+    cx.fillStyle = 'rgba(0,0,0,.15)'; cx.beginPath(); cx.ellipse(x, ground + h * 0.02, h * 0.16, h * 0.035, 0, 0, 6.28); cx.fill();
+    cx.strokeStyle = '#5b3d2b'; cx.lineCap = 'round'; cx.lineWidth = h * 0.07;
+    cx.beginPath(); cx.moveTo(x - h * 0.06, y); cx.lineTo(x - h * 0.03, y - h * 0.42); cx.moveTo(x + h * 0.06, y); cx.lineTo(x + h * 0.03, y - h * 0.42); cx.stroke();
+    cx.beginPath(); cx.moveTo(x - h * 0.12, y - h * 0.62); cx.lineTo(x - h * 0.2, y - h * 0.88); cx.moveTo(x + h * 0.12, y - h * 0.62); cx.lineTo(x + h * 0.2, y - h * 0.88); cx.stroke();
+    cx.fillStyle = col; cx.beginPath(); cx.ellipse(x, y - h * 0.55, h * 0.12, h * 0.17, 0, 0, 6.28); cx.fill();
+    cx.fillStyle = '#5b3d2b'; cx.beginPath(); cx.arc(x, y - h * 0.8, h * 0.08, 0, 6.28); cx.fill();
+  }
+  function drawCourt(k, t) {
+    var pan = k * W * 0.18, hz = H * 0.44;
+    var sky = cx.createLinearGradient(0, 0, 0, hz); sky.addColorStop(0, '#8fcfe2'); sky.addColorStop(1, '#e8f5f7');
+    cx.fillStyle = sky; cx.fillRect(0, 0, W, hz);
+    var sx = W * 0.82 - pan * 0.05, sun = cx.createRadialGradient(sx, H * 0.12, 0, sx, H * 0.12, H * 0.35); sun.addColorStop(0, 'rgba(255,248,220,.9)'); sun.addColorStop(1, 'rgba(255,248,220,0)');
+    cx.fillStyle = sun; cx.fillRect(0, 0, W, hz);
+    cx.fillStyle = '#2aa9bb'; cx.fillRect(0, hz, W, H * 0.06);
+    cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 1.5 * DPR;
+    for (var w = 0; w < 14; w++) { var wx = (((w * 0.13 * W - pan * 0.15 + t * 12 * DPR) % (W * 1.2)) + W * 1.2) % (W * 1.2) - W * 0.1, wy = hz + H * (0.012 + (w % 4) * 0.012); cx.beginPath(); cx.moveTo(wx, wy); cx.lineTo(wx + W * 0.05, wy); cx.stroke(); }
+    var sand = cx.createLinearGradient(0, hz + H * 0.06, 0, H); sand.addColorStop(0, '#efdcae'); sand.addColorStop(1, '#d8bb80');
+    cx.fillStyle = sand; cx.fillRect(0, hz + H * 0.06, W, H);
+    var r0 = rng(5); cx.fillStyle = 'rgba(150,115,60,.18)';
+    for (var f = 0; f < 70; f++) { var fy = hz + H * 0.08 + r0() * H * 0.55, sc = (fy - hz) / H, fx = ((r0() * W * 1.4 - pan * (0.2 + sc)) % (W * 1.4) + W * 1.4) % (W * 1.4) - W * 0.2; cx.beginPath(); cx.ellipse(fx, fy, 20 * DPR * sc, 9 * DPR * sc, 0, 0, 6.28); cx.fill(); }
+    var np = pan * 0.5, u = Math.min(H, W * 1.1);
+    player(W * 0.36 - np * 0.6, H * 0.62, u * 0.2, 0.5, '#f0d48a', t);
+    player(W * 0.66 - np * 0.6, H * 0.62, u * 0.2, 2.1, '#f0d48a', t);
+    var nl = W * 0.12 - np, nr = W * 0.9 - np, ntop = H * 0.4, nbot = H * 0.52, ground = H * 0.7;
+    cx.fillStyle = '#20313a'; cx.fillRect(nl - 5 * DPR, ntop - 6 * DPR, 10 * DPR, ground - ntop + 6 * DPR); cx.fillRect(nr - 5 * DPR, ntop - 6 * DPR, 10 * DPR, ground - ntop + 6 * DPR);
+    cx.strokeStyle = 'rgba(20,30,36,.45)'; cx.lineWidth = 1 * DPR;
+    for (var gx = nl; gx < nr; gx += 14 * DPR) { cx.beginPath(); cx.moveTo(gx, ntop); cx.lineTo(gx, nbot); cx.stroke(); }
+    for (var gy = ntop; gy < nbot; gy += 14 * DPR) { cx.beginPath(); cx.moveTo(nl, gy); cx.lineTo(nr, gy); cx.stroke(); }
+    cx.fillStyle = '#1f6fb2'; cx.fillRect(nl, ntop - 4 * DPR, nr - nl, 10 * DPR); cx.fillRect(nl, nbot - 3 * DPR, nr - nl, 5 * DPR);
+    player(W * 0.86 - pan * 1.1, H * 1.05, u * 0.62, 3.6, '#e9eef0', t);
+    var bk = (Math.sin(t * 0.8) + 1) / 2;
+    if (k > 0.25) volleyball(lerp(W * 0.3, W * 0.7, bk) - np, H * 0.3 - Math.sin(bk * Math.PI) * H * 0.12, H * 0.028, t);
+  }
+
+  // Shot 3, over-under: the camera sits half in the water and sinks, so the waterline climbs the frame.
+  function waterline(yw, t) { cx.beginPath(); cx.moveTo(0, yw); for (var x = 0; x <= W; x += W / 40) cx.lineTo(x, yw + Math.sin(x / W * 12 + t * 2) * 8 * DPR); }
+  function drawOverUnder(k, t) {
+    var yw = lerp(H * 0.7, -H * 0.12, smooth(k)), sh = yw - H * 0.16;
+    var sky = cx.createLinearGradient(0, sh - H * 0.6, 0, yw); sky.addColorStop(0, '#9fd6e6'); sky.addColorStop(1, '#eaf6f7'); cx.fillStyle = sky; cx.fillRect(0, 0, W, H);
+    cx.fillStyle = '#e6d2a0'; cx.fillRect(0, sh, W, H * 0.035);
+    [[0.2, '#f2a65a'], [0.32, '#2fb3c6'], [0.7, '#f0d48a']].forEach(function (u) { cx.fillStyle = u[1]; cx.beginPath(); cx.ellipse(W * u[0], sh, W * 0.025, H * 0.014, 0, 3.14, 6.28); cx.fill(); });
+    var sea = cx.createLinearGradient(0, sh + H * 0.03, 0, yw); sea.addColorStop(0, '#3fbfca'); sea.addColorStop(1, '#1b98ad'); cx.fillStyle = sea; cx.fillRect(0, sh + H * 0.03, W, yw - sh);
+    cx.fillStyle = '#ff7a3d'; cx.beginPath(); cx.ellipse(W / 2, yw, W * 0.05, H * 0.03, 0, 3.14, 6.28); cx.fill();
+    cx.save(); waterline(yw, t); cx.lineTo(W, H); cx.lineTo(0, H); cx.closePath(); cx.clip();
+    drawWater(depthAt(0.5 + k * 0.1), t, 0);
+    cx.strokeStyle = 'rgba(245,236,210,.9)'; cx.lineWidth = 3 * DPR; cx.beginPath(); cx.moveTo(W / 2, yw); cx.lineTo(W / 2, H); cx.stroke();
+    cx.fillStyle = '#c45a2a'; cx.beginPath(); cx.ellipse(W / 2, yw + 6 * DPR, W * 0.05, H * 0.03, 0, 0, 3.14); cx.fill();
+    cx.restore();
+    cx.strokeStyle = 'rgba(255,255,255,.85)'; cx.lineWidth = 3 * DPR; waterline(yw, t); cx.stroke();
+    // droplets on the dome port while its top half is still dry
+    var r = rng(21), a = clamp(1 - k * 1.6, 0, 1);
+    for (var i = 0; i < 18; i++) { var dx = r() * W, dy = r() * H * 0.6, dr = (6 + r() * 22) * DPR; if (dy > yw || a <= 0) continue;
+      var dg = cx.createRadialGradient(dx - dr * 0.3, dy - dr * 0.3, 0, dx, dy, dr); dg.addColorStop(0, 'rgba(255,255,255,' + 0.55 * a + ')'); dg.addColorStop(.7, 'rgba(255,255,255,' + 0.08 * a + ')'); dg.addColorStop(1, 'rgba(60,120,140,' + 0.25 * a + ')');
+      cx.fillStyle = dg; cx.beginPath(); cx.arc(dx, dy, dr, 0, 6.28); cx.fill(); }
+  }
+
+  function drawFrame(p, t) {
+    if (frames.length) { var img = frames[Math.round(p * (frames.length - 1))]; if (img && img.complete) { var sc = Math.max(W / img.width, H / img.height); cx.drawImage(img, (W - img.width * sc) / 2, (H - img.height * sc) / 2, img.width * sc, img.height * sc); return; } }
+    if (p < 0.29) {
+      drawAir(Math.min(p, 0.27), t);
+      if (p > 0.245) ballShot(band(p, 0.245, 0.29), 1, t); // the ball rises off the court into the lens
+    } else if (p < 0.5) {
+      drawCourt(band(p, 0.29, 0.5), t);
+      if (p < 0.335) ballShot(1 - band(p, 0.29, 0.335), -1, t); // and flies away again into the next shot
+    } else if (p < 0.6) {
+      drawOverUnder(band(p, 0.5, 0.6), t);
+    } else {
+      drawWater(depthAt(p), t, smooth(band(p, 0.92, 0.98)));
+    }
+  }
+
+  function fmt(v) { var r = Math.round(v); return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r); }
+  function updateUI(p) {
+    var alt = altitude(p), d = depthAt(p);
+    gDot.style.top = (clamp((100 - alt) / 130, 0, 1) * 100) + '%';
+    gLbl.textContent = alt < 0 ? 'Depth' : 'Altitude';
+    gBig.firstChild.nodeValue = fmt(alt);
+    gZone.textContent = p < 0.2 ? 'Above the sea' : p < 0.29 ? 'The drop' : p < 0.5 ? 'Sea level' : p < 0.6 ? 'Going under' : p > 0.9 ? 'Bottom plate' : 'On one breath';
+    // a relaxed freedive descends at roughly 1 m/s
+    gSub.textContent = alt < 0 ? 'Dive time 0:' + String(Math.round(d)).padStart(2, '0') : '';
+    chapters.forEach(function (c) {
+      var a = +c.dataset.in, b = +c.dataset.out, f = 0.025, o = clamp(Math.min((p - a) / f, (b - p) / f), 0, 1);
+      c.style.opacity = o; c.classList.toggle('on', o > 0.5);
+      if (window.innerWidth > 860) c.style.transform = 'translateY(calc(-50% + ' + ((1 - o) * 14) + 'px))';
+    });
+    var pxm = cv.clientHeight / 7, inWater = p > 0.6;
+    tags.forEach(function (tg) {
+      var td = +tg.dataset.depth, y = cv.clientHeight / 2 + (td - d) * pxm - 22, o = inWater ? clamp(1 - Math.abs(td - d) / 3.2, 0, 1) : 0;
+      if (td === 30) o = inWater ? clamp((d - 26.8) / 2, 0, 1) * (1 - band(p, 0.95, 0.99)) : 0;
+      var maxY = cv.clientHeight - tg.offsetHeight - 16;
+      tg.style.transform = 'translateY(' + clamp(y, 70, Math.max(70, maxY)) + 'px)';
+      tg.style.opacity = o; tg.classList.toggle('on', o > 0.5);
+    });
+  }
+
+  var shown = 0, goal = 0, t0 = performance.now(), visible = true, running = false;
+  function progress() { var r = dive.getBoundingClientRect(); return clamp(-r.top / (dive.offsetHeight - window.innerHeight), 0, 1); }
+  function loop(now) {
+    var t = still.matches ? 0 : (now - t0) / 1000;
+    shown = still.matches ? goal : shown + (goal - shown) * 0.12;
+    if (Math.abs(goal - shown) < 0.0002) shown = goal;
+    drawFrame(shown, t); updateUI(shown);
+    if (visible && (!still.matches || shown !== goal)) requestAnimationFrame(loop); else running = false;
+  }
+  function kick() { goal = progress(); if (!running) { running = true; requestAnimationFrame(loop); } }
+  new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) kick(); }).observe(dive);
+  window.addEventListener('scroll', kick, { passive: true });
+  window.addEventListener('resize', function () { resize(); kick(); });
+  if (SEQ.count > 0) for (var i = 0; i < SEQ.count; i++) { var im = new Image(); im.src = SEQ.url.replace('####', String(i + 1).padStart(4, '0')); frames.push(im); }
+  resize(); goal = shown = progress(); drawFrame(shown, 0); updateUI(shown); kick();
+})();
+</script>
+</body>
+</html>
