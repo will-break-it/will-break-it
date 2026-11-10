@@ -31,3 +31,4 @@ Round 4, a bolder concept:
 Round 5, back to the calm vertical layout:
 
 - `f1-descent-aerial.html`: D1 Refined, with its static hero replaced by one slow scroll-scrubbed top-down drone descent from 100 m to the court. Intro panels fade in over the scene, the ruler reads the drone's altitude, and the shot dissolves into the sand where the sea-level section starts. Below that it is D1, with freediving copy. Same `SEQ` hook for real footage.
+- `f2-refined-aerial.html`: D1 Refined left as it is (layout, sky gradient, ruler, motion). Only its frames above sea level change: the hero shot and the two aerial frames hold a top-down drone scene that comes down from 120 m as each frame scrolls past. Freediving copy below. Each canvas takes an image sequence for real footage (`data-seq`, `data-count`).
