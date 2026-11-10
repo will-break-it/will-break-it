@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Will Wolff · Descent Aerial</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* F1, "Descent aerial". D1 with its static hero replaced by a scroll-scrubbed top-down drone
+   descent from 100 m to the sand, kept calm: one slow camera move, no cuts, no gimmicks. Below the
+   sand it is D1 unchanged. Original D1 notes:
+   D1, "Descent refined". Same trip as B1, smoother: one continuous colour gradient for the whole
+   page (no hard band edges), a ruler on the right with a tick every 10 m, and a booking pill that
+   rides along until you reach the seabed. Light above the surface, dark below. */
+:root {
+  --sky: #dcf0f5; --sky-low: #c2e3ec; --sand: #efe0bd; --sand-wet: #e2cc96;
+  --shallow: #27a6b8; --mid: #0e6f86; --deep: #083a4b; --abyss: #04202a;
+  --ink: #062a36; --ink-soft: #3b5a66; --foam: #ffffff; --foam-soft: rgba(255,255,255,.82);
+  --lagoon-deep: #0b7684; --sun: #f0d48a;
+  --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--abyss); color: var(--ink); font: 17px/1.6 var(--font-body); }
+main { background: linear-gradient(var(--sand), var(--sand) 33%, var(--sand-wet) 52%, var(--shallow) 56%, var(--mid) 70%, var(--deep) 84%, var(--abyss)); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(128px, env(safe-area-inset-right, 0px)); }
+.alt { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--lagoon-deep); }
+.under .alt { color: var(--sun); }
+.under { color: var(--foam); }
+.under p, .under .soft { color: var(--foam-soft); }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1.3rem; border-radius: 999px; font: 600 .95rem var(--font-body); text-decoration: none; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+.btn-ink { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn-sun { background: var(--sun); border-color: var(--sun); color: var(--abyss); }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .chip:focus-within, .card:focus-visible { outline: 2px solid var(--shallow); outline-offset: 3px; }
+.ph-note { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1.5px dashed currentColor; padding: .18rem .45rem; border-radius: 5px; opacity: .85; }
+.media { border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: .9rem; color: #fff; min-width: 0; }
+.media strong { font-variant-numeric: tabular-nums; }
+
+/* Ruler */
+.ruler { position: fixed; right: max(20px, env(safe-area-inset-right, 0px)); top: 0; bottom: 0; width: 56px; z-index: 20; pointer-events: none; display: flex; align-items: center; }
+.ruler .scale { position: relative; height: 70vh; width: 100%; }
+.ruler .tick { position: absolute; right: 0; height: 1px; width: 10px; background: currentColor; opacity: .35; }
+.ruler .tick.major { width: 18px; opacity: .7; }
+.ruler .tick span { position: absolute; right: 24px; top: -8px; font: 700 .68rem var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ruler .needle { position: absolute; right: -4px; top: 0; height: 2px; width: 30px; background: currentColor; will-change: transform; }
+.ruler .read { position: absolute; right: 34px; top: 0; transform: translateY(-50%); will-change: transform; font: 800 .95rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ruler { color: var(--ink); }
+.ruler .tick span { transition: opacity .25s; }
+.ruler.lit .tick span, .ruler.lit .read { text-shadow: 0 1px 3px rgba(4,32,42,.45); }
+
+/* Floating booking pill */
+.pill { position: fixed; transition-timing-function: cubic-bezier(.2,.7,.2,1); right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: calc(100vw - 40px); z-index: 20; box-shadow: 0 6px 24px rgba(4,32,42,.25); transition: opacity .25s, transform .25s; }
+.pill-alt { display: none; font-variant-numeric: tabular-nums; padding-right: .6rem; margin-right: .1rem; border-right: 1px solid rgba(255,255,255,.3); }
+.pill[data-off="true"] { opacity: 0; transform: translateY(12px); pointer-events: none; }
+
+.topbar { display: flex; align-items: center; gap: 1rem; padding-block: 1.25rem; }
+.topbar .name { font-family: var(--font-display); font-weight: 800; text-decoration: none; font-size: 1.1rem; }
+.topbar nav { margin-left: auto; display: flex; gap: 1.25rem; font-size: .92rem; }
+.topbar nav a { text-decoration: none; color: var(--ink-soft); }
+
+.stop { padding-block: 5rem; }
+.stop-head { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 3rem; align-items: end; margin-bottom: 2.25rem; }
+.stop-head h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); line-height: 1.02; margin-top: .4rem; }
+.stop-head p { margin: 0; color: var(--ink-soft); max-width: 44ch; }
+
+.hero { padding-block: 3rem 2rem; }
+.hero-shot { margin-top: 2.5rem; aspect-ratio: 21 / 9; max-width: 100%; background: linear-gradient(160deg, #a9dbe6, #58adbf 55%, #2f8c8f 80%, #c9b98f); }
+.hero h1 { font-size: clamp(3rem, 8.5vw, 6.6rem); line-height: .93; font-weight: 800; max-width: 11ch; margin-top: .6rem; }
+.hero p { font-size: 1.18rem; color: var(--ink-soft); max-width: 48ch; margin: 1.3rem 0 1.8rem; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+.pair .media { aspect-ratio: 4 / 3; max-width: 100%; }
+.a1 { background: linear-gradient(160deg, #bfd9d3, #5fa9a2 55%, #c9b98f); }
+.a2 { background: linear-gradient(170deg, #a8d8e0, #5aaec0 60%, #d8c99f); }
+
+.horizon { display: flex; align-items: center; gap: 1rem; color: var(--lagoon-deep); margin-bottom: 3rem; }
+.horizon::before, .horizon::after { content: ""; flex: 1; height: 2px; background: currentColor; opacity: .35; }
+.feature { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 4rem; }
+.feature .court { aspect-ratio: 4 / 5; max-width: 100%; color: var(--ink); justify-content: flex-start; gap: .5rem; background: repeating-linear-gradient(-45deg, #ead9b0 0 10px, #e2cc9b 10px 20px); border: 1.5px dashed #b89f65; position: relative; }
+.feature .court img { position: absolute; right: -1.5rem; bottom: -1.5rem; width: 62%; border-radius: 12px; box-shadow: 0 12px 30px rgba(6,42,54,.2); }
+.feature h3 { font-size: 2.2rem; margin: .4rem 0 .6rem; }
+.feature p { color: var(--ink-soft); max-width: 44ch; }
+.go { font-weight: 700; color: var(--lagoon-deep); text-decoration: none; }
+.builds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 2.5rem; }
+.card { display: grid; gap: .4rem; text-decoration: none; min-width: 0; padding-top: 1rem; border-top: 1.5px solid rgba(6,42,54,.2); }
+.card .kind { font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lagoon-deep); }
+.card h3 { font-size: 1.25rem; }
+.card p { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+.card:hover h3 { color: var(--lagoon-deep); }
+
+.under .stop-head p { color: var(--foam-soft); }
+.uj { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 3.5rem; }
+.uj img { width: 100%; max-width: 100%; border-radius: 16px; aspect-ratio: 16 / 10; object-fit: cover; }
+.uj h3 { font-size: 2rem; margin: .4rem 0 .6rem; }
+.uj a { color: var(--sun); font-weight: 700; text-decoration: none; }
+.dives { display: grid; grid-template-columns: 1.4fr 1fr 1fr; grid-auto-rows: 200px; gap: .9rem; }
+.dives .media:first-child { grid-row: span 2; }
+.d1 { background: linear-gradient(170deg, #36b6c4, #127f97); }
+.d2 { background: linear-gradient(170deg, #1a8aa0, #0b5a71); }
+.d3 { background: linear-gradient(170deg, #0f6e86, #073e50); }
+.d4 { background: linear-gradient(170deg, #0b4a5f, #04222d); }
+.d5 { background: linear-gradient(170deg, #0d5a70, #052b38); }
+
+.seabed .grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3.5rem; }
+.seabed h2 { font-size: clamp(2.3rem, 5vw, 3.9rem); line-height: 1; margin-top: .5rem; }
+.seabed h2 span { color: var(--sun); }
+.addr { color: var(--sun); font-weight: 600; user-select: all; }
+form { display: grid; gap: 1rem; }
+fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+legend { font-weight: 600; margin-bottom: .6rem; font-size: .9rem; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; opacity: 0; }
+.chip span { display: inline-block; padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.3); cursor: pointer; font-size: .92rem; }
+.chip input:checked + span { background: var(--sun); color: var(--abyss); border-color: var(--sun); font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .88rem; font-weight: 600; min-width: 0; }
+input[type=text], input[type=email], textarea { font: 400 1rem var(--font-body); padding: .75rem .9rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; width: 100%; }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.5); }
+textarea { min-height: 110px; resize: vertical; }
+.composed { border-top: 1px solid rgba(255,255,255,.2); padding-top: 1rem; }
+.composed pre { white-space: pre-wrap; font: inherit; opacity: .8; margin: .5rem 0 1rem; }
+.composed .btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+footer { background: var(--abyss); color: rgba(255,255,255,.6); font-size: .85rem; padding-block: 1.5rem 2.5rem; border-top: 1px solid rgba(255,255,255,.12); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+footer a { color: rgba(255,255,255,.85); }
+
+@media (max-width: 900px) {
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .ruler { display: none; }
+  .pill-alt { display: inline; }
+  .ruler .scale { height: auto; }
+  .ruler .tick, .ruler .needle { display: none; }
+  .ruler .read { position: static; transform: none; background: var(--foam); color: var(--ink); padding: .3rem .7rem; border-radius: 999px; box-shadow: 0 4px 14px rgba(4,32,42,.2); }
+  .topbar nav { display: none; }
+  .stop { padding-block: 3.5rem; }
+  .stop-head, .feature, .uj, .builds, .seabed .grid, .row { grid-template-columns: 1fr; gap: 1.5rem; }
+  .feature .court img { right: .75rem; bottom: .75rem; }
+  .dives { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
+}
+/* Aerial opening: a sticky full-bleed scene, scrubbed by scroll from 100 m down to the sand */
+.aerial { position: relative; height: 330vh; background: var(--sand); }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #e8d4a2; }
+.stage-fade { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: linear-gradient(rgba(239,224,189,0) 30%, var(--sand) 96%); }
+.stage-top { position: absolute; inset: 0 0 auto; z-index: 3; left: 0; right: 0; }
+.stage-top .topbar { padding-top: calc(1.1rem + env(safe-area-inset-top, 0px)); }
+.stage-top .name, .stage-top nav { background: rgba(244,250,251,.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 999px; padding: .4rem .9rem; }
+.stage-top nav a { color: var(--ink); }
+.stage-copy { position: absolute; inset: 0; z-index: 2; display: grid; align-items: center; pointer-events: none; left: 0; right: 0; }
+.panel { grid-area: 1 / 1; width: min(520px, 100%); padding: 1.6rem 1.7rem; border-radius: 20px; background: rgba(244,250,251,.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 14px 44px rgba(4,32,42,.16); display: grid; gap: .7rem; justify-items: start; opacity: 0; visibility: hidden; will-change: opacity, transform; }
+.panel.on { pointer-events: auto; }
+.panel h1 { font-size: clamp(2.5rem, 5.4vw, 4.3rem); line-height: .95; font-weight: 800; }
+.panel h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1.02; }
+.panel p { margin: 0; color: var(--ink-soft); max-width: 44ch; }
+.panel .actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .2rem; }
+.hint { font-size: .84rem; color: var(--ink-soft); }
+.standin { position: absolute; z-index: 2; left: max(24px, env(safe-area-inset-left, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; border: 1.5px dashed rgba(255,255,255,.7); padding: .25rem .55rem; border-radius: 6px; background: rgba(3,28,38,.35); }
+@media (max-width: 900px) {
+  .stage-copy { align-items: end; padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+  .panel { padding: 1.2rem 1.25rem; gap: .55rem; }
+  .panel h1 { font-size: clamp(2.1rem, 9vw, 2.8rem); }
+  .hint { display: none; }
+  .standin { left: 16px; top: calc(64px + env(safe-area-inset-top, 0px)); bottom: auto; }
+}
+[data-drift] { will-change: transform; }
+.media, .card, .feature img, .uj img { transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+.card:hover { transform: translateY(-2px); }
+#underwater { position: relative; isolation: isolate; }
+.surface { position: absolute; left: 0; right: 0; top: -10px; height: 20px; pointer-events: none; z-index: -1; opacity: .4;
+  background: radial-gradient(30px 5px at 50% 50%, rgba(255,255,255,.7), transparent 75%) 0 50% / 64px 20px repeat-x; }
+.rays { position: absolute; inset: 0 0 35% 0; pointer-events: none; z-index: -1; opacity: .35;
+  background: repeating-linear-gradient(100deg, rgba(255,255,255,.14) 0 3%, transparent 3% 11%);
+  -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .surface { animation: shimmer 9s linear infinite; }
+  .rays { animation: rays 14s ease-in-out infinite alternate; }
+  @keyframes shimmer { to { background-position: 460px 50%; } }
+  @keyframes rays { from { background-position: 0 0; opacity: .25; } to { background-position: 120px 0; opacity: .4; } }
+}
+@media (prefers-reduced-motion: reduce) { .pill, .media, .card { transition: none; } }
+</style>
+</head>
+<body>
+<div class="ruler" id="ruler" aria-hidden="true"><div class="scale" id="scale"><span class="needle" id="needle"></span><span class="read" id="read">+100 m</span></div></div>
+<a class="btn btn-ink pill" id="pill" href="#book"><span class="pill-alt" id="pill-alt" aria-hidden="true"></span>Book a project</a>
+
+<main>
+  <section class="aerial" id="aerial" aria-label="Introduction">
+    <div class="stage">
+      <canvas id="scene" aria-hidden="true"></canvas>
+      <div class="stage-fade" id="stage-fade" aria-hidden="true"></div>
+      <div class="wrap stage-top">
+        <div class="topbar">
+          <a class="name" href="#top">Will Wolff</a>
+          <nav aria-label="Sections"><a href="#sea-level">Sea level</a><a href="#underwater">Underwater</a><a href="#book">Book me</a></nav>
+        </div>
+      </div>
+      <div class="wrap stage-copy">
+        <div class="panel" id="top" data-in="-1" data-out="0.3">
+          <span class="alt">+100 m · drone</span>
+          <h1>From 100&nbsp;m up to 30&nbsp;m down.</h1>
+          <p>I'm Will. I film from the air and underwater, play beach volleyball, and build software. Scroll down through all of it, or book me for any of it.</p>
+          <div class="actions"><a class="btn btn-ink" href="#book">Book a project</a><a class="btn" href="#sea-level">See what I build</a></div>
+          <span class="hint" aria-hidden="true">Scroll to come down ↓</span>
+        </div>
+        <div class="panel" data-in="0.38" data-out="0.66">
+          <span class="alt">+60 → +20 m · drone</span>
+          <h2>I film from above.</h2>
+          <p>Top-down drone footage of coastlines, bays, boats and dive sites. For dive centres, tourism and nature projects.</p>
+          <div class="actions"><a class="btn btn-ink" href="#book" data-kind="Footage">Book drone footage</a></div>
+        </div>
+        <div class="panel" data-in="0.76" data-out="9">
+          <span class="alt">+10 m → sea level</span>
+          <h2>Down to the sand.</h2>
+          <p>Where the rest of my time goes: the volleyball court, and the desk where I build software.</p>
+        </div>
+      </div>
+      <span class="standin">Rendered stand-in · drone footage scrubs here</span>
+    </div>
+  </section>
+  <section class="stop" id="sea-level" data-alt="0">
+    <div class="wrap">
+      <div class="horizon"><span class="alt">0 m · sea level</span></div>
+      <div class="feature">
+        <div class="media court"><span class="ph-note">Placeholder</span><span>You on the court, portrait</span><img src="../assets/previews/alwayssandy.jpg" alt="AlwaysSandy app" loading="lazy"></div>
+        <div>
+          <span class="alt">On the sand · own product</span>
+          <h3>AlwaysSandy</h3>
+          <p>I play beach volleyball, so I built a social network for Berlin's scene. Players find coaches, sessions and each other across the city's sand courts.</p>
+          <a class="go" href="https://alwayssandy.com" target="_blank" rel="noopener">alwayssandy.com ↗</a>
+        </div>
+      </div>
+      <div class="stop-head">
+        <div><span class="alt">At the desk</span><h2>Software I build</h2></div>
+        <p>Eleven years of engineering, for clients and for myself.</p>
+      </div>
+      <div class="builds">
+        <a class="card" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener"><span class="kind">Contract · IOG</span><h3>Ouroboros Leios</h3><p>Software engineer and architect on Cardano's high-throughput protocol.</p></a>
+        <a class="card" href="https://txflow.fun" target="_blank" rel="noopener"><span class="kind">Side project</span><h3>txflow</h3><p>Describe a transaction flow in plain words and run it on the Leios test network.</p></a>
+        <a class="card" href="https://hausnummer.pages.dev/" target="_blank" rel="noopener"><span class="kind">Own product</span><h3>Hausnummer</h3><p>Quick screening of German residential property listings.</p></a>
+        <a class="card" href="https://operando.de" target="_blank" rel="noopener"><span class="kind">Client</span><h3>Operando</h3><p>AI deal sourcing from M&amp;A teasers, reviewed by the team.</p></a>
+        <a class="card" href="https://pagebase.dev" target="_blank" rel="noopener"><span class="kind">Studio</span><h3>Pagebase</h3><p>Fixed-price websites for small businesses.</p></a>
+        <a class="card" href="../willi-wolff-cv-en.pdf"><span class="kind">PDF</span><h3>Full CV</h3><p>Career, publications and everything else.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop under" id="underwater" data-alt="-12">
+    <span class="surface" aria-hidden="true"></span><span class="rays" aria-hidden="true"></span>
+    <div class="wrap">
+      <div class="uj">
+        <img src="../assets/previews/underwater-journeys.jpg" alt="Underwater Journeys website" loading="lazy">
+        <div>
+          <span class="alt">−5 m · client</span>
+          <h3>Underwater Journeys</h3>
+          <p>A freediving club in Cyprus. I built their website and booking system, and I help with the story videos they make about each dive site.</p>
+          <a href="https://underwater.journeys.cy/" target="_blank" rel="noopener">underwater.journeys.cy ↗</a>
+        </div>
+      </div>
+      <div class="stop-head">
+        <div><span class="alt">−4 → −30 m</span><h2>Below the surface</h2></div>
+        <p>Freediving footage of reefs, wildlife and wrecks, filmed on a single breath.</p>
+      </div>
+      <div class="dives">
+        <div class="media d1" data-drift><span class="ph-note">Placeholder</span><span><strong>−4 m</strong> · shore entry</span></div>
+        <div class="media d2"><span class="ph-note">Placeholder</span><span><strong>−12 m</strong> · reef wall</span></div>
+        <div class="media d3"><span class="ph-note">Placeholder</span><span><strong>−18 m</strong> · wildlife</span></div>
+        <div class="media d5"><span class="ph-note">Placeholder</span><span><strong>−24 m</strong> · close-up</span></div>
+        <div class="media d4"><span class="ph-note">Placeholder</span><span><strong>−30 m</strong> · wreck or cave</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop under seabed" id="book" data-alt="-30">
+    <div class="wrap grid">
+      <div>
+        <span class="alt">−30 m · the bottom</span>
+        <h2>You made it down. Let's <span>make</span> something.</h2>
+        <p>Footage, software, a website or another kind of collaboration. A few lines are enough.</p>
+        <p>Email: <span class="addr">contact@williwolff.com</span></p>
+      </div>
+      <form id="enquiry">
+        <fieldset>
+          <legend>I'm looking for</legend>
+          <label class="chip"><input type="radio" name="kind" id="k-ft" value="Footage" checked><span>Footage</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-sw" value="Software engineering"><span>Software</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-web" value="Website"><span>A website</span></label>
+          <label class="chip"><input type="radio" name="kind" id="k-other" value="Something else"><span>Something else</span></label>
+        </fieldset>
+        <div class="row">
+          <label>Name<input type="text" id="enq-name" autocomplete="name"></label>
+          <label>Email<input type="email" id="enq-email" autocomplete="email"></label>
+        </div>
+        <label>What you have in mind<textarea id="enq-msg" placeholder="Where, what, and roughly when"></textarea></label>
+        <label>Timing (optional)<input type="text" id="enq-when" placeholder="e.g. next dive season"></label>
+        <div><button class="btn btn-sun" type="submit">Write the email</button></div>
+        <div class="composed" id="composed" hidden>
+          <strong class="composed-subject"></strong>
+          <pre class="composed-body"></pre>
+          <div class="btns"><a class="btn btn-sun composed-open" href="#">Open in mail app</a><button class="btn composed-copy" type="button">Copy text</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Willi Wolff · Berlin</span><a href="https://github.com/will-break-it" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener">LinkedIn</a><a href="https://x.com/will_break_it" target="_blank" rel="noopener">X</a></div></footer>
+<script src="enquiry.js"></script>
+<script>
+(function () {
+  // Real footage: export the top-down descent as an image sequence and set count > 0.
+  // Frame i is loaded from url.replace('####', zero-padded i). Image sequences scrub smoothly
+  // on every browser; video.currentTime scrubbing stutters on Safari and phones.
+  var SEQ = { url: 'frames/aerial-####.webp', count: 0 };
+
+  var TOP = 100, BOT = -30, LAND = 8; // the drone shot ends 8 m above the court
+  var stops = Array.prototype.slice.call(document.querySelectorAll('[data-alt]'));
+  var scale = document.getElementById('scale'), needle = document.getElementById('needle'), read = document.getElementById('read');
+  var ruler = document.getElementById('ruler'), pill = document.getElementById('pill'), pillAlt = document.getElementById('pill-alt');
+  var book = document.getElementById('book'), main = document.querySelector('main');
+  var aer = document.getElementById('aerial'), cv = document.getElementById('scene'), cx = cv.getContext('2d'), fade = document.getElementById('stage-fade');
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var drift = Array.prototype.slice.call(document.querySelectorAll('[data-drift]'));
+  var labels = [], frames = [];
+
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function lerp(a, b, k) { return a + (b - a) * k; }
+  function smooth(k) { k = clamp(k, 0, 1); return k * k * (3 - 2 * k); }
+  function band(p, a, b) { return clamp((p - a) / (b - a), 0, 1); }
+  function ease(x) { return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+  for (var a = TOP; a >= BOT; a -= 10) {
+    var t = document.createElement('span'); t.className = 'tick' + (a % 50 === 0 || a === BOT ? ' major' : '');
+    t.style.top = ((TOP - a) / (TOP - BOT) * 100) + '%';
+    if (a % 50 === 0 || a === BOT) { var l = document.createElement('span'); l.textContent = (a > 0 ? '+' : a < 0 ? '−' : '') + Math.abs(a); t.appendChild(l); labels.push([a, l]); }
+    scale.appendChild(t);
+  }
+
+  // ---------- The aerial scene (rendered stand-in for drone footage) ----------
+  // One slow move: altitude falls exponentially, so the zoom rate feels constant, while the camera
+  // drifts a little, so the court at x = -14 ends up beside the text rather than under it.
+  function airAlt(p) { var e = 0.45 * p + 0.55 * smooth(p); return TOP * Math.pow(LAND / TOP, e); }
+  function airX(p) { return lerp(-20, -17, smooth(p)); }
+  function shore(y) { return 3 * Math.sin(y / 18) + 1.4 * Math.sin(y / 6.5); }
+
+  var W = 0, H = 0, DPR = 1, overSea = 0;
+  var sandTile = document.createElement('canvas'); sandTile.width = sandTile.height = 128;
+  (function () { var c = sandTile.getContext('2d'), r = rng(7); c.fillStyle = '#e8d4a2'; c.fillRect(0, 0, 128, 128);
+    for (var i = 0; i < 900; i++) { c.fillStyle = r() < .5 ? 'rgba(170,140,85,.22)' : 'rgba(255,250,235,.35)'; c.fillRect(r() * 128, r() * 128, 1 + r() * 1.5, 1 + r() * 1.5); } })();
+  var sandPat = cx.createPattern(sandTile, 'repeat');
+  var reefs = (function () { var r = rng(21), o = []; for (var i = 0; i < 26; i++) o.push([12 + r() * 46, -70 + r() * 140, 2 + r() * 6, 1 + r() * 3, r() * 3]); return o; })();
+  var brollies = (function () { var r = rng(5), o = [], cols = ['#f2a65a', '#2fb3c6', '#f0d48a', '#e86f5a']; for (var y = -66; y <= 66; y += 6.5) { if (Math.abs(y) < 7) continue; o.push([-27 - r() * 4, y + r() * 2, cols[Math.floor(r() * 4)]]); if (r() < .6) o.push([-35 - r() * 4, y + 3 + r() * 2, cols[Math.floor(r() * 4)]]); } return o; })();
+  var shrubs = (function () { var r = rng(9), o = []; for (var i = 0; i < 40; i++) o.push([-62 - r() * 30, -80 + r() * 160, 1.5 + r() * 2.5]); return o; })();
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth * DPR; H = cv.clientHeight * DPR; cv.width = W; cv.height = H;
+  }
+
+  function drawAir(p, tm) {
+    var alt = airAlt(p), cxm = airX(p), s = Math.max(W, H * 0.75) / (alt * 1.45); // s: pixels per metre
+    var X = function (x) { return W / 2 + (x - cxm) * s; }, Y = function (y) { return H / 2 + y * s; };
+    var y0 = -H / 2 / s - 2, y1 = H / 2 / s + 2, step = Math.max(0.05, (y1 - y0) / 90), lw = function (m) { return Math.max(1.1 * DPR, m * s); };
+    sandPat.setTransform(new DOMMatrix().translate(X(0), Y(0)).scale(s * 2 / 128));
+    cx.fillStyle = sandPat; cx.fillRect(0, 0, W, H);
+    // dunes and the path behind the beach
+    cx.fillStyle = 'rgba(190,160,100,.35)'; cx.fillRect(X(-90), Y(-200), (90 - 52) * s, 400 * s);
+    cx.fillStyle = '#d9c7a0'; cx.fillRect(X(-52), Y(-200), 3 * s, 400 * s);
+    shrubs.forEach(function (b) { cx.fillStyle = 'rgba(40,70,40,.25)'; cx.beginPath(); cx.arc(X(b[0]) + .5 * s, Y(b[1]) + .5 * s, b[2] * s, 0, 6.28); cx.fill(); cx.fillStyle = '#6d8a4e'; cx.beginPath(); cx.arc(X(b[0]), Y(b[1]), b[2] * s, 0, 6.28); cx.fill(); });
+    // wet sand, then the sea
+    cx.beginPath(); for (var y = y0; y <= y1; y += step) cx.lineTo(X(shore(y) - 1.6), Y(y));
+    cx.lineTo(W + 10, Y(y1)); cx.lineTo(W + 10, Y(y0)); cx.closePath(); cx.fillStyle = '#cdb47e'; cx.fill();
+    cx.beginPath(); for (y = y0; y <= y1; y += step) cx.lineTo(X(shore(y)), Y(y));
+    cx.lineTo(W + 10, Y(y1)); cx.lineTo(W + 10, Y(y0)); cx.closePath();
+    var g = cx.createLinearGradient(X(0), 0, X(80), 0); g.addColorStop(0, '#86dcd8'); g.addColorStop(.1, '#45c1ca'); g.addColorStop(.4, '#178fa7'); g.addColorStop(1, '#0a5c77');
+    cx.fillStyle = g; cx.fill();
+    // reef and seagrass patches seen through clear water
+    reefs.forEach(function (r) { cx.fillStyle = 'rgba(8,70,84,.22)'; cx.beginPath(); cx.ellipse(X(r[0]), Y(r[1]), r[2] * s, r[3] * s, r[4], 0, 6.28); cx.fill(); });
+    // slow swell lines rolling in
+    [0.35, 2.4, 5.2].forEach(function (o, i) {
+      var off = o + 0.45 * Math.sin(tm * 0.45 + i * 1.7);
+      cx.beginPath(); for (var y = y0; y <= y1; y += step) cx.lineTo(X(shore(y) + off + 0.22 * Math.sin(y * 0.8 + tm * 0.6 + i)), Y(y));
+      cx.strokeStyle = 'rgba(255,255,255,' + (0.7 - i * 0.2) + ')'; cx.lineWidth = lw(0.2); cx.stroke();
+    });
+    // umbrellas
+    brollies.forEach(function (u) {
+      var r = 1.1 * s; if (X(u[0]) < -r * 2 || X(u[0]) > W + r * 2) return;
+      cx.fillStyle = 'rgba(0,0,0,.18)'; cx.beginPath(); cx.arc(X(u[0]) + .8 * s, Y(u[1]) + .8 * s, r, 0, 6.28); cx.fill();
+      for (var q = 0; q < 8; q++) { cx.beginPath(); cx.moveTo(X(u[0]), Y(u[1])); cx.arc(X(u[0]), Y(u[1]), r, q * .785, (q + 1) * .785); cx.closePath(); cx.fillStyle = q % 2 ? '#fbf7ee' : u[2]; cx.fill(); }
+    });
+    // the court: 16 x 8 m, net across the middle, four players standing still between points
+    var c = { x: -14, w: 16, h: 8 };
+    cx.fillStyle = 'rgba(255,248,230,.28)'; cx.fillRect(X(c.x - c.w / 2), Y(-c.h / 2), c.w * s, c.h * s);
+    cx.strokeStyle = '#2a7fd4'; cx.lineWidth = lw(0.06); cx.strokeRect(X(c.x - c.w / 2), Y(-c.h / 2), c.w * s, c.h * s);
+    cx.strokeStyle = 'rgba(0,0,0,.22)'; cx.lineWidth = lw(0.08); cx.beginPath(); cx.moveTo(X(c.x) + .35 * s, Y(-4.6) + .35 * s); cx.lineTo(X(c.x) + .35 * s, Y(4.6) + .35 * s); cx.stroke();
+    cx.strokeStyle = '#1b2a33'; cx.lineWidth = lw(0.07); cx.beginPath(); cx.moveTo(X(c.x), Y(-4.6)); cx.lineTo(X(c.x), Y(4.6)); cx.stroke();
+    [[-18.6, -1.9, '#f0d48a'], [-17.2, 2.1, '#f0d48a'], [-10.4, -2.3, '#ffffff'], [-9.7, 1.7, '#ffffff']].forEach(function (pl) {
+      cx.fillStyle = 'rgba(0,0,0,.2)'; cx.beginPath(); cx.ellipse(X(pl[0]) + .45 * s, Y(pl[1]) + .45 * s, .32 * s, .26 * s, 0, 0, 6.28); cx.fill();
+      cx.fillStyle = '#6b4a35'; cx.beginPath(); cx.arc(X(pl[0]), Y(pl[1]), .24 * s, 0, 6.28); cx.fill();
+      cx.fillStyle = pl[2]; cx.beginPath(); cx.arc(X(pl[0]), Y(pl[1]), .15 * s, 0, 6.28); cx.fill();
+    });
+    // a boat at anchor over the reef, and the dive buoy
+    cx.save(); cx.translate(X(38), Y(-22)); cx.rotate(-0.45);
+    cx.fillStyle = 'rgba(0,0,0,.18)'; cx.beginPath(); cx.ellipse(.8 * s, .8 * s, 3.2 * s, 1.1 * s, 0, 0, 6.28); cx.fill();
+    cx.fillStyle = '#ffffff'; cx.beginPath(); cx.ellipse(0, 0, 3.2 * s, 1.1 * s, 0, 0, 6.28); cx.fill();
+    cx.fillStyle = '#d7e6ea'; cx.fillRect(-1 * s, -.55 * s, 1.6 * s, 1.1 * s); cx.restore();
+    var rip = (tm * 0.35) % 1;
+    cx.strokeStyle = 'rgba(255,255,255,' + (0.55 * (1 - rip)) + ')'; cx.lineWidth = lw(0.05); cx.beginPath(); cx.arc(X(30), Y(6), (.5 + rip * 1.6) * s, 0, 6.28); cx.stroke();
+    cx.fillStyle = '#ff7a3d'; cx.beginPath(); cx.arc(X(30), Y(6), .42 * s, 0, 6.28); cx.fill();
+    // what sits under the ruler on the right decides whether it is drawn dark or light
+    var wx = cxm + ((cv.clientWidth - 48) * DPR - W / 2) / s;
+    overSea = clamp((wx - shore(0) + 1) / 2, 0, 1);
+  }
+  function drawFrame(p, tm) {
+    if (frames.length) { var img = frames[Math.round(p * (frames.length - 1))]; if (img && img.complete && img.naturalWidth) { var sc = Math.max(W / img.width, H / img.height); cx.drawImage(img, (W - img.width * sc) / 2, (H - img.height * sc) / 2, img.width * sc, img.height * sc); return; } }
+    drawAir(p, tm);
+  }
+  function panelsAt(p) {
+    var wide = window.innerWidth > 900;
+    panels.forEach(function (el) {
+      var a = +el.dataset.in, b = +el.dataset.out, f = 0.035, o = smooth(Math.min((p - a) / f, (b - p) / f));
+      el.style.opacity = o; el.style.visibility = o > 0.01 ? 'visible' : 'hidden'; el.classList.toggle('on', o > 0.5);
+      el.style.transform = 'translateY(' + ((1 - o) * (wide ? 10 : 6)).toFixed(1) + 'px)';
+    });
+    fade.style.opacity = smooth(band(p, 0.8, 1)).toFixed(3);
+  }
+
+  // ---------- Page geometry: measured once per resize, never inside the scroll path ----------
+  var geo = [], docH = 0, viewH = 0, scaleH = 0, bookTop = 0, aerTop = 0, aerSpan = 1;
+  function measure() {
+    viewH = window.innerHeight; docH = document.documentElement.scrollHeight; scaleH = scale.offsetHeight;
+    aerTop = aer.offsetTop; aerSpan = Math.max(1, aer.offsetHeight - viewH);
+    geo = stops.map(function (s) { return { top: s.offsetTop, h: s.offsetHeight, alt: +s.dataset.alt }; });
+    bookTop = book.offsetTop;
+    drift.forEach(function (el) { el._mid = el.getBoundingClientRect().top + window.scrollY + el.offsetHeight / 2; });
+    resize(); paint();
+  }
+  // Below the aerial scene the page is one gradient, with stops on the real section edges.
+  function paint() {
+    var h = main.offsetHeight, pct = function (el, f) { return ((el.offsetTop - main.offsetTop + el.offsetHeight * (f || 0)) / h * 100).toFixed(2) + '%'; };
+    var sea = document.getElementById('sea-level'), under = document.getElementById('underwater');
+    main.style.background = 'linear-gradient(var(--sand) 0%, var(--sand) ' + pct(sea, 0.06) + ', var(--sand-wet) ' + pct(sea, 0.92) + ', var(--shallow) ' + pct(under, 0.02) + ', var(--mid) ' + pct(under, 0.5) + ', var(--deep) ' + pct(book) + ', var(--abyss) 100%)';
+  }
+  function progressAt(sy) { return clamp((sy - aerTop) / aerSpan, 0, 1); }
+  // In the aerial scene the gauge reads the drone's altitude. After it, each stop holds its own
+  // altitude for most of its height, then eases towards the next one.
+  function target(sy) {
+    if (sy <= aerTop + aerSpan) return airAlt(progressAt(sy));
+    if (sy + viewH >= docH - 4) return BOT;
+    var y = sy + viewH / 2, first = geo[0], aerEnd = aerTop + aerSpan;
+    if (y < first.top) return LAND * (1 - ease(clamp((sy - aerEnd) / Math.max(1, first.top - viewH / 2 - aerEnd), 0, 1)));
+    var alt = LAND;
+    for (var i = 0; i < geo.length; i++) {
+      var g = geo[i], n = geo[i + 1];
+      if (y < g.top) break;
+      var end = n ? n.top : g.top + g.h, hold = g.top + (end - g.top) * 0.55;
+      var k = clamp((y - hold) / Math.max(1, end - hold), 0, 1);
+      alt = g.alt + ((n ? n.alt : g.alt) - g.alt) * ease(k);
+    }
+    return alt;
+  }
+  function fmt(v) { var r = Math.round(v); return (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r) + ' m'; }
+  function mix(k) { // ink (6,42,54) to foam (255,255,255)
+    var c = [6 + 249 * k, 42 + 213 * k, 54 + 201 * k].map(Math.round); return 'rgb(' + c.join(',') + ')';
+  }
+
+  // ---------- One animation loop for the scene and the gauge ----------
+  var shown = TOP, goal = TOP, shownP = 0, goalP = 0, inAir = true, aerVisible = true, running = false, lastText = '', t0 = performance.now();
+  function frame(now) {
+    var calm = still.matches, tm = calm ? 0 : (now - t0) / 1000;
+    var dp = goalP - shownP; shownP = (calm || Math.abs(dp) < 0.0002) ? goalP : shownP + dp * 0.12;
+    if (inAir) shown = airAlt(shownP); // the gauge moves with the picture, not ahead of it
+    else { var d = goal - shown; shown = (calm || Math.abs(d) < 0.05) ? goal : shown + d * 0.16; }
+    if (aerVisible) { drawFrame(shownP, tm); panelsAt(shownP); }
+    var y = (TOP - shown) / (TOP - BOT) * scaleH;
+    needle.style.transform = 'translateY(' + y + 'px)';
+    read.style.transform = 'translateY(calc(' + y + 'px - 50%))';
+    var text = fmt(shown);
+    if (text !== lastText) { read.textContent = text; pillAlt.textContent = text; lastText = text; }
+    var tc = Math.max(clamp((-0.5 - shown) / 4, 0, 1), aerVisible && inAir ? overSea : 0);
+    ruler.style.color = mix(tc); ruler.classList.toggle('lit', tc > 0.5);
+    labels.forEach(function (p) { p[1].style.opacity = Math.abs(p[0] - shown) < 9 ? 0 : 1; });
+    var settled = shownP === goalP && (inAir || shown === goal);
+    if ((aerVisible && !calm) || !settled) requestAnimationFrame(frame); else running = false;
+  }
+  function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+  function onScroll() {
+    var sy = window.scrollY;
+    goalP = progressAt(sy); inAir = sy <= aerTop + aerSpan + 2; goal = target(sy);
+    pill.dataset.off = String(bookTop - sy < viewH * 0.8);
+    if (!still.matches) drift.forEach(function (el) { el.style.transform = 'translate3d(0,' + ((sy + viewH / 2 - el._mid) * -0.05).toFixed(1) + 'px,0)'; });
+    kick();
+  }
+  new IntersectionObserver(function (e) { aerVisible = e[0].isIntersecting; if (aerVisible) kick(); }).observe(aer);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { measure(); onScroll(); });
+  window.addEventListener('load', function () { measure(); onScroll(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); onScroll(); });
+  if (SEQ.count > 0) for (var i = 0; i < SEQ.count; i++) { var im = new Image(); im.src = SEQ.url.replace('####', String(i + 1).padStart(4, '0')); frames.push(im); }
+  measure(); onScroll(); shownP = goalP; shown = goal;
+})();
+</script>
+</body>
+</html>

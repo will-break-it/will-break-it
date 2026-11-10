@@ -27,3 +27,7 @@ Round 4, a bolder concept:
 
 - `e1-one-breath.html`: the page is one take and one breath. Scroll scrubs a top-down shot from 100 m down onto the court, through the surface and down the freediving line to 30 m. Projects ride on the line as depth tags; contact is the ascent. The canvas is a rendered stand-in; real footage drops in as an image sequence (`SEQ` in the script).
 - `e2-one-breath-composed.html`: the same dive built from separate shots: aerial tilt, a drop onto the court, a slow-motion volleyball into the lens as the cut to an eye-level court shot, an over-under waterline shot, then down the line.
+
+Round 5, back to the calm vertical layout:
+
+- `f1-descent-aerial.html`: D1 Refined, with its static hero replaced by one slow scroll-scrubbed top-down drone descent from 100 m to the court. Intro panels fade in over the scene, the ruler reads the drone's altitude, and the shot dissolves into the sand where the sea-level section starts. Below that it is D1, with freediving copy. Same `SEQ` hook for real footage.
