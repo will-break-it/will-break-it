@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-13T06:50:44Z",
+  "generated": "2026-11-13T19:46:15Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 14943,
+    "total": 15088,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -54,17 +54,17 @@
       },
       {
         "month": "2026-11",
-        "total": 982
+        "total": 1127
       }
     ]
   },
   "streakDays": 62,
   "totals": {
-    "contributions": 19444,
+    "contributions": 19589,
     "private": 85,
-    "commits": 15404,
-    "pullRequests": 3242,
-    "reviews": 83,
+    "commits": 15508,
+    "pullRequests": 3279,
+    "reviews": 84,
     "repositories": 43,
     "publicRepositories": 11
   },
@@ -167,11 +167,11 @@
     },
     {
       "year": 2026,
-      "total": 14083,
+      "total": 14228,
       "private": 0,
-      "commits": 10439,
-      "prs": 3037,
-      "reviews": 51
+      "commits": 10543,
+      "prs": 3074,
+      "reviews": 52
     }
   ],
   "monthly": [
@@ -517,8 +517,8 @@
     },
     {
       "month": "2026-11",
-      "total": 982,
-      "commits": 695
+      "total": 1127,
+      "commits": 799
     }
   ],
   "days": [
@@ -2094,23 +2094,23 @@
     },
     {
       "date": "2026-11-04",
-      "total": 36,
-      "commits": 22
+      "total": 37,
+      "commits": 23
     },
     {
       "date": "2026-11-05",
-      "total": 76,
-      "commits": 57
+      "total": 77,
+      "commits": 58
     },
     {
       "date": "2026-11-06",
-      "total": 179,
-      "commits": 154
+      "total": 191,
+      "commits": 166
     },
     {
       "date": "2026-11-07",
-      "total": 159,
-      "commits": 136
+      "total": 160,
+      "commits": 137
     },
     {
       "date": "2026-11-08",
@@ -2124,23 +2124,23 @@
     },
     {
       "date": "2026-11-10",
-      "total": 203,
-      "commits": 136
+      "total": 217,
+      "commits": 150
     },
     {
       "date": "2026-11-11",
-      "total": 154,
-      "commits": 90
+      "total": 163,
+      "commits": 99
     },
     {
       "date": "2026-11-12",
-      "total": 38,
-      "commits": 17
+      "total": 51,
+      "commits": 30
     },
     {
       "date": "2026-11-13",
-      "total": 2,
-      "commits": 1
+      "total": 96,
+      "commits": 54
     }
   ],
   "languages": [
@@ -2150,7 +2150,7 @@
     },
     {
       "name": "PLpgSQL",
-      "share": 9.8
+      "share": 9.9
     },
     {
       "name": "HTML",
@@ -2165,12 +2165,12 @@
       "share": 1.5
     },
     {
-      "name": "Rust",
+      "name": "Astro",
       "share": 1.4
     }
   ],
   "lastPush": {
-    "at": "2026-11-13T06:48:28Z",
+    "at": "2026-11-13T19:12:13Z",
     "repo": null,
     "url": null,
     "private": true
@@ -2179,7 +2179,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-11-12T20:00:14Z",
+      "pushedAt": "2026-11-13T06:52:28Z",
       "language": "HTML"
     },
     {
