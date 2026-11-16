@@ -102,6 +102,7 @@ Software engineer with 10+ years across enterprise (Deloitte), blockchain infras
   #v(2pt)
   #b[*Smart Contract Architecture:* Designed complete Plutus stack for collateralized debt position (CDP) platform]
   #b[*Technical Education:* Conducted workshops for 100+ Amazon engineers on eUTxO model, smart contracts, and dApp patterns]
+  #b[*Node Deployment:* Helped Amazon design its provisioning and deployment scheme for running Cardano and Midnight nodes]
   #b[*Knowledge Transfer:* Created training materials and hands-on exercises for blockchain education]
 ]
 
@@ -120,6 +121,7 @@ Software engineer with 10+ years across enterprise (Deloitte), blockchain infras
   #b[*Migration Toolchain:* Redesigned Cobol-to-Java architecture for functional language (ISA); 3-stage pipeline: parser → AST → Java codegen, plus runtime emulation layer preserving original ISA/IDM behavior]
   #b[*Business Impact:* Saved client €6M annually in licensing costs]
   #b[*Go-Lives:* Delivered two production go-lives on separate migration projects: a major German insurer and a US state pension fund and social security agency]
+  #b[*Retail Clients:* Onsite with S&P 500 retailers Target and Walmart on programmatic mainframe-to-Java migrations (Cobol parsing, custom runtime, end-to-end tests) cutting mainframe licensing and support costs]
   #b[*Team Growth:* Promoted to Lead within 24 months; scaled team from 3 to 20 engineers]
   #b[*Global Coordination:* Coordinated with offshore teams in India; established testing standards adopted organization-wide]
 ]

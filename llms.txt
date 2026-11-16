@@ -49,9 +49,9 @@ Also building, on his own time:
 - **Technical Architect — Byzantine-Resistant PubSub Network**, IOG (Feb 2026–Oct 2026): led the team through formal verification of the SecureCyclon peer-sampling stack and built the prototype via spec-driven development.
 - **Technical Architect — Ouroboros Leios**, IOG (Nov 2024–Feb 2026): led R&D for Cardano's high-throughput overlay protocol; principal author of CIP-0164; ran monthly public demo and review sessions (~5k views per session, sustained over 1.5 years).
 - **Technical Architect — Lace Wallet**, IOG (Nov 2022–Nov 2024): event-driven re-architecture using CQRS and event sourcing (45% latency reduction, 60%+ infrastructure savings), custom chain indexer with bloom filters and credential-based indexing (2,000+ tx/s, sub-second wallet sync), led a 7-person team delivering the MetaDex swap feature.
-- **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture for a collateralised debt position platform; workshops for 100+ Amazon engineers on the eUTxO model.
+- **Solutions Architect**, IOG (Nov 2021–Nov 2022): Plutus smart-contract architecture for a collateralised debt position platform; workshops for 100+ Amazon engineers on the eUTxO model; helped Amazon design its provisioning and deployment scheme for Cardano and Midnight nodes.
 - **Senior Software Engineer**, Mobility Data Lab, Berlin (Feb 2020–Nov 2021): IoT and connected-vehicle systems; OTA fleet-update pipeline (Rust embedded, Vert.x backend).
-- **Software Engineer → Lead Engineer**, Deloitte, Austin TX then Ulm (Sep 2016–Nov 2019): toolchain that migrated 16M lines of legacy code to Java; €6M/yr license savings.
+- **Software Engineer → Lead Engineer**, Deloitte, Austin TX then Ulm (Sep 2016–Nov 2019): onsite with clients including Target, Walmart, a large German insurer and a US state pension fund; programmatic mainframe-to-Java migrations (Cobol parsing, custom runtime, end-to-end tests); toolchain that migrated 16M lines of legacy code to Java; €6M/yr license savings.
 - **Co-Founder & CTO**, CityXcape, San Francisco (Feb 2015–Sep 2016): social discovery platform; raised ~€150k seed; native iOS (Swift) and Android apps and the Django/Rails backend, from concept to App Store launch.
 
 Three employers, two companies founded.
