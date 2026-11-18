@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-17T20:58:50Z",
+  "generated": "2026-11-18T07:34:50Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 15263,
+    "total": 15223,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -522,11 +522,6 @@
     }
   ],
   "days": [
-    {
-      "date": "2025-10-17",
-      "total": 3,
-      "commits": 3
-    },
     {
       "date": "2025-10-18",
       "total": 1,
@@ -2151,7 +2146,7 @@
   "languages": [
     {
       "name": "TypeScript",
-      "share": 68.1
+      "share": 68.2
     },
     {
       "name": "PLpgSQL",
@@ -2175,7 +2170,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-11-17T20:42:43Z",
+    "at": "2026-11-18T07:22:58Z",
     "repo": null,
     "url": null,
     "private": true
@@ -2184,7 +2179,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-11-17T08:00:44Z",
+      "pushedAt": "2026-11-17T21:00:42Z",
       "language": "HTML"
     },
     {
