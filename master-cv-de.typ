@@ -102,6 +102,7 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
   #v(2pt)
   #b[*Smart-Contract-Architektur:* Entwarf den kompletten Plutus-Stack für eine Collateralized-Debt-Position-(CDP)-Plattform]
   #b[*Technische Schulung:* Führte Workshops für 100+ Amazon-Engineers zum eUTxO-Modell, Smart Contracts und dApp-Patterns durch]
+  #b[*Node-Deployment:* Unterstützte Amazon beim Entwurf des Provisioning- und Deployment-Konzepts für Cardano- und Midnight-Nodes]
   #b[*Wissenstransfer:* Erstellte Schulungsmaterialien und praktische Übungen für Blockchain-Ausbildung]
 ]
 
@@ -120,6 +121,7 @@ Software Engineer mit über 10 Jahren Erfahrung, von Enterprise (Deloitte) über
   #b[*Migrations-Toolchain:* Redesign der Cobol-zu-Java-Architektur für eine funktionale Sprache (ISA); 3-stufige Pipeline: Parser → AST → Java-Codegen, plus Runtime-Emulationsschicht zur Wahrung des ursprünglichen ISA/IDM-Verhaltens]
   #b[*Business Impact:* Sparte dem Kunden jährlich 6 Mio. € an Lizenzkosten]
   #b[*Go-Lives:* Zwei Produktiv-Go-Lives in separaten Migrationsprojekten: ein großer deutscher Versicherer sowie Pensionsfonds und Sozialversicherung eines US-Bundesstaats]
+  #b[*Handelskunden:* Vor Ort bei den S&P-500-Händlern Target und Walmart: programmatische Mainframe-zu-Java-Migrationen (Cobol-Parsing, eigene Runtime, End-to-End-Tests) zur Senkung von Mainframe-Lizenz- und Supportkosten]
   #b[*Team-Wachstum:* Innerhalb von 24 Monaten zum Lead befördert; Team von 3 auf 20 Engineers skaliert]
   #b[*Globale Koordination:* Koordination mit Offshore-Teams in Indien; etablierte organisationsweit übernommene Teststandards]
 ]
