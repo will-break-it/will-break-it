@@ -1,0 +1,53 @@
+{
+  "name": "Willi Wolff",
+  "also_known_as": "Will",
+  "role": "Freelance software engineer and architect",
+  "status": "open_to_selected_projects",
+  "availability": {
+    "en": "On contract with IOG (Ouroboros Leios). Open to selected additional contract work.",
+    "de": "Aktuell auf Vertragsbasis bei IOG (Ouroboros Leios). Offen für ausgewählte weitere Projekte."
+  },
+  "rate": {
+    "from": 75,
+    "currency": "EUR",
+    "unit": "hour",
+    "note": {
+      "en": "Hourly, billed as a freelancer. The rate depends on scope and length; a quote names the number.",
+      "de": "Stundenbasis, Abrechnung als Freelancer. Der Satz hängt von Umfang und Dauer ab; das Angebot nennt die Zahl."
+    }
+  },
+  "engagement": ["freelance_contract"],
+  "remote": true,
+  "location": { "city": "Berlin", "country": "DE" },
+  "languages": ["de", "en"],
+  "takes_on": [
+    "AI agents and automation",
+    "Blockchain and distributed systems",
+    "Web and mobile products"
+  ],
+  "fixed_price_websites": "https://pagebase.dev",
+  "contact": {
+    "email": "contact@williwolff.com",
+    "enquiry": {
+      "method": "POST",
+      "url": "https://williwolff.com/api/enquiry",
+      "schema": "https://williwolff.com/openapi.json"
+    },
+    "mcp": "https://williwolff.com/mcp",
+    "answered_by": "A person reads and answers every request. Nothing is booked or quoted automatically."
+  },
+  "cv": {
+    "en": {
+      "pdf": "https://williwolff.com/willi-wolff-cv-en.pdf",
+      "markdown": "https://williwolff.com/cv.md",
+      "json": "https://williwolff.com/cv.json"
+    },
+    "de": {
+      "pdf": "https://williwolff.com/willi-wolff-cv-de.pdf",
+      "markdown": "https://williwolff.com/cv.de.md",
+      "json": "https://williwolff.com/cv.de.json"
+    }
+  },
+  "profile": "https://williwolff.com/llms.txt",
+  "updated": "2026-11-20"
+}
