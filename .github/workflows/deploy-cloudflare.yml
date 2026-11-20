@@ -38,6 +38,13 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      # cv.md and cv.json are generated from the Typst sources and committed.
+      # Refuse to deploy a CV whose formats disagree with each other.
+      - name: Check generated CV files and agent routes
+        run: |
+          node scripts/build-cv-data.mjs --check
+          node --test tests/agent-routes.test.mjs
+
       - name: Assemble static site
         run: |
           rm -rf dist
@@ -50,6 +57,8 @@ jobs:
             --exclude='master-cv-de.typ' \
             --exclude='scripts' \
             --exclude='functions' \
+            --exclude='lib' \
+            --exclude='tests' \
             --exclude='.gitignore' \
             --exclude='.nvmrc' \
             --exclude='.DS_Store' \
