@@ -39,11 +39,11 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
 - `BREVO_API_KEY` in the Cloudflare Pages project (optional: `CONTACT_TO_EMAIL`,
   `CONTACT_FROM_EMAIL`, `CONTACT_SENDER_NAME`). Without it the endpoint answers 503 and the
   form falls back to email.
-- A KV namespace bound to the Pages project as `BRIEF_LIMITS` (Workers & Pages, the
-  project, Settings, Bindings, Add, KV namespace; then redeploy). `POST /api/enquiry` and
-  `POST /mcp` send one email per valid request and need no sign-in, because agents use them.
-  With the binding, `lib/enquiry.js` caps briefs at 5 per visitor per hour and 100 per day
-  (`BRIEF_LIMIT_PER_VISITOR_HOUR` and `BRIEF_LIMIT_PER_DAY` change that) and answers 429
-  beyond it. Without the binding nothing is counted and there is no cap: a script could then
-  fill the inbox and use up the Brevo quota. Only a daily hash of the address is stored.
-  To try it locally: `npx wrangler pages dev dist --kv=BRIEF_LIMITS`.
+
+`POST /api/enquiry` and `POST /mcp` send one email per valid request and need no sign-in,
+because agents use them. `lib/enquiry.js` caps briefs at 5 per visitor per hour and 100 per
+day and answers 429 beyond that (`BRIEF_LIMIT_PER_VISITOR_HOUR` and `BRIEF_LIMIT_PER_DAY`
+change the numbers). The counters live in the Function's memory, so there is nothing to set
+up, and they are approximate: each running copy of the Function counts for itself. If briefs
+are ever abused beyond that, the next steps are a rate-limiting rule in Cloudflare (Security
+rules) or counters in a shared store.
