@@ -22,6 +22,8 @@
           "200": { "description": "Brief received.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Receipt" } } } },
           "400": { "description": "A field is missing or invalid. `fields` names each one.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Problem" } } } },
           "413": { "description": "The body is larger than 32 KB." },
+          "415": { "description": "The body was not sent as application/json." },
+          "429": { "description": "Too many briefs from this address, or in total today. `Retry-After` and `retry_after_seconds` say when to try again; `fallback.email` is the address to write to instead." },
           "503": { "description": "The brief could not be delivered. `fallback.email` is the address to write to instead.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Problem" } } } }
         }
       }

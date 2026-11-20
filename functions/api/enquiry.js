@@ -40,6 +40,6 @@ export async function onRequest({ request, env }) {
     const payload = body.value;
 
     const sameOrigin = (request.headers.get('origin') || '') === new URL(request.url).origin;
-    const result = await submitEnquiry(payload, env, sameOrigin ? 'form' : 'api');
-    return json(result.body, result.status);
+    const result = await submitEnquiry(payload, env, sameOrigin ? 'form' : 'api', request.headers.get('cf-connecting-ip'));
+    return json(result.body, result.status, result.retryAfter ? { 'Retry-After': String(result.retryAfter) } : {});
 }

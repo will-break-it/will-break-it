@@ -93,11 +93,10 @@ async function callTool(name, args, context) {
             return text(await asset(path, context));
         }
         case 'submit_enquiry': {
-            // One brief per HTTP request. Nothing in this code limits how often requests
-            // come: that is a rate-limiting rule in Cloudflare (see DEVELOPMENT.md), and
-            // this makes a limit on requests there a limit on emails.
+            // One brief per HTTP request, so a batch cannot multiply emails. How many
+            // briefs a visitor may send per hour is counted in lib/enquiry.js.
             if (context.briefs >= 1) return text('One brief per request. Send further briefs in separate requests.', true);
-            const result = await submitEnquiry({ ...args, submitted_by: 'agent' }, context.env, 'mcp');
+            const result = await submitEnquiry({ ...args, submitted_by: 'agent' }, context.env, 'mcp', context.request.headers.get('cf-connecting-ip'));
             // A brief that failed validation reached nobody, so it may be corrected in the same request.
             if (result.status !== 400) context.briefs += 1;
             return text(JSON.stringify(result.body), !result.body.ok);
