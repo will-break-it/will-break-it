@@ -9,7 +9,6 @@
 // files are stale. The deploy workflow runs it before publishing.
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -319,14 +318,10 @@ function toMarkdown(cv, code, lang, modified) {
     return lines.join('\n');
 }
 
-// The date the source last changed, so a rebuild without edits is a no-op.
-function lastModified(file) {
-    try {
-        const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', file], { cwd: root, encoding: 'utf8' }).trim();
-        if (out) return out;
-    } catch { /* not a git checkout */ }
-    return new Date().toISOString().slice(0, 10);
-}
+// The date written into the files when their content changes. It is today,
+// not the source's last commit date: this script runs before the edit is
+// committed, so the commit date would still be that of the previous change.
+const today = new Date().toISOString().slice(0, 10);
 
 const check = process.argv.includes('--check');
 let stale = false;
@@ -343,7 +338,7 @@ for (const [code, lang] of Object.entries(LANGS)) {
     let outputs = previous?.meta?.lastModified ? render(previous.meta.lastModified) : null;
     const unchanged = outputs && Object.entries(outputs).every(([file, text]) => existsSync(out(file)) && readFileSync(out(file), 'utf8') === text);
     if (!unchanged) {
-        outputs = render(lastModified(lang.source));
+        outputs = render(today);
         stale = true;
         if (!check) {
             for (const [file, text] of Object.entries(outputs)) writeFileSync(out(file), text);
