@@ -88,8 +88,10 @@ h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.015em; }
     gap: var(--s-5);
     padding: 0 var(--gutter);
     background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: saturate(160%) blur(12px);
+    /* Prefixed first: the build's minifier keeps only the last of the two when the
+       standard one comes first, and Chrome and Firefox then get no blur at all. */
     -webkit-backdrop-filter: saturate(160%) blur(12px);
+    backdrop-filter: saturate(160%) blur(12px);
     border-bottom: 1px solid var(--border);
 }
 
