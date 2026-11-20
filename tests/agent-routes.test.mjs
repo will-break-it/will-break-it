@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { onRequest as middleware } from '../functions/_middleware.js';
 import { onRequest as enquiry } from '../functions/api/enquiry.js';
 import { onRequest as mcp } from '../functions/mcp.js';
-import { forgetBriefCounts, overLimit } from '../lib/enquiry.js';
+import { forgetBriefCounts, overLimit, SITE_ADDRESS } from '../lib/enquiry.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -250,7 +250,9 @@ test('a valid brief is emailed to Will and never to the sender', async () => {
     assert.equal(body.ok, true);
     assert.match(body.reference, /^WW-[0-9A-F]{8}$/);
     assert.equal(sent.length, 1);
-    assert.deepEqual(sent[0].body.to, [{ email: 'contact@williwolff.com' }]);
+    assert.deepEqual(sent[0].body.to, [{ email: 'contact+web@williwolff.com' }]);
+    assert.equal(sent[0].body.sender.email, 'contact@williwolff.com', 'the sender stays the plain, verified address');
+    assert.match(sent[0].body.subject, /^\[williwolff\.com\] /);
     assert.equal(sent[0].body.replyTo.email, 'ada@example.com');
     assert.match(sent[0].body.subject, /via agent/);
     assert.match(sent[0].body.textContent, /Sent by an agent \(Scout\)/);
@@ -304,7 +306,7 @@ test('the form works without its script and states nothing the visitor did not c
     for (const path of ['/', '/de/']) {
         const html = file(path);
         const form = html.match(/<form[^>]*id="brief-form"[^>]*>/)[0];
-        assert.match(form, /action="mailto:contact@williwolff\.com/, path);
+        assert.match(form, /action="mailto:contact\+web@williwolff\.com/, path);
         assert.match(form, /method="post"/, path);
         assert.match(form, /enctype="text\/plain"/, path);
         // The first option of each select is what a visitor sends without choosing.
@@ -340,7 +342,7 @@ test('without a mail key the form says so and names the fallback', async () => {
     const body = await response.json();
     assert.equal(response.status, 503);
     assert.equal(body.code, 'unavailable');
-    assert.equal(body.fallback.email, 'contact@williwolff.com');
+    assert.equal(body.fallback.email, 'contact+web@williwolff.com');
 });
 
 test('bad JSON, oversized bodies and GET are handled', async () => {
@@ -360,7 +362,7 @@ test('briefs are capped per visitor and per day', async () => {
     const body = await sixth.json();
     assert.equal(sixth.status, 429);
     assert.equal(body.code, 'rate_limited');
-    assert.equal(body.fallback.email, 'contact@williwolff.com');
+    assert.equal(body.fallback.email, 'contact+web@williwolff.com');
     assert.ok(Number(sixth.headers.get('retry-after')) > 0 && Number(sixth.headers.get('retry-after')) <= 3600);
     // Another visitor is not affected, and an invalid brief is not counted.
     assert.equal((await enquiry({ request: from('203.0.113.8'), env })).status, 200);
@@ -396,6 +398,23 @@ test('the daily cap counts everyone, and both caps lift when their time is up', 
     for (let i = 0; i < 100; i += 1) assert.equal(overLimit({}, '192.0.2.' + i, noon), 0);
     assert.equal(overLimit({}, '192.0.3.1', noon), 12 * 3600);
     assert.equal(overLimit({}, '192.0.3.1', noon + 12 * 3600 * 1000), 0);
+});
+
+test('everything the site shows or sends to carries the tagged address', async () => {
+    // Mail that came through the website can then be told apart by its recipient.
+    // The CV files are passed on outside the site and keep the plain address.
+    const plain = /contact@williwolff\.com/;
+    const files = (function walk(dir) {
+        return readdirSync(dir, { withFileTypes: true }).flatMap(item => item.isDirectory() ? walk(join(dir, item.name)) : [join(dir, item.name)]);
+    })(dist).filter(file => /\.(html|js|json|md|txt|xml)$/.test(file) && !/[\\/]cv\.(de\.)?(md|json)$/.test(file));
+    assert.ok(files.length > 30);
+    for (const file of files) assert.doesNotMatch(readFileSync(file, 'utf8'), plain, file.slice(dist.length));
+    assert.equal(JSON.parse(readFileSync(join(dist, 'hire.json'), 'utf8')).contact.email, SITE_ADDRESS);
+    assert.match(readFileSync(join(dist, 'index.html'), 'utf8'), /href="mailto:contact\+web@williwolff\.com"/);
+
+    // An address set for the Pages project wins for briefs, for example a tagged private one.
+    await enquiry({ request: post('https://williwolff.com/api/enquiry', brief), env: { ...env, CONTACT_TO_EMAIL: 'someone+site@example.org' } });
+    assert.deepEqual(sent[0].body.to, [{ email: 'someone+site@example.org' }]);
 });
 
 // --- /mcp -------------------------------------------------------------------------
