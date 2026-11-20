@@ -1,0 +1,87 @@
+---
+// One document shell for every page: head, header and the language links
+// that tell search engines which address holds which language.
+import '@fontsource-variable/inter/wght.css';
+import '../styles/site.css';
+import Header from '../components/Header.astro';
+import sprite from '../partials/sprite.html?raw';
+import { type Lang, HOME, ORIGIN, abs } from '../lib/site';
+
+interface Props {
+    lang: Lang;
+    title: string;
+    description: string;
+    /** Path of this page and of the same page in each language. */
+    path: string;
+    paths: Record<Lang, string>;
+    jsonld?: unknown;
+    ogType?: 'website' | 'article';
+    markdownPath?: string;
+    onHome?: boolean;
+    noindex?: boolean;
+}
+const { lang, title, description, path, paths, jsonld, ogType = 'website', markdownPath, onHome = false, noindex = false } = Astro.props;
+const altLang: Lang = lang === 'de' ? 'en' : 'de';
+const alt = lang === 'de'
+    ? 'Willi Wolff, Software Engineer und Architekt für Projektarbeit, mit seinem GitHub-Aktivitätsraster'
+    : 'Willi Wolff, software engineer and architect for contract work, with his GitHub contribution grid';
+---
+<!DOCTYPE html>
+<html lang={lang} data-lang={lang}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <meta name="author" content="Willi Wolff">
+    {noindex
+        ? <meta name="robots" content="noindex">
+        : <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">}
+    {!noindex && <link rel="canonical" href={abs(path)}>}
+    {!noindex && <>
+        <link rel="alternate" hreflang="en" href={abs(paths.en)}>
+        <link rel="alternate" hreflang="de" href={abs(paths.de)}>
+        <link rel="alternate" hreflang="x-default" href={abs(paths.en)}>
+    </>}
+
+    <meta property="og:type" content={ogType}>
+    <meta property="og:site_name" content="Willi Wolff">
+    <meta property="og:url" content={abs(path)}>
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content={`${ORIGIN}/social-preview.png`}>
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content={alt}>
+    <meta property="og:locale" content={HOME[lang].ogLocale}>
+    <meta property="og:locale:alternate" content={HOME[altLang].ogLocale}>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={`${ORIGIN}/social-preview.png`}>
+    <meta name="twitter:image:alt" content={alt}>
+    <meta name="twitter:site" content="@will_break_it">
+    <meta name="twitter:creator" content="@will_break_it">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="color-scheme" content="light">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- The same site for agents. -->
+    {markdownPath && <link rel="alternate" type="text/markdown" href={abs(markdownPath)} title={lang === 'de' ? 'Diese Seite als Markdown' : 'This page as Markdown'}>}
+    <link rel="alternate" type="application/json" href={`${ORIGIN}/hire.json`} title="Availability, rate and contact as JSON">
+    <link rel="service-desc" type="application/openapi+json" href={`${ORIGIN}/openapi.json`}>
+    <slot name="head" />
+
+    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+</head>
+<body>
+    <Fragment set:html={sprite} />
+    <Header lang={lang} altPath={paths[altLang]} onHome={onHome} />
+    <slot />
+</body>
+</html>

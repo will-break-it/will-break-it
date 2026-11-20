@@ -1,0 +1,55 @@
+---
+// The home page. Its sections are HTML partials that hold both languages
+// side by side; localize() keeps one of them for this page.
+import Base from '../layouts/Base.astro';
+import Footer from './Footer.astro';
+import { type Lang, HOME, ORIGIN, home } from '../lib/site';
+import { localize } from '../lib/localize';
+import graph from '../data/jsonld.json';
+
+import lead from '../partials/home/lead.html?raw';
+import work from '../partials/home/work.html?raw';
+import brief from '../partials/home/brief.html?raw';
+import cv from '../partials/home/cv.html?raw';
+import now from '../partials/home/now.html?raw';
+import projects from '../partials/home/projects.html?raw';
+import experience from '../partials/home/experience.html?raw';
+import technologies from '../partials/home/technologies.html?raw';
+import publications from '../partials/home/publications.html?raw';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const meta = HOME[lang];
+const paths = { en: home('en'), de: home('de') };
+
+// One graph for both languages; only the page node differs.
+const jsonld = structuredClone(graph) as { '@graph': Record<string, unknown>[] };
+for (const node of jsonld['@graph']) {
+    if (node['@type'] === 'ProfilePage') {
+        node.url = ORIGIN + paths[lang];
+        node['@id'] = `${ORIGIN}${paths[lang]}#page`;
+        node.name = meta.title;
+        node.inLanguage = lang;
+    }
+}
+const sections = [work, brief, cv, now, projects, experience, technologies, publications];
+---
+<Base lang={lang} title={meta.title} description={meta.description} path={paths[lang]} paths={paths} jsonld={jsonld} markdownPath="/llms.txt" onHome>
+    <Fragment slot="head">
+        <link rel="alternate" type="application/pdf" hreflang="en" href={`${ORIGIN}/willi-wolff-cv-en.pdf`} title="CV (English, PDF)">
+        <link rel="alternate" type="application/pdf" hreflang="de" href={`${ORIGIN}/willi-wolff-cv-de.pdf`} title="Lebenslauf (Deutsch, PDF)">
+        <link rel="alternate" type="text/markdown" hreflang="en" href={`${ORIGIN}/cv.md`} title="CV (English, Markdown)">
+        <link rel="alternate" type="text/markdown" hreflang="de" href={`${ORIGIN}/cv.de.md`} title="Lebenslauf (Deutsch, Markdown)">
+        <link rel="alternate" type="application/json" hreflang="en" href={`${ORIGIN}/cv.json`} title="CV (English, JSON Resume)">
+        <link rel="alternate" type="application/json" hreflang="de" href={`${ORIGIN}/cv.de.json`} title="Lebenslauf (Deutsch, JSON Resume)">
+    </Fragment>
+    <main class="page" id="top">
+        <Fragment set:html={localize(lead, lang)} />
+        <div class="content">
+            {sections.map(section => <Fragment set:html={localize(section, lang)} />)}
+            <Footer lang={lang} />
+        </div>
+    </main>
+    <script is:inline src="/js/home.js"></script>
+    <script is:inline src="/js/brief.js"></script>
+</Base>

@@ -1,0 +1,121 @@
+            <section id="brief" aria-labelledby="brief-title">
+                <div class="section-head">
+                    <p class="section-kicker"><span lang="en">Start a project</span><span lang="de">Projekt starten</span></p>
+                    <h2 id="brief-title"><span lang="en">Tell me the project. Get a quote back.</span><span lang="de">Schildern Sie das Projekt. Sie bekommen ein Angebot zurück.</span></h2>
+                    <p>
+                        <span lang="en">A few fields are enough. I read every request myself and reply by email.</span>
+                        <span lang="de">Wenige Felder genügen. Ich lese jede Anfrage selbst und antworte per E-Mail.</span>
+                    </p>
+                </div>
+
+                <div class="brief">
+                    <form class="brief-form" id="brief-form" novalidate>
+                        <div class="field">
+                            <label for="brief-type"><span lang="en">Kind of project</span><span lang="de">Art des Projekts</span></label>
+                            <select id="brief-type" name="project_type">
+                                <option value="ai_automation" data-en="AI agent or automation" data-de="KI-Agent oder Automatisierung">AI agent or automation</option>
+                                <option value="backend_architecture" data-en="Backend or architecture" data-de="Backend oder Architektur">Backend or architecture</option>
+                                <option value="blockchain_distributed" data-en="Blockchain or distributed systems" data-de="Blockchain oder verteilte Systeme">Blockchain or distributed systems</option>
+                                <option value="web_mobile" data-en="Web or mobile app" data-de="Web- oder Mobile-App">Web or mobile app</option>
+                                <option value="other" data-en="Something else" data-de="Etwas anderes">Something else</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="brief-summary"><span lang="en">What do you need?</span><span lang="de">Worum geht es?</span></label>
+                            <textarea id="brief-summary" name="summary" rows="5" required aria-describedby="brief-summary-error"
+                                data-placeholder-en="The problem, what exists today, what done looks like"
+                                data-placeholder-de="Das Problem, was es heute gibt, woran man erkennt, dass es fertig ist"
+                                placeholder="The problem, what exists today, what done looks like"></textarea>
+                            <p class="field-error" id="brief-summary-error" hidden></p>
+                        </div>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="brief-timeline"><span lang="en">Timeline</span><span lang="de">Zeitplan</span></label>
+                                <select id="brief-timeline" name="timeline">
+                                    <option value="start within a month" data-en="Start within a month" data-de="Start innerhalb eines Monats">Start within a month</option>
+                                    <option value="start in one to three months" data-en="Start in one to three months" data-de="Start in ein bis drei Monaten">Start in one to three months</option>
+                                    <option value="not fixed yet" data-en="Not fixed yet" data-de="Noch offen">Not fixed yet</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="brief-budget"><span lang="en">Budget range</span><span lang="de">Budgetrahmen</span></label>
+                                <select id="brief-budget" name="budget_eur">
+                                    <option value="under 10000" data-en="Under 10,000 EUR" data-de="Unter 10.000 EUR">Under 10,000 EUR</option>
+                                    <option value="10000-40000" data-en="10,000 to 40,000 EUR" data-de="10.000 bis 40.000 EUR">10,000 to 40,000 EUR</option>
+                                    <option value="over 40000" data-en="Over 40,000 EUR" data-de="Über 40.000 EUR">Over 40,000 EUR</option>
+                                    <option value="hourly, open ended" data-en="Hourly, open ended" data-de="Auf Stundenbasis, offen">Hourly, open ended</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="brief-email"><span lang="en">Where should the quote go?</span><span lang="de">Wohin soll das Angebot gehen?</span></label>
+                                <input id="brief-email" name="email" type="email" required autocomplete="email" aria-describedby="brief-email-error"
+                                    data-placeholder-en="you@company.com" data-placeholder-de="sie@firma.de" placeholder="you@company.com">
+                                <p class="field-error" id="brief-email-error" hidden></p>
+                            </div>
+                            <div class="field">
+                                <label for="brief-name"><span lang="en">Your name <span class="optional">(optional)</span></span><span lang="de">Ihr Name <span class="optional">(optional)</span></span></label>
+                                <input id="brief-name" name="name" type="text" autocomplete="name">
+                            </div>
+                        </div>
+                        <!-- Not for people: a bot that fills every field fills this one too. -->
+                        <div class="field-trap" aria-hidden="true">
+                            <label for="brief-website">Website</label>
+                            <input id="brief-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="brief-submit">
+                            <button type="submit" class="btn btn-primary btn-lg" id="brief-send">
+                                <span lang="en">Request a quote</span><span lang="de">Angebot anfragen</span>
+                            </button>
+                            <p><span lang="en">75 to 110 EUR per hour, by scope.</span><span lang="de">75 bis 110 EUR pro Stunde, je nach Umfang.</span></p>
+                        </div>
+                        <p class="brief-status" id="brief-status" role="status" aria-live="polite" hidden></p>
+                    </form>
+
+                    <aside class="brief-agent" aria-labelledby="brief-agent-title">
+                        <p class="agent-chip"><span lang="en">For agents</span><span lang="de">Für Agenten</span></p>
+                        <h3 id="brief-agent-title"><span lang="en">The same request as JSON</span><span lang="de">Dieselbe Anfrage als JSON</span></h3>
+                        <div class="code-block">
+                            <button type="button" class="code-copy" id="brief-copy"><span lang="en">Copy</span><span lang="de">Kopieren</span></button>
+                            <pre id="brief-json" tabindex="0">POST https://williwolff.com/api/enquiry
+Content-Type: application/json
+
+{
+  "email": "ada@example.com",
+  "summary": "Extract figures from supplier PDFs into our ERP, with review.",
+  "project_type": "ai_automation",
+  "timeline": "start within a month",
+  "budget_eur": "under 10000",
+  "submitted_by": "agent"
+}</pre>
+                        </div>
+                        <p class="brief-agent-note">
+                            <span lang="en">It follows the form as you type. The contract is in <a href="/openapi.json">openapi.json</a>, the terms in <a href="/hire.json">hire.json</a>, and an MCP server answers at <a href="/mcp">/mcp</a>. A request sent by an agent is labelled as such and answered by a person.</span>
+                            <span lang="de">Es folgt dem Formular beim Tippen. Die Schnittstelle steht in <a href="/openapi.json">openapi.json</a>, die Konditionen in <a href="/hire.json">hire.json</a>, und unter <a href="/mcp">/mcp</a> antwortet ein MCP-Server. Eine Anfrage von einem Agenten wird als solche gekennzeichnet und von einem Menschen beantwortet.</span>
+                        </p>
+                    </aside>
+                </div>
+
+                <div class="back" aria-labelledby="back-title">
+                    <h3 id="back-title"><span lang="en">What you get back</span><span lang="de">Was Sie zurückbekommen</span></h3>
+                    <dl class="back-list">
+                        <div>
+                            <dt><span lang="en">Fit</span><span lang="de">Passung</span></dt>
+                            <dd><span lang="en">Whether this is work I take on, and if not, why.</span><span lang="de">Ob ich das Projekt übernehme, und falls nicht, warum.</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Scope</span><span lang="de">Umfang</span></dt>
+                            <dd><span lang="en">Three lines on what I would build first.</span><span lang="de">Drei Zeilen dazu, was ich zuerst bauen würde.</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Estimate</span><span lang="de">Schätzung</span></dt>
+                            <dd><span lang="en">A range in days and in EUR.</span><span lang="de">Eine Spanne in Tagen und in EUR.</span></dd>
+                        </div>
+                        <div>
+                            <dt>Start</dt>
+                            <dd><span lang="en">The earliest date I can begin.</span><span lang="de">Der früheste Termin, an dem ich anfangen kann.</span></dd>
+                        </div>
+                    </dl>
+                </div>
+            </section>

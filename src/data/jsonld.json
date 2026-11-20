@@ -1,0 +1,369 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://williwolff.com/#willi",
+      "name": "Willi Wolff",
+      "alternateName": "Will Wolff",
+      "givenName": "Willi",
+      "familyName": "Wolff",
+      "jobTitle": "Software Engineer & Architect",
+      "description": "Freelance software engineer and architect in Berlin: AI, blockchain, web and mobile, from research to production. Writing code since 2008, shipping professionally since 2015.",
+      "url": "https://williwolff.com/",
+      "image": "https://williwolff.com/assets/images/will.jpg",
+      "email": "mailto:contact@williwolff.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Berlin",
+        "addressCountry": "DE"
+      },
+      "knowsLanguage": [
+        {
+          "@type": "Language",
+          "name": "German",
+          "alternateName": "de"
+        },
+        {
+          "@type": "Language",
+          "name": "English",
+          "alternateName": "en"
+        }
+      ],
+      "knowsAbout": [
+        "AI agents",
+        "Distributed systems",
+        "Distributed ledger technology",
+        "Consensus protocols",
+        "Protocol design",
+        "Formal verification",
+        "Cardano",
+        "eUTxO model",
+        "Plutus smart contracts",
+        "Event-driven architecture",
+        "CQRS",
+        "Event sourcing",
+        "Chain indexing",
+        "Cryptography",
+        "End-to-end encryption",
+        "TypeScript",
+        "Rust",
+        "Haskell",
+        "Agda",
+        "Swift",
+        "Kotlin",
+        "Java"
+      ],
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization",
+          "name": "Hult International Business School",
+          "url": "https://www.hult.edu/",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "San Francisco",
+            "addressCountry": "US"
+          }
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "DHBW Stuttgart",
+          "url": "https://www.dhbw-stuttgart.de/",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Stuttgart",
+            "addressCountry": "DE"
+          }
+        }
+      ],
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "degree",
+          "name": "M.A. International Business",
+          "educationalLevel": "Master's degree"
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "credentialCategory": "degree",
+          "name": "B.Sc. Computer Science",
+          "educationalLevel": "Bachelor's degree"
+        }
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Input Output Global (IOG)",
+        "url": "https://www.iog.io/"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "project enquiries",
+        "email": "contact@williwolff.com",
+        "url": "https://williwolff.com/#brief",
+        "availableLanguage": [
+          "de",
+          "en"
+        ]
+      },
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "name": "Freelance software engineering and architecture",
+          "url": "https://williwolff.com/#work",
+          "availability": "https://schema.org/LimitedAvailability",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Freelance software engineering and architecture",
+            "serviceType": "Software engineering",
+            "description": "Contract work on AI agents and automation, blockchain and distributed systems, and web and mobile products. Remote from Berlin, in German or English.",
+            "provider": {
+              "@id": "https://williwolff.com/#willi"
+            },
+            "areaServed": {
+              "@type": "Place",
+              "name": "Worldwide"
+            },
+            "availableLanguage": [
+              "de",
+              "en"
+            ]
+          },
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "minPrice": 75,
+            "maxPrice": 110,
+            "priceCurrency": "EUR",
+            "unitCode": "HUR",
+            "unitText": "hour"
+          }
+        }
+      ],
+      "potentialAction": {
+        "@type": "CommunicateAction",
+        "name": "Send a project brief",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://williwolff.com/api/enquiry",
+          "httpMethod": "POST",
+          "encodingType": "application/json",
+          "contentType": "application/json"
+        }
+      },
+      "founder": [
+        {
+          "@id": "https://williwolff.com/#pagebase"
+        }
+      ],
+      "sameAs": [
+        "https://github.com/will-break-it",
+        "https://linkedin.com/in/wwolff",
+        "https://x.com/will_break_it"
+      ],
+      "subjectOf": [
+        {
+          "@type": "TechArticle",
+          "name": "CIP-0164: Ouroboros Leios",
+          "url": "https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md"
+        },
+        {
+          "@type": "TechArticle",
+          "name": "CIP-0118: Nested Transactions",
+          "url": "https://github.com/cardano-foundation/CIPs/blob/master/CIP-0118/README.md"
+        },
+        {
+          "@type": "TechArticle",
+          "name": "CIP: Decentralised Pub/Sub Message Dissemination",
+          "url": "https://github.com/cardano-foundation/CIPs/pull/1271"
+        },
+        {
+          "@type": "TechArticle",
+          "name": "CPS: Trustworthy Off-chain Message Dissemination",
+          "url": "https://github.com/cardano-foundation/CIPs/pull/1270"
+        },
+        {
+          "@type": "DigitalDocument",
+          "name": "Willi Wolff – CV (English)",
+          "url": "https://williwolff.com/willi-wolff-cv-en.pdf",
+          "encodingFormat": "application/pdf",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "DigitalDocument",
+          "name": "Willi Wolff – Lebenslauf (Deutsch)",
+          "url": "https://williwolff.com/willi-wolff-cv-de.pdf",
+          "encodingFormat": "application/pdf",
+          "inLanguage": "de"
+        },
+        {
+          "@type": "DigitalDocument",
+          "name": "Willi Wolff – CV (English, Markdown)",
+          "url": "https://williwolff.com/cv.md",
+          "encodingFormat": "text/markdown",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "DigitalDocument",
+          "name": "Willi Wolff – Lebenslauf (Deutsch, Markdown)",
+          "url": "https://williwolff.com/cv.de.md",
+          "encodingFormat": "text/markdown",
+          "inLanguage": "de"
+        },
+        {
+          "@type": "DigitalDocument",
+          "name": "Willi Wolff – CV (English, JSON Resume)",
+          "url": "https://williwolff.com/cv.json",
+          "encodingFormat": "application/json",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "DigitalDocument",
+          "name": "Willi Wolff – Lebenslauf (Deutsch, JSON Resume)",
+          "url": "https://williwolff.com/cv.de.json",
+          "encodingFormat": "application/json",
+          "inLanguage": "de"
+        }
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://williwolff.com/#pagebase",
+      "name": "Pagebase",
+      "url": "https://pagebase.dev",
+      "description": "Fixed-price website packages, managed hosting and optional support plans for small businesses and independent professionals. Berlin-based, working with clients worldwide.",
+      "founder": {
+        "@id": "https://williwolff.com/#willi"
+      },
+      "areaServed": {
+        "@type": "Place",
+        "name": "Worldwide"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Berlin",
+        "addressCountry": "DE"
+      },
+      "availableLanguage": [
+        "de",
+        "en"
+      ],
+      "knowsAbout": [
+        "Web development",
+        "Website design",
+        "Managed hosting",
+        "Astro",
+        "Supabase",
+        "PostgreSQL",
+        "React",
+        "React Native",
+        "Cloudflare Workers",
+        "AI automation",
+        "Internationalisation"
+      ],
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Fixed-price business websites",
+            "description": "Design and build of a business website on a fixed price, in German or English."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Managed hosting and support",
+            "description": "Hosting, updates and ongoing support plans for delivered sites."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Web and mobile application development",
+            "description": "Supabase and PostgreSQL backends with web or React Native front ends."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "AI automation",
+            "description": "Document and email pipelines using large language models, with human review before anything is written to a system of record."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://williwolff.com/#website",
+      "name": "Willi Wolff",
+      "alternateName": "Will Wolff — Freelance Software Engineer & Architect",
+      "url": "https://williwolff.com/",
+      "inLanguage": [
+        "en",
+        "de"
+      ],
+      "author": {
+        "@id": "https://williwolff.com/#willi"
+      },
+      "about": {
+        "@id": "https://williwolff.com/#willi"
+      }
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://williwolff.com/#page",
+      "url": "https://williwolff.com/",
+      "name": "Willi Wolff – Freelance Software Engineer & Architect, Berlin",
+      "isPartOf": {
+        "@id": "https://williwolff.com/#website"
+      },
+      "mainEntity": {
+        "@id": "https://williwolff.com/#willi"
+      },
+      "dateModified": "2026-11-20",
+      "inLanguage": [
+        "en",
+        "de"
+      ],
+      "hasPart": [
+        {
+          "@type": "WebPageElement",
+          "name": "Services",
+          "url": "https://williwolff.com/#work"
+        },
+        {
+          "@type": "WebPageElement",
+          "name": "Send a brief",
+          "url": "https://williwolff.com/#brief"
+        },
+        {
+          "@type": "WebPageElement",
+          "name": "CV",
+          "url": "https://williwolff.com/#cv"
+        },
+        {
+          "@type": "WebPageElement",
+          "name": "Projects",
+          "url": "https://williwolff.com/#projects"
+        },
+        {
+          "@type": "WebPageElement",
+          "name": "Career",
+          "url": "https://williwolff.com/#experience"
+        },
+        {
+          "@type": "WebPageElement",
+          "name": "Tools",
+          "url": "https://williwolff.com/#technologies"
+        },
+        {
+          "@type": "WebPageElement",
+          "name": "Publications",
+          "url": "https://williwolff.com/#publications"
+        }
+      ]
+    }
+  ]
+}

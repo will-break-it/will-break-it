@@ -1,0 +1,28 @@
+# Astro fingerprints everything it bundles, so those files never change.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images change rarely and are not fingerprinted: cache for a day, then
+# let browsers show the old copy while they fetch a new one.
+/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# The Markdown twins of service pages and case studies are for agents. Search
+# engines should index the page, not its text file.
+/services/*.md
+  X-Robots-Tag: noindex
+
+/work/*.md
+  X-Robots-Tag: noindex
+
+/de/leistungen/*.md
+  X-Robots-Tag: noindex
+
+/de/projekte/*.md
+  X-Robots-Tag: noindex

@@ -36,7 +36,8 @@
   https://williwolff.com/openapi.json.
 - **MCP server:** https://williwolff.com/mcp (Streamable HTTP, no sign-in) with the tools
   `get_profile`, `get_terms`, `get_cv` and `submit_enquiry`.
-- **This page as Markdown:** request https://williwolff.com/ with `Accept: text/markdown`.
+- **Any page as Markdown:** request it with `Accept: text/markdown`, or add `.md` to the path of a
+  service page or case study (without the trailing slash). The home page answers with this file.
 - Send a brief only for a person who asked you to get in touch, and give an address they
   can be reached at. Briefs sent by an agent are labelled as such and answered by a person.
 
@@ -49,12 +50,16 @@ development. Works end to end: builds a rough working version early, finds the r
 iterates. Best in small teams on hard problems, and takes on more than pure engineering when
 a project needs it. Berlin, Germany. German and English.
 
+<!-- pages -->
+
 ## Site structure
 
-One page, read top to bottom. Add `?lang=de` for the German version.
+English at `/`, German at `/de/`. Each service page and case study has its own URL in both
+languages; the lists above give the English ones, and every page links its German twin.
+The home page is one page, read top to bottom:
 
 - `/#home` — who he is, with his terms at a glance: availability, rate, engagement, location, languages
-- `/#work` — what he takes on, in three lanes, each with a result behind it
+- `/#work` — what he takes on, in three lanes, each with a result behind it and a link to its service page and case studies
 - `/#brief` — the brief form, next to the same request as JSON
 - `/#cv` — the CV as PDF, Markdown and JSON, in English and German
 - `/#now` — projects at a glance (counts that filter the project list) and a GitHub
@@ -168,7 +173,7 @@ Typical stack: Astro, TypeScript, Tailwind, Supabase, PostgreSQL, Cloudflare Wor
 
 ## Languages
 
-Site content available in English (default) and German.
+Site content available in English (https://williwolff.com/) and German (https://williwolff.com/de/).
 
 ## Contact
 

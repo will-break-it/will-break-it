@@ -18,3 +18,8 @@ vendor/
 private/ 
 # Wrangler / Cloudflare local state
 .wrangler/
+
+# Astro / Node
+node_modules/
+dist/
+.astro/

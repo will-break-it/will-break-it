@@ -17,7 +17,7 @@
 import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 
 const LOGIN = 'will-break-it';
-const OUT = 'data/activity.json';
+const OUT = 'public/data/activity.json';
 const TOKEN = process.env.GH_ACTIVITY_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
 
 if (!TOKEN) {
