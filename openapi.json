@@ -1,0 +1,82 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "williwolff.com",
+    "version": "1.0.0",
+    "summary": "Hire Willi Wolff, freelance software engineer and architect in Berlin.",
+    "description": "Machine-readable routes of williwolff.com. Read the profile, the terms and the CV, then send a project brief. A person reads and answers every brief; nothing is booked or quoted automatically.",
+    "contact": { "name": "Willi Wolff", "email": "contact@williwolff.com", "url": "https://williwolff.com/" }
+  },
+  "servers": [{ "url": "https://williwolff.com" }],
+  "paths": {
+    "/api/enquiry": {
+      "post": {
+        "operationId": "submitEnquiry",
+        "summary": "Send a project brief",
+        "description": "Emails the brief to Will. Send it only on behalf of a person who asked to get in touch, with an address they can be reached at.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Enquiry" } } }
+        },
+        "responses": {
+          "200": { "description": "Brief received.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Receipt" } } } },
+          "400": { "description": "A field is missing or invalid. `fields` names each one.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Problem" } } } },
+          "413": { "description": "The body is larger than 32 KB." },
+          "503": { "description": "The brief could not be delivered. `fallback.email` is the address to write to instead.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Problem" } } } }
+        }
+      }
+    },
+    "/hire.json": {
+      "get": { "operationId": "getTerms", "summary": "Availability, rate, engagement, location, languages and contact routes", "responses": { "200": { "description": "Terms as JSON." } } }
+    },
+    "/llms.txt": {
+      "get": { "operationId": "getProfile", "summary": "The whole site as Markdown", "responses": { "200": { "description": "Profile, experience, projects and how to work with him." } } }
+    },
+    "/cv.md": { "get": { "operationId": "getCvMarkdownEn", "summary": "CV in English, Markdown", "responses": { "200": { "description": "CV." } } } },
+    "/cv.de.md": { "get": { "operationId": "getCvMarkdownDe", "summary": "CV in German, Markdown", "responses": { "200": { "description": "Lebenslauf." } } } },
+    "/cv.json": { "get": { "operationId": "getCvJsonEn", "summary": "CV in English, JSON Resume schema", "responses": { "200": { "description": "CV." } } } },
+    "/cv.de.json": { "get": { "operationId": "getCvJsonDe", "summary": "CV in German, JSON Resume schema", "responses": { "200": { "description": "Lebenslauf." } } } },
+    "/willi-wolff-cv-en.pdf": { "get": { "operationId": "getCvPdfEn", "summary": "CV in English, PDF", "responses": { "200": { "description": "CV." } } } },
+    "/willi-wolff-cv-de.pdf": { "get": { "operationId": "getCvPdfDe", "summary": "CV in German, PDF", "responses": { "200": { "description": "Lebenslauf." } } } }
+  },
+  "components": {
+    "schemas": {
+      "Enquiry": {
+        "type": "object",
+        "required": ["email", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "email": { "type": "string", "format": "email", "description": "Where the reply should go." },
+          "summary": { "type": "string", "minLength": 10, "maxLength": 6000, "description": "The problem, what exists today, what done looks like." },
+          "name": { "type": "string", "maxLength": 120 },
+          "company": { "type": "string", "maxLength": 160 },
+          "project_type": { "type": "string", "enum": ["ai_automation", "backend_architecture", "blockchain_distributed", "web_mobile", "other"], "default": "other" },
+          "timeline": { "type": "string", "maxLength": 300, "examples": ["start in January, about 8 weeks"] },
+          "budget_eur": { "type": "string", "maxLength": 80, "examples": ["10000-40000"] },
+          "engagement": { "type": "string", "enum": ["hourly", "fixed_price", "unsure"], "default": "unsure" },
+          "submitted_by": { "type": "string", "enum": ["human", "agent"], "default": "human", "description": "Say \"agent\" when software sends this for a person." },
+          "agent": { "type": "string", "maxLength": 120, "description": "Name of the agent or product sending the brief." },
+          "locale": { "type": "string", "enum": ["en", "de"], "default": "en" }
+        }
+      },
+      "Receipt": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean", "const": true },
+          "reference": { "type": "string", "examples": ["WW-1A2B3C4D"] },
+          "message": { "type": "string" }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean", "const": false },
+          "code": { "type": "string", "enum": ["invalid", "unavailable", "delivery_failed"] },
+          "error": { "type": "string" },
+          "fields": { "type": "object", "additionalProperties": { "type": "string" } },
+          "fallback": { "type": "object", "properties": { "email": { "type": "string" } } }
+        }
+      }
+    }
+  }
+}
