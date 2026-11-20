@@ -11,8 +11,8 @@
 - **What:** freelance software engineering and architecture: AI agents and automation,
   blockchain and distributed systems, web and mobile. Delivery is scaled with AI agents and
   every result is reviewed by him before it ships.
-- **Rate:** from 75 EUR per hour, billed as a freelancer on a contract basis. The rate
-  depends on scope and length; his quote names the number.
+- **Rate:** 75 to 110 EUR per hour, billed as a freelancer on a contract basis. Where a
+  project lands in that range depends on scope and length; his quote names the number.
 - **Availability:** currently on contract with IOG (Ouroboros Leios); open to selected
   additional contract work. Based in Berlin, works remote, German or English.
 - **Websites and small products:** fixed-price packages go through Pagebase (https://pagebase.dev).

@@ -183,12 +183,14 @@ test('MCP errors: unknown method, unknown tool, GET', async () => {
 
 test('the rate is the same on the page, in llms.txt and in hire.json', () => {
     const terms = JSON.parse(file('hire.json'));
-    const rate = String(terms.rate.from);
-    assert.match(file('llms.txt'), new RegExp('from ' + rate + ' EUR per hour'));
+    const { from, to } = terms.rate;
+    assert.match(file('llms.txt'), new RegExp(from + ' to ' + to + ' EUR per hour'));
     const page = file('index.html');
-    assert.match(page, new RegExp('From ' + rate + ' EUR per hour'));
-    assert.match(page, new RegExp('Ab ' + rate + ' EUR pro Stunde'));
-    assert.match(page, new RegExp('"minPrice": ' + rate + '\\b'));
+    assert.match(page, new RegExp(from + ' to ' + to + ' EUR per hour'));
+    assert.match(page, new RegExp(from + ' bis ' + to + ' EUR pro Stunde'));
+    assert.match(page, new RegExp('"minPrice": ' + from + '\\b'));
+    assert.match(page, new RegExp('"maxPrice": ' + to + '\\b'));
+    assert.doesNotMatch(page, /From \d+ EUR per hour|Ab \d+ EUR pro Stunde/);
 });
 
 test('the generated CV files match their Typst sources', async () => {
