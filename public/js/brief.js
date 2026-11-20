@@ -17,6 +17,7 @@
             sent: 'Brief received. I read every request myself and reply by email.',
             ref: 'Reference',
             failed: 'The form could not send this. Your text is still here.',
+            limited: 'Too many briefs for now. Your text is still here.',
             mail: 'Send it by email instead',
             copied: 'Copied',
             copy: 'Copy',
@@ -28,6 +29,7 @@
             sent: 'Anfrage erhalten. Ich lese jede Anfrage selbst und antworte per E-Mail.',
             ref: 'Referenz',
             failed: 'Das Formular konnte die Anfrage nicht senden. Ihr Text steht noch hier.',
+            limited: 'Im Moment sind es zu viele Anfragen. Ihr Text steht noch hier.',
             mail: 'Stattdessen per E-Mail senden',
             copied: 'Kopiert',
             copy: 'Kopieren',
@@ -141,6 +143,9 @@
                 fieldError('email', body.fields.email);
                 fieldError('summary', body.fields.summary);
                 say([body.error], null, true);
+            } else if (response.status === 429) {
+                // The server's own words are for agents; the form speaks in the first person.
+                say([t.limited], { href: mailto(v), text: t.mail + ' (' + MAIL + ')' }, true);
             } else {
                 throw new Error('not sent');
             }

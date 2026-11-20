@@ -39,8 +39,11 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
 - `BREVO_API_KEY` in the Cloudflare Pages project (optional: `CONTACT_TO_EMAIL`,
   `CONTACT_FROM_EMAIL`, `CONTACT_SENDER_NAME`). Without it the endpoint answers 503 and the
   form falls back to email.
-- A rate-limiting rule in Cloudflare for `POST /api/enquiry` and `POST /mcp`. Both send one
-  email per valid request and need no sign-in, because agents use them. The code caps size,
-  refuses other websites and sends one brief per request, but it keeps no state, so it cannot
-  count requests per visitor. Without the rule, a script can fill the inbox and use up the
-  Brevo quota.
+- A KV namespace bound to the Pages project as `BRIEF_LIMITS` (Workers & Pages, the
+  project, Settings, Bindings, Add, KV namespace; then redeploy). `POST /api/enquiry` and
+  `POST /mcp` send one email per valid request and need no sign-in, because agents use them.
+  With the binding, `lib/enquiry.js` caps briefs at 5 per visitor per hour and 100 per day
+  (`BRIEF_LIMIT_PER_VISITOR_HOUR` and `BRIEF_LIMIT_PER_DAY` change that) and answers 429
+  beyond it. Without the binding nothing is counted and there is no cap: a script could then
+  fill the inbox and use up the Brevo quota. Only a daily hash of the address is stored.
+  To try it locally: `npx wrangler pages dev dist --kv=BRIEF_LIMITS`.
