@@ -2,6 +2,9 @@
 // collapsible career entries and expandable project descriptions.
 
 const html = document.documentElement;
+// Each page is one language. Text this script inserts has to be in it too:
+// nothing hides the other language any more.
+const pageLang = html.getAttribute('data-lang') === 'de' ? 'de' : 'en';
 
 // Collapsible job sections
 document.addEventListener('click', function(e) {
@@ -74,8 +77,7 @@ function spinReels(root) {
         const title = o.title ? ` title="${o.title.replace(/"/g, '&quot;')}"` : '';
         return `<button type="button" class="figure" data-filter="${key}"${title}>` +
             `<span class="figure-value">${reel(value, { accent: o.accent })}</span>` +
-            `<span class="figure-label" lang="en">${LABELS[key].en}</span>` +
-            `<span class="figure-label" lang="de">${LABELS[key].de}</span></button>`;
+            `<span class="figure-label">${LABELS[key][pageLang]}</span></button>`;
     }
 
     const cards = Array.from(document.querySelectorAll('.project-card'));
@@ -100,9 +102,9 @@ function spinReels(root) {
         note.hidden = key === 'all';
         if (key !== 'all') {
             const n = cards.filter(c => !c.hidden).length;
-            noteLabel.innerHTML =
-                `<span lang="en">Showing ${n} ${LABELS[key].en.toLowerCase()}</span>` +
-                `<span lang="de">${n} × ${LABELS[key].de}</span>`;
+            noteLabel.textContent = pageLang === 'de'
+                ? `${n} × ${LABELS[key].de}`
+                : `Showing ${n} ${LABELS[key].en.toLowerCase()}`;
         }
     }
 
@@ -154,9 +156,7 @@ function spinReels(root) {
                 const line = document.createElement('p');
                 line.className = 'project-status';
                 line.dataset.state = p.building ? 'building' : p.status;
-                line.innerHTML =
-                    `<span lang="en"><b>${st.en}${year}</b>${why.en}</span>` +
-                    `<span lang="de"><b>${st.de}${year}</b>${why.de}</span>`;
+                line.innerHTML = `<span><b>${st[pageLang]}${year}</b>${why[pageLang]}</span>`;
                 desc.parentNode.insertBefore(line, desc);
             });
 
@@ -335,22 +335,20 @@ function spinReels(root) {
 
 // Descriptions show three lines; "More" expands one card at a time.
 (function () {
-    const de = () => document.documentElement.getAttribute('data-lang') === 'de';
     document.querySelectorAll('.project-description').forEach(desc => {
         const card = desc.closest('.project-card');
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'project-more';
         btn.setAttribute('aria-expanded', 'false');
-        btn.innerHTML = '<span lang="en">More</span><span lang="de">Mehr</span>';
+        const label = open => (pageLang === 'de' ? (open ? 'Weniger' : 'Mehr') : (open ? 'Less' : 'More'));
+        btn.textContent = label(false);
         desc.after(btn);
         const sync = () => { btn.hidden = !card.classList.contains('is-open') && desc.scrollHeight <= desc.clientHeight + 1; };
         btn.addEventListener('click', () => {
             const open = card.classList.toggle('is-open');
             btn.setAttribute('aria-expanded', String(open));
-            btn.innerHTML = open
-                ? '<span lang="en">Less</span><span lang="de">Weniger</span>'
-                : '<span lang="en">More</span><span lang="de">Mehr</span>';
+            btn.textContent = label(open);
         });
         sync();
         window.addEventListener('resize', sync, { passive: true });

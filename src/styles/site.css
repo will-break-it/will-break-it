@@ -845,8 +845,8 @@ h3.project-title-link::after { content: none; }
     color: var(--faint);
 }
 .contrib-legend i { width: 11px; }
-.contrib-legend span:first-of-type { margin-right: 4px; }
-.contrib-legend span:last-of-type { margin-left: 4px; }
+.contrib-legend i:first-of-type { margin-left: 4px; }
+.contrib-legend i:last-of-type { margin-right: 4px; }
 
 @media (max-width: 640px) {
     .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
