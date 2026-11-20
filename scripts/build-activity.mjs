@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Aggregates GitHub contribution data into data/activity.json.
+// Aggregates GitHub contribution data into public/data/activity.json.
 //
 // Records presence, never absence. Days and months both survive into the file,
 // but only where something was recorded: a bucket with nothing in it is left

@@ -1044,6 +1044,7 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 .field [aria-invalid="true"] { border-color: var(--signal); }
 .field-error { font-size: 0.85rem; color: var(--signal); }
 
+.brief-noscript { margin: 0 0 var(--s-4); font-size: 0.9rem; color: var(--muted); }
 .field-trap { position: absolute; left: -200vw; width: 1px; height: 1px; overflow: hidden; }
 
 .brief-submit {

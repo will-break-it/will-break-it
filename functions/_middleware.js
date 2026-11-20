@@ -53,7 +53,10 @@ export async function onRequest({ request, next, env }) {
 
     if (url.hostname === 'wwolff.pages.dev') {
         url.hostname = 'williwolff.com';
-        return Response.redirect(url.toString(), 301);
+        // 301 lets a client turn a POST into a GET, which would drop a brief sent
+        // to /api/enquiry or /mcp on the old host. 308 keeps method and body.
+        const reading = request.method === 'GET' || request.method === 'HEAD';
+        return Response.redirect(url.toString(), reading ? 301 : 308);
     }
 
     if (request.method !== 'GET' && request.method !== 'HEAD') return next();

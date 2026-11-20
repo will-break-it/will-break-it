@@ -9,7 +9,13 @@
                 </div>
 
                 <div class="brief">
-                    <form class="brief-form" id="brief-form" novalidate>
+                    <!-- With the script, the form posts JSON to /api/enquiry. Without it (blocked,
+                         failed to load, switched off) the browser opens the visitor's mail program
+                         with the fields as the message, so a brief is never lost in a page reload. -->
+                    <form class="brief-form" id="brief-form" novalidate action="mailto:contact@williwolff.com?subject=Project%20brief" method="post" enctype="text/plain">
+                        <noscript>
+                            <p class="brief-noscript"><span lang="en">Without JavaScript this form opens your mail program. You can also write to <a href="mailto:contact@williwolff.com">contact@williwolff.com</a> directly.</span><span lang="de">Ohne JavaScript öffnet dieses Formular Ihr Mailprogramm. Sie können auch direkt an <a href="mailto:contact@williwolff.com">contact@williwolff.com</a> schreiben.</span></p>
+                        </noscript>
                         <div class="field">
                             <label for="brief-type"><span lang="en">Kind of project</span><span lang="de">Art des Projekts</span></label>
                             <select id="brief-type" name="project_type">
@@ -32,14 +38,15 @@
                             <div class="field">
                                 <label for="brief-timeline"><span lang="en">Timeline</span><span lang="de">Zeitplan</span></label>
                                 <select id="brief-timeline" name="timeline">
+                                    <option value="not fixed yet" data-en="Not fixed yet" data-de="Noch offen">Not fixed yet</option>
                                     <option value="start within a month" data-en="Start within a month" data-de="Start innerhalb eines Monats">Start within a month</option>
                                     <option value="start in one to three months" data-en="Start in one to three months" data-de="Start in ein bis drei Monaten">Start in one to three months</option>
-                                    <option value="not fixed yet" data-en="Not fixed yet" data-de="Noch offen">Not fixed yet</option>
                                 </select>
                             </div>
                             <div class="field">
                                 <label for="brief-budget"><span lang="en">Budget range</span><span lang="de">Budgetrahmen</span></label>
                                 <select id="brief-budget" name="budget_eur">
+                                    <option value="" data-en="Not sure yet" data-de="Noch unklar">Not sure yet</option>
                                     <option value="under 10000" data-en="Under 10,000 EUR" data-de="Unter 10.000 EUR">Under 10,000 EUR</option>
                                     <option value="10000-40000" data-en="10,000 to 40,000 EUR" data-de="10.000 bis 40.000 EUR">10,000 to 40,000 EUR</option>
                                     <option value="over 40000" data-en="Over 40,000 EUR" data-de="Über 40.000 EUR">Over 40,000 EUR</option>
