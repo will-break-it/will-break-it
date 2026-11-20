@@ -195,6 +195,17 @@ test('the language switch is on every page and nothing hides it', () => {
     }
 });
 
+test('the sticky header keeps its blur in every browser', () => {
+    // The header is translucent. Without the blur, the text scrolling under it shows
+    // through and collides with the navigation. The minifier once kept only one of the
+    // two declarations: Safari before 18 needs the prefixed one, the others the standard.
+    const css = readdirSync(join(dist, '_astro')).filter(n => n.endsWith('.css')).map(n => readFileSync(join(dist, '_astro', n), 'utf8')).join('');
+    const header = css.match(/\.site-header\{[^}]*position:sticky[^}]*\}/);
+    assert.ok(header, 'no rule for the sticky header');
+    assert.match(header[0], /[;{]backdrop-filter:[^;}]*blur\(/);
+    assert.match(header[0], /-webkit-backdrop-filter:[^;}]*blur\(/);
+});
+
 test('the home page script writes one language, and the German page describes itself', () => {
     // Nothing hides the other language, so text inserted by a script must not carry both.
     for (const name of readdirSync(join(dist, 'js'))) {

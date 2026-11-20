@@ -8,4 +8,9 @@ export default defineConfig({
     output: 'static',
     build: { format: 'directory' },
     devToolbar: { enabled: false },
+    // Name the browsers the stylesheet is minified for. Without this the minifier
+    // keeps only one of a prefixed and a standard declaration, and the header lost
+    // its blur: Safari before 18 needs -webkit-backdrop-filter, the others the
+    // standard one.
+    vite: { build: { cssTarget: ['chrome111', 'edge111', 'firefox113', 'safari16.2'] } },
 });
