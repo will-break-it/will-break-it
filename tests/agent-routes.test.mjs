@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { onRequest as middleware } from '../functions/_middleware.js';
 import { onRequest as enquiry } from '../functions/api/enquiry.js';
 import { onRequest as mcp } from '../functions/mcp.js';
+import { forgetBriefCounts, overLimit } from '../lib/enquiry.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -50,6 +51,7 @@ const realFetch = globalThis.fetch;
 let sent;
 beforeEach(() => {
     sent = [];
+    forgetBriefCounts();
     globalThis.fetch = async (url, init) => {
         sent.push({ url: String(url), body: JSON.parse(init.body), headers: init.headers });
         return new Response(JSON.stringify({ messageId: '<test@brevo>' }), { status: 201 });
@@ -350,51 +352,50 @@ test('bad JSON, oversized bodies and GET are handled', async () => {
     assert.deepEqual(described.required, ['email', 'summary']);
 });
 
-// A stand-in for the KV namespace that holds the counters.
-const kv = () => {
-    const data = new Map();
-    return { data, get: async key => data.get(key) ?? null, put: async (key, value) => { data.set(key, value); } };
-};
 const from = (ip, body = brief) => post('https://williwolff.com/api/enquiry', body, { 'cf-connecting-ip': ip });
 
-test('briefs are capped per visitor and per day once a counter store is bound', async () => {
-    const store = kv();
-    const limited = { ...env, BRIEF_LIMITS: store };
-    for (let i = 0; i < 5; i += 1) assert.equal((await enquiry({ request: from('203.0.113.7'), env: limited })).status, 200);
-    const sixth = await enquiry({ request: from('203.0.113.7'), env: limited });
+test('briefs are capped per visitor and per day', async () => {
+    for (let i = 0; i < 5; i += 1) assert.equal((await enquiry({ request: from('203.0.113.7'), env })).status, 200);
+    const sixth = await enquiry({ request: from('203.0.113.7'), env });
     const body = await sixth.json();
     assert.equal(sixth.status, 429);
     assert.equal(body.code, 'rate_limited');
     assert.equal(body.fallback.email, 'contact@williwolff.com');
     assert.ok(Number(sixth.headers.get('retry-after')) > 0 && Number(sixth.headers.get('retry-after')) <= 3600);
-    // Another visitor is not affected, and a refused or invalid brief is not counted.
-    assert.equal((await enquiry({ request: from('203.0.113.8'), env: limited })).status, 200);
-    assert.equal((await enquiry({ request: from('203.0.113.9', { summary: 'no address given here' }), env: limited })).status, 400);
-    assert.equal(sent.length, 6);
-    assert.equal(store.data.get('day:' + new Date().toISOString().slice(0, 10)), '6');
-    // The address is counted by a hash, never stored.
-    assert.ok([...store.data.keys()].every(key => !key.includes('203.0.113')));
+    // Another visitor is not affected, and an invalid brief is not counted.
+    assert.equal((await enquiry({ request: from('203.0.113.8'), env })).status, 200);
+    for (let i = 0; i < 9; i += 1) assert.equal((await enquiry({ request: from('203.0.113.9', { summary: 'no address given here' }), env })).status, 400);
+    assert.equal((await enquiry({ request: from('203.0.113.9'), env })).status, 200);
+    assert.equal(sent.length, 7);
 
     // The same cap holds for the MCP route.
     const call = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'submit_enquiry', arguments: brief } };
-    const viaMcp = await mcp({ request: post('https://williwolff.com/mcp', call, { 'cf-connecting-ip': '203.0.113.7' }), env: limited });
+    const viaMcp = await mcp({ request: post('https://williwolff.com/mcp', call, { 'cf-connecting-ip': '203.0.113.7' }), env });
     const answer = await viaMcp.json();
     assert.equal(answer.result.isError, true);
     assert.match(answer.result.content[0].text, /rate_limited/);
-
-    // The daily cap counts everyone.
-    const tight = { ...env, BRIEF_LIMITS: kv(), BRIEF_LIMIT_PER_DAY: '2' };
-    assert.equal((await enquiry({ request: from('198.51.100.1'), env: tight })).status, 200);
-    assert.equal((await enquiry({ request: from('198.51.100.2'), env: tight })).status, 200);
-    assert.equal((await enquiry({ request: from('198.51.100.3'), env: tight })).status, 429);
-    assert.equal(sent.length, 8);
+    assert.equal(sent.length, 7);
 });
 
-test('without a counter store, or with a broken one, briefs still go through', async () => {
-    for (let i = 0; i < 7; i += 1) assert.equal((await enquiry({ request: from('203.0.113.7'), env })).status, 200);
-    const broken = { get: async () => { throw new Error('kv down'); }, put: async () => {} };
-    assert.equal((await enquiry({ request: from('203.0.113.7'), env: { ...env, BRIEF_LIMITS: broken } })).status, 200);
-    assert.equal(sent.length, 8);
+test('the daily cap counts everyone, and both caps lift when their time is up', async () => {
+    const tight = { ...env, BRIEF_LIMIT_PER_DAY: '2' };
+    assert.equal((await enquiry({ request: from('198.51.100.1'), env: tight })).status, 200);
+    assert.equal((await enquiry({ request: from('198.51.100.2'), env: tight })).status, 200);
+    const third = await enquiry({ request: from('198.51.100.3'), env: tight });
+    assert.equal(third.status, 429);
+    assert.ok(Number(third.headers.get('retry-after')) <= 86400);
+    assert.equal(sent.length, 2);
+
+    forgetBriefCounts();
+    const noon = Date.UTC(2026, 10, 20, 12, 0, 0);
+    for (let i = 0; i < 5; i += 1) assert.equal(overLimit({}, '192.0.2.1', noon), 0);
+    assert.equal(overLimit({}, '192.0.2.1', noon + 59 * 60 * 1000), 60, 'one minute left in the hour');
+    assert.equal(overLimit({}, '192.0.2.1', noon + 60 * 60 * 1000), 0, 'the next hour starts from zero');
+    // A hundred different visitors use up the day.
+    forgetBriefCounts();
+    for (let i = 0; i < 100; i += 1) assert.equal(overLimit({}, '192.0.2.' + i, noon), 0);
+    assert.equal(overLimit({}, '192.0.3.1', noon), 12 * 3600);
+    assert.equal(overLimit({}, '192.0.3.1', noon + 12 * 3600 * 1000), 0);
 });
 
 // --- /mcp -------------------------------------------------------------------------
