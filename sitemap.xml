@@ -2,14 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://williwolff.com/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://williwolff.com/willi-wolff-cv-en.pdf</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
     <loc>https://williwolff.com/willi-wolff-cv-de.pdf</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://williwolff.com/cv.md</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://williwolff.com/cv.de.md</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://williwolff.com/cv.json</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://williwolff.com/cv.de.json</loc>
+    <lastmod>2026-11-18</lastmod>
+  </url>
+  <url>
+    <loc>https://williwolff.com/hire.json</loc>
+    <lastmod>2026-11-20</lastmod>
+  </url>
+  <url>
+    <loc>https://williwolff.com/llms.txt</loc>
+    <lastmod>2026-11-20</lastmod>
   </url>
 </urlset>

@@ -52,6 +52,16 @@
     <link rel="alternate" type="application/pdf" hreflang="en" href="https://williwolff.com/willi-wolff-cv-en.pdf" title="CV (English, PDF)">
     <link rel="alternate" type="application/pdf" hreflang="de" href="https://williwolff.com/willi-wolff-cv-de.pdf" title="Lebenslauf (Deutsch, PDF)">
 
+    <!-- The same site for agents: this page as Markdown, the terms and the
+         CV as data, and the contract of the enquiry endpoint. -->
+    <link rel="alternate" type="text/markdown" href="https://williwolff.com/llms.txt" title="This page as Markdown">
+    <link rel="alternate" type="text/markdown" hreflang="en" href="https://williwolff.com/cv.md" title="CV (English, Markdown)">
+    <link rel="alternate" type="text/markdown" hreflang="de" href="https://williwolff.com/cv.de.md" title="Lebenslauf (Deutsch, Markdown)">
+    <link rel="alternate" type="application/json" hreflang="en" href="https://williwolff.com/cv.json" title="CV (English, JSON Resume)">
+    <link rel="alternate" type="application/json" hreflang="de" href="https://williwolff.com/cv.de.json" title="Lebenslauf (Deutsch, JSON Resume)">
+    <link rel="alternate" type="application/json" href="https://williwolff.com/hire.json" title="Availability, rate and contact as JSON">
+    <link rel="service-desc" type="application/openapi+json" href="https://williwolff.com/openapi.json">
+
     <!-- Structured Data / JSON-LD -->
     <script type="application/ld+json">
         {
@@ -151,6 +161,48 @@
                 "name": "Input Output Global (IOG)",
                 "url": "https://www.iog.io/"
               },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "project enquiries",
+                "email": "contact@williwolff.com",
+                "url": "https://williwolff.com/#brief",
+                "availableLanguage": ["de", "en"]
+              },
+              "makesOffer": [
+                {
+                  "@type": "Offer",
+                  "name": "Freelance software engineering and architecture",
+                  "url": "https://williwolff.com/#work",
+                  "availability": "https://schema.org/LimitedAvailability",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Freelance software engineering and architecture",
+                    "serviceType": "Software engineering",
+                    "description": "Contract work on AI agents and automation, blockchain and distributed systems, and web and mobile products. Remote from Berlin, in German or English.",
+                    "provider": { "@id": "https://williwolff.com/#willi" },
+                    "areaServed": { "@type": "Place", "name": "Worldwide" },
+                    "availableLanguage": ["de", "en"]
+                  },
+                  "priceSpecification": {
+                    "@type": "UnitPriceSpecification",
+                    "minPrice": 75,
+                    "priceCurrency": "EUR",
+                    "unitCode": "HUR",
+                    "unitText": "hour"
+                  }
+                }
+              ],
+              "potentialAction": {
+                "@type": "CommunicateAction",
+                "name": "Send a project brief",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://williwolff.com/api/enquiry",
+                  "httpMethod": "POST",
+                  "encodingType": "application/json",
+                  "contentType": "application/json"
+                }
+              },
               "founder": [
                 {
                   "@id": "https://williwolff.com/#pagebase"
@@ -194,6 +246,34 @@
                   "name": "Willi Wolff – Lebenslauf (Deutsch)",
                   "url": "https://williwolff.com/willi-wolff-cv-de.pdf",
                   "encodingFormat": "application/pdf",
+                  "inLanguage": "de"
+                },
+                {
+                  "@type": "DigitalDocument",
+                  "name": "Willi Wolff – CV (English, Markdown)",
+                  "url": "https://williwolff.com/cv.md",
+                  "encodingFormat": "text/markdown",
+                  "inLanguage": "en"
+                },
+                {
+                  "@type": "DigitalDocument",
+                  "name": "Willi Wolff – Lebenslauf (Deutsch, Markdown)",
+                  "url": "https://williwolff.com/cv.de.md",
+                  "encodingFormat": "text/markdown",
+                  "inLanguage": "de"
+                },
+                {
+                  "@type": "DigitalDocument",
+                  "name": "Willi Wolff – CV (English, JSON Resume)",
+                  "url": "https://williwolff.com/cv.json",
+                  "encodingFormat": "application/json",
+                  "inLanguage": "en"
+                },
+                {
+                  "@type": "DigitalDocument",
+                  "name": "Willi Wolff – Lebenslauf (Deutsch, JSON Resume)",
+                  "url": "https://williwolff.com/cv.de.json",
+                  "encodingFormat": "application/json",
                   "inLanguage": "de"
                 }
               ]
@@ -292,9 +372,12 @@
               "name": "Willi Wolff – Freelance Software Engineer & Architect, Berlin",
               "isPartOf": { "@id": "https://williwolff.com/#website" },
               "mainEntity": { "@id": "https://williwolff.com/#willi" },
-              "dateModified": "2026-10-08",
+              "dateModified": "2026-11-20",
               "inLanguage": ["en", "de"],
               "hasPart": [
+                { "@type": "WebPageElement", "name": "Services", "url": "https://williwolff.com/#work" },
+                { "@type": "WebPageElement", "name": "Send a brief", "url": "https://williwolff.com/#brief" },
+                { "@type": "WebPageElement", "name": "CV", "url": "https://williwolff.com/#cv" },
                 { "@type": "WebPageElement", "name": "Projects", "url": "https://williwolff.com/#projects" },
                 { "@type": "WebPageElement", "name": "Career", "url": "https://williwolff.com/#experience" },
                 { "@type": "WebPageElement", "name": "Tools", "url": "https://williwolff.com/#technologies" },
@@ -341,6 +424,7 @@
             --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
             --header-h: 64px;
+            --page-w: 1180px;
             --gutter: clamp(1rem, 3vw, 2.5rem);
             --s-1: 0.25rem;
             --s-2: 0.5rem;
@@ -475,53 +559,22 @@
         .btn-primary:hover { background: var(--brand-strong); border-color: var(--brand-strong); }
 
         /* --- layout ------------------------------------------------------- */
-        /* Phones and tablets: one column, hero first. Desktop: the screen
-           splits, the hero pins on the left and the work scrolls on the right. */
+        /* One column at every width: the lead runs edge to edge, everything
+           after it sits in a centred column. */
         .page {
             display: grid;
             grid-template-columns: minmax(0, 1fr);
         }
 
-        .hero {
-            padding: var(--s-7) var(--gutter) var(--s-6);
-            border-bottom: 1px solid var(--border);
-            background:
-                radial-gradient(700px 360px at 0% 0%, rgba(13, 148, 136, 0.12), transparent 70%),
-                radial-gradient(600px 320px at 100% 100%, rgba(56, 189, 248, 0.12), transparent 70%),
-                radial-gradient(500px 260px at 90% 10%, rgba(251, 191, 36, 0.10), transparent 70%),
-                var(--surface);
-        }
-
         .content {
             min-width: 0;
+            width: 100%;
+            max-width: var(--page-w);
+            margin: 0 auto;
             padding: 0 var(--gutter) var(--s-8);
         }
 
-        @media (min-width: 1100px) {
-            .page {
-                grid-template-columns: minmax(400px, 40%) minmax(0, 1fr);
-                align-items: start;
-            }
-
-            .hero {
-                position: sticky;
-                top: var(--header-h);
-                height: calc(100vh - var(--header-h));
-                overflow-y: auto;
-                display: flex;
-                flex-direction: column;
-                padding: var(--s-6) var(--s-7) var(--s-5) var(--gutter);
-                border-bottom: none;
-                border-right: 1px solid var(--border);
-            }
-
-            .content {
-                padding: 0 var(--gutter) var(--s-8) var(--s-7);
-                max-width: 1100px;
-            }
-        }
-
-        /* --- hero --------------------------------------------------------- */
+        /* --- identity ----------------------------------------------------- */
         .hero-id {
             display: flex;
             align-items: center;
@@ -556,37 +609,6 @@
         }
         .tagline li { display: inline-flex; align-items: center; }
 
-
-        .hero-title {
-            margin-top: var(--s-5);
-            font-size: clamp(1.9rem, 1.1rem + 2vw, 2.6rem);
-            font-weight: 800;
-            letter-spacing: -0.035em;
-            line-height: 1.1;
-            color: var(--ink);
-            max-width: 20ch;
-        }
-
-        .hero-title em {
-            font-style: normal;
-            color: var(--brand);
-        }
-
-        .hero-sub {
-            margin-top: var(--s-4);
-            max-width: 46ch;
-            font-size: 1.05rem;
-            color: var(--muted);
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--s-3) var(--s-5);
-            margin-top: var(--s-5);
-        }
 
         /* Plain-word jump links: underline and a sliding arrow on hover,
            the arrow always visible where there is no hover. */
@@ -633,22 +655,6 @@
         .social-link svg { width: 22px; height: 22px; transition: transform 0.2s ease; }
         .social-link:hover svg { transform: scale(1.1); }
 
-        /* Current work: the part of the old proof-of-work view worth seeing
-           in the first viewport. */
-        .now-building {
-            margin-top: var(--s-6);
-            padding-top: var(--s-4);
-            border-top: 1px solid var(--border);
-        }
-
-        .now-building-head {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: var(--s-3);
-            margin-bottom: var(--s-2);
-        }
-
         .now-label {
             display: inline-flex;
             align-items: center;
@@ -677,31 +683,6 @@
         .now-push {
             font-size: 0.7rem;
             color: var(--faint);
-        }
-
-        .now-list { list-style: none; }
-        .now-list li {
-            display: grid;
-            gap: 1px;
-            padding: var(--s-2) 0;
-            border-top: 1px solid var(--border);
-        }
-        .now-list li:first-child { border-top: none; }
-
-        .hero-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--s-2) var(--s-4);
-            margin-top: var(--s-5);
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-        .cv-meta-item { display: inline-flex; align-items: center; gap: 0.4rem; }
-        .cv-meta-icon { width: 15px; height: 15px; flex: none; color: var(--faint); }
-
-        @media (min-width: 1100px) {
-            /* Pinned panel: meta drops to the bottom edge of the viewport. */
-            .hero-meta { margin-top: auto; padding-top: var(--s-5); }
         }
 
         /* --- sections ----------------------------------------------------- */
@@ -1046,7 +1027,6 @@
         .education-meta { margin: 2px 0 var(--s-2); font-size: 0.82rem; color: var(--faint); }
         .education-item p:not(.education-meta) { font-size: 0.92rem; color: var(--muted); }
 
-        @media (min-width: 1100px) { .site-foot { display: none; } }
         .site-foot {
             margin-top: var(--s-8);
             padding-top: var(--s-5);
@@ -1064,8 +1044,6 @@
             :root { --header-h: 56px; }
             .header-controls { gap: 0; }
             .btn-label-long { display: none; }
-            .hero { padding-top: var(--s-6); }
-            .hero-title { margin-top: var(--s-5); }
             .timeline::before { left: 6px; }
             .company { padding-left: 28px; }
             .company::before, .company.present::after { left: 1px; }
@@ -1083,35 +1061,6 @@
         .tagline s { color: var(--faint); text-decoration-thickness: 1.5px; }
         .tagline s { white-space: nowrap; }
         .tagline strong { color: var(--brand-strong); font-weight: 650; }
-
-        /* --- building now: each row is one link -------------------------- */
-        .now-list li { padding: 0; }
-        .now-item {
-            display: flex;
-            align-items: center;
-            gap: var(--s-3);
-            margin: 0 calc(-1 * var(--s-3));
-            padding: var(--s-2) var(--s-3);
-            border-radius: var(--radius-sm);
-            color: inherit;
-            transition: background 0.15s ease;
-        }
-        .now-item:hover { background: var(--surface); text-decoration: none; }
-        .now-item-text { display: grid; gap: 1px; flex: 1; min-width: 0; }
-        .now-item-name { font-weight: 650; font-size: 0.95rem; color: var(--brand-strong); }
-        .now-item-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.45; }
-        .now-chevron {
-            width: 18px;
-            height: 18px;
-            flex: none;
-            color: var(--brand);
-            opacity: 0;
-            transform: translateX(-6px);
-            transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .now-item:hover .now-chevron,
-        .now-item:focus-visible .now-chevron { opacity: 1; transform: none; }
-        @media (hover: none) { .now-chevron { opacity: 0.6; transform: none; } }
 
         /* --- digit reels ------------------------------------------------- */
         .reel { display: inline-flex; gap: 3px; }
@@ -1162,7 +1111,7 @@
         .project-more[hidden] { display: none; }
 
         @media (prefers-reduced-motion: reduce) {
-            .reel-strip, .contrib-grid i, .now-chevron { transition: none; }
+            .reel-strip, .contrib-grid i { transition: none; }
         }
 
         @media (max-width: 640px) {
@@ -1301,15 +1250,320 @@
             .figure:nth-child(n+3) { border-top: 1px solid var(--border); }
         }
 
+        /* --- contract page: lead, lanes, brief, CV ------------------------ */
+        /* The first screen answers a hiring question in one look: who, what,
+           on which terms, where the CV is and how to send a brief. */
+        .lead {
+            border-bottom: 1px solid var(--border);
+            background:
+                radial-gradient(700px 360px at 0% 0%, rgba(13, 148, 136, 0.12), transparent 70%),
+                radial-gradient(600px 320px at 100% 100%, rgba(56, 189, 248, 0.12), transparent 70%),
+                radial-gradient(500px 260px at 90% 10%, rgba(251, 191, 36, 0.10), transparent 70%),
+                var(--surface);
+        }
+
+        .lead-inner {
+            max-width: var(--page-w);
+            margin: 0 auto;
+            padding: var(--s-7) var(--gutter);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: var(--s-7) var(--s-8);
+        }
+
+        .lead-main { flex: 1.5 1 440px; min-width: 0; }
+
+        .lead-sig { font-weight: 500; color: var(--muted); }
+
+        .lead-title {
+            margin-top: var(--s-6);
+            max-width: 17ch;
+            font-size: clamp(2.2rem, 1.2rem + 3.4vw, 3.75rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.04;
+            text-wrap: balance;
+        }
+        .lead-title em { font-style: normal; color: var(--brand); }
+
+        .lead-sub {
+            margin-top: var(--s-5);
+            max-width: 52ch;
+            font-size: 1.15rem;
+            color: var(--muted);
+        }
+
+        .lead-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--s-3);
+            margin-top: var(--s-6);
+        }
+
+        .btn-lg { height: 48px; padding: 0 1.4rem; font-size: 1rem; }
+        button.btn { font-family: inherit; cursor: pointer; }
+        button.btn[disabled] { opacity: 0.6; cursor: progress; }
+
+        .lead-more {
+            margin-left: var(--s-2);
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--border-strong);
+            text-underline-offset: 4px;
+        }
+
+        .lead-now {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: var(--s-2) var(--s-4);
+            margin-top: var(--s-6);
+            font-size: 0.9rem;
+        }
+        .lead-now-list { display: inline-flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); }
+        .lead-now-list a { font-weight: 600; }
+
+        /* Terms: the block a headhunter or an agent is scanning for. Flat,
+           under one strong rule, like the lanes below. No box. */
+        .terms {
+            flex: 1 1 340px;
+            min-width: 0;
+            padding-top: var(--s-4);
+            border-top: 2px solid var(--ink);
+        }
+
+        .terms-list > div {
+            display: grid;
+            grid-template-columns: 7.5rem minmax(0, 1fr);
+            gap: var(--s-4);
+            padding: var(--s-3) 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .terms-list dt { font-size: 0.88rem; color: var(--muted); padding-top: 1px; }
+        .terms-list dd { font-weight: 600; color: var(--ink); }
+
+        .terms-foot {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--s-2) var(--s-4);
+            padding-top: var(--s-2);
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .terms-foot .social-links { margin-right: calc(-1 * var(--s-3)); }
+
+        /* Lanes: flat columns under a rule, no boxes. */
+        .lanes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: var(--s-6) var(--s-7);
+        }
+
+        .lane {
+            display: flex;
+            flex-direction: column;
+            gap: var(--s-3);
+            padding-top: var(--s-4);
+            border-top: 2px solid var(--ink);
+        }
+        .lane h3 { font-size: 1.2rem; font-weight: 750; }
+        .lane-what { color: var(--muted); }
+        .lane-proof { font-size: 0.95rem; }
+        .lane-proof strong { color: var(--ink); }
+        .lane .jump-link { margin-top: auto; padding-top: var(--s-2); font-size: 0.92rem; }
+
+        .results { margin-top: var(--s-7); }
+
+        .results-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: var(--s-5) var(--s-6);
+            margin-top: var(--s-4);
+        }
+        .results-list dt {
+            font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2.1rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: var(--ink);
+            font-variant-numeric: tabular-nums;
+        }
+        .results-list dd { margin-top: var(--s-1); font-size: 0.9rem; color: var(--muted); }
+
+        .worked-with {
+            margin-top: var(--s-6);
+            padding-top: var(--s-4);
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+        }
+        .worked-with strong { color: var(--ink); margin-right: var(--s-2); }
+
+        /* Brief: the form and its machine-readable twin, side by side. */
+        .brief {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: var(--s-7) var(--s-8);
+        }
+
+        .brief-form { flex: 1.2 1 420px; min-width: 0; display: grid; gap: var(--s-5); }
+
+        .field { display: grid; gap: 0.4rem; min-width: 0; }
+        .field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--s-5); }
+        .field label { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+        .field .optional { font-weight: 400; color: var(--muted); }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            min-height: 48px;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            color: var(--ink);
+            font: inherit;
+        }
+        .field textarea { resize: vertical; line-height: 1.5; }
+        .field input::placeholder,
+        .field textarea::placeholder { color: var(--faint); }
+        .field input:focus-visible,
+        .field select:focus-visible,
+        .field textarea:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; border-color: var(--brand); }
+        .field [aria-invalid="true"] { border-color: var(--signal); }
+        .field-error { font-size: 0.85rem; color: var(--signal); }
+
+        .field-trap { position: absolute; left: -200vw; width: 1px; height: 1px; overflow: hidden; }
+
+        .brief-submit {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--s-3) var(--s-5);
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .brief-status {
+            padding: var(--s-4);
+            border-radius: var(--radius-sm);
+            background: var(--brand-soft);
+            color: var(--ink);
+        }
+        .brief-status.is-error { background: rgba(194, 65, 12, 0.08); }
+
+        .brief-agent { flex: 1 1 360px; min-width: 0; display: grid; gap: var(--s-3); }
+        .brief-agent h3 { font-size: 1.15rem; font-weight: 700; }
+        .brief-agent-note { font-size: 0.9rem; color: var(--muted); }
+
+        .agent-chip {
+            justify-self: start;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            background: var(--brand-soft);
+            color: var(--brand-strong);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .code-block {
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+        }
+        .code-block pre {
+            margin: 0;
+            padding: var(--s-5) var(--s-4) var(--s-4);
+            overflow-x: auto;
+            font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+            font-size: 0.8rem;
+            line-height: 1.65;
+            color: var(--text);
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+        .code-copy {
+            position: absolute;
+            top: var(--s-2);
+            right: var(--s-2);
+            min-height: 32px;
+            padding: 0 0.7rem;
+            border: 1px solid var(--border-strong);
+            border-radius: 999px;
+            background: var(--bg);
+            color: var(--text);
+            font: 600 0.78rem var(--font-sans);
+            cursor: pointer;
+        }
+        .code-copy:hover { border-color: var(--ink); color: var(--ink); }
+
+        .back { margin-top: var(--s-7); }
+        .back h3 { font-size: 1.15rem; font-weight: 700; }
+        .back-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: var(--s-4) var(--s-6);
+            margin-top: var(--s-4);
+            padding-top: var(--s-4);
+            border-top: 1px solid var(--border);
+        }
+        .back-list dt { font-weight: 700; color: var(--ink); }
+        .back-list dd { margin-top: 2px; font-size: 0.92rem; color: var(--muted); }
+
+        /* CV formats: two rows of three plain links. */
+        .cv-updated { color: var(--text); font-weight: 600; }
+        .cv-formats { display: grid; gap: var(--s-6); }
+        .cv-lang h3 { font-size: 1rem; font-weight: 700; }
+        .cv-lang ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0 var(--s-6);
+            margin-top: var(--s-3);
+        }
+        .cv-lang a {
+            display: grid;
+            gap: 2px;
+            padding: var(--s-4) 0;
+            border-top: 2px solid var(--ink);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        .cv-lang a strong { font-size: 1.15rem; color: var(--ink); }
+        .cv-lang a:hover { text-decoration: none; border-top-color: var(--brand); }
+        .cv-lang a:hover strong { color: var(--brand-strong); }
+
+        .agents-row { margin-top: var(--s-2); }
+        .agents-row strong { color: var(--text); }
+
+        @media (max-width: 640px) {
+            .lead-inner { padding-top: var(--s-6); padding-bottom: var(--s-6); }
+            .terms-list > div { grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--s-3); }
+            .lead-actions .btn-lg { flex: 1 1 auto; justify-content: center; }
+            .lead-more { margin-left: 0; }
+        }
+
         /* --- print: a plain CV -------------------------------------------- */
         @media print {
             :root {
                 --bg: #fff; --surface: #fff; --surface-2: #f2f2f2; --border: #ddd; --border-strong: #ccc;
                 --ink: #000; --text: #222; --muted: #444; --faint: #666; --brand: #0d9488; --brand-strong: #0d9488;
             }
-            .site-header, .hero-actions, .now-building, #now, .project-logo, .job-toggle, .role-links, .company-ships { display: none !important; }
+            .site-header, .lead-actions, .lead-now, .terms-foot, #brief, #now, .project-logo, .job-toggle, .role-links, .company-ships { display: none !important; }
             .page { display: block; }
-            .hero { position: static; height: auto; border: none; background: none; padding: 0 0 1rem; }
+            .lead { border: none; background: none; }
+            .lead-inner { padding: 0 0 1rem; }
+            .terms { border-top: none; padding: 0; }
             .content { padding: 0; max-width: none; }
             .job-content { max-height: none !important; }
             .job, .project-card, .education-item, .tech-category { box-shadow: none; break-inside: avoid; }
@@ -1339,11 +1593,11 @@
         <a href="#top" class="logo">Will<span class="name-soft">i</span> Wolff</a>
 
         <nav class="site-nav" aria-label="Sections">
-            <a href="#now"><span lang="en">Overview</span><span lang="de">Überblick</span></a>
+            <a href="#work"><span lang="en">Services</span><span lang="de">Leistungen</span></a>
+            <a href="#brief"><span lang="en">Brief</span><span lang="de">Anfrage</span></a>
+            <a href="#cv"><span lang="en">CV</span><span lang="de">Lebenslauf</span></a>
             <a href="#projects"><span lang="en">Projects</span><span lang="de">Projekte</span></a>
-            <a href="#experience"><span lang="en">Timeline</span><span lang="de">Werdegang</span></a>
-            <a href="#technologies"><span lang="en">Stack</span><span lang="de">Stack</span></a>
-            <a href="#publications"><span lang="en">Writing</span><span lang="de">Publikationen</span></a>
+            <a href="#experience"><span lang="en">Career</span><span lang="de">Werdegang</span></a>
         </nav>
 
         <div class="header-controls">
@@ -1355,122 +1609,337 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 <span>CV<span class="btn-label-long"> (PDF)</span></span>
             </a>
-            <a href="mailto:contact@williwolff.com" class="btn btn-primary">
-                <span lang="en">Get in touch</span><span lang="de">Kontakt</span>
+            <a href="#brief" class="btn btn-primary">
+                <span lang="en">Send a brief</span><span lang="de">Projekt anfragen</span>
             </a>
         </div>
     </header>
 
     <main class="page" id="top">
-        <!-- Hero. On desktop this column pins while the work scrolls past. -->
-        <aside class="hero" id="home">
-            <div class="hero-id">
-                <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
-                <div>
-                    <h1 class="hero-name">Will<span class="name-soft">i</span> Wolff</h1>
-                    <ol class="tagline" aria-label="Titles over time">
-                        <li><s><span lang="en">Co-founder</span><span lang="de">Mitgründer</span></s></li>
-                        <li><s>Lead Engineer</s></li>
-                        <li><s>Senior Software Engineer</s></li>
-                        <li><s>Solutions Architect</s></li>
-                        <li><s><span lang="en">Technical Architect</span><span lang="de">Technischer Architekt</span></s></li>
-                        <li><s><span lang="en">Project Lead</span><span lang="de">Projektleiter</span></s></li>
-                        <li><strong><span lang="en">Team lead of ~8 AI agents, and their quality gate</span><span lang="de">Teamleiter von ~8 KI-Agenten und ihr Qualitäts-Gate</span></strong></li>
-                    </ol>
-                </div>
-            </div>
+        <!-- First screen: who, what, on which terms, and the two things a
+             visitor came for: the CV and a way to send a brief. -->
+        <section class="lead" id="home">
+            <div class="lead-inner">
+                <div class="lead-main">
+                    <div class="hero-id">
+                        <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
+                        <div>
+                            <p class="hero-name">Will<span class="name-soft">i</span> Wolff <span class="lead-sig"><span lang="en">· Always shipping.</span><span lang="de">· Immer am Liefern.</span></span></p>
+                            <ol class="tagline" aria-label="Titles over time">
+                                <li><s><span lang="en">Co-founder</span><span lang="de">Mitgründer</span></s></li>
+                                <li><s>Lead Engineer</s></li>
+                                <li><s>Senior Software Engineer</s></li>
+                                <li><s>Solutions Architect</s></li>
+                                <li><s><span lang="en">Technical Architect</span><span lang="de">Technischer Architekt</span></s></li>
+                                <li><s><span lang="en">Project Lead</span><span lang="de">Projektleiter</span></s></li>
+                                <li><strong><span lang="en">Team lead of ~8 AI agents, and their quality gate</span><span lang="de">Teamleiter von ~8 KI-Agenten und ihr Qualitäts-Gate</span></strong></li>
+                            </ol>
+                        </div>
+                    </div>
 
-            <p class="hero-title">
-                <span lang="en">Always <em>shipping</em>.</span>
-                <span lang="de">Immer am <em>Liefern</em>.</span>
-            </p>
-            <p class="hero-sub">
-                <span lang="en">AI, blockchain, web or mobile. I scale delivery with AI agents and verify every result before it ships. Freelance with high agency, currently on contract with IOG.</span>
-                <span lang="de">KI, Blockchain, Web oder Mobile. Ich skaliere Entwicklung mit KI-Agenten und prüfe jedes Ergebnis, bevor es live geht. Freelancer mit High Agency, aktuell auf Vertragsbasis bei IOG.</span>
-            </p>
+                    <h1 class="lead-title">
+                        <span lang="en">Software engineer and architect for <em>contract work</em>.</span>
+                        <span lang="de">Software Engineer und Architekt, <em>als Freelancer buchbar</em>.</span>
+                    </h1>
+                    <p class="lead-sub">
+                        <span lang="en">Eleven years from enterprise migrations to blockchain protocols to AI in production. I scale delivery with AI agents and verify every result before it ships.</span>
+                        <span lang="de">Elf Jahre zwischen Enterprise-Migrationen, Blockchain-Protokollen und KI in Produktion. Ich skaliere Entwicklung mit KI-Agenten und prüfe jedes Ergebnis, bevor es live geht.</span>
+                    </p>
 
-            <div class="hero-actions">
-                <nav class="jump-links" aria-label="Jump to">
-                    <a href="#projects" class="jump-link"><span lang="en">Projects</span><span lang="de">Projekte</span><svg class="jump-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
-                    <a href="#experience" class="jump-link"><span lang="en">Career</span><span lang="de">Werdegang</span><svg class="jump-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
-                    <a href="#publications" class="jump-link"><span lang="en">Publications</span><span lang="de">Publikationen</span><svg class="jump-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
-                </nav>
-                <div class="social-links">
-                    <a href="https://github.com/will-break-it" target="_blank" rel="noopener" class="social-link" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21"/></svg></a>
-                    <a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener" class="social-link" title="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 1 0-4 0"/></svg></a>
-                    <a href="https://x.com/will_break_it" target="_blank" rel="noopener" class="social-link" title="X" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l11.733 16H20L8.267 4z"/><path d="M4 20l6.768-6.768m2.46-2.46L20 4"/></svg></a>
-                </div>
-            </div>
-
-            <div class="now-building">
-                <div class="now-building-head">
-                    <span class="now-label">
-                        <span class="now-pulse" aria-hidden="true"></span>
-                        <span lang="en">Building now</span>
-                        <span lang="de">Aktuell in Arbeit</span>
-                    </span>
-                    <span class="now-push" data-activity="lastpush" hidden></span>
-                </div>
-                <ul class="now-list">
-                    <li>
-                        <a class="now-item" href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener">
-                            <span class="now-item-text">
-                                <span class="now-item-name">Ouroboros Leios</span>
-                                <span class="now-item-desc" lang="en">Higher throughput for Cardano without weaker settlement</span>
-                                <span class="now-item-desc" lang="de">Mehr Durchsatz für Cardano bei gleichen Settlement-Garantien</span>
-                            </span>
-                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                    <div class="lead-actions">
+                        <a href="#brief" class="btn btn-primary btn-lg">
+                            <span lang="en">Send a brief</span><span lang="de">Projekt anfragen</span>
                         </a>
-                    </li>
-                    <li>
-                        <a class="now-item" href="https://txflow.fun" target="_blank" rel="noopener">
-                            <span class="now-item-text">
-                                <span class="now-item-name">txflow</span>
-                                <span class="now-item-desc" lang="en">Describe a transaction flow, run it on the Leios test network</span>
-                                <span class="now-item-desc" lang="de">Transaktionsfolgen beschreiben und im Leios-Testnetz ausführen</span>
-                            </span>
-                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                        <a href="willi-wolff-cv-en.pdf" download class="btn btn-lg">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span>CV, English</span>
                         </a>
-                    </li>
-                    <li>
-                        <a class="now-item" href="https://alwayssandy.com" target="_blank" rel="noopener">
-                            <span class="now-item-text">
-                                <span class="now-item-name">AlwaysSandy</span>
-                                <span class="now-item-desc" lang="en">Social network for Berlin's beach volleyball players and coaches</span>
-                                <span class="now-item-desc" lang="de">Soziales Netzwerk für Berlins Beachvolleyball-Spieler und Trainer</span>
-                            </span>
-                            <svg class="now-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>
+                        <a href="willi-wolff-cv-de.pdf" download class="btn btn-lg">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span>CV, Deutsch</span>
                         </a>
-                    </li>
-                </ul>
-            </div>
+                        <a href="#cv" class="lead-more"><span lang="en">More formats</span><span lang="de">Weitere Formate</span></a>
+                    </div>
 
-            <div class="hero-meta">
-                    <span class="cv-meta-item">
-                        <svg class="cv-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        Berlin, DE
-                    </span>
-                    <span class="cv-meta-item">
-                        <svg class="cv-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"></path>
-                        </svg>
-                        <span lang="en">German & English</span>
-                        <span lang="de">Deutsch & Englisch</span>
-                    </span>
-                    <span class="cv-meta-item">
-                        <svg class="cv-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <a href="mailto:contact@williwolff.com" class="cv-meta-link">contact@williwolff.com</a>
-                    </span>
+                    <p class="lead-now">
+                        <span class="now-label">
+                            <span class="now-pulse" aria-hidden="true"></span>
+                            <span lang="en">Building now</span>
+                            <span lang="de">Aktuell in Arbeit</span>
+                        </span>
+                        <span class="lead-now-list">
+                            <a href="https://leios.cardano-scaling.org/" target="_blank" rel="noopener">Ouroboros Leios</a>
+                            <a href="https://txflow.fun" target="_blank" rel="noopener">txflow</a>
+                            <a href="https://alwayssandy.com" target="_blank" rel="noopener">AlwaysSandy</a>
+                        </span>
+                        <span class="now-push" data-activity="lastpush" hidden></span>
+                    </p>
                 </div>
-        </aside>
+
+                <aside class="terms" aria-labelledby="terms-title">
+                    <h2 class="section-kicker" id="terms-title"><span lang="en">Terms at a glance</span><span lang="de">Konditionen auf einen Blick</span></h2>
+                    <dl class="terms-list">
+                        <div>
+                            <dt><span lang="en">Availability</span><span lang="de">Verfügbarkeit</span></dt>
+                            <dd><span lang="en">Open to selected projects alongside IOG</span><span lang="de">Offen für ausgewählte Projekte neben IOG</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Rate</span><span lang="de">Stundensatz</span></dt>
+                            <dd><span lang="en">From 75 EUR per hour</span><span lang="de">Ab 75 EUR pro Stunde</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Engagement</span><span lang="de">Zusammenarbeit</span></dt>
+                            <dd><span lang="en">Freelance contract, remote</span><span lang="de">Freelance auf Vertragsbasis, remote</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Based in</span><span lang="de">Standort</span></dt>
+                            <dd><span lang="en">Berlin, Germany</span><span lang="de">Berlin, Deutschland</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Languages</span><span lang="de">Sprachen</span></dt>
+                            <dd><span lang="en">German, English</span><span lang="de">Deutsch, Englisch</span></dd>
+                        </div>
+                    </dl>
+                    <div class="terms-foot">
+                        <p><span lang="en">The same facts as data:</span><span lang="de">Dieselben Angaben als Daten:</span> <a href="hire.json">hire.json</a></p>
+                        <div class="social-links">
+                            <a href="https://github.com/will-break-it" target="_blank" rel="noopener" class="social-link" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21"/></svg></a>
+                            <a href="https://www.linkedin.com/in/wwolff/" target="_blank" rel="noopener" class="social-link" title="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 1 0-4 0"/></svg></a>
+                            <a href="https://x.com/will_break_it" target="_blank" rel="noopener" class="social-link" title="X" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l11.733 16H20L8.267 4z"/><path d="M4 20l6.768-6.768m2.46-2.46L20 4"/></svg></a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
 
         <div class="content">
+            <section id="work" aria-labelledby="work-title">
+                <div class="section-head">
+                    <p class="section-kicker"><span lang="en">What I take on</span><span lang="de">Was ich übernehme</span></p>
+                    <h2 id="work-title"><span lang="en">Three kinds of work, each with a result behind it</span><span lang="de">Drei Arten von Projekten, jeweils mit einem Ergebnis dahinter</span></h2>
+                </div>
+                <div class="lanes">
+                    <article class="lane">
+                        <h3><span lang="en">AI agents and automation</span><span lang="de">KI-Agenten und Automatisierung</span></h3>
+                        <p class="lane-what">
+                            <span lang="en">Document and email pipelines built on large language models, with a person reviewing before anything is written to a system of record.</span>
+                            <span lang="de">Dokumenten- und E-Mail-Pipelines auf Basis großer Sprachmodelle, mit menschlicher Prüfung, bevor etwas in ein führendes System geschrieben wird.</span>
+                        </p>
+                        <p class="lane-proof">
+                            <span lang="en"><strong>Operando.</strong> Reads the deal teasers M&amp;A advisors send by email, extracts the key figures with Claude and drafts HubSpot leads for the team to review. In production since September 2026.</span>
+                            <span lang="de"><strong>Operando.</strong> Liest Deal-Teaser, die M&amp;A-Berater per E-Mail schicken, extrahiert die Kennzahlen mit Claude und legt HubSpot-Leads als Entwurf an, die das Team prüft. Produktiv seit September 2026.</span>
+                        </p>
+                        <a class="jump-link" href="#p-operando"><span lang="en">See the project</span><span lang="de">Zum Projekt</span><svg class="jump-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+                    </article>
+                    <article class="lane">
+                        <h3><span lang="en">Distributed systems and blockchain</span><span lang="de">Verteilte Systeme und Blockchain</span></h3>
+                        <p class="lane-what">
+                            <span lang="en">Protocol design, event-driven backends and chain indexing. Five years on Cardano at IOG, from wallet infrastructure to consensus research.</span>
+                            <span lang="de">Protokolldesign, event-getriebene Backends und Chain-Indexing. Fünf Jahre Cardano bei IOG, von Wallet-Infrastruktur bis Konsensforschung.</span>
+                        </p>
+                        <p class="lane-proof">
+                            <span lang="en"><strong>Lace Wallet.</strong> Event-driven re-architecture with 45% lower latency and over 60% infrastructure savings. Principal author of CIP-0164 for Ouroboros Leios.</span>
+                            <span lang="de"><strong>Lace Wallet.</strong> Event-getriebene Neuarchitektur mit 45 % weniger Latenz und über 60 % geringeren Infrastrukturkosten. Hauptautor von CIP-0164 für Ouroboros Leios.</span>
+                        </p>
+                        <a class="jump-link" href="#p-lace-architecture"><span lang="en">See the project</span><span lang="de">Zum Projekt</span><svg class="jump-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+                    </article>
+                    <article class="lane">
+                        <h3><span lang="en">Web and mobile products</span><span lang="de">Web- und Mobile-Produkte</span></h3>
+                        <p class="lane-what">
+                            <span lang="en">From first prototype to the App Store: Supabase and PostgreSQL backends, React Native, native iOS and Android.</span>
+                            <span lang="de">Vom ersten Prototyp bis in den App Store: Supabase- und PostgreSQL-Backends, React Native, natives iOS und Android.</span>
+                        </p>
+                        <p class="lane-proof">
+                            <span lang="en"><strong>AlwaysSandy.</strong> Social network for Berlin's beach volleyball players and coaches, on web, iOS and Android from one React Native codebase. Over 170,000 player profiles.</span>
+                            <span lang="de"><strong>AlwaysSandy.</strong> Soziales Netzwerk für Berlins Beachvolleyball-Spieler und Trainer, auf Web, iOS und Android aus einer React-Native-Codebasis. Über 170.000 Spielerprofile.</span>
+                        </p>
+                        <a class="jump-link" href="#p-alwayssandy"><span lang="en">See the project</span><span lang="de">Zum Projekt</span><svg class="jump-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+                    </article>
+                </div>
+
+                <div class="results" aria-labelledby="results-title">
+                    <p class="section-kicker" id="results-title"><span lang="en">Results from teams I led or built with</span><span lang="de">Ergebnisse aus Teams, die ich geleitet oder mit aufgebaut habe</span></p>
+                    <dl class="results-list">
+                        <div>
+                            <dt><span lang="en">16M lines</span><span lang="de">16 Mio. Zeilen</span></dt>
+                            <dd><span lang="en">of legacy code migrated to Java at Deloitte</span><span lang="de">Legacy-Code bei Deloitte nach Java migriert</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">6M EUR</span><span lang="de">6 Mio. EUR</span></dt>
+                            <dd><span lang="en">saved per year in licence costs for one insurer</span><span lang="de">Lizenzkosten pro Jahr für einen Versicherer gespart</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">45%</span><span lang="de">45 %</span></dt>
+                            <dd><span lang="en">lower latency after the Lace re-architecture</span><span lang="de">weniger Latenz nach der Lace-Neuarchitektur</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">2,000+ tx/s</span><span lang="de">2.000+ Tx/s</span></dt>
+                            <dd><span lang="en">ingest capacity of the Lace chain indexer</span><span lang="de">Ingest-Kapazität des Lace-Chain-Indexers</span></dd>
+                        </div>
+                        <div>
+                            <dt>100+</dt>
+                            <dd><span lang="en">Amazon engineers trained on the eUTxO model</span><span lang="de">Amazon-Engineers zum eUTxO-Modell geschult</span></dd>
+                        </div>
+                    </dl>
+                    <p class="worked-with">
+                        <span lang="en"><strong>Worked with</strong> IOG · Deloitte, onsite at Target and Walmart · Amazon, through IOG · Mobility Data Lab · Operando Partners</span>
+                        <span lang="de"><strong>Gearbeitet mit</strong> IOG · Deloitte, vor Ort bei Target und Walmart · Amazon, über IOG · Mobility Data Lab · Operando Partners</span>
+                    </p>
+                </div>
+            </section>
+
+            <section id="brief" aria-labelledby="brief-title">
+                <div class="section-head">
+                    <p class="section-kicker"><span lang="en">Start a project</span><span lang="de">Projekt starten</span></p>
+                    <h2 id="brief-title"><span lang="en">Tell me the project. Get a quote back.</span><span lang="de">Schildern Sie das Projekt. Sie bekommen ein Angebot zurück.</span></h2>
+                    <p>
+                        <span lang="en">A few fields are enough. I read every request myself and reply by email.</span>
+                        <span lang="de">Wenige Felder genügen. Ich lese jede Anfrage selbst und antworte per E-Mail.</span>
+                    </p>
+                </div>
+
+                <div class="brief">
+                    <form class="brief-form" id="brief-form" novalidate>
+                        <div class="field">
+                            <label for="brief-type"><span lang="en">Kind of project</span><span lang="de">Art des Projekts</span></label>
+                            <select id="brief-type" name="project_type">
+                                <option value="ai_automation" data-en="AI agent or automation" data-de="KI-Agent oder Automatisierung">AI agent or automation</option>
+                                <option value="backend_architecture" data-en="Backend or architecture" data-de="Backend oder Architektur">Backend or architecture</option>
+                                <option value="blockchain_distributed" data-en="Blockchain or distributed systems" data-de="Blockchain oder verteilte Systeme">Blockchain or distributed systems</option>
+                                <option value="web_mobile" data-en="Web or mobile app" data-de="Web- oder Mobile-App">Web or mobile app</option>
+                                <option value="other" data-en="Something else" data-de="Etwas anderes">Something else</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="brief-summary"><span lang="en">What do you need?</span><span lang="de">Worum geht es?</span></label>
+                            <textarea id="brief-summary" name="summary" rows="5" required aria-describedby="brief-summary-error"
+                                data-placeholder-en="The problem, what exists today, what done looks like"
+                                data-placeholder-de="Das Problem, was es heute gibt, woran man erkennt, dass es fertig ist"
+                                placeholder="The problem, what exists today, what done looks like"></textarea>
+                            <p class="field-error" id="brief-summary-error" hidden></p>
+                        </div>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="brief-timeline"><span lang="en">Timeline</span><span lang="de">Zeitplan</span></label>
+                                <select id="brief-timeline" name="timeline">
+                                    <option value="start within a month" data-en="Start within a month" data-de="Start innerhalb eines Monats">Start within a month</option>
+                                    <option value="start in one to three months" data-en="Start in one to three months" data-de="Start in ein bis drei Monaten">Start in one to three months</option>
+                                    <option value="not fixed yet" data-en="Not fixed yet" data-de="Noch offen">Not fixed yet</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="brief-budget"><span lang="en">Budget range</span><span lang="de">Budgetrahmen</span></label>
+                                <select id="brief-budget" name="budget_eur">
+                                    <option value="under 10000" data-en="Under 10,000 EUR" data-de="Unter 10.000 EUR">Under 10,000 EUR</option>
+                                    <option value="10000-40000" data-en="10,000 to 40,000 EUR" data-de="10.000 bis 40.000 EUR">10,000 to 40,000 EUR</option>
+                                    <option value="over 40000" data-en="Over 40,000 EUR" data-de="Über 40.000 EUR">Over 40,000 EUR</option>
+                                    <option value="hourly, open ended" data-en="Hourly, open ended" data-de="Auf Stundenbasis, offen">Hourly, open ended</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="brief-email"><span lang="en">Where should the quote go?</span><span lang="de">Wohin soll das Angebot gehen?</span></label>
+                                <input id="brief-email" name="email" type="email" required autocomplete="email" aria-describedby="brief-email-error"
+                                    data-placeholder-en="you@company.com" data-placeholder-de="sie@firma.de" placeholder="you@company.com">
+                                <p class="field-error" id="brief-email-error" hidden></p>
+                            </div>
+                            <div class="field">
+                                <label for="brief-name"><span lang="en">Your name <span class="optional">(optional)</span></span><span lang="de">Ihr Name <span class="optional">(optional)</span></span></label>
+                                <input id="brief-name" name="name" type="text" autocomplete="name">
+                            </div>
+                        </div>
+                        <!-- Not for people: a bot that fills every field fills this one too. -->
+                        <div class="field-trap" aria-hidden="true">
+                            <label for="brief-website">Website</label>
+                            <input id="brief-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="brief-submit">
+                            <button type="submit" class="btn btn-primary btn-lg" id="brief-send">
+                                <span lang="en">Request a quote</span><span lang="de">Angebot anfragen</span>
+                            </button>
+                            <p><span lang="en">From 75 EUR per hour.</span><span lang="de">Ab 75 EUR pro Stunde.</span></p>
+                        </div>
+                        <p class="brief-status" id="brief-status" role="status" aria-live="polite" hidden></p>
+                    </form>
+
+                    <aside class="brief-agent" aria-labelledby="brief-agent-title">
+                        <p class="agent-chip"><span lang="en">For agents</span><span lang="de">Für Agenten</span></p>
+                        <h3 id="brief-agent-title"><span lang="en">The same request as JSON</span><span lang="de">Dieselbe Anfrage als JSON</span></h3>
+                        <div class="code-block">
+                            <button type="button" class="code-copy" id="brief-copy"><span lang="en">Copy</span><span lang="de">Kopieren</span></button>
+                            <pre id="brief-json" tabindex="0">POST https://williwolff.com/api/enquiry
+Content-Type: application/json
+
+{
+  "email": "ada@example.com",
+  "summary": "Extract figures from supplier PDFs into our ERP, with review.",
+  "project_type": "ai_automation",
+  "timeline": "start within a month",
+  "budget_eur": "under 10000",
+  "submitted_by": "agent"
+}</pre>
+                        </div>
+                        <p class="brief-agent-note">
+                            <span lang="en">It follows the form as you type. The contract is in <a href="openapi.json">openapi.json</a>, the terms in <a href="hire.json">hire.json</a>, and an MCP server answers at <a href="mcp">/mcp</a>. A request sent by an agent is labelled as such and answered by a person.</span>
+                            <span lang="de">Es folgt dem Formular beim Tippen. Die Schnittstelle steht in <a href="openapi.json">openapi.json</a>, die Konditionen in <a href="hire.json">hire.json</a>, und unter <a href="mcp">/mcp</a> antwortet ein MCP-Server. Eine Anfrage von einem Agenten wird als solche gekennzeichnet und von einem Menschen beantwortet.</span>
+                        </p>
+                    </aside>
+                </div>
+
+                <div class="back" aria-labelledby="back-title">
+                    <h3 id="back-title"><span lang="en">What you get back</span><span lang="de">Was Sie zurückbekommen</span></h3>
+                    <dl class="back-list">
+                        <div>
+                            <dt><span lang="en">Fit</span><span lang="de">Passung</span></dt>
+                            <dd><span lang="en">Whether this is work I take on, and if not, why.</span><span lang="de">Ob ich das Projekt übernehme, und falls nicht, warum.</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Scope</span><span lang="de">Umfang</span></dt>
+                            <dd><span lang="en">Three lines on what I would build first.</span><span lang="de">Drei Zeilen dazu, was ich zuerst bauen würde.</span></dd>
+                        </div>
+                        <div>
+                            <dt><span lang="en">Estimate</span><span lang="de">Schätzung</span></dt>
+                            <dd><span lang="en">A range in days and in EUR.</span><span lang="de">Eine Spanne in Tagen und in EUR.</span></dd>
+                        </div>
+                        <div>
+                            <dt>Start</dt>
+                            <dd><span lang="en">The earliest date I can begin.</span><span lang="de">Der früheste Termin, an dem ich anfangen kann.</span></dd>
+                        </div>
+                    </dl>
+                </div>
+            </section>
+
+            <section id="cv" aria-labelledby="cv-title">
+                <div class="section-head">
+                    <p class="section-kicker"><span lang="en">CV</span><span lang="de">Lebenslauf</span></p>
+                    <h2 id="cv-title"><span lang="en">The CV, in the format you need</span><span lang="de">Der Lebenslauf im passenden Format</span></h2>
+                    <p>
+                        <span lang="en">Every format is built from one source, so they all say the same thing.</span>
+                        <span lang="de">Alle Formate entstehen aus einer Quelle und sagen deshalb dasselbe.</span>
+                        <span class="cv-updated" data-cv-updated hidden></span>
+                    </p>
+                </div>
+                <div class="cv-formats">
+                    <div class="cv-lang">
+                        <h3>English</h3>
+                        <ul>
+                            <li><a href="willi-wolff-cv-en.pdf" download><strong>PDF</strong><span lang="en">For people and for printing</span><span lang="de">Für Menschen und zum Ausdrucken</span></a></li>
+                            <li><a href="cv.md"><strong>Markdown</strong><span lang="en">To paste into a model</span><span lang="de">Zum Einfügen in ein Modell</span></a></li>
+                            <li><a href="cv.json"><strong>JSON</strong><span lang="en">JSON Resume schema</span><span lang="de">JSON-Resume-Schema</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="cv-lang">
+                        <h3>Deutsch</h3>
+                        <ul>
+                            <li><a href="willi-wolff-cv-de.pdf" download><strong>PDF</strong><span lang="en">For people and for printing</span><span lang="de">Für Menschen und zum Ausdrucken</span></a></li>
+                            <li><a href="cv.de.md"><strong>Markdown</strong><span lang="en">To paste into a model</span><span lang="de">Zum Einfügen in ein Modell</span></a></li>
+                            <li><a href="cv.de.json"><strong>JSON</strong><span lang="en">JSON Resume schema</span><span lang="de">JSON-Resume-Schema</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
             <section id="now" aria-labelledby="now-title">
                 <div class="section-head">
                     <p class="section-kicker"><span lang="en">Track record</span><span lang="de">Bilanz</span></p>
@@ -2800,8 +3269,8 @@
             </section>
 
             <footer class="site-foot">
-                <span lang="en">Willi Wolff · Berlin · <a href="mailto:contact@williwolff.com">contact@williwolff.com</a></span>
-                <span lang="de">Willi Wolff · Berlin · <a href="mailto:contact@williwolff.com">contact@williwolff.com</a></span>
+                <p>Willi Wolff · Berlin · <a href="mailto:contact@williwolff.com">contact@williwolff.com</a></p>
+                <p class="agents-row"><strong><span lang="en">For agents</span><span lang="de">Für Agenten</span></strong> · <a href="llms.txt">llms.txt</a> · <a href="hire.json">hire.json</a> · <a href="cv.md">cv.md</a> · <a href="cv.json">cv.json</a> · <a href="openapi.json">openapi.json</a> · <a href="api/enquiry">POST /api/enquiry</a> · <a href="mcp">MCP /mcp</a></p>
             </footer>
         </div>
     </main>
@@ -3197,6 +3666,197 @@
                 sync();
                 window.addEventListener('resize', sync, { passive: true });
             });
+        })();
+    </script>
+    <script>
+        // Brief form: posts to /api/enquiry, mirrors itself as the JSON an
+        // agent would send, and falls back to email when the endpoint cannot send.
+        (function () {
+            const form = document.getElementById('brief-form');
+            if (!form) return;
+            const root = document.documentElement;
+            const lang = () => (root.getAttribute('data-lang') === 'de' ? 'de' : 'en');
+            const pre = document.getElementById('brief-json');
+            const status = document.getElementById('brief-status');
+            const send = document.getElementById('brief-send');
+            const copy = document.getElementById('brief-copy');
+            const MAIL = 'contact@williwolff.com';
+            const T = {
+                en: {
+                    email: 'Give an email address I can reply to.',
+                    summary: 'Describe what you need in a sentence or more.',
+                    sent: 'Brief received. I read every request myself and reply by email.',
+                    ref: 'Reference',
+                    failed: 'The form could not send this. Your text is still here.',
+                    mail: 'Send it by email instead',
+                    copied: 'Copied',
+                    copy: 'Copy',
+                    updated: 'Last updated',
+                },
+                de: {
+                    email: 'Bitte eine E-Mail-Adresse angeben, auf die ich antworten kann.',
+                    summary: 'Bitte in mindestens einem Satz beschreiben, worum es geht.',
+                    sent: 'Anfrage erhalten. Ich lese jede Anfrage selbst und antworte per E-Mail.',
+                    ref: 'Referenz',
+                    failed: 'Das Formular konnte die Anfrage nicht senden. Ihr Text steht noch hier.',
+                    mail: 'Stattdessen per E-Mail senden',
+                    copied: 'Kopiert',
+                    copy: 'Kopieren',
+                    updated: 'Stand',
+                },
+            };
+            const EXAMPLE = {
+                email: 'ada@example.com',
+                summary: 'Extract figures from supplier PDFs into our ERP, with review.',
+            };
+
+            function values() {
+                const data = new FormData(form);
+                const get = k => String(data.get(k) || '').trim();
+                return {
+                    email: get('email'),
+                    summary: get('summary'),
+                    name: get('name'),
+                    project_type: get('project_type'),
+                    timeline: get('timeline'),
+                    budget_eur: get('budget_eur'),
+                };
+            }
+
+            // The request an agent would send for what the form holds right now.
+            function preview() {
+                const v = values();
+                const body = { email: v.email || EXAMPLE.email, summary: v.summary || EXAMPLE.summary };
+                if (v.name) body.name = v.name;
+                body.project_type = v.project_type;
+                body.timeline = v.timeline;
+                body.budget_eur = v.budget_eur;
+                body.submitted_by = 'agent';
+                pre.textContent = 'POST https://williwolff.com/api/enquiry\nContent-Type: application/json\n\n' + JSON.stringify(body, null, 2);
+            }
+
+            // Option labels and placeholders cannot carry both languages in markup.
+            function localise() {
+                const l = lang();
+                form.querySelectorAll('option[data-en]').forEach(o => { o.textContent = o.getAttribute('data-' + l); });
+                form.querySelectorAll('[data-placeholder-en]').forEach(el => { el.placeholder = el.getAttribute('data-placeholder-' + l); });
+                copy.textContent = T[l].copy;
+                showUpdated();
+            }
+
+            function fieldError(name, message) {
+                const input = form.elements[name];
+                const note = document.getElementById('brief-' + name + '-error');
+                if (!input || !note) return;
+                note.textContent = message || '';
+                note.hidden = !message;
+                if (message) input.setAttribute('aria-invalid', 'true');
+                else input.removeAttribute('aria-invalid');
+            }
+
+            function say(lines, link, isError) {
+                status.textContent = '';
+                lines.forEach((line, i) => {
+                    if (i) status.appendChild(document.createElement('br'));
+                    status.appendChild(document.createTextNode(line));
+                });
+                if (link) {
+                    status.appendChild(document.createTextNode(' '));
+                    const a = document.createElement('a');
+                    a.href = link.href;
+                    a.textContent = link.text;
+                    status.appendChild(a);
+                }
+                status.classList.toggle('is-error', !!isError);
+                status.hidden = false;
+            }
+
+            function mailto(v) {
+                const body = [v.summary, '', 'Kind of project: ' + v.project_type, 'Timeline: ' + v.timeline, 'Budget (EUR): ' + v.budget_eur, v.name ? 'Name: ' + v.name : '']
+                    .filter((line, i) => i < 2 || line).join('\n');
+                return 'mailto:' + MAIL + '?subject=' + encodeURIComponent('Project brief') + '&body=' + encodeURIComponent(body);
+            }
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const t = T[lang()];
+                const v = values();
+                const problems = {
+                    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email) ? '' : t.email,
+                    summary: v.summary.length >= 10 ? '' : t.summary,
+                };
+                fieldError('email', problems.email);
+                fieldError('summary', problems.summary);
+                status.hidden = true;
+                if (problems.summary) { form.elements.summary.focus(); return; }
+                if (problems.email) { form.elements.email.focus(); return; }
+
+                send.disabled = true;
+                try {
+                    const response = await fetch('/api/enquiry', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(Object.assign({}, v, {
+                            locale: lang(),
+                            submitted_by: 'human',
+                            website: form.elements.website.value,
+                        })),
+                    });
+                    const body = await response.json().catch(() => null);
+                    if (response.ok && body && body.ok) {
+                        say([body.message || t.sent, body.reference ? t.ref + ': ' + body.reference : ''].filter(Boolean));
+                        form.reset();
+                        localise();
+                        preview();
+                    } else if (response.status === 400 && body && body.fields) {
+                        fieldError('email', body.fields.email);
+                        fieldError('summary', body.fields.summary);
+                        say([body.error], null, true);
+                    } else {
+                        throw new Error('not sent');
+                    }
+                } catch (err) {
+                    say([t.failed], { href: mailto(v), text: t.mail + ' (' + MAIL + ')' }, true);
+                } finally {
+                    send.disabled = false;
+                }
+            });
+
+            form.addEventListener('input', preview);
+            form.addEventListener('change', preview);
+
+            copy.addEventListener('click', function () {
+                const t = T[lang()];
+                const done = () => { copy.textContent = t.copied; setTimeout(() => { copy.textContent = T[lang()].copy; }, 1600); };
+                const select = () => {
+                    const range = document.createRange();
+                    range.selectNodeContents(pre);
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(pre.textContent).then(done, select);
+                else select();
+            });
+
+            // The CV's own date, read from the data file the CV section links to.
+            let cvDate = null;
+            function showUpdated() {
+                const el = document.querySelector('[data-cv-updated]');
+                if (!el || !cvDate) return;
+                const l = lang();
+                const text = new Date(cvDate + 'T00:00:00Z').toLocaleDateString(l === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+                el.textContent = T[l].updated + (l === 'de' ? ': ' : ' ') + text + '.';
+                el.hidden = false;
+            }
+            fetch('cv.json').then(r => (r.ok ? r.json() : null)).then(cv => {
+                const date = cv && cv.meta && cv.meta.lastModified;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(date || '')) { cvDate = date; showUpdated(); }
+            }).catch(() => {});
+
+            new MutationObserver(localise).observe(root, { attributes: true, attributeFilter: ['data-lang'] });
+            localise();
+            preview();
         })();
     </script>
 </body>

@@ -6,6 +6,40 @@
 > Input Output Global (IOG), after leading a Byzantine-resistant publish/subscribe
 > network through formal verification and a working prototype.
 
+## How to work with him
+
+- **What:** freelance software engineering and architecture: AI agents and automation,
+  blockchain and distributed systems, web and mobile. Delivery is scaled with AI agents and
+  every result is reviewed by him before it ships.
+- **Rate:** from 75 EUR per hour, billed as a freelancer on a contract basis. The rate
+  depends on scope and length; his quote names the number.
+- **Availability:** currently on contract with IOG (Ouroboros Leios); open to selected
+  additional contract work. Based in Berlin, works remote, German or English.
+- **Websites and small products:** fixed-price packages go through Pagebase (https://pagebase.dev).
+- **How to start:** send a brief with what you need, the timeline and the budget. Three
+  routes reach the same inbox: the form at https://williwolff.com/#brief, a JSON POST to
+  https://williwolff.com/api/enquiry, or an email to contact@williwolff.com. A person reads
+  and answers every request; there is no automated booking.
+- **What comes back:** one email with fit, a rough scope, an estimate and the earliest start date.
+
+## For agents
+
+- **Terms as JSON:** https://williwolff.com/hire.json
+- **CV as Markdown:** https://williwolff.com/cv.md (English), https://williwolff.com/cv.de.md (German)
+- **CV as JSON (JSON Resume schema):** https://williwolff.com/cv.json (English), https://williwolff.com/cv.de.json (German)
+- **CV as PDF:** https://williwolff.com/willi-wolff-cv-en.pdf (English), https://williwolff.com/willi-wolff-cv-de.pdf (German)
+- **Send a brief:** `POST https://williwolff.com/api/enquiry` with a JSON body. Required:
+  `email`, `summary`. Optional: `name`, `company`, `project_type` (`ai_automation`,
+  `backend_architecture`, `blockchain_distributed`, `web_mobile`, `other`), `timeline`,
+  `budget_eur`, `engagement` (`hourly`, `fixed_price`, `unsure`), `submitted_by` (`agent` when
+  software sends it for a person), `agent`, `locale` (`en`, `de`). The full contract is at
+  https://williwolff.com/openapi.json.
+- **MCP server:** https://williwolff.com/mcp (Streamable HTTP, no sign-in) with the tools
+  `get_profile`, `get_terms`, `get_cv` and `submit_enquiry`.
+- **This page as Markdown:** request https://williwolff.com/ with `Accept: text/markdown`.
+- Send a brief only for a person who asked you to get in touch, and give an address they
+  can be reached at. Briefs sent by an agent are labelled as such and answered by a person.
+
 ## About
 
 Range across enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), mobile and
@@ -17,10 +51,12 @@ a project needs it. Berlin, Germany. German and English.
 
 ## Site structure
 
-One page. On desktop the screen splits: who he is and what he is building now stay pinned
-on the left, the work scrolls on the right. Phones and tablets get one column, hero first.
-Add `?lang=de` for the German version.
+One page, read top to bottom. Add `?lang=de` for the German version.
 
+- `/#home` — who he is, with his terms at a glance: availability, rate, engagement, location, languages
+- `/#work` — what he takes on, in three lanes, each with a result behind it
+- `/#brief` — the brief form, next to the same request as JSON
+- `/#cv` — the CV as PDF, Markdown and JSON, in English and German
 - `/#now` — projects at a glance (counts that filter the project list) and a GitHub
   contribution grid for the last 12 months
 - `/#projects` — projects grouped as Research & Development, Products, Commercial and
@@ -28,9 +64,6 @@ Add `?lang=de` for the German version.
 - `/#experience` — career timeline: roles and studies on one rail
 - `/#technologies` — tools he has worked with
 - `/#publications` — published specifications
-
-CV as PDF: https://williwolff.com/willi-wolff-cv-en.pdf (English),
-https://williwolff.com/willi-wolff-cv-de.pdf (German)
 
 ## Current work
 
@@ -80,7 +113,7 @@ Products and client work:
 
 - **Hausnummer** — screening tool for German residential investment listings: monthly cashflow before tax, after-tax estimates, break-even equity, cash-on-cash return, and listing import that extracts the figures from a pasted link. Astro on Cloudflare Workers. https://hausnummer.pages.dev/
 - **Operando** — AI deal sourcing for Operando Partners: reads deal teasers that M&A advisors send by email, extracts the key figures from the PDFs with Claude, and drafts HubSpot leads the team reviews. In production since September 2026. Email content is treated as untrusted data. https://operando.de
-- **AlwaysSandy** — beach volleyball coach booking across Berlin's sand courts. Web, iOS and Android from one React Native codebase. https://alwayssandy.com
+- **AlwaysSandy** — beach volleyball coach booking across Berlin's sand courts. Web, iOS and Android from one React Native codebase. Over 170,000 player profiles. https://alwayssandy.com
 - **TokenRiot.IO** — lead frontend developer for a Cardano NFT marketplace, 2022–2024, roughly 80% of the frontend: Next.js, Redux Toolkit, CIP-30 wallet integration.
 - **Dump it!** — voice-first note taking on web, iOS and Android with end-to-end encryption, intent classification and semantic search. Native iOS (Swift) first, then rewritten in Flutter for iOS and Android. 200+ users. Shut down in 2025.
 - **Drip Dropz** — NFT marketplace, 10k+ listings. Handed over to the team in 2024.
@@ -124,22 +157,11 @@ Delivered client sites: https://ugc.astridmunkwitz.de/ (UGC creator), https://un
 
 Typical stack: Astro, TypeScript, Tailwind, Supabase, PostgreSQL, Cloudflare Workers, React Native.
 
-## How to work with him
-
-- **What:** freelance software engineering and architecture: AI agents and automation,
-  blockchain and distributed systems, web and mobile. Delivery is scaled with AI agents and
-  every result is reviewed by him before it ships.
-- **Rate:** 90 EUR per hour, billed as a freelancer on a contract basis.
-- **Availability:** currently on contract with IOG (Ouroboros Leios); open to selected
-  additional contract work. Based in Berlin, works remote, German or English.
-- **Websites and small products:** fixed-price packages go through Pagebase (https://pagebase.dev).
-- **How to start:** email contact@williwolff.com with what you need, the timeline and the
-  budget. A person reads and answers every request; there is no automated booking.
-
 ## Links
 
 - Portfolio & CV: https://williwolff.com
 - CV as PDF: https://williwolff.com/willi-wolff-cv-en.pdf (English), https://williwolff.com/willi-wolff-cv-de.pdf (German)
+- CV as Markdown and JSON: see "For agents" above
 - GitHub: https://github.com/will-break-it
 - LinkedIn: https://linkedin.com/in/wwolff
 - X: https://x.com/will_break_it
