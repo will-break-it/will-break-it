@@ -185,12 +185,36 @@ test('the language switch is on every page and nothing hides it', () => {
     }
 });
 
+test('the home page script writes one language, and the German page describes itself', () => {
+    // Nothing hides the other language, so text inserted by a script must not carry both.
+    for (const name of readdirSync(join(dist, 'js'))) {
+        assert.doesNotMatch(readFileSync(join(dist, 'js', name), 'utf8'), /lang=\\?["'](en|de)/, name + ' writes language-tagged markup');
+    }
+    const graph = JSON.parse(file('/de/').match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];
+    const page = graph.find(node => node['@type'] === 'ProfilePage');
+    assert.equal(page.inLanguage, 'de');
+    for (const part of page.hasPart) {
+        assert.ok(part.url.startsWith('https://williwolff.com/de/#'), part.url);
+        const id = part.url.split('#')[1];
+        assert.ok(file('/de/').includes(`id="${id}"`), 'no section #' + id + ' on the German page');
+    }
+    assert.ok(page.hasPart.some(part => part.name === 'Leistungen'));
+    // Group counts in the markup match the cards under them before any script runs.
+    for (const path of ['/', '/de/']) {
+        const groups = file(path).split('class="group-count">').slice(1);
+        for (const group of groups) {
+            const count = Number(group.match(/^(\d+)/)[1]);
+            assert.equal((group.match(/class="project-card[ "]/g) || []).length, count, path + ' group count');
+        }
+    }
+});
+
 test('every internal link on every page leads to a built file', () => {
     for (const path of pages) {
         const html = file(path);
         assert.doesNotMatch(html, /@(work|service)\//, path + ' has an unresolved page reference');
         for (const [, href] of html.matchAll(/(?:href|src)="(\/[^"#?]*)[^"]*"/g)) {
-            if (href.startsWith('//') || href.startsWith('/api/') || href === '/mcp') continue;
+            if (href.startsWith('//') || href.startsWith('/api/')) continue;
             assert.ok(existsSync(resolve(href)), `${path} links to ${href}, which is not in dist`);
         }
     }
@@ -338,6 +362,25 @@ test('MCP sends one brief per request, whatever the batch holds', async () => {
     assert.equal(tooMany.status, 400);
     const huge = await mcp({ request: post('https://williwolff.com/mcp', { jsonrpc: '2.0', id: 1, method: 'ping', params: { pad: 'x'.repeat(40000) } }), env });
     assert.equal(huge.status, 413);
+    assert.equal(sent.length, 1);
+});
+
+test('MCP refuses what a web page on another site could send', async () => {
+    const call = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'submit_enquiry', arguments: brief } };
+    const plain = await mcp({ request: new Request('https://williwolff.com/mcp', { method: 'POST', headers: { 'content-type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(call) }), env });
+    assert.equal(plain.status, 415);
+    const foreign = await mcp({ request: post('https://williwolff.com/mcp', call, { origin: 'https://evil.example' }), env });
+    assert.equal(foreign.status, 403);
+    assert.equal(sent.length, 0);
+    const own = await mcp({ request: post('https://williwolff.com/mcp', call, { origin: 'https://williwolff.com' }), env });
+    assert.equal(own.status, 200);
+    assert.equal(sent.length, 1);
+});
+
+test('MCP lets a brief be corrected in the same request', async () => {
+    const call = (id, args) => ({ jsonrpc: '2.0', id, method: 'tools/call', params: { name: 'submit_enquiry', arguments: args } });
+    const batch = await mcp({ request: post('https://williwolff.com/mcp', [call(1, { summary: 'no address given here' }), call(2, brief), call(3, brief)]), env });
+    assert.deepEqual((await batch.json()).map(a => a.result.isError), [true, false, true]);
     assert.equal(sent.length, 1);
 });
 

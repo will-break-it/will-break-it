@@ -3,7 +3,7 @@
 // side by side; localize() keeps one of them for this page.
 import Base from '../layouts/Base.astro';
 import Footer from './Footer.astro';
-import { type Lang, HOME, ORIGIN, home } from '../lib/site';
+import { type Lang, HOME, ORIGIN, home, T } from '../lib/site';
 import { localize } from '../lib/localize';
 import graph from '../data/jsonld.json';
 
@@ -22,6 +22,16 @@ const { lang } = Astro.props;
 const meta = HOME[lang];
 const paths = { en: home('en'), de: home('de') };
 
+const SECTION_NAMES: Record<Lang, Record<string, string>> = {
+    en: {},
+    de: {
+        ...T.de.nav,
+        brief: T.de.sendBrief,
+        technologies: 'Womit ich gearbeitet habe',
+        publications: 'Veröffentlichte Spezifikationen',
+    },
+};
+
 // One graph for both languages; only the page node differs.
 const jsonld = structuredClone(graph) as { '@graph': Record<string, unknown>[] };
 for (const node of jsonld['@graph']) {
@@ -30,6 +40,12 @@ for (const node of jsonld['@graph']) {
         node['@id'] = `${ORIGIN}${paths[lang]}#page`;
         node.name = meta.title;
         node.inLanguage = lang;
+        // The sections are anchors on this page, under this page's headings.
+        for (const part of (node.hasPart ?? []) as { name: string; url: string }[]) {
+            const id = part.url.split('#')[1];
+            part.url = `${ORIGIN}${paths[lang]}#${id}`;
+            part.name = SECTION_NAMES[lang][id] ?? part.name;
+        }
     }
 }
 const sections = [work, brief, cv, now, projects, experience, technologies, publications];

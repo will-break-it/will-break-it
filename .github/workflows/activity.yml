@@ -5,9 +5,8 @@ name: Refresh activity data
 # never touch the GitHub API: no rate limits, no CORS, no empty graph when the
 # API is down.
 #
-# Runs in both this repo and the will-break-it.github.io mirror. Set the
-# GH_ACTIVITY_TOKEN secret in both, otherwise the mirror falls back to
-# public-only counts and the two sites report different totals.
+# The former mirror, will-break-it.github.io, is retired and only redirects to
+# williwolff.com; it no longer receives this repository's commits.
 #
 # GH_ACTIVITY_TOKEN: classic PAT with `repo` + `read:user`.
 #

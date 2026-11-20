@@ -95,8 +95,9 @@ async function callTool(name, args, context) {
         case 'submit_enquiry': {
             // One brief per HTTP request, so a rate limit on requests is a limit on emails.
             if (context.briefs >= 1) return text('One brief per request. Send further briefs in separate requests.', true);
-            context.briefs += 1;
             const result = await submitEnquiry({ ...args, submitted_by: 'agent' }, context.env, 'mcp');
+            // A brief that failed validation reached nobody, so it may be corrected in the same request.
+            if (result.status !== 400) context.briefs += 1;
             return text(JSON.stringify(result.body), !result.body.ok);
         }
         default:
@@ -154,6 +155,16 @@ export async function onRequest({ request, env }) {
             tools: TOOLS.map(tool => tool.name),
             more: 'https://williwolff.com/llms.txt',
         }), { status: 405, headers: { ...HEADERS, Allow: 'POST' } });
+    }
+
+    // MCP clients are programs, not web pages. A browser on another site can
+    // post text/plain here without asking first, and would send a brief from
+    // every visitor. JSON needs a preflight this endpoint does not answer, and
+    // a request that names another site as its origin is refused outright.
+    const origin = request.headers.get('origin');
+    if (origin && origin !== new URL(request.url).origin) return rpcError(-32600, 'Requests from other websites are not accepted', 403);
+    if (!/^application\/json\b/i.test(request.headers.get('content-type') || '')) {
+        return rpcError(-32600, 'Send JSON-RPC with Content-Type: application/json', 415);
     }
 
     const read = await readJsonBody(request, MAX_BYTES);

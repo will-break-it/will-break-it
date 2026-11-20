@@ -21,8 +21,8 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # The repo is mirrored to will-break-it.github.io; only deploy from the primary repo
-    # to avoid a duplicate deploy when the same commit is pushed to both remotes.
+    # Only the primary repository deploys. The old will-break-it.github.io mirror is
+    # retired and redirects to williwolff.com; the check stays in case of a fork.
     if: |
       github.repository == 'will-break-it/will-break-it' &&
       (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')

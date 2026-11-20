@@ -178,7 +178,7 @@
         el.textContent = T[l].updated + (l === 'de' ? ': ' : ' ') + text + '.';
         el.hidden = false;
     }
-    fetch('/cv.json').then(r => (r.ok ? r.json() : null)).then(cv => {
+    fetch(lang() === 'de' ? '/cv.de.json' : '/cv.json').then(r => (r.ok ? r.json() : null)).then(cv => {
         const date = cv && cv.meta && cv.meta.lastModified;
         if (/^\d{4}-\d{2}-\d{2}$/.test(date || '')) { cvDate = date; showUpdated(); }
     }).catch(() => {});
