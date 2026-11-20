@@ -9,11 +9,12 @@
   },
   "rate": {
     "from": 75,
+    "to": 110,
     "currency": "EUR",
     "unit": "hour",
     "note": {
-      "en": "Hourly, billed as a freelancer. The rate depends on scope and length; a quote names the number.",
-      "de": "Stundenbasis, Abrechnung als Freelancer. Der Satz hängt von Umfang und Dauer ab; das Angebot nennt die Zahl."
+      "en": "Hourly, billed as a freelancer. Where in the range a project lands depends on scope and length; a quote names the number.",
+      "de": "Stundenbasis, Abrechnung als Freelancer. Wo ein Projekt in der Spanne liegt, hängt von Umfang und Dauer ab; das Angebot nennt die Zahl."
     }
   },
   "engagement": ["freelance_contract"],
