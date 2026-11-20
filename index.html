@@ -26,7 +26,7 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Always shipping. Willi Wolff, team lead of ~8 AI agents, with his GitHub contribution grid">
+    <meta property="og:image:alt" content="Willi Wolff, software engineer and architect for contract work, with his GitHub contribution grid">
     <meta property="og:locale" content="en_US">
     <meta property="og:locale:alternate" content="de_DE">
 
@@ -36,7 +36,7 @@
     <meta name="twitter:title" content="Willi Wolff – Freelance Software Engineer &amp; Architect, Berlin">
     <meta name="twitter:description" content="Berlin-based freelance software engineer and architect. AI, blockchain, web and mobile, from research to production. Currently on Ouroboros Leios at IOG.">
     <meta name="twitter:image" content="https://williwolff.com/social-preview.png">
-    <meta name="twitter:image:alt" content="Always shipping. Willi Wolff, team lead of ~8 AI agents, with his GitHub contribution grid">
+    <meta name="twitter:image:alt" content="Willi Wolff, software engineer and architect for contract work, with his GitHub contribution grid">
     <meta name="twitter:site" content="@will_break_it">
     <meta name="twitter:creator" content="@will_break_it">
 
@@ -407,7 +407,7 @@
             --ink: #0b1622;
             --text: #27323f;
             --muted: #5b6878;
-            --faint: #8592a1;
+            --faint: #64707f;
 
             --brand: #0d9488;
             --brand-strong: #0f766e;
@@ -1452,6 +1452,7 @@
         .brief-agent { flex: 1 1 360px; min-width: 0; display: grid; gap: var(--s-3); }
         .brief-agent h3 { font-size: 1.15rem; font-weight: 700; }
         .brief-agent-note { font-size: 0.9rem; color: var(--muted); }
+        .brief-agent-note a { text-decoration: underline; text-underline-offset: 3px; }
 
         .agent-chip {
             justify-self: start;
@@ -1591,7 +1592,7 @@
         </nav>
 
         <div class="header-controls">
-            <button class="icon-btn lang-toggle" id="lang-toggle" type="button" aria-label="Switch language">
+            <button class="icon-btn lang-toggle" id="lang-toggle" type="button" aria-label="DE: switch language">
                 <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"></path></svg>
                 <span class="lang-label">DE</span>
             </button>
@@ -1612,7 +1613,7 @@
             <div class="lead-inner">
                 <div class="lead-main">
                     <div class="hero-id">
-                        <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
+                        <img src="assets/images/will-160.jpg" alt="Willi Wolff" class="profile-image" width="76" height="76">
                         <div>
                             <p class="hero-name">Will<span class="name-soft">i</span> Wolff <span class="lead-sig"><span lang="en">· Always shipping.</span><span lang="de">· Immer am Liefern.</span></span></p>
                             <p class="hero-role"><span lang="en">Currently software engineer and architect on Ouroboros Leios at IOG</span><span lang="de">Aktuell Software Engineer und Architekt für Ouroboros Leios bei IOG</span></p>
@@ -1966,7 +1967,7 @@ Content-Type: application/json
                         <div class="projects-grid">
                         <div class="project-card" id="p-pubsub" data-tags="blockchain,architecture">
                         <div class="project-logo">
-                            <img src="pubsub-social-preview.png" alt="Byzantine-Resistant PubSub" class="project-logo-img cover">
+                            <img src="assets/previews/pubsub.jpg" alt="Byzantine-Resistant PubSub" class="project-logo-img cover" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -1993,7 +1994,7 @@ Content-Type: application/json
                     </div>
                         <div class="project-card" id="p-ouroboros-leios" data-tags="blockchain,architecture">
                         <div class="project-logo">
-                            <img src="leios-social-preview.jpg" alt="Ouroboros Leios" class="project-logo-img cover">
+                            <img src="assets/previews/leios.jpg" alt="Ouroboros Leios" class="project-logo-img cover" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -2020,7 +2021,7 @@ Content-Type: application/json
                     </div>
                         <div class="project-card" id="p-leios-mempool-simulation" data-tags="blockchain,infrastructure">
                         <div class="project-logo">
-                            <img src="leios-thumbnail.jpg" alt="Leios Mempool Simulation" class="project-logo-img cover">
+                            <img src="leios-thumbnail.jpg" alt="Leios Mempool Simulation" class="project-logo-img cover" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -2141,7 +2142,7 @@ Content-Type: application/json
                     </div>
                         <div class="project-card" id="p-hausnummer" data-tags="web,ai,architecture">
                         <div class="project-logo">
-                            <img src="hausnummer-logo.svg" alt="Hausnummer" class="project-logo-img">
+                            <img src="hausnummer-logo.svg" alt="Hausnummer" class="project-logo-img" width="64" height="64" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -2193,7 +2194,7 @@ Content-Type: application/json
                     </div>
                         <div class="project-card" id="p-drip-dropz" data-tags="web,blockchain">
                         <div class="project-logo">
-                            <img src="https://dripdropz.io/favicon.ico" alt="Drip Dropz logo" class="project-logo-img">
+                            <img src="https://dripdropz.io/favicon.ico" alt="Drip Dropz logo" class="project-logo-img" width="64" height="64" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -2274,7 +2275,7 @@ Content-Type: application/json
                     </div>
                         <div class="project-card" id="p-operando" data-tags="ai,architecture,consulting">
                         <div class="project-logo">
-                            <img src="https://operando.de/wp-content/uploads/2024/09/cropped-operando-favicon-192x192.png" alt="Operando Partners" class="project-logo-img">
+                            <img src="https://operando.de/wp-content/uploads/2024/09/cropped-operando-favicon-192x192.png" alt="Operando Partners" class="project-logo-img" width="64" height="64" loading="lazy">
                         </div>
                         <div class="project-header">
                             <div class="project-title-row">
@@ -3281,6 +3282,7 @@ Content-Type: application/json
             html.setAttribute('data-lang', lang);
             html.setAttribute('lang', lang);
             langLabel.textContent = lang === 'en' ? 'DE' : 'EN';
+            langToggle.setAttribute('aria-label', lang === 'en' ? 'DE: auf Deutsch umschalten' : 'EN: switch to English');
             updateCvDownload(lang);
         }
 

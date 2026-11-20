@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- Source of /social-preview.png, the image LinkedIn, Slack and others show
+     for a shared link. Serve the repository root and screenshot this page at
+     1200 x 630, for example with Playwright:
+       python3 -m http.server 8123
+       page.setViewportSize({ width: 1200, height: 630 })
+       page.goto('http://localhost:8123/scripts/social-preview.html')
+       page.screenshot({ path: 'social-preview.png' })
+     The grid is the last 52 weeks from data/activity.json. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+        width: 1200px; height: 630px; overflow: hidden;
+        padding: 64px 84px 0;
+        font-family: "Inter", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        color: #0b1622;
+        background: radial-gradient(900px 500px at 100% 0%, rgba(13, 148, 136, 0.10), transparent 60%), #ffffff;
+    }
+    .id { display: flex; align-items: center; gap: 22px; }
+    .id img { width: 84px; height: 84px; border-radius: 50%; box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #0d9488; }
+    .name { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+    .name i { font-style: normal; color: #a9b4c0; }
+    .url { font-size: 20px; font-weight: 650; color: #0f766e; }
+    h1 { margin-top: 38px; font-size: 76px; font-weight: 800; letter-spacing: -0.045em; line-height: 1.02; }
+    h1 em { font-style: normal; color: #0d9488; }
+    .lanes { margin-top: 26px; font-size: 26px; font-weight: 600; color: #5b6878; }
+    .lanes b { font-weight: 600; color: #cdd6df; padding: 0 6px; }
+    .grid { position: absolute; left: 84px; right: 84px; bottom: 44px; display: grid; grid-template-columns: repeat(52, 1fr); grid-auto-flow: column; grid-template-rows: repeat(7, 13px); gap: 4px 5px; }
+    .grid span { border-radius: 3px; background: #eef2f5; }
+    .grid .l1 { background: #ccfbf1; } .grid .l2 { background: #5eead4; } .grid .l3 { background: #14b8a6; } .grid .l4 { background: #0f766e; }
+</style>
+</head>
+<body>
+    <div class="id">
+        <img src="../assets/images/will.jpg" alt="">
+        <div>
+            <p class="name">Will<i>i</i> Wolff</p>
+            <p class="url">williwolff.com</p>
+        </div>
+    </div>
+    <h1>Software engineer and architect for <em>contract work</em>.</h1>
+    <p class="lanes">AI agents <b>·</b> Distributed systems <b>·</b> Web and mobile <b>·</b> Berlin</p>
+    <div class="grid" id="grid"></div>
+    <script>
+        fetch('../data/activity.json').then(r => r.json()).then(data => {
+            // data.days lists active days only, so walk the calendar instead.
+            const byDate = new Map(data.days.map(d => [d.date, d.total]));
+            const end = new Date(data.generated.slice(0, 10) + 'T00:00:00Z');
+            const totals = [];
+            for (let i = 363; i >= 0; i--) {
+                const day = new Date(end.getTime() - i * 86400000).toISOString().slice(0, 10);
+                totals.push(byDate.get(day) || 0);
+            }
+            // Quartiles of the active days, so one busy day does not flatten the rest.
+            const active = totals.filter(n => n > 0).sort((x, y) => x - y);
+            const q = f => active[Math.min(active.length - 1, Math.floor(active.length * f))] || 1;
+            const level = n => (n === 0 ? 0 : n <= q(0.25) ? 1 : n <= q(0.5) ? 2 : n <= q(0.75) ? 3 : 4);
+            document.getElementById('grid').innerHTML = totals.map(n => '<span class="l' + level(n) + '"></span>').join('');
+            document.body.dataset.ready = '1';
+        });
+    </script>
+</body>
+</html>
