@@ -9,7 +9,9 @@ import type { Lang } from './site';
 import { resolveLinks } from './content';
 
 export function localize(html: string, lang: Lang): string {
-    const root = parse(html, { comment: true });
+    // By default the parser keeps the inside of <noscript> as plain text. It
+    // holds markup in both languages like everything else, so it is parsed too.
+    const root = parse(html, { comment: true, blockTextElements: { script: true, style: true, pre: true } });
     for (const el of root.querySelectorAll('[lang]')) {
         const tagged = el.getAttribute('lang');
         if (tagged !== 'en' && tagged !== 'de') continue;

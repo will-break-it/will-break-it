@@ -103,6 +103,10 @@ test('other paths and the old host behave as before', async () => {
     const old = await middleware({ request: new Request('https://wwolff.pages.dev/cv.md?x=1'), env, next: () => new Response('no') });
     assert.equal(old.status, 301);
     assert.equal(old.headers.get('location'), 'https://williwolff.com/cv.md?x=1');
+    // A POST to the old host keeps its method and body through the redirect.
+    const oldPost = await middleware({ request: post('https://wwolff.pages.dev/api/enquiry', brief), env, next: () => new Response('no') });
+    assert.equal(oldPost.status, 308);
+    assert.equal(oldPost.headers.get('location'), 'https://williwolff.com/api/enquiry');
 });
 
 test('the old ?lang= links land on the page for that language', async () => {
@@ -118,6 +122,10 @@ test('the German home page is its own page, in one language', async () => {
     const german = await response.text();
     assert.match(german, /<html lang="de"/);
     assert.match(german, /Zur Fallstudie/);
+    // Besides <html> itself, the only thing marked with a language on either
+    // page is the switch to the other one. Anything else is a leftover translation.
+    assert.deepEqual(german.match(/ lang="[a-z]+"/g), [' lang="de"', ' lang="en"']);
+    assert.deepEqual(file('/').match(/ lang="[a-z]+"/g), [' lang="en"', ' lang="de"']);
     assert.doesNotMatch(german, /Read the case study/);
     const english = file('/');
     assert.match(english, /<html lang="en"/);
@@ -275,6 +283,33 @@ test('a brief that names a website, or an address with an apostrophe, is still s
     assert.equal(sent.length, 2);
     assert.equal(sent[1].body.replyTo.email, "o'brien@example.com");
     assert.doesNotMatch(sent[1].body.htmlContent, /o'brien/, 'the apostrophe is escaped in the HTML part');
+});
+
+test('an address no mail server would accept is a field error, not an outage', async () => {
+    for (const email of ['ada@example..com', 'a@b.c.', 'ada@.example.com', 'ada.@example.com', 'ada@-example.com', 'ada@example']) {
+        const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, email }), env });
+        assert.equal(response.status, 400, email);
+        assert.ok((await response.json()).fields.email, email);
+    }
+    for (const email of ['ada@example.com', 'ada.lovelace+work@mail.example.co.uk', 'jürgen@müller.de', 'a@b.co']) {
+        const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, email }), env });
+        assert.equal(response.status, 200, email);
+    }
+    assert.equal(sent.length, 4);
+});
+
+test('the form works without its script and states nothing the visitor did not choose', () => {
+    for (const path of ['/', '/de/']) {
+        const html = file(path);
+        const form = html.match(/<form[^>]*id="brief-form"[^>]*>/)[0];
+        assert.match(form, /action="mailto:contact@williwolff\.com/, path);
+        assert.match(form, /method="post"/, path);
+        assert.match(form, /enctype="text\/plain"/, path);
+        // The first option of each select is what a visitor sends without choosing.
+        const first = name => html.match(new RegExp(`<select[^>]*name="${name}"[^>]*>\\s*<option value="([^"]*)"`))[1];
+        assert.equal(first('timeline'), 'not fixed yet', path);
+        assert.equal(first('budget_eur'), '', path);
+    }
 });
 
 test('a brief that is too long is refused, not cut', async () => {

@@ -33,3 +33,14 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
    into the right URL for each language.
 3. `npm test`. The sitemap, `/llms.txt`, the language links and the Markdown twin
    (`<url without trailing slash>.md`) are generated and checked.
+
+## Before the brief form is live
+
+- `BREVO_API_KEY` in the Cloudflare Pages project (optional: `CONTACT_TO_EMAIL`,
+  `CONTACT_FROM_EMAIL`, `CONTACT_SENDER_NAME`). Without it the endpoint answers 503 and the
+  form falls back to email.
+- A rate-limiting rule in Cloudflare for `POST /api/enquiry` and `POST /mcp`. Both send one
+  email per valid request and need no sign-in, because agents use them. The code caps size,
+  refuses other websites and sends one brief per request, but it keeps no state, so it cannot
+  count requests per visitor. Without the rule, a script can fill the inbox and use up the
+  Brevo quota.

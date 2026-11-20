@@ -326,9 +326,12 @@ function spinReels(root) {
     const visible = new Set();
     const observer = new IntersectionObserver(entries => {
         entries.forEach(e => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
-        const current = sections.find(s => visible.has(s));
-        if (!current) return;
-        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current.id));
+        // Some sections have no link in the header. While one of those is being
+        // read, no link is marked, instead of the last one staying lit.
+        // When one section ends and the next begins inside the reading band, the
+        // later one is the one being read, also right after a jump to its anchor.
+        const current = sections.filter(s => visible.has(s)).pop();
+        links.forEach(a => a.classList.toggle('active', !!current && a.getAttribute('href') === '#' + current.id));
     }, { rootMargin: '-80px 0px -60% 0px' });
     sections.forEach(s => observer.observe(s));
 })();

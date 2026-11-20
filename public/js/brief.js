@@ -59,7 +59,7 @@
         if (v.name) body.name = v.name;
         body.project_type = v.project_type;
         body.timeline = v.timeline;
-        body.budget_eur = v.budget_eur;
+        if (v.budget_eur) body.budget_eur = v.budget_eur;
         body.submitted_by = 'agent';
         pre.textContent = 'POST https://williwolff.com/api/enquiry\nContent-Type: application/json\n\n' + JSON.stringify(body, null, 2);
     }
@@ -101,7 +101,7 @@
     }
 
     function mailto(v) {
-        const body = [v.summary, '', 'Kind of project: ' + v.project_type, 'Timeline: ' + v.timeline, 'Budget (EUR): ' + v.budget_eur, v.name ? 'Name: ' + v.name : '']
+        const body = [v.summary, '', 'Kind of project: ' + v.project_type, 'Timeline: ' + v.timeline, v.budget_eur ? 'Budget (EUR): ' + v.budget_eur : '', v.name ? 'Name: ' + v.name : '']
             .filter((line, i) => i < 2 || line).join('\n');
         return 'mailto:' + MAIL + '?subject=' + encodeURIComponent('Project brief') + '&body=' + encodeURIComponent(body);
     }
@@ -133,7 +133,7 @@
             });
             const body = await response.json().catch(() => null);
             if (response.ok && body && body.ok) {
-                say([body.message || t.sent, body.reference ? t.ref + ': ' + body.reference : ''].filter(Boolean));
+                say([t.sent, body.reference ? t.ref + ': ' + body.reference : ''].filter(Boolean));
                 form.reset();
                 localise();
                 preview();
