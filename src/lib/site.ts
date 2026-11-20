@@ -5,7 +5,7 @@ import hire from '../../public/hire.json';
 export type Lang = 'en' | 'de';
 export const LANGS: Lang[] = ['en', 'de'];
 export const ORIGIN = 'https://williwolff.com';
-export const EMAIL = 'contact@williwolff.com';
+export const EMAIL = 'contact+web@williwolff.com';
 export const PERSON_ID = `${ORIGIN}/#willi`;
 export const RATE = hire.rate as { from: number; to: number; currency: string };
 

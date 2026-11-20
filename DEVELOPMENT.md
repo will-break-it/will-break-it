@@ -39,6 +39,12 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
 - `BREVO_API_KEY` in the Cloudflare Pages project (optional: `CONTACT_TO_EMAIL`,
   `CONTACT_FROM_EMAIL`, `CONTACT_SENDER_NAME`). Without it the endpoint answers 503 and the
   form falls back to email.
+- One test email to `contact+web@williwolff.com`. The site shows this tagged address and sends
+  briefs to it, so that mail from the website can be told apart by its recipient (`SITE_ADDRESS`
+  in `lib/enquiry.js`; a test fails if a page still shows the plain one). The tag needs plus
+  addressing for the domain: in Cloudflare Email Routing it is a switch under Settings
+  (Subaddressing). The CV files keep the plain address on purpose. `CONTACT_TO_EMAIL` overrides
+  where briefs go, for example a tagged private address.
 
 `POST /api/enquiry` and `POST /mcp` send one email per valid request and need no sign-in,
 because agents use them. `lib/enquiry.js` caps briefs at 5 per visitor per hour and 100 per

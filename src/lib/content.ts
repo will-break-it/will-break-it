@@ -118,8 +118,8 @@ export function toMarkdown(entry: Entry, labels: { facts: Record<string, string>
     const unit = entry.lang === 'de' ? `${RATE.from} bis ${RATE.to} EUR pro Stunde` : `${RATE.from} to ${RATE.to} EUR per hour`;
     lines.push(`## ${labels.similar}`, '');
     lines.push(entry.lang === 'de'
-        ? `Willi Wolff, freiberuflicher Software Engineer und Architekt, Berlin. ${unit}. Anfrage: ${abs(home('de'))}#brief, als JSON an ${abs('/api/enquiry')} (project_type \`${entry.brief}\`), oder per E-Mail an contact@williwolff.com. Konditionen: ${abs('/hire.json')}.`
-        : `Willi Wolff, freelance software engineer and architect, Berlin. ${unit}. Send a brief at ${abs('/')}#brief, as JSON to ${abs('/api/enquiry')} (project_type \`${entry.brief}\`), or by email to contact@williwolff.com. Terms: ${abs('/hire.json')}.`);
+        ? `Willi Wolff, freiberuflicher Software Engineer und Architekt, Berlin. ${unit}. Anfrage: ${abs(home('de'))}#brief, als JSON an ${abs('/api/enquiry')} (project_type \`${entry.brief}\`), oder per E-Mail an contact+web@williwolff.com. Konditionen: ${abs('/hire.json')}.`
+        : `Willi Wolff, freelance software engineer and architect, Berlin. ${unit}. Send a brief at ${abs('/')}#brief, as JSON to ${abs('/api/enquiry')} (project_type \`${entry.brief}\`), or by email to contact+web@williwolff.com. Terms: ${abs('/hire.json')}.`);
     lines.push('', '---', '', `${labels.updated}: ${entry.updated} · ${abs(entry.path)}`, '');
     return lines.join('\n');
 }

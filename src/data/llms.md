@@ -18,7 +18,7 @@
 - **Websites and small products:** fixed-price packages go through Pagebase (https://pagebase.dev).
 - **How to start:** send a brief with what you need, the timeline and the budget. Three
   routes reach the same inbox: the form at https://williwolff.com/#brief, a JSON POST to
-  https://williwolff.com/api/enquiry, or an email to contact@williwolff.com. A person reads
+  https://williwolff.com/api/enquiry, or an email to contact+web@williwolff.com. A person reads
   and answers every request; there is no automated booking.
 - **What comes back:** one email with fit, a rough scope, an estimate and the earliest start date.
 
@@ -177,4 +177,4 @@ Site content available in English (https://williwolff.com/) and German (https://
 
 ## Contact
 
-contact@williwolff.com
+contact+web@williwolff.com
