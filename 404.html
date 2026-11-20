@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found – Willi Wolff</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- Without this file Cloudflare Pages treats the site as a single-page
+         app and answers every unknown path with the home page and status 200. -->
+    <style>
+        :root { --ink: #0b1622; --muted: #5b6878; --brand-strong: #0f766e; --border: #e2e8ee; }
+        * { box-sizing: border-box; margin: 0; }
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--ink);
+            background: #ffffff;
+            line-height: 1.6;
+        }
+        main { width: 100%; max-width: 34rem; }
+        .kicker { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+        h1 { margin-top: 0.5rem; font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+        p { margin-top: 1rem; color: var(--muted); }
+        ul { margin-top: 1.5rem; padding: 0; list-style: none; border-top: 2px solid var(--ink); }
+        li { border-bottom: 1px solid var(--border); }
+        a { display: block; padding: 0.85rem 0; font-weight: 600; color: var(--brand-strong); text-decoration: none; }
+        a:hover { text-decoration: underline; text-underline-offset: 3px; }
+        a span { font-weight: 400; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <main>
+        <p class="kicker">404</p>
+        <h1>This page does not exist.</h1>
+        <p>The address may be old or mistyped. Diese Seite gibt es nicht, die Adresse ist vermutlich veraltet.</p>
+        <ul>
+            <li><a href="/">Home <span>· Startseite</span></a></li>
+            <li><a href="/#brief">Send a project brief <span>· Projekt anfragen</span></a></li>
+            <li><a href="/#cv">CV <span>· Lebenslauf</span></a></li>
+            <li><a href="/llms.txt">The site as Markdown <span>· for agents</span></a></li>
+        </ul>
+    </main>
+</body>
+</html>
