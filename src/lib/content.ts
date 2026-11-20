@@ -62,7 +62,7 @@ function read(file: string, raw: string): Entry {
         proof: meta.proof ?? [],
         related: meta.related ?? [],
         body,
-        html: marked.parse(body, { async: false }) as string,
+        html: '', // rendered below, once links between entries can be resolved
         path,
         markdownPath: `${BASE[kind][lang]}${meta.slug}.md`,
     };
@@ -83,10 +83,22 @@ export function find(kind: Kind, key: string, lang: Lang): Entry {
 // Every page exists in both languages; a missing translation fails the build.
 for (const entry of entries) find(entry.kind, entry.key, entry.lang === 'en' ? 'de' : 'en');
 
-/** Replaces @work/<key> and @service/<key> in the home page partials. */
-export function resolveLinks(html: string, lang: Lang): string {
-    return html.replace(/@(work|service)\/([a-z0-9-]+)/g, (_, kind, key) =>
-        find(kind === 'service' ? 'services' : 'work', key, lang).path);
+/**
+ * Replaces @work/<key> and @service/<key> with that page's URL in `lang`.
+ * Used for the home page partials and for the Markdown bodies below.
+ */
+export function resolveLinks(text: string, lang: Lang, absolute = false): string {
+    return text.replace(/@(work|service)\/([a-z0-9-]+)/g, (_, kind, key) => {
+        const { path } = find(kind === 'service' ? 'services' : 'work', key, lang);
+        return absolute ? abs(path) : path;
+    });
+}
+
+// Bodies may link to other pages by key. This runs once every entry is known:
+// site-relative links for the page, full URLs for the Markdown twin.
+for (const entry of entries) {
+    entry.html = marked.parse(resolveLinks(entry.body, entry.lang), { async: false }) as string;
+    entry.body = resolveLinks(entry.body, entry.lang, true);
 }
 
 /** The page as plain Markdown, for agents: /work/<slug>.md and friends. */

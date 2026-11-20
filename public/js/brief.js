@@ -128,7 +128,7 @@
                 body: JSON.stringify(Object.assign({}, v, {
                     locale: lang(),
                     submitted_by: 'human',
-                    website: form.elements.website.value,
+                    hp_confirm: form.elements.hp_confirm.value,
                 })),
             });
             const body = await response.json().catch(() => null);

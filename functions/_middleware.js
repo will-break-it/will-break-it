@@ -38,7 +38,9 @@ function wantsMarkdown(request, url) {
 // Where the Markdown for a page lives, or null when the page has none.
 function markdownSource(pathname) {
     const path = pathname.replace(/index\.html$/, '');
-    if (path === '/' || path === '/de/') return { source: '/llms.txt', canonical: path };
+    // llms.txt exists in English only, so the German home page answers with
+    // the English text and names the English page as its original.
+    if (path === '/' || path === '/de/') return { source: '/llms.txt', canonical: '/', language: 'en' };
     if (SUBPAGE.test(path)) {
         const bare = path.replace(/\/$/, '');
         return { source: bare + '.md', canonical: bare + '/' };
@@ -76,6 +78,7 @@ export async function onRequest({ request, next, env }) {
                     'Cache-Control': 'public, max-age=300',
                     'Vary': 'Accept, User-Agent',
                     'Link': `<${ORIGIN}${page.canonical}>; rel="canonical"`,
+                    ...(page.language ? { 'Content-Language': page.language } : {}),
                     'X-Robots-Tag': 'noindex',
                 },
             });

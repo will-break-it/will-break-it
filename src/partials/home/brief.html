@@ -22,7 +22,7 @@
                         </div>
                         <div class="field">
                             <label for="brief-summary"><span lang="en">What do you need?</span><span lang="de">Worum geht es?</span></label>
-                            <textarea id="brief-summary" name="summary" rows="5" required aria-describedby="brief-summary-error"
+                            <textarea id="brief-summary" name="summary" rows="5" required maxlength="6000" aria-describedby="brief-summary-error"
                                 data-placeholder-en="The problem, what exists today, what done looks like"
                                 data-placeholder-de="Das Problem, was es heute gibt, woran man erkennt, dass es fertig ist"
                                 placeholder="The problem, what exists today, what done looks like"></textarea>
@@ -61,8 +61,8 @@
                         </div>
                         <!-- Not for people: a bot that fills every field fills this one too. -->
                         <div class="field-trap" aria-hidden="true">
-                            <label for="brief-website">Website</label>
-                            <input id="brief-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                            <label for="brief-confirm">Leave this field empty</label>
+                            <input id="brief-confirm" name="hp_confirm" type="text" tabindex="-1" autocomplete="off">
                         </div>
                         <div class="brief-submit">
                             <button type="submit" class="btn btn-primary btn-lg" id="brief-send">

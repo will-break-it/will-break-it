@@ -43,6 +43,8 @@ const pages = (function walk(dir, base = '/') {
 })(dist);
 const SUBPAGE = /^\/(services|work|de\/leistungen|de\/projekte)\/[a-z0-9-]+\/$/;
 const subpages = pages.filter(path => SUBPAGE.test(path));
+// One Markdown file per page and language.
+const sources = ['services', 'work'].flatMap(kind => readdirSync(join(root, 'src/content', kind)).filter(name => name.endsWith('.md')));
 
 const realFetch = globalThis.fetch;
 let sent;
@@ -124,7 +126,7 @@ test('the German home page is its own page, in one language', async () => {
 });
 
 test('a service page or case study answers an agent with its Markdown twin', async () => {
-    assert.equal(subpages.length, 16, 'three services and five case studies, in two languages');
+    assert.equal(subpages.length, sources.length, 'one page for every file in src/content');
     for (const path of subpages) {
         const url = 'https://williwolff.com' + path;
         const markdown = await visit(url, { accept: 'text/markdown' });
@@ -138,6 +140,13 @@ test('a service page or case study answers an agent with its Markdown twin', asy
         // The twin is linked from the page, so an agent reading HTML can find it.
         assert.ok(html.includes(`href="${path.slice(0, -1)}.md"`), path + ' links its twin');
     }
+});
+
+test('the German home page answers an agent in English and says so', async () => {
+    const response = await visit('https://williwolff.com/de/', { accept: 'text/markdown' });
+    assert.equal(response.headers.get('content-type'), 'text/markdown; charset=utf-8');
+    assert.equal(response.headers.get('content-language'), 'en');
+    assert.equal(response.headers.get('link'), '<https://williwolff.com/>; rel="canonical"');
 });
 
 // --- pages, languages and links -------------------------------------------------
@@ -159,6 +168,20 @@ test('every page names itself, and its twin in the other language names it back'
         assert.match(html, /<title>[^<]{10,70}<\/title>/, path + ' title length');
         assert.match(html, /<meta name="description" content="[^"]{50,200}"/, path + ' description length');
         assert.equal((html.match(/<h1[ >]/g) || []).length, 1, path + ' has one h1');
+    }
+});
+
+test('the language switch is on every page and nothing hides it', () => {
+    for (const path of pages) {
+        const html = file(path);
+        const other = path.startsWith('/de/') ? 'en' : 'de';
+        const twin = alternate(html, other);
+        assert.ok(html.includes(`id="lang-toggle" href="${twin}"`), path + ' has no switch to ' + twin);
+    }
+    // The old single page hid the other language with CSS. A rule like that
+    // would hide the switch, which is labelled in the other language.
+    for (const name of readdirSync(join(dist, '_astro')).filter(n => n.endsWith('.css'))) {
+        assert.doesNotMatch(readFileSync(join(dist, '_astro', name), 'utf8'), /\[data-lang|\[lang[=\]]/, name + ' selects by language');
     }
 });
 
@@ -215,10 +238,41 @@ test('markup and header injection in a brief stay inert', async () => {
 });
 
 test('a filled trap field is answered but not sent', async () => {
-    const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, website: 'https://spam.example' }), env });
+    const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, hp_confirm: 'https://spam.example' }), env });
     assert.equal((await response.json()).ok, true);
     assert.equal(sent.length, 0);
 });
+
+test('a brief that names a website, or an address with an apostrophe, is still sent', async () => {
+    const withSite = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, website: 'https://acme.example' }), env });
+    assert.match((await withSite.json()).reference, /^WW-/);
+    const irish = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, email: "o'brien@example.com" }), env });
+    assert.equal(irish.status, 200);
+    assert.equal(sent.length, 2);
+    assert.equal(sent[1].body.replyTo.email, "o'brien@example.com");
+    assert.doesNotMatch(sent[1].body.htmlContent, /o'brien/, 'the apostrophe is escaped in the HTML part');
+});
+
+test('a brief that is too long is refused, not cut', async () => {
+    const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, summary: 'x'.repeat(6001) }), env });
+    const body = await response.json();
+    assert.equal(response.status, 400);
+    assert.match(body.fields.summary, /6,000/);
+    assert.equal(sent.length, 0);
+    const fits = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, summary: 'x'.repeat(6000) }), env });
+    assert.equal(fits.status, 200);
+    assert.equal(sent[0].body.textContent.match(/x+$/)[0].length, 6000);
+});
+
+test('only JSON is accepted, so another website cannot post through its visitors', async () => {
+    for (const type of [undefined, 'text/plain;charset=UTF-8', 'application/x-www-form-urlencoded']) {
+        const headers = type ? { 'content-type': type } : {};
+        const response = await enquiry({ request: new Request('https://williwolff.com/api/enquiry', { method: 'POST', headers, body: JSON.stringify(brief) }), env });
+        assert.equal(response.status, 415, String(type));
+    }
+    assert.equal(sent.length, 0);
+});
+
 
 test('without a mail key the form says so and names the fallback', async () => {
     const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', brief), env: { ASSETS } });
@@ -231,6 +285,8 @@ test('without a mail key the form says so and names the fallback', async () => {
 test('bad JSON, oversized bodies and GET are handled', async () => {
     assert.equal((await enquiry({ request: post('https://williwolff.com/api/enquiry', '{nope'), env })).status, 400);
     assert.equal((await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, summary: 'x'.repeat(40000) }), env })).status, 413);
+    // The cap counts bytes, not characters: 12,000 euro signs are 36 KB.
+    assert.equal((await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, summary: '€'.repeat(12000) }), env })).status, 413);
     const described = await (await enquiry({ request: new Request('https://williwolff.com/api/enquiry'), env })).json();
     assert.deepEqual(described.required, ['email', 'summary']);
 });
@@ -272,6 +328,30 @@ test('MCP submit_enquiry sends a brief marked as from an agent', async () => {
     assert.equal(bad.body.result.isError, true);
 });
 
+test('MCP sends one brief per request, whatever the batch holds', async () => {
+    const call = id => ({ jsonrpc: '2.0', id, method: 'tools/call', params: { name: 'submit_enquiry', arguments: brief } });
+    const batch = await mcp({ request: post('https://williwolff.com/mcp', [call(1), call(2), call(3)]), env });
+    const answers = await batch.json();
+    assert.deepEqual(answers.map(a => a.result.isError), [false, true, true]);
+    assert.equal(sent.length, 1);
+    const tooMany = await mcp({ request: post('https://williwolff.com/mcp', Array.from({ length: 21 }, (_, i) => ({ jsonrpc: '2.0', id: i, method: 'ping' }))), env });
+    assert.equal(tooMany.status, 400);
+    const huge = await mcp({ request: post('https://williwolff.com/mcp', { jsonrpc: '2.0', id: 1, method: 'ping', params: { pad: 'x'.repeat(40000) } }), env });
+    assert.equal(huge.status, 413);
+    assert.equal(sent.length, 1);
+});
+
+test('MCP answers malformed messages and odd arguments with an error, not a crash', async () => {
+    for (const body of ['null', '[null]', '42', '"hi"']) {
+        const response = await mcp({ request: post('https://williwolff.com/mcp', body), env });
+        const answer = [].concat(await response.json())[0];
+        assert.equal(answer.error.code, -32600, body);
+    }
+    const odd = await rpc('tools/call', { name: 'get_cv', arguments: { language: 'constructor', format: 'name' } });
+    assert.equal(odd.body.result.isError, true);
+    assert.match(odd.body.result.content[0].text, /language must be/);
+});
+
 test('MCP errors: unknown method, unknown tool, GET', async () => {
     assert.equal((await rpc('resources/list')).body.error.code, -32601);
     assert.equal((await rpc('tools/call', { name: 'delete_everything' })).body.error.code, -32602);
@@ -287,6 +367,14 @@ test('the rate is the same on the page, in llms.txt and in hire.json', () => {
     assert.match(file('/llms.txt'), new RegExp(from + ' to ' + to + ' EUR per hour'));
     assert.match(file('/'), new RegExp(from + ' to ' + to + ' EUR per hour'));
     assert.match(file('/de/'), new RegExp(from + ' bis ' + to + ' EUR pro Stunde'));
+    // The range is typed by hand in a few places. Every mention, on every page
+    // and in every Markdown twin, has to be the one in hire.json.
+    const texts = pages.concat(subpages.map(p => p.slice(0, -1) + '.md'), ['/llms.txt', '/404.html']);
+    for (const path of texts) {
+        for (const [found, low, high] of file(path).matchAll(/(\d+) (?:to|bis) (\d+) EUR/g)) {
+            assert.deepEqual([Number(low), Number(high)], [from, to], `${path} says "${found}"`);
+        }
+    }
     // The home pages and the service pages each carry the price as structured data.
     for (const path of pages.filter(p => p === '/' || p === '/de/' || /\/(services|leistungen)\//.test(p))) {
         const page = file(path);

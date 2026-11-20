@@ -75,9 +75,6 @@ h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.015em; }
 
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
 
-[data-lang="de"] [lang="en"] { display: none !important; }
-[data-lang="en"] [lang="de"] { display: none !important; }
-
 .name-soft { opacity: 0.4; }
 
 /* --- header ------------------------------------------------------- */
@@ -714,7 +711,15 @@ h3.project-title-link::after { content: none; }
 }
 
 @media (max-width: 640px) {
+    .site-header { gap: var(--s-3); }
     .site-header .btn { padding: 0 0.8rem; }
+    /* The two letters say more than the globe, and the header is short of room. */
+    .lang-toggle { padding: 0 0.4rem; }
+    .lang-globe { display: none; }
+}
+/* On the narrowest phones the CV button gives way; the page offers the CV right below. */
+@media (max-width: 380px) {
+    .site-header #cv-download { display: none; }
 }
 
 /* --- figures: big numbers, no boxes, each one a filter ----------- */

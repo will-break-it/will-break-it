@@ -5,7 +5,7 @@
 // a way to send a brief. The server keeps no session: every POST is answered
 // with plain JSON, and there is no server-to-client stream.
 
-import { submitEnquiry, PROJECT_TYPES, ENGAGEMENTS } from '../lib/enquiry.js';
+import { submitEnquiry, PROJECT_TYPES, ENGAGEMENTS, readJsonBody } from '../lib/enquiry.js';
 
 const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'];
 const HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' };
@@ -85,14 +85,18 @@ async function callTool(name, args, context) {
         case 'get_terms':
             return text(await asset('/hire.json', context));
         case 'get_cv': {
-            const files = CV_FILES[args.language || 'en'];
-            const path = files && files[args.format || 'markdown'];
+            const language = args.language || 'en';
+            const format = args.format || 'markdown';
+            const path = Object.hasOwn(CV_FILES, language) && Object.hasOwn(CV_FILES[language], format) ? CV_FILES[language][format] : null;
             if (!path) return text('language must be "en" or "de", and format one of "markdown", "json", "pdf".', true);
             if (path.endsWith('.pdf')) return text(origin + path);
             return text(await asset(path, context));
         }
         case 'submit_enquiry': {
-            const result = await submitEnquiry({ ...args, submitted_by: 'agent', website: '' }, context.env, 'mcp');
+            // One brief per HTTP request, so a rate limit on requests is a limit on emails.
+            if (context.briefs >= 1) return text('One brief per request. Send further briefs in separate requests.', true);
+            context.briefs += 1;
+            const result = await submitEnquiry({ ...args, submitted_by: 'agent' }, context.env, 'mcp');
             return text(JSON.stringify(result.body), !result.body.ok);
         }
         default:
@@ -102,9 +106,9 @@ async function callTool(name, args, context) {
 
 async function handle(message, context) {
     const reply = result => ({ jsonrpc: '2.0', id: message.id, result });
-    const fail = (code, error) => ({ jsonrpc: '2.0', id: message.id ?? null, error: { code, message: error } });
+    const fail = (code, error) => ({ jsonrpc: '2.0', id: message?.id ?? null, error: { code, message: error } });
 
-    if (!message || message.jsonrpc !== '2.0' || typeof message.method !== 'string') return fail(-32600, 'Invalid request');
+    if (!message || typeof message !== 'object' || message.jsonrpc !== '2.0' || typeof message.method !== 'string') return fail(-32600, 'Invalid request');
     // Notifications carry no id and get no answer.
     if (message.id === undefined || message.id === null) return null;
 
@@ -135,8 +139,13 @@ async function handle(message, context) {
     }
 }
 
-export async function onRequest(context) {
-    const { request } = context;
+// Tool calls are small. Anything larger is not one.
+const MAX_BYTES = 32 * 1024;
+const MAX_BATCH = 20;
+const rpcError = (code, message, status) => new Response(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code, message } }), { status, headers: HEADERS });
+
+export async function onRequest({ request, env }) {
+    const context = { request, env, briefs: 0 };
 
     if (request.method !== 'POST') {
         // No server-to-client stream and no sessions, so GET and DELETE have nothing to do.
@@ -147,15 +156,20 @@ export async function onRequest(context) {
         }), { status: 405, headers: { ...HEADERS, Allow: 'POST' } });
     }
 
-    let body;
-    try {
-        body = JSON.parse(await request.text());
-    } catch {
-        return new Response(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Parse error' } }), { status: 400, headers: HEADERS });
-    }
+    const read = await readJsonBody(request, MAX_BYTES);
+    if (read.tooLarge) return rpcError(-32600, 'Request too large', 413);
+    if (read.invalid) return rpcError(-32700, 'Parse error', 400);
+    const body = read.value;
 
     if (Array.isArray(body)) {
-        const answers = (await Promise.all(body.slice(0, 20).map(message => handle(message, context)))).filter(Boolean);
+        // Refused whole, so no message of a batch goes unanswered.
+        if (body.length > MAX_BATCH) return rpcError(-32600, 'A batch may hold at most ' + MAX_BATCH + ' messages', 400);
+        // In order, not in parallel: the one-brief limit above counts as it goes.
+        const answers = [];
+        for (const message of body) {
+            const answer = await handle(message, context);
+            if (answer) answers.push(answer);
+        }
         return answers.length ? new Response(JSON.stringify(answers), { headers: HEADERS }) : new Response(null, { status: 202 });
     }
 
