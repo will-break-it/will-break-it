@@ -1,0 +1,363 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Willi Wolff",
+    "label": "Software Engineer & Architect",
+    "image": "https://williwolff.com/assets/images/will.jpg",
+    "email": "contact@williwolff.com",
+    "url": "https://williwolff.com/",
+    "summary": "Software engineer with 10+ years across enterprise (Deloitte), blockchain infrastructure (Bitcoin/Cardano), mobile, and IoT. Currently software engineer and architect on Ouroboros Leios at IOG. Founder DNA and high agency, at home in distributed systems and secure software. I like to own problems end-to-end: build a rough working version early, find the risks, then iterate. My best work happens in small teams on hard problems, and I gladly take on more than pure engineering when a project needs it.",
+    "location": {
+      "city": "Berlin",
+      "countryCode": "DE"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "will-break-it",
+        "url": "https://github.com/will-break-it"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "wwolff",
+        "url": "https://linkedin.com/in/wwolff"
+      },
+      {
+        "network": "X",
+        "username": "will_break_it",
+        "url": "https://x.com/will_break_it"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Input Output Global (IOG)",
+      "position": "Software Engineer & Architect – Ouroboros Leios",
+      "url": "https://www.iog.io/",
+      "description": "Contract",
+      "startDate": "2026-10",
+      "summary": "Back on Ouroboros Leios, building Cardano's high-throughput protocol towards mainnet."
+    },
+    {
+      "name": "Input Output Global (IOG)",
+      "position": "Technical Architect – Byzantine-Resistant PubSub Network",
+      "url": "https://www.iog.io/",
+      "description": "Contract",
+      "startDate": "2026-02",
+      "endDate": "2026-10",
+      "summary": "Led research and development of Cardano PubSub, a Byzantine-resistant publish/subscribe network, taking a team through formal verification of a research proposal and building the prototype.",
+      "highlights": [
+        "Technical Leadership: Led a team of 4 engineers and researchers designing a Byzantine-resistant pub/sub overlay network",
+        "Formal Verification: Took a team through formal verification of the SecureCyclon peer-sampling protocol stack and built the working prototype via spec-driven development (spec-kit)",
+        "Protocol Security: Reevaluated peer-sampling protocols for specific security properties"
+      ]
+    },
+    {
+      "name": "Input Output Global (IOG)",
+      "position": "Technical Architect – Ouroboros Leios",
+      "url": "https://www.iog.io/",
+      "description": "Contract",
+      "startDate": "2024-11",
+      "endDate": "2026-02",
+      "summary": "Led research and development of Ouroboros Leios, a high-throughput overlay protocol for Cardano blockchain, coordinating cross-functional team and driving toward mainnet implementation.",
+      "highlights": [
+        "Technical Leadership & Team Coordination: Direct team of 8 researchers and engineers across formal methods, protocol design, and prototype development",
+        "Defining Direction: Translated open research into executable roadmap—authored CIP-0164 (Cardano Improvement Proposal, industry RFC comparable to Bitcoin's BIPs or IETF standards)",
+        "Architecture & Strategy: Designed simulation-driven approach validating protocol behavior before mainnet; created decision log tracking architectural choices and rationale",
+        "Cross-Org Coordination: Bridge formal methods researchers, protocol engineers, and product teams—navigating complex technical trade-offs",
+        "Point of Contact: Technical point of contact for the project: presented progress and findings in large internal reviews and publicly via monthly demo and review sessions for community and technical audiences (5k+ views per session, sustained over 1.5 years), the project website, and regular reports",
+        "MEV Analysis: Investigated MEV (Miner Extractable Value) impact on Leios via mempool analysis and simulation",
+        "Workshop Facilitation: Organized week-long on-site workshop that reduced open research questions and aligned team on implementation strategy"
+      ]
+    },
+    {
+      "name": "Input Output Global (IOG)",
+      "position": "Technical Architect – Lace Wallet",
+      "url": "https://www.iog.io/",
+      "description": "Contract",
+      "startDate": "2022-11",
+      "endDate": "2024-11",
+      "summary": "Led technical architecture and backend infrastructure for Lace, a next-generation Cardano wallet, delivering significant performance improvements and new revenue-generating features.",
+      "highlights": [
+        "Backend Re-Architecture: Re-engineered from poll-based to event-driven architecture—45% latency reduction, 60%+ infrastructure cost savings",
+        "Go-Live: Took the re-architected backend to production for the public Lace 1.0 launch",
+        "Custom Chain Indexer: Built indexer with bloom filters and credential-based indexing; 2,000+ tx/s ingest capacity, sub-second wallet sync",
+        "Industry Standards: Authored CIP proposal for wallet indexing standards adopted in ecosystem",
+        "Product Leadership: Led 7-person cross-functional team (3 FE, 2 BE, 1 QA, 1 PM) delivering MetaDex swap feature",
+        "Shared Tooling: Built transaction construction libraries and event-driven patterns adopted across multiple product teams",
+        "Technical Innovation: Developed background web worker sync approach later adopted by team as standard pattern"
+      ]
+    },
+    {
+      "name": "Input Output Global (IOG)",
+      "position": "Solutions Architect",
+      "url": "https://www.iog.io/",
+      "description": "Contract",
+      "startDate": "2021-11",
+      "endDate": "2022-11",
+      "summary": "Designed blockchain solutions and educated enterprise partners on Cardano's technical architecture.",
+      "highlights": [
+        "Smart Contract Architecture: Designed complete Plutus stack for collateralized debt position (CDP) platform",
+        "Technical Education: Conducted workshops for 100+ Amazon engineers on eUTxO model, smart contracts, and dApp patterns",
+        "Node Deployment: Helped Amazon design its provisioning and deployment scheme for running Cardano and Midnight nodes",
+        "Knowledge Transfer: Created training materials and hands-on exercises for blockchain education"
+      ]
+    },
+    {
+      "name": "Mobility Data Lab GmbH",
+      "position": "Senior Software Engineer",
+      "location": "Berlin",
+      "startDate": "2020-02",
+      "endDate": "2021-11",
+      "summary": "Built IoT and data processing systems for connected vehicle platform.",
+      "highlights": [
+        "Fleet Management: Delivered complete OTA fleet-update pipeline for connected vehicle hardware",
+        "IoT Platform: Built OTA update mechanism (Rust embedded, Vert.x backend) with rollback capabilities",
+        "Analytics: Designed real-time data pipeline using ELK stack for Miles and Share Now car-sharing services",
+        "Go-Live: Launched the pilot in production with 20+ vehicles"
+      ]
+    },
+    {
+      "name": "Deloitte",
+      "position": "Software Engineer → Lead Engineer & Senior Software Engineer",
+      "url": "https://www.deloitte.com/global/en/services/consulting/services/systems-delivery-modernization.html",
+      "location": "Austin TX → Ulm, Germany",
+      "startDate": "2016-09",
+      "endDate": "2019-11",
+      "summary": "Joined as Software Engineer in Austin, Texas, then relocated to Ulm, Germany as Senior Software Engineer, where I was promoted to lead a large-scale legacy system migration for a major German insurance company.",
+      "highlights": [
+        "Migration Toolchain: Redesigned Cobol-to-Java architecture for functional language (ISA); 3-stage pipeline: parser → AST → Java codegen, plus runtime emulation layer preserving original ISA/IDM behavior",
+        "Business Impact: Saved client €6M annually in licensing costs",
+        "Go-Lives: Delivered two production go-lives on separate migration projects: a major German insurer and a US state pension fund and social security agency",
+        "Retail Clients: Onsite with S&P 500 retailers Target and Walmart on programmatic mainframe-to-Java migrations (Cobol parsing, custom runtime, end-to-end tests) cutting mainframe licensing and support costs",
+        "Team Growth: Promoted to Lead within 24 months; scaled team from 3 to 20 engineers",
+        "Global Coordination: Coordinated with offshore teams in India; established testing standards adopted organization-wide"
+      ]
+    },
+    {
+      "name": "CityXcape Inc.",
+      "position": "Co-Founder & CTO",
+      "url": "https://cityxcape.com/",
+      "location": "San Francisco",
+      "startDate": "2015-02",
+      "endDate": "2016-09",
+      "summary": "Technical co-founder of social discovery platform for exploring cities through community-driven recommendations.",
+      "highlights": [
+        "Product Development: Built native iOS app (Swift) and Django/Rails backend from concept to App Store launch",
+        "Fundraising: Raised ~€150k in seed funding from angel investors",
+        "Team Leadership: Led technical team of 2-3 contract developers; defined product vision and roadmap"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Hult International Business School, San Francisco",
+      "studyType": "M.A.",
+      "area": "International Business",
+      "startDate": "2014",
+      "endDate": "2015"
+    },
+    {
+      "institution": "DHBW Stuttgart, Germany",
+      "studyType": "B.Sc.",
+      "area": "Computer Science",
+      "startDate": "2011",
+      "endDate": "2014"
+    }
+  ],
+  "publications": [
+    {
+      "name": "CIP-0164: Ouroboros Leios",
+      "publisher": "Cardano Improvement Proposal",
+      "releaseDate": "2025",
+      "url": "https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md",
+      "summary": "Canonical architecture and design specification for Cardano's high-throughput overlay protocol—an open industry RFC comparable to Bitcoin's BIPs and IETF standards. Read it at CIP-0164."
+    }
+  ],
+  "projects": [
+    {
+      "name": "Ouroboros Leios – Protocol Architecture & CIP",
+      "description": "Co-authored protocol specification and architecture for Cardano's next-generation throughput layer.",
+      "highlights": [
+        "CIP Authorship: Principal author of CIP-0164—the canonical architecture design document guiding implementation teams",
+        "Protocol Specification: Translated academic research into implementable specification with concrete parameters and trade-offs",
+        "Technical Documentation: Created comprehensive documentation site covering protocol mechanics, simulation results, and design rationale"
+      ],
+      "startDate": "2024",
+      "url": "https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md",
+      "roles": [
+        "Cardano Research"
+      ]
+    },
+    {
+      "name": "Dump it! – AI-Enhanced Note Taking",
+      "description": "Cross-platform application with end-to-end encryption and sophisticated AI processing pipeline.",
+      "highlights": [
+        "Full-Stack: Native iOS (Swift/SwiftUI), Android (Kotlin/Compose), and React web app with feature parity",
+        "E2E Encryption: Diffie-Hellman key exchange + AES-256-GCM + iOS Secure Enclave—zero backend access to user data",
+        "AI Pipeline: Two-phase LLM processing (Claude for intent, pgvector for semantic search, Whisper for speech-to-text)",
+        "Architecture: Event-sourced with SSE streaming; offline-first with persistent queue sync",
+        "Traction: 5k+ notes, 200+ users, 70% weekly retention; shipped to App Store and Google Play"
+      ],
+      "startDate": "2023",
+      "endDate": "2025",
+      "roles": [
+        "iOS, Android, Web"
+      ]
+    },
+    {
+      "name": "Pagebase – Freelance Development Agency",
+      "description": "Berlin-based agency building Supabase/PostgreSQL backends, web and mobile apps, and AI automation.",
+      "highlights": [
+        "Stack: Supabase, PostgreSQL, React/React Native, edge functions, CI/CD"
+      ],
+      "startDate": "2024",
+      "roles": [
+        "Founder"
+      ]
+    },
+    {
+      "name": "Hausnummer – Property Deal Screening",
+      "description": "Screening tool for German residential investment listings, built and shipped solo.",
+      "highlights": [
+        "Modelling: Monthly cashflow before tax as the headline figure, after-tax estimates kept separate, break-even equity and cash-on-cash return; all assumptions visible and editable",
+        "Stack: Astro on Cloudflare Workers with KV; listing import extracts figures from a pasted link via browser rendering and structured output parsing"
+      ],
+      "startDate": "2026",
+      "endDate": "2026",
+      "roles": [
+        "Solo Project"
+      ]
+    },
+    {
+      "name": "Drip Dropz – NFT Marketplace",
+      "description": "Production NFT trading platform built from scratch.",
+      "highlights": [
+        "Frontend: React/TypeScript SPA with CIP-30 wallet integration and background web worker sync",
+        "Smart Contracts: Plutus integration for bidding, selling, swapping, and order management",
+        "Launch: 10k+ NFT listings; first revenue within 48 hours",
+        "DevOps: TDD practices with Jest; CI/CD pipeline for reliable deployments"
+      ],
+      "startDate": "2022",
+      "endDate": "2024",
+      "roles": [
+        "Cardano"
+      ]
+    },
+    {
+      "name": "Berlin Pool – Stakepool Operations",
+      "description": "Operated Cardano consensus nodes contributing to network decentralization.",
+      "highlights": [
+        "Node Operations: Produced 2,000+ mainnet blocks; maintained 99.9% uptime; 15M+ ADA delegation",
+        "Security: Air-gapped cold key storage; secure key rotation procedures",
+        "Infrastructure: Automated deployment with Docker, Ansible, Terraform; Prometheus/Grafana monitoring"
+      ],
+      "startDate": "2021",
+      "endDate": "2024",
+      "roles": [
+        "Cardano Infrastructure"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "keywords": [
+        "TypeScript (expert)",
+        "Rust",
+        "Swift",
+        "Java/Kotlin",
+        "Python",
+        "Haskell/Plutus"
+      ]
+    },
+    {
+      "name": "Infrastructure",
+      "keywords": [
+        "Distributed systems",
+        "Event-driven",
+        "PostgreSQL",
+        "Redis",
+        "gRPC",
+        "Microservices"
+      ]
+    },
+    {
+      "name": "Security",
+      "keywords": [
+        "E2E encryption",
+        "Diffie-Hellman",
+        "AES-256",
+        "Secure Enclave/TEE",
+        "Key management"
+      ]
+    },
+    {
+      "name": "AI/ML",
+      "keywords": [
+        "LLM integration (Claude",
+        "GPT-4)",
+        "Vector search",
+        "Embeddings",
+        "Whisper"
+      ]
+    },
+    {
+      "name": "Web & Mobile",
+      "keywords": [
+        "React",
+        "React Native",
+        "NestJS",
+        "Spring Boot",
+        "Vert.x",
+        "Swift/iOS",
+        "Kotlin/Android"
+      ]
+    },
+    {
+      "name": "DevOps",
+      "keywords": [
+        "Docker",
+        "Terraform",
+        "Ansible",
+        "GitHub Actions",
+        "CI/CD",
+        "AWS",
+        "Prometheus/Grafana"
+      ]
+    },
+    {
+      "name": "Blockchain & DLT",
+      "keywords": [
+        "Cardano (eUTxO)",
+        "Plutus",
+        "CIP standards",
+        "Consensus protocols",
+        "Wallet standards"
+      ]
+    },
+    {
+      "name": "Leadership",
+      "keywords": [
+        "Team building",
+        "Technical strategy",
+        "Architecture docs",
+        "Workshop facilitation"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "German"
+    },
+    {
+      "language": "English"
+    }
+  ],
+  "meta": {
+    "canonical": "https://williwolff.com/cv.json",
+    "version": "v1.0.0",
+    "lastModified": "2026-11-18",
+    "language": "en"
+  }
+}
