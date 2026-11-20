@@ -597,17 +597,11 @@
             color: var(--ink);
         }
 
-        .tagline {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.15rem 0.7rem;
+        .hero-role {
             margin-top: var(--s-1);
-            padding: 0;
-            list-style: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--muted);
         }
-        .tagline li { display: inline-flex; align-items: center; }
 
 
         /* Plain-word jump links: underline and a sliding arrow on hover,
@@ -1056,11 +1050,6 @@
             .project-card:hover .project-logo > * { transform: none; }
             .job-content, .job-toggle { transition: none; }
         }
-
-        /* --- tagline: the old titles struck through ------------------------ */
-        .tagline s { color: var(--faint); text-decoration-thickness: 1.5px; }
-        .tagline s { white-space: nowrap; }
-        .tagline strong { color: var(--brand-strong); font-weight: 650; }
 
         /* --- digit reels ------------------------------------------------- */
         .reel { display: inline-flex; gap: 3px; }
@@ -1625,15 +1614,7 @@
                         <img src="assets/images/will.jpg" alt="Willi Wolff" class="profile-image">
                         <div>
                             <p class="hero-name">Will<span class="name-soft">i</span> Wolff <span class="lead-sig"><span lang="en">· Always shipping.</span><span lang="de">· Immer am Liefern.</span></span></p>
-                            <ol class="tagline" aria-label="Titles over time">
-                                <li><s><span lang="en">Co-founder</span><span lang="de">Mitgründer</span></s></li>
-                                <li><s>Lead Engineer</s></li>
-                                <li><s>Senior Software Engineer</s></li>
-                                <li><s>Solutions Architect</s></li>
-                                <li><s><span lang="en">Technical Architect</span><span lang="de">Technischer Architekt</span></s></li>
-                                <li><s><span lang="en">Project Lead</span><span lang="de">Projektleiter</span></s></li>
-                                <li><strong><span lang="en">Team lead of ~8 AI agents, and their quality gate</span><span lang="de">Teamleiter von ~8 KI-Agenten und ihr Qualitäts-Gate</span></strong></li>
-                            </ol>
+                            <p class="hero-role"><span lang="en">Currently software engineer and architect on Ouroboros Leios at IOG</span><span lang="de">Aktuell Software Engineer und Architekt für Ouroboros Leios bei IOG</span></p>
                         </div>
                     </div>
 
