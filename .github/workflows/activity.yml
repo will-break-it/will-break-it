@@ -1,6 +1,6 @@
 name: Refresh activity data
 
-# Rebuilds data/activity.json from the GitHub GraphQL API and commits it when
+# Rebuilds public/data/activity.json from the GitHub GraphQL API and commits it when
 # the numbers actually changed. The site reads the committed file, so page loads
 # never touch the GitHub API: no rate limits, no CORS, no empty graph when the
 # API is down.
@@ -62,12 +62,12 @@ jobs:
 
       - name: Commit if changed
         run: |
-          if git diff --quiet -- data/activity.json; then
+          if git diff --quiet -- public/data/activity.json; then
             echo "No change in activity data."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/activity.json
+          git add public/data/activity.json
           git commit -m "data: refresh activity aggregates"
           git push

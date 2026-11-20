@@ -1,8 +1,8 @@
 // Builds the text and data versions of the CV from the Typst sources, so the
 // PDF, the Markdown and the JSON can never say different things.
 //
-//   master-cv.typ     -> cv.md,    cv.json     (English)
-//   master-cv-de.typ  -> cv.de.md, cv.de.json  (German)
+//   master-cv.typ     -> public/cv.md,    public/cv.json     (English)
+//   master-cv-de.typ  -> public/cv.de.md, public/cv.de.json  (German)
 //
 // The JSON follows the JSON Resume schema (https://jsonresume.org/schema).
 // Run with `node scripts/build-cv-data.mjs`; `--check` exits 1 if the committed
@@ -14,6 +14,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+// Astro copies this folder to the site root unchanged.
+const out = file => join(root, 'public', file);
 const SITE = 'https://williwolff.com';
 
 const LANGS = {
@@ -333,18 +335,18 @@ for (const [code, lang] of Object.entries(LANGS)) {
     const cv = parseCv(readFileSync(join(root, lang.source), 'utf8'));
     // A committed file keeps its date unless its content changed, so the
     // date means "the CV changed", not "the build ran".
-    const previous = existsSync(join(root, lang.json)) ? JSON.parse(readFileSync(join(root, lang.json), 'utf8')) : null;
+    const previous = existsSync(out(lang.json)) ? JSON.parse(readFileSync(out(lang.json), 'utf8')) : null;
     const render = modified => ({
         [lang.json]: JSON.stringify(toJsonResume(cv, code, lang, modified), null, 2) + '\n',
         [lang.md]: toMarkdown(cv, code, lang, modified),
     });
     let outputs = previous?.meta?.lastModified ? render(previous.meta.lastModified) : null;
-    const unchanged = outputs && Object.entries(outputs).every(([file, text]) => existsSync(join(root, file)) && readFileSync(join(root, file), 'utf8') === text);
+    const unchanged = outputs && Object.entries(outputs).every(([file, text]) => existsSync(out(file)) && readFileSync(out(file), 'utf8') === text);
     if (!unchanged) {
         outputs = render(lastModified(lang.source));
         stale = true;
         if (!check) {
-            for (const [file, text] of Object.entries(outputs)) writeFileSync(join(root, file), text);
+            for (const [file, text] of Object.entries(outputs)) writeFileSync(out(file), text);
             console.log(`${lang.source} -> ${lang.md}, ${lang.json}`);
         } else {
             console.error(`${lang.md} or ${lang.json} is out of date with ${lang.source}`);

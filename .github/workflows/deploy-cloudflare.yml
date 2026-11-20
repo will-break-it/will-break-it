@@ -3,7 +3,7 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [main]
-  # The activity cron commits data/activity.json with GITHUB_TOKEN, and GitHub
+  # The activity cron commits public/data/activity.json with GITHUB_TOKEN, and GitHub
   # does not raise a push event for those commits, so this workflow would never
   # see the refreshed data. Chain off that run instead.
   workflow_run:
@@ -37,35 +37,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+          cache: npm
 
-      # cv.md and cv.json are generated from the Typst sources and committed.
-      # Refuse to deploy a CV whose formats disagree with each other.
-      - name: Check generated CV files and agent routes
-        run: |
-          node scripts/build-cv-data.mjs --check
-          node --test tests/agent-routes.test.mjs
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Assemble static site
+      # `npm run build` first checks that cv.md and cv.json still match the Typst
+      # sources, so a CV whose formats disagree is never deployed. The tests then
+      # run the Pages Functions against the built site in dist/.
+      - name: Build the site and test it
         run: |
-          rm -rf dist
-          mkdir -p dist
-          rsync -a \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='README.md' \
-            --exclude='master-cv.typ' \
-            --exclude='master-cv-de.typ' \
-            --exclude='scripts' \
-            --exclude='functions' \
-            --exclude='lib' \
-            --exclude='tests' \
-            --exclude='.gitignore' \
-            --exclude='.nvmrc' \
-            --exclude='.DS_Store' \
-            --exclude='dist' \
-            ./ dist/
+          npm test
           echo "Files to deploy:"
           find dist -type f | sort
+
+      # Wrangler picks up ./functions (and the ./lib it imports) from the
+      # working directory; only dist/ is uploaded as static files.
 
       - name: Resolve Cloudflare credentials
         run: |

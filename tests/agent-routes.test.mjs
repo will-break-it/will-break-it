@@ -1,9 +1,10 @@
-// Runs the Pages Functions in Node with a stand-in for the static assets and
-// for Brevo. No network, no email. `node --test tests/`
+// Runs the Pages Functions in Node against the built site in dist/, with a
+// stand-in for Brevo. No network, no email. `npm test` builds first; on its
+// own, run `npm run build` and then `node --test tests/agent-routes.test.mjs`.
 
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,19 +13,36 @@ import { onRequest as enquiry } from '../functions/api/enquiry.js';
 import { onRequest as mcp } from '../functions/mcp.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const file = name => readFileSync(join(root, name), 'utf8');
+const dist = join(root, 'dist');
+if (!existsSync(join(dist, 'index.html'))) throw new Error('dist/ is missing. Run `npm run build` first, or use `npm test`.');
 
-// Serves repository files the way Pages serves the deployed site.
+// A path as Pages resolves it: a folder answers with its index.html.
+const resolve = path => {
+    const target = join(dist, decodeURIComponent(path));
+    return existsSync(target) && statSync(target).isDirectory() ? join(target, 'index.html') : target;
+};
+const file = name => readFileSync(resolve(name), 'utf8');
+
+// Serves the built files the way Pages serves the deployed site.
 const ASSETS = {
     async fetch(request) {
-        const path = new URL(request.url).pathname;
         try {
-            return new Response(file(path === '/' ? 'index.html' : path.slice(1)));
+            return new Response(file(new URL(request.url).pathname));
         } catch {
             return new Response('not found', { status: 404 });
         }
     },
 };
+
+// Every built HTML page, as the path a visitor would request.
+const pages = (function walk(dir, base = '/') {
+    return readdirSync(dir, { withFileTypes: true }).flatMap(item => {
+        if (item.isDirectory()) return walk(join(dir, item.name), base + item.name + '/');
+        return item.name === 'index.html' ? [base] : [];
+    });
+})(dist);
+const SUBPAGE = /^\/(services|work|de\/leistungen|de\/projekte)\/[a-z0-9-]+\/$/;
+const subpages = pages.filter(path => SUBPAGE.test(path));
 
 const realFetch = globalThis.fetch;
 let sent;
@@ -43,8 +61,9 @@ const post = (url, body, headers = {}) => new Request(url, { method: 'POST', hea
 
 // --- home page: HTML for people, Markdown for agents --------------------------
 
-const home = (headers = {}, url = 'https://williwolff.com/') =>
+const visit = (url, headers = {}) =>
     middleware({ request: new Request(url, { headers }), env, next: () => ASSETS.fetch(new Request(url)) });
+const home = (headers = {}, url = 'https://williwolff.com/') => visit(url, headers);
 
 test('a browser gets the HTML page', async () => {
     const response = await home({ accept: 'text/html,application/xhtml+xml', 'user-agent': 'Mozilla/5.0 Safari/605.1.15' });
@@ -82,6 +101,87 @@ test('other paths and the old host behave as before', async () => {
     const old = await middleware({ request: new Request('https://wwolff.pages.dev/cv.md?x=1'), env, next: () => new Response('no') });
     assert.equal(old.status, 301);
     assert.equal(old.headers.get('location'), 'https://williwolff.com/cv.md?x=1');
+});
+
+test('the old ?lang= links land on the page for that language', async () => {
+    const german = await home({}, 'https://williwolff.com/?lang=de');
+    assert.equal(german.status, 301);
+    assert.equal(german.headers.get('location'), 'https://williwolff.com/de/');
+    const english = await home({}, 'https://williwolff.com/?lang=en&utm_source=x');
+    assert.equal(english.headers.get('location'), 'https://williwolff.com/?utm_source=x');
+});
+
+test('the German home page is its own page, in one language', async () => {
+    const response = await visit('https://williwolff.com/de/', { accept: 'text/html' });
+    const german = await response.text();
+    assert.match(german, /<html lang="de"/);
+    assert.match(german, /Zur Fallstudie/);
+    assert.doesNotMatch(german, /Read the case study/);
+    const english = file('/');
+    assert.match(english, /<html lang="en"/);
+    assert.match(english, /Read the case study/);
+    assert.doesNotMatch(english, /Zur Fallstudie/);
+});
+
+test('a service page or case study answers an agent with its Markdown twin', async () => {
+    assert.equal(subpages.length, 16, 'three services and five case studies, in two languages');
+    for (const path of subpages) {
+        const url = 'https://williwolff.com' + path;
+        const markdown = await visit(url, { accept: 'text/markdown' });
+        assert.equal(markdown.headers.get('content-type'), 'text/markdown; charset=utf-8', path);
+        assert.equal(markdown.headers.get('link'), `<${url}>; rel="canonical"`);
+        const text = await markdown.text();
+        assert.match(text, /^# \S/, path);
+        assert.doesNotMatch(text, /<[a-z]+[ >]/, path + ' twin contains HTML');
+        const html = await (await visit(url, { accept: 'text/html' })).text();
+        assert.match(html, /<!DOCTYPE html>/i, path);
+        // The twin is linked from the page, so an agent reading HTML can find it.
+        assert.ok(html.includes(`href="${path.slice(0, -1)}.md"`), path + ' links its twin');
+    }
+});
+
+// --- pages, languages and links -------------------------------------------------
+
+const attr = (html, pattern) => (html.match(pattern) || [])[1];
+const alternate = (html, lang) => attr(html, new RegExp(`<link rel="alternate" hreflang="${lang}" href="https://williwolff\\.com([^"]+)"`));
+
+test('every page names itself, and its twin in the other language names it back', () => {
+    for (const path of pages.filter(p => p !== '/404.html' && !p.startsWith('/404'))) {
+        const html = file(path);
+        const lang = path.startsWith('/de/') ? 'de' : 'en';
+        const other = lang === 'de' ? 'en' : 'de';
+        assert.equal(attr(html, /<link rel="canonical" href="https:\/\/williwolff\.com([^"]+)"/), path, path + ' canonical');
+        assert.equal(alternate(html, lang), path, path + ' hreflang for itself');
+        const twin = alternate(html, other);
+        assert.ok(pages.includes(twin), `${path} points at ${twin}, which is not built`);
+        assert.equal(alternate(file(twin), lang), path, `${twin} does not point back at ${path}`);
+        assert.equal(alternate(html, 'x-default'), lang === 'en' ? path : twin, path + ' x-default');
+        assert.match(html, /<title>[^<]{10,70}<\/title>/, path + ' title length');
+        assert.match(html, /<meta name="description" content="[^"]{50,200}"/, path + ' description length');
+        assert.equal((html.match(/<h1[ >]/g) || []).length, 1, path + ' has one h1');
+    }
+});
+
+test('every internal link on every page leads to a built file', () => {
+    for (const path of pages) {
+        const html = file(path);
+        assert.doesNotMatch(html, /@(work|service)\//, path + ' has an unresolved page reference');
+        for (const [, href] of html.matchAll(/(?:href|src)="(\/[^"#?]*)[^"]*"/g)) {
+            if (href.startsWith('//') || href.startsWith('/api/') || href === '/mcp') continue;
+            assert.ok(existsSync(resolve(href)), `${path} links to ${href}, which is not in dist`);
+        }
+    }
+});
+
+test('the sitemap and llms.txt list every page', () => {
+    const sitemap = file('/sitemap.xml');
+    const listed = [...sitemap.matchAll(/<loc>https:\/\/williwolff\.com([^<]+)<\/loc>/g)].map(m => m[1]);
+    for (const path of pages.filter(p => !p.startsWith('/404'))) assert.ok(listed.includes(path), path + ' is missing from the sitemap');
+    for (const path of listed) assert.ok(existsSync(resolve(path)), `the sitemap lists ${path}, which is not built`);
+    const llms = file('/llms.txt');
+    for (const path of subpages) assert.ok(llms.includes('https://williwolff.com' + path), path + ' is missing from llms.txt');
+    assert.doesNotMatch(llms, /<!--/);
+    assert.match(file('/404.html'), /<meta name="robots" content="noindex/);
 });
 
 // --- POST /api/enquiry ----------------------------------------------------------
@@ -182,15 +282,18 @@ test('MCP errors: unknown method, unknown tool, GET', async () => {
 // --- published facts agree --------------------------------------------------------
 
 test('the rate is the same on the page, in llms.txt and in hire.json', () => {
-    const terms = JSON.parse(file('hire.json'));
+    const terms = JSON.parse(file('/hire.json'));
     const { from, to } = terms.rate;
-    assert.match(file('llms.txt'), new RegExp(from + ' to ' + to + ' EUR per hour'));
-    const page = file('index.html');
-    assert.match(page, new RegExp(from + ' to ' + to + ' EUR per hour'));
-    assert.match(page, new RegExp(from + ' bis ' + to + ' EUR pro Stunde'));
-    assert.match(page, new RegExp('"minPrice": ' + from + '\\b'));
-    assert.match(page, new RegExp('"maxPrice": ' + to + '\\b'));
-    assert.doesNotMatch(page, /From \d+ EUR per hour|Ab \d+ EUR pro Stunde/);
+    assert.match(file('/llms.txt'), new RegExp(from + ' to ' + to + ' EUR per hour'));
+    assert.match(file('/'), new RegExp(from + ' to ' + to + ' EUR per hour'));
+    assert.match(file('/de/'), new RegExp(from + ' bis ' + to + ' EUR pro Stunde'));
+    // The home pages and the service pages each carry the price as structured data.
+    for (const path of pages.filter(p => p === '/' || p === '/de/' || /\/(services|leistungen)\//.test(p))) {
+        const page = file(path);
+        assert.match(page, new RegExp('"minPrice":\\s*' + from + '\\b'), path);
+        assert.match(page, new RegExp('"maxPrice":\\s*' + to + '\\b'), path);
+        assert.doesNotMatch(page, /From \d+ EUR per hour|Ab \d+ EUR pro Stunde/, path);
+    }
 });
 
 test('the generated CV files match their Typst sources', async () => {

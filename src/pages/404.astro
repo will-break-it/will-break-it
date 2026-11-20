@@ -1,0 +1,29 @@
+---
+// Without a 404 page Cloudflare Pages treats the site as a single-page app
+// and answers every unknown path with the home page and status 200.
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+import { T } from '../lib/site';
+const en = T.en.notFound;
+const de = T.de.notFound;
+---
+<Base lang="en" title="Page not found – Willi Wolff" description="This page does not exist." path="/404.html" paths={{ en: '/', de: '/de/' }} noindex>
+    <main class="page" id="top">
+        <div class="content">
+            <div class="notfound">
+                <p class="section-kicker">404</p>
+                <h1>{en.title}</h1>
+                <p>{en.text} <span lang="de">{de.title} {de.text}</span></p>
+                <div class="side-list" style="margin-top: var(--s-6)">
+                    <ul>
+                        <li><a href="/">{en.home}</a> · <a href="/de/" lang="de">{de.home}</a></li>
+                        <li><a href="/#brief">{T.en.sendBrief}</a> · <a href="/de/#brief" lang="de">{T.de.sendBrief}</a></li>
+                        <li><a href="/#cv">{en.cv}</a> · <a href="/de/#cv" lang="de">{de.cv}</a></li>
+                        <li><a href="/llms.txt">{en.md}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <Footer lang="en" />
+        </div>
+    </main>
+</Base>

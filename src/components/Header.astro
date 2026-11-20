@@ -1,0 +1,33 @@
+---
+// The language switch is a link to the same page in the other language, so
+// each language has its own address for people and for search engines.
+import { type Lang, T, home } from '../lib/site';
+
+interface Props { lang: Lang; altPath: string; onHome?: boolean }
+const { lang, altPath, onHome = false } = Astro.props;
+const t = T[lang];
+const base = onHome ? '' : home(lang);
+---
+<header class="site-header" id="header">
+    <a href={onHome ? '#top' : home(lang)} class="logo">Will<span class="name-soft">i</span> Wolff</a>
+
+    <nav class="site-nav" aria-label={lang === 'de' ? 'Abschnitte' : 'Sections'}>
+        <a href={`${base}#work`}>{t.nav.work}</a>
+        <a href={`${base}#brief`}>{t.nav.brief}</a>
+        <a href={`${base}#cv`}>{t.nav.cv}</a>
+        <a href={`${base}#projects`}>{t.nav.projects}</a>
+        <a href={`${base}#experience`}>{t.nav.experience}</a>
+    </nav>
+
+    <div class="header-controls">
+        <a class="icon-btn lang-toggle" id="lang-toggle" href={altPath} hreflang={lang === 'de' ? 'en' : 'de'} lang={lang === 'de' ? 'en' : 'de'} aria-label={t.switchLabel}>
+            <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"></path></svg>
+            <span class="lang-label">{t.switchText}</span>
+        </a>
+        <a href={`/willi-wolff-cv-${lang}.pdf`} download id="cv-download" class="btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>CV<span class="btn-label-long"> (PDF)</span></span>
+        </a>
+        <a href={`${base}#brief`} class="btn btn-primary">{t.sendBrief}</a>
+    </div>
+</header>

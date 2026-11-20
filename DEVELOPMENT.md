@@ -1,0 +1,35 @@
+# Working on williwolff.com
+
+The site is static, built with [Astro](https://astro.build) and deployed to Cloudflare Pages
+(project `wwolff`). Node version: see `.nvmrc`.
+
+```sh
+npm ci
+npm run dev      # http://localhost:4321, English at /, German at /de/
+npm test         # builds into dist/, then runs the tests against the built site
+npm run cv       # regenerates public/cv*.md and public/cv*.json from the Typst sources
+```
+
+To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locally:
+`npm run build && npx wrangler pages dev dist`.
+
+## Where things live
+
+| Path | What |
+| --- | --- |
+| `src/partials/home/*.html` | The home page, one file per section. Both languages sit side by side as `<span lang="en">` and `<span lang="de">`; the build keeps one of them per page. |
+| `src/content/services/`, `src/content/work/` | Service pages and case studies as Markdown, one file per language: `<key>.en.md` and `<key>.de.md`. The build fails if a translation is missing. |
+| `src/lib/site.ts` | Shared strings, URLs and the rate (read from `public/hire.json`). |
+| `src/data/llms.md` | The prose of `/llms.txt`. The list of pages is added at build time. |
+| `public/` | Files served as they are: images, CV files, `hire.json`, `openapi.json`, `_headers`. |
+| `functions/`, `lib/` | Cloudflare Pages Functions: the brief endpoint, the MCP server, redirects and Markdown for agents. |
+| `master-cv.typ`, `master-cv-de.typ` | The CV sources. The PDFs in `public/` are compiled from them with Typst. |
+
+## Adding a case study or service page
+
+1. Add `src/content/work/<key>.en.md` and `<key>.de.md` (or under `services/`) with the same
+   front matter as an existing file. `slug` sets the URL and may differ per language.
+2. Link to it from other content as `@work/<key>` or `@service/<key>`; the build turns that
+   into the right URL for each language.
+3. `npm test`. The sitemap, `/llms.txt`, the language links and the Markdown twin
+   (`<url without trailing slash>.md`) are generated and checked.

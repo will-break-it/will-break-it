@@ -6,7 +6,7 @@
        page.setViewportSize({ width: 1200, height: 630 })
        page.goto('http://localhost:8123/scripts/social-preview.html')
        page.screenshot({ path: 'social-preview.png' })
-     The grid is the last 52 weeks from data/activity.json. -->
+     The grid is the last 52 weeks from public/data/activity.json. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -35,7 +35,7 @@
 </head>
 <body>
     <div class="id">
-        <img src="../assets/images/will.jpg" alt="">
+        <img src="../public/assets/images/will.jpg" alt="">
         <div>
             <p class="name">Will<i>i</i> Wolff</p>
             <p class="url">williwolff.com</p>
@@ -45,7 +45,7 @@
     <p class="lanes">AI agents <b>·</b> Distributed systems <b>·</b> Web and mobile <b>·</b> Berlin</p>
     <div class="grid" id="grid"></div>
     <script>
-        fetch('../data/activity.json').then(r => r.json()).then(data => {
+        fetch('../public/data/activity.json').then(r => r.json()).then(data => {
             // data.days lists active days only, so walk the calendar instead.
             const byDate = new Map(data.days.map(d => [d.date, d.total]));
             const end = new Date(data.generated.slice(0, 10) + 'T00:00:00Z');
