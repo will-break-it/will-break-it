@@ -121,8 +121,9 @@ run the URL through LinkedIn's Post Inspector.
   test fails if a page shows another one). Brief emails are marked by their subject,
   `[williwolff.com]`.
 
-The email itself is built in `lib/brief-mail.js` (HTML: a teal band with "New brief", what
-the visitor needs, the facts in the form's words, a reply button) and in `messageText()` in
+The email itself is built in `lib/brief-mail.js` (HTML: "A new brief came in.", then
+budget, timeline and kind of project as three big figures in the form's words, what the
+visitor needs, a reply button) and in `messageText()` in
 `lib/enquiry.js` (plain text). Will chose the design from four variants in November 2026. It
 is written for Gmail: tables, inline styles, no images. Gmail's Reply quotes this email under
 the answer, so the visitor may see it; the button starts a fresh message without the quote.
