@@ -1377,6 +1377,86 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 .code-copy { transition: border-color var(--duration-quick) var(--ease-out), color var(--duration-quick) var(--ease-out), transform var(--duration-quick) var(--ease-smooth-out); }
 .code-copy:active { transform: scale(var(--scale-medium)); }
 
+/* Brief sent. The section head, the form and its JSON twin give way to one
+   screen: the confirmation on the left, "What you get back" beside it. Will
+   chose this from four variants (Nov 2026). brief.js sets .is-sent on the section. */
+.sent { --panel-translate-y: 12px; display: grid; justify-items: start; gap: var(--s-4); min-width: 0; }
+.sent[hidden] { display: none; }
+/* The script puts the focus here so the news is read out; it is not a control. */
+.sent:focus { outline: none; }
+.sent .sent-tick {
+    --check-y-amount: 14px;
+    --check-blur-from: 6px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand-strong);
+}
+.sent-tick svg { width: 22px; height: 22px; }
+.sent-title { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+.sent-text { max-width: 46ch; color: var(--muted); }
+.sent-text b { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+.sent-ref {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-3);
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+}
+.sent-ref[hidden] { display: none; }
+.sent-ref-label { font-size: 0.9rem; color: var(--muted); }
+.sent-ref code { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+.sent-copy {
+    min-height: 36px;
+    padding: 0 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font: 600 0.78rem var(--font-sans);
+    cursor: pointer;
+    transition: border-color var(--duration-quick) var(--ease-out), color var(--duration-quick) var(--ease-out), transform var(--duration-quick) var(--ease-smooth-out);
+}
+.sent-copy:hover { border-color: var(--ink); color: var(--ink); }
+.sent-copy:active { transform: scale(var(--scale-medium)); }
+.sent-again {
+    padding: 0.35rem 0;
+    border: none;
+    background: none;
+    color: var(--brand-strong);
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--brand-line);
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+.sent-again:hover { text-decoration-color: currentColor; }
+
+.is-sent > .section-head,
+.is-sent > .brief { display: none; }
+.is-sent > .brief-after {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--s-7) var(--s-8);
+    padding: var(--s-5) 0 var(--s-6);
+}
+.is-sent .back { margin-top: 0; }
+.is-sent .back-list { grid-template-columns: 1fr; gap: 0; }
+.is-sent .back-list > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--s-4); padding: var(--s-3) 0; border-bottom: 1px solid var(--border); }
+.is-sent .back-list > div:last-child { border-bottom: none; }
+.is-sent .back-list dd { margin-top: 0; }
+@media (max-width: 760px) {
+    .is-sent > .brief-after { grid-template-columns: 1fr; }
+}
+
 .back { margin-top: var(--s-7); }
 .back h3 { font-size: 1.15rem; font-weight: 700; }
 .back-list {

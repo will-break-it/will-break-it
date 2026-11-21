@@ -17,13 +17,18 @@
     const sendCheck = document.getElementById('brief-send-check');
     const copy = document.getElementById('brief-copy');
     const copyLabel = document.getElementById('brief-copy-label');
+    const section = document.getElementById('brief');
+    const sentBox = document.getElementById('brief-sent');
+    const sentTick = document.getElementById('brief-sent-tick');
+    const sentRef = document.getElementById('brief-sent-ref');
+    const sentCode = document.getElementById('brief-sent-code');
+    const sentCopy = document.getElementById('brief-sent-copy');
+    const sentCopyLabel = document.getElementById('brief-sent-copy-label');
     const MAIL = 'contact@williwolff.com';
     const T = {
         en: {
             email: 'Give an email address I can reply to.',
             summary: 'Describe what you need in a sentence or more.',
-            sent: 'Brief received. I read every request myself and reply by email.',
-            ref: 'Reference',
             failed: 'The form could not send this. Your text is still here.',
             limited: 'Too many briefs for now. Your text is still here.',
             mail: 'Send it by email instead',
@@ -36,8 +41,6 @@
         de: {
             email: 'Bitte eine E-Mail-Adresse angeben, auf die ich antworten kann.',
             summary: 'Bitte in mindestens einem Satz beschreiben, worum es geht.',
-            sent: 'Anfrage erhalten. Ich lese jede Anfrage selbst und antworte per E-Mail.',
-            ref: 'Referenz',
             failed: 'Das Formular konnte die Anfrage nicht senden. Ihr Text steht noch hier.',
             limited: 'Im Moment sind es zu viele Anfragen. Ihr Text steht noch hier.',
             mail: 'Stattdessen per E-Mail senden',
@@ -207,6 +210,49 @@
         return 'mailto:' + MAIL + '?subject=' + encodeURIComponent('Project brief') + '&body=' + encodeURIComponent(body);
     }
 
+    // Brief sent: the form gives way to the confirmation, which names the address the
+    // reply goes to and the reference. "Send another brief" brings the form back.
+    function showSent(email, reference) {
+        sentBox.querySelectorAll('[data-sent-email]').forEach(el => { el.textContent = email; });
+        sentCode.textContent = reference || '';
+        sentRef.hidden = !reference;
+        section.classList.add('is-sent');
+        sentBox.hidden = false;
+        // Panel reveal and success check, each from its start.
+        sentBox.setAttribute('data-open', 'false');
+        sentTick.setAttribute('data-state', 'out');
+        void sentBox.offsetWidth;
+        sentBox.setAttribute('data-open', 'true');
+        sentTick.setAttribute('data-state', 'in');
+        // The form was taller than what replaces it, so the section is brought back into view.
+        sentBox.focus({ preventScroll: true });
+        section.scrollIntoView({ block: 'start', behavior: calm.matches ? 'auto' : 'smooth' });
+    }
+    function hideSent() {
+        section.classList.remove('is-sent');
+        sentBox.hidden = true;
+        sentBox.setAttribute('data-open', 'false');
+        sendState('idle');
+        (document.getElementById('brief-type-button') || form.elements.project_type).focus();
+    }
+    document.getElementById('brief-again').addEventListener('click', hideSent);
+    sentCopy.addEventListener('click', function () {
+        const done = () => {
+            swapText(sentCopyLabel, T[lang()].copied);
+            clearTimeout(sentCopy._back);
+            sentCopy._back = setTimeout(() => swapText(sentCopyLabel, T[lang()].copy), 1600);
+        };
+        const select = () => {
+            const range = document.createRange();
+            range.selectNodeContents(sentCode);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(sentCode.textContent).then(done, select);
+        else select();
+    });
+
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
         if (send.dataset.state === 'sending') return;
@@ -237,11 +283,12 @@
             });
             const body = await response.json().catch(() => null);
             if (response.ok && body && body.ok) {
-                say([t.sent, body.reference ? t.ref + ': ' + body.reference : ''].filter(Boolean));
                 sent = true;
                 form.reset();
                 localise();
                 preview();
+                // The button says "Sent" for a moment, then the confirmation takes the form's place.
+                setTimeout(() => showSent(v.email, body.reference), calm.matches ? 0 : 700);
             } else if (response.status === 400 && body && body.fields) {
                 fieldError('email', body.fields.email);
                 fieldError('summary', body.fields.summary);

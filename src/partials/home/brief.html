@@ -114,6 +114,23 @@ Content-Type: application/json
                     </aside>
                 </div>
 
+                <!-- After a brief has gone out, brief.js hides the form above and shows this in its
+                     place, beside "What you get back". Without scripts it is never shown. -->
+                <div class="brief-after">
+                <div class="sent t-panel-slide" id="brief-sent" data-open="false" tabindex="-1" aria-labelledby="brief-sent-title" hidden>
+                    <span class="sent-tick t-success-check" id="brief-sent-tick" data-state="out" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+                    <h2 class="sent-title" id="brief-sent-title"><span lang="en">Brief received.</span><span lang="de">Anfrage erhalten.</span></h2>
+                    <p class="sent-text">
+                        <span lang="en">I read every request myself and reply by email, to <b data-sent-email></b>.</span>
+                        <span lang="de">Ich lese jede Anfrage selbst und antworte per E-Mail an <b data-sent-email></b>.</span>
+                    </p>
+                    <p class="sent-ref" id="brief-sent-ref">
+                        <span class="sent-ref-label"><span lang="en">Reference</span><span lang="de">Referenz</span></span>
+                        <code id="brief-sent-code"></code>
+                        <button type="button" class="sent-copy" id="brief-sent-copy"><span class="t-text-swap" id="brief-sent-copy-label"><span lang="en">Copy</span><span lang="de">Kopieren</span></span></button>
+                    </p>
+                    <button type="button" class="sent-again" id="brief-again"><span lang="en">Send another brief</span><span lang="de">Weitere Anfrage senden</span></button>
+                </div>
                 <div class="back" aria-labelledby="back-title">
                     <h3 id="back-title"><span lang="en">What you get back</span><span lang="de">Was Sie zurückbekommen</span></h3>
                     <dl class="back-list">
@@ -134,5 +151,6 @@ Content-Type: application/json
                             <dd><span lang="en">The earliest date I can begin.</span><span lang="de">Der früheste Termin, an dem ich anfangen kann.</span></dd>
                         </div>
                     </dl>
+                </div>
                 </div>
             </section>
