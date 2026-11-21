@@ -672,3 +672,39 @@ test('every page has its own title, description and link preview image', () => {
     }
     assert.deepEqual(readdirSync(join(dist, 'og')).filter(file => file.endsWith('.png')).length, 18);
 });
+
+test('the dark palette is complete and every page carries the switch', () => {
+    const css = readFileSync(join(root, 'src', 'styles', 'site.css'), 'utf8');
+    const declarations = block => block.split('\n').map(line => line.trim()).filter(line => /^(--[\w-]+|color-scheme):/.test(line));
+    const between = (start, end) => css.slice(css.indexOf(start) + start.length, css.indexOf(end, css.indexOf(start)));
+
+    // Plain CSS cannot share the list, so it exists twice: for a dark device and for a visitor who chose dark.
+    const device = declarations(between(':root:not([data-theme="light"]) {', '}'));
+    const chosen = declarations(between('\n:root[data-theme="dark"] {', '}'));
+    assert.ok(device.length >= 20, 'dark palette has ' + device.length + ' entries');
+    assert.deepEqual(device, chosen);
+
+    // Every colour token of the light palette has a dark value, except the logo plate, which stays white.
+    const light = declarations(between(':root {', '\n}')).map(line => line.split(':')[0]);
+    const colours = declarations(between(':root {', '\n}')).filter(line => /#[0-9a-f]{3,8}\b|rgba?\(/i.test(line)).map(line => line.split(':')[0]);
+    const dark = device.map(line => line.split(':')[0]);
+    assert.deepEqual(colours.filter(name => !dark.includes(name)), ['--plate']);
+    assert.deepEqual(dark.filter(name => !light.includes(name)), []);
+
+    // Nothing outside the palettes names a colour, so no rule can stay light on a dark page.
+    const rest = css.slice(css.indexOf('*, *::before, *::after'), css.indexOf('@media print'));
+    assert.deepEqual(rest.match(/#[0-9a-f]{3,8}\b|rgba?\(/gi) || [], []);
+
+    for (const page of ['index.html', 'de/index.html', 'services/web-mobile-products/index.html', 'de/projekte/alwayssandy/index.html', '404.html']) {
+        const html = readFileSync(join(dist, page), 'utf8');
+        assert.match(html, /<meta name="color-scheme" content="light dark">/, page);
+        // The stored choice is applied in the head, before the page is drawn.
+        const head = html.slice(0, html.indexOf('</head>'));
+        assert.match(head, /localStorage\.getItem\('theme'\)/, page);
+        // The switch waits hidden for its script, and says what a click does in the page's language.
+        const button = html.match(/<button[^>]*id="theme-toggle"[^>]*>/)[0];
+        assert.match(button, / hidden /, page);
+        assert.match(button, page.startsWith('de/') ? /aria-label="Zum dunklen Design wechseln"/ : /aria-label="Switch to the dark theme"/, page);
+        assert.match(html, /getElementById\('theme-toggle'\)/, page);
+    }
+});

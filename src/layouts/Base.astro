@@ -74,8 +74,11 @@ const image = abs(card.image);
     <meta name="twitter:site" content="@will_break_it">
     <meta name="twitter:creator" content="@will_break_it">
 
-    <meta name="theme-color" content="#ffffff">
-    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b1622" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
+    {/* Before the first paint: a visitor who picked a palette gets it without a flash of the other one. */}
+    <script is:inline>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
     <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -92,5 +95,33 @@ const image = abs(card.image);
     <Fragment set:html={sprite} />
     <Header lang={lang} altPath={paths[altLang]} onHome={onHome} />
     <slot />
+    {/* The light/dark switch. The device decides until the visitor clicks; choosing
+        what the device asks for anyway hands the decision back to the device. */}
+    <script is:inline>
+    (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button || !window.matchMedia) return;
+        var root = document.documentElement;
+        var device = window.matchMedia('(prefers-color-scheme: dark)');
+        var current = function () { return root.dataset.theme || (device.matches ? 'dark' : 'light'); };
+        var show = function () {
+            var dark = current() === 'dark';
+            button.setAttribute('aria-label', dark ? button.dataset.toLight : button.dataset.toDark);
+            button.title = button.getAttribute('aria-label');
+            var colors = document.querySelectorAll('meta[name="theme-color"]');
+            for (var i = 0; i < colors.length; i++) colors[i].content = dark ? '#0b1622' : '#ffffff';
+        };
+        button.addEventListener('click', function () {
+            var next = current() === 'dark' ? 'light' : 'dark';
+            var same = next === (device.matches ? 'dark' : 'light');
+            if (same) delete root.dataset.theme; else root.dataset.theme = next;
+            try { if (same) localStorage.removeItem('theme'); else localStorage.setItem('theme', next); } catch (e) {}
+            show();
+        });
+        if (device.addEventListener) device.addEventListener('change', show);
+        button.hidden = false;
+        show();
+    })();
+    </script>
 </body>
 </html>

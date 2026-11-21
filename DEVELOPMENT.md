@@ -36,6 +36,20 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
 4. `npm test`. The sitemap, `/llms.txt`, the language links and the Markdown twin
    (`<url without trailing slash>.md`) are generated and checked.
 
+## Light and dark
+
+The site has two palettes. Both are lists of the same tokens at the top of
+`src/styles/site.css`; no other rule names a colour, so a new rule works in both as long as it
+uses the tokens. The dark list is written twice, once for a device that asks for dark and
+once for a visitor who chose it, and `npm test` fails if the two differ or if a rule names a
+colour directly.
+
+The device decides until the visitor uses the switch in the header. The choice is kept in
+`localStorage` under `theme` and applied by a one-line script in the head, before the page is
+drawn. Choosing what the device asks for anyway removes the stored choice, so the page follows
+the device again. Without scripts the switch stays hidden and the device decides. Print always
+uses the light palette. The link preview images are light only.
+
 ## Titles, descriptions and link previews
 
 Every page sets its own title, description, Open Graph and Twitter tags in
