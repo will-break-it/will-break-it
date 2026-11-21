@@ -319,6 +319,37 @@ test('the brief email is designed, says what the form says, and keeps its plain 
     assert.doesNotMatch(sent[3].body.htmlContent, /Not sure yet|>Budget</);
 });
 
+test('the brief email rewrites only a bare amount, and keeps what was typed', async () => {
+    const { budgetLabel, briefHtml } = await import('../lib/brief-mail.js');
+    // The form's own values read as the form words them.
+    assert.equal(budgetLabel('under 10000'), 'Under 10,000 EUR');
+    assert.equal(budgetLabel('10000-40000'), '10,000 to 40,000 EUR');
+    assert.equal(budgetLabel('over 40000'), 'Over 40,000 EUR');
+    assert.equal(budgetLabel('hourly, open ended'), 'Hourly, open ended');
+    assert.equal(budgetLabel('2500000'), '2,500,000 EUR');
+    // An agent may write anything: another currency, a year, a date. None of it is touched.
+    for (const typed of ['5000 USD', '$20000', '£8000', '2 developers for 3 months', 'Approved for 2027', 'TBD by 2026-12-01', 'Q1-2027', '0.12345', '15000 EUR'])
+        assert.equal(budgetLabel(typed), typed);
+
+    const mail = over => briefHtml({ name: '', company: '', email: 'ada@example.com', summary: 'Something to build.', project_type: 'other', timeline: '', budget_eur: '', engagement: 'unsure', locale: 'en', submitted_by: 'human', agent: '', ...over }, 'WW-00000000', 'api');
+    // Indents and runs of spaces survive without a style a mail program may drop.
+    assert.match(mail({ summary: 'Steps:\n    - export CSV\n\t- map   columns' }), /Steps:<br>&nbsp;&nbsp;&nbsp;&nbsp;- export CSV<br>&nbsp;&nbsp;&nbsp;&nbsp;- map&nbsp;&nbsp;&nbsp;columns/);
+    // A title or "Surname, Name" is not a first name.
+    assert.match(mail({ name: 'Ada Example' }), />Reply to Ada</);
+    for (const name of ['Dr. Ada Example', 'Example, Ada', 'Herr Müller', 'Prof Ada Example'])
+        assert.match(mail({ name }), />Reply</, name);
+    // A long unbroken string breaks inside the card.
+    assert.ok(mail({}).split('overflow-wrap:anywhere').length > 4);
+    assert.match(mail({}), /max-width:600px;table-layout:fixed/);
+});
+
+test('an address that holds half a character pair is a field error, not a failed send', async () => {
+    const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, email: 'a\ud800b@example.com' }), env });
+    assert.equal(response.status, 400);
+    assert.deepEqual(Object.keys((await response.json()).fields), ['email']);
+    assert.equal(sent.length, 0);
+});
+
 test('missing fields are named and nothing is sent', async () => {
     const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { email: 'not-an-address', summary: 'hi', project_type: 'nonsense' }), env });
     const body = await response.json();
