@@ -115,7 +115,7 @@
             "@type": "Service",
             "name": "Freelance software engineering and architecture",
             "serviceType": "Software engineering",
-            "description": "Contract work on AI agents and automation, blockchain and distributed systems, and web and mobile products. Remote from Berlin, in German or English.",
+            "description": "Contract work on AI agents and automation, blockchain and distributed systems, enterprise and mission-critical software, and websites, booking systems and mobile apps. Remote from Berlin, in German or English.",
             "provider": {
               "@id": "https://williwolff.com/#willi"
             },

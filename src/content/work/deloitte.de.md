@@ -6,7 +6,7 @@ lead: "Bei Deloitte habe ich an programmatischen Migrationen gearbeitet, die Mai
 order: 4
 updated: 2026-11-20
 brief: backend_architecture
-related: [distributed]
+related: [enterprise]
 facts:
   client: "Deloitte, für einen großen deutschen Versicherer, einen US-Pensionsfonds mit Sozialversicherungsbehörde, Target und Walmart"
   role: "Software Engineer, dann Lead Engineer (angestellt)"
