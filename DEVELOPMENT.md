@@ -77,6 +77,11 @@ between the look before and after. `npm test` keeps the outcome:
   without scripts sees, already in the page's look. `brief.js` hides it and puts a button and
   a list in its place (a select-only combobox: arrow keys, Home, End, Enter, Escape, typing).
   A new select in the form needs only that wrapper and the arrow icon.
+- **After a brief is sent** the section becomes one screen: `brief.js` sets `is-sent` on
+  `#brief`, which hides the section head, the form and its JSON twin and shows `#brief-sent`
+  beside "What you get back". It names the address the reply goes to and the reference, with
+  a button to copy it. Will chose this from four variants (November 2026). Errors still appear
+  in `#brief-status` under the form.
 - The German header has longer labels. `Header.astro` marks it with `long-labels`, and the CV
   button gives way where there is no room; check 320 to 1300 pixels in both languages after
   changing the header.

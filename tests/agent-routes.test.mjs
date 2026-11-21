@@ -745,7 +745,17 @@ test('the form keeps its fallback without scripts and its motion rules', () => {
         assert.match(html, /<span class="t-text-swap" id="brief-send-label">[^<]+<\/span>/, path);
         assert.match(html, /<span class="t-text-swap" id="brief-copy-label">[^<]+<\/span>/, path);
         assert.match(html, /<p class="brief-status t-panel-slide" id="brief-status" data-open="false" role="status"/, path);
+        // The confirmation that takes the form's place is in the page, hidden until a brief
+        // has gone out, with the reference and a button to copy it.
+        const sent = html.match(/<div class="sent t-panel-slide" id="brief-sent"[^>]*>[\s\S]*?<div class="back"/);
+        assert.ok(sent, path + ' has the sent confirmation');
+        assert.match(sent[0], /^<div[^>]* hidden>/, path);
+        assert.match(sent[0], /<code id="brief-sent-code"><\/code>\s*<button type="button" class="sent-copy" id="brief-sent-copy">/, path);
+        assert.match(sent[0], /<b data-sent-email><\/b>/, path);
+        assert.match(sent[0], path === '/de/' ? /Anfrage erhalten\.[\s\S]*Weitere Anfrage senden/ : /Brief received\.[\s\S]*Send another brief/, path);
     }
+    assert.match(css, /\.sent\[hidden\] \{ display: none; \}/);
+    assert.match(css, /\.is-sent > \.section-head,\s*\.is-sent > \.brief \{ display: none; \}/);
     assert.match(css, /\.select\.is-enhanced select \{ display: none; \}/);
     assert.match(css, /\.field select \{[^}]*appearance: none/);
     // Every transition taken from transitions.dev keeps its own rule for less motion.
