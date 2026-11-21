@@ -732,6 +732,33 @@ test('the design holds the rules of the November 2026 audit', () => {
     assert.match(css, /\.js \.job-content \{[^}]*visibility: hidden/);
 });
 
+// The form's dropdowns, fields and buttons move after transitions.dev (November 2026).
+test('the form keeps its fallback without scripts and its motion rules', () => {
+    const css = readFileSync(join(root, 'src', 'styles', 'site.css'), 'utf8');
+    const js = readFileSync(join(root, 'public', 'js', 'brief.js'), 'utf8');
+    for (const path of ['/', '/de/']) {
+        const html = file(path);
+        // Each select stays in the page, in a wrapper with its own arrow, so it holds the
+        // value and looks like the other fields when the script does not run.
+        assert.equal((html.match(/<div class="select">\s*<select [^>]*>[\s\S]*?<\/select>\s*<svg class="select-chevron"/g) || []).length, 3, path);
+        // The script changes the text of these two labels, so each is a single piece of text.
+        assert.match(html, /<span class="t-text-swap" id="brief-send-label">[^<]+<\/span>/, path);
+        assert.match(html, /<span class="t-text-swap" id="brief-copy-label">[^<]+<\/span>/, path);
+        assert.match(html, /<p class="brief-status t-panel-slide" id="brief-status" data-open="false" role="status"/, path);
+    }
+    assert.match(css, /\.select\.is-enhanced select \{ display: none; \}/);
+    assert.match(css, /\.field select \{[^}]*appearance: none/);
+    // Every transition taken from transitions.dev keeps its own rule for less motion.
+    for (const hook of ['t-dropdown', 't-input', 't-text-swap', 't-success-check', 't-panel-slide']) {
+        assert.match(css, new RegExp('@media \\(prefers-reduced-motion: reduce\\) \\{\\s*\\.' + hook + ' \\{'), hook);
+    }
+    // The script waits as long as the sheet animates: it reads these, and they are plain milliseconds.
+    for (const name of ['--dropdown-close-dur', '--text-swap-dur', '--shake-dur-a', '--shake-dur-b', '--revert-dur']) {
+        assert.match(css, new RegExp(name + ': \\d+ms;'), name);
+        assert.ok(js.includes("ms('" + name + "'"), name + ' is read by brief.js');
+    }
+});
+
 test('the dark palette is complete and every page carries the switch', () => {
     const css = readFileSync(join(root, 'src', 'styles', 'site.css'), 'utf8');
     const declarations = block => block.split('\n').map(line => line.trim()).filter(line => /^(--[\w-]+|color-scheme):/.test(line));
