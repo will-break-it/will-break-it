@@ -1,13 +1,18 @@
 /* ===================================================================
-   One design, one bright palette.
+   One design, two palettes.
    -------------------------------------------------------------------
    Every colour on the page comes from the tokens below; nothing else in
    this sheet names a hex value. Teal is the brand colour because it is
    already the accent of the PDF CV, so the site and the document read
    as one thing. Neutrals are cool slate, after cloudflare.com: near-
    white surfaces, crisp 1px borders, dark ink for headings.
+
+   The dark palette further down swaps the same tokens. A visitor gets
+   it when their device asks for dark, or when they pick it with the
+   switch in the header (data-theme on <html>, see Base.astro).
    =================================================================== */
 :root {
+    color-scheme: light;
     --bg: #ffffff;
     --surface: #f6f8fa;
     --surface-2: #eef2f5;
@@ -25,7 +30,21 @@
     --brand-line: rgba(13, 148, 136, 0.35);
     /* Second colour, used sparingly: failures and warnings only. */
     --signal: #c2410c;
-
+    --signal-soft: rgba(194, 65, 12, 0.08);
+    /* A project that is live. */
+    --live: #16a34a;
+    --hover: rgba(39, 50, 63, 0.1);
+    /* Behind a logo that was drawn for a white page; stays white in both palettes. */
+    --plate: #ffffff;
+    /* Activity grid, from a quiet day to a busy one. */
+    --level-1: #ccfbf1;
+    --level-2: #5eead4;
+    --level-3: #14b8a6;
+    --level-4: #0f766e;
+    /* The three soft glows behind the first screen. */
+    --glow-1: rgba(13, 148, 136, 0.12);
+    --glow-2: rgba(56, 189, 248, 0.12);
+    --glow-3: rgba(251, 191, 36, 0.10);
 
     --shadow: 0 1px 2px rgba(11, 22, 34, 0.04), 0 8px 24px rgba(11, 22, 34, 0.06);
     --radius: 16px;
@@ -47,6 +66,75 @@
 }
 
 /* --- base --------------------------------------------------------- */
+/* --- dark palette ---------------------------------------------------- */
+/* The same list twice, because plain CSS cannot share it: once for a device
+   that asks for dark (unless the visitor chose light), once for a visitor who
+   chose dark. A test fails if the two lists differ. */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #0b1622;
+        --surface: #101d2b;
+        --surface-2: #172636;
+        --border: #213243;
+        --border-strong: #31455a;
+        --ink: #f4f7fa;
+        --text: #d3dbe4;
+        --muted: #9dabba;
+        --faint: #8b99a8;
+        --brand: #2dd4bf;
+        --brand-strong: #5eead4;
+        --brand-ink: #062521;
+        --brand-soft: rgba(45, 212, 191, 0.12);
+        --brand-line: rgba(45, 212, 191, 0.4);
+        --signal: #fb923c;
+        --signal-soft: rgba(251, 146, 60, 0.12);
+        --live: #4ade80;
+        --hover: rgba(255, 255, 255, 0.08);
+        --level-1: #134e4a;
+        --level-2: #0f766e;
+        --level-3: #14b8a6;
+        --level-4: #5eead4;
+        --glow-1: rgba(45, 212, 191, 0.14);
+        --glow-2: rgba(56, 189, 248, 0.08);
+        --glow-3: rgba(251, 191, 36, 0.05);
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+    :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0b1622;
+    --surface: #101d2b;
+    --surface-2: #172636;
+    --border: #213243;
+    --border-strong: #31455a;
+    --ink: #f4f7fa;
+    --text: #d3dbe4;
+    --muted: #9dabba;
+    --faint: #8b99a8;
+    --brand: #2dd4bf;
+    --brand-strong: #5eead4;
+    --brand-ink: #062521;
+    --brand-soft: rgba(45, 212, 191, 0.12);
+    --brand-line: rgba(45, 212, 191, 0.4);
+    --signal: #fb923c;
+    --signal-soft: rgba(251, 146, 60, 0.12);
+    --live: #4ade80;
+    --hover: rgba(255, 255, 255, 0.08);
+    --level-1: #134e4a;
+    --level-2: #0f766e;
+    --level-3: #14b8a6;
+    --level-4: #5eead4;
+    --glow-1: rgba(45, 212, 191, 0.14);
+    --glow-2: rgba(56, 189, 248, 0.08);
+    --glow-3: rgba(251, 191, 36, 0.05);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
@@ -140,6 +228,10 @@ h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.015em; }
 }
 .icon-btn:hover { color: var(--ink); background: var(--surface); }
 .icon-btn svg { width: 18px; height: 18px; }
+/* Light or dark. Shows the palette a click leads to: a moon by day, a sun by night. */
+.theme-toggle { padding: 0; }
+.theme-toggle[hidden] { display: none; }
+.theme-toggle .icon-sun { display: none; }
 
 
 .btn {
@@ -254,7 +346,7 @@ h1, h2, h3 { color: var(--ink); line-height: 1.2; letter-spacing: -0.015em; }
     color: var(--text);
     transition: background 0.2s ease;
 }
-.social-link:hover { background: rgba(39, 50, 63, 0.1); }
+.social-link:hover { background: var(--hover); }
 .social-link svg { width: 22px; height: 22px; transition: transform 0.2s ease; }
 .social-link:hover svg { transform: scale(1.1); }
 
@@ -530,7 +622,7 @@ h3.project-title-link::after { content: none; }
 .project-logo-img { max-width: 60%; max-height: 64px; object-fit: contain; }
 .project-logo-img.cover { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
 .project-logo-img.shot { object-position: top center; }
-.project-logo-img.with-bg { padding: var(--s-3); border-radius: var(--radius-sm); background: #fff; }
+.project-logo-img.with-bg { padding: var(--s-3); border-radius: var(--radius-sm); background: var(--plate); }
 
 .project-logo-placeholder {
     display: flex;
@@ -593,7 +685,7 @@ h3.project-title-link::after { content: none; }
     transform: translateY(-1px);
 }
 .project-status b { font-weight: 650; color: var(--text); }
-.project-status[data-state="live"]::before { background: #16a34a; }
+.project-status[data-state="live"]::before { background: var(--live); }
 .project-status[data-state="building"]::before { background: var(--brand); }
 .project-status[data-state="failed"]::before { background: var(--signal); }
 .project-status[data-state="failed"] b { color: var(--signal); }
@@ -719,9 +811,15 @@ h3.project-title-link::after { content: none; }
     .lang-toggle { padding: 0 0.4rem; }
     .lang-globe { display: none; }
 }
-/* On the narrowest phones the CV button gives way; the page offers the CV right below. */
-@media (max-width: 380px) {
+/* On phones the CV button gives way to the theme switch; the page offers the CV right below. */
+@media (max-width: 400px) {
     .site-header #cv-download { display: none; }
+}
+/* The smallest phones, where the German button label is long: tighten everything a little. */
+@media (max-width: 340px) {
+    .site-header { gap: var(--s-2); }
+    .site-header .btn { padding: 0 0.6rem; }
+    .site-header .icon-btn { min-width: 32px; }
 }
 
 /* --- figures: big numbers, no boxes, each one a filter ----------- */
@@ -803,7 +901,7 @@ h3.project-title-link::after { content: none; }
     padding: 4px 9px;
     border-radius: 6px;
     background: var(--ink);
-    color: #fff;
+    color: var(--bg);
     font-size: 0.75rem;
     white-space: nowrap;
     pointer-events: none;
@@ -833,10 +931,10 @@ h3.project-title-link::after { content: none; }
     transition-delay: calc(var(--i) * 12ms);
 }
 .contrib-grid.is-in i { opacity: 1; transform: none; }
-[data-level="1"] { background: #ccfbf1 !important; }
-[data-level="2"] { background: #5eead4 !important; }
-[data-level="3"] { background: #14b8a6 !important; }
-[data-level="4"] { background: #0f766e !important; }
+[data-level="1"] { background: var(--level-1) !important; }
+[data-level="2"] { background: var(--level-2) !important; }
+[data-level="3"] { background: var(--level-3) !important; }
+[data-level="4"] { background: var(--level-4) !important; }
 .contrib-legend {
     display: flex;
     align-items: center;
@@ -862,9 +960,9 @@ h3.project-title-link::after { content: none; }
 .lead {
     border-bottom: 1px solid var(--border);
     background:
-        radial-gradient(700px 360px at 0% 0%, rgba(13, 148, 136, 0.12), transparent 70%),
-        radial-gradient(600px 320px at 100% 100%, rgba(56, 189, 248, 0.12), transparent 70%),
-        radial-gradient(500px 260px at 90% 10%, rgba(251, 191, 36, 0.10), transparent 70%),
+        radial-gradient(700px 360px at 0% 0%, var(--glow-1), transparent 70%),
+        radial-gradient(600px 320px at 100% 100%, var(--glow-2), transparent 70%),
+        radial-gradient(500px 260px at 90% 10%, var(--glow-3), transparent 70%),
         var(--surface);
 }
 
@@ -1071,7 +1169,7 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
     background: var(--brand-soft);
     color: var(--ink);
 }
-.brief-status.is-error { background: rgba(194, 65, 12, 0.08); }
+.brief-status.is-error { background: var(--signal-soft); }
 
 .brief-agent { flex: 1 1 360px; min-width: 0; display: grid; gap: var(--s-3); }
 .brief-agent h3 { font-size: 1.15rem; font-weight: 700; }
@@ -1229,7 +1327,8 @@ a.icon-btn:hover { text-decoration: none; }
 .notfound p { margin-top: var(--s-4); color: var(--muted); }
 
 @media print {
-    :root {
+    :root, :root[data-theme="dark"], :root:not([data-theme="light"]) {
+        color-scheme: light;
         --bg: #fff; --surface: #fff; --surface-2: #f2f2f2; --border: #ddd; --border-strong: #ccc;
         --ink: #000; --text: #222; --muted: #444; --faint: #666; --brand: #0d9488; --brand-strong: #0d9488;
     }
