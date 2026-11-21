@@ -49,11 +49,16 @@ const sources = ['services', 'work'].flatMap(kind => readdirSync(join(root, 'src
 
 const realFetch = globalThis.fetch;
 let sent;
+// What Cloudflare's send endpoint answers in a test; a test may replace it.
+let cloudflareAnswer;
 beforeEach(() => {
     sent = [];
+    cloudflareAnswer = to => ({ success: true, errors: [], messages: [], result: { delivered: [to], permanent_bounces: [], queued: [] } });
     forgetBriefCounts();
     globalThis.fetch = async (url, init) => {
-        sent.push({ url: String(url), body: JSON.parse(init.body), headers: init.headers });
+        const body = JSON.parse(init.body);
+        sent.push({ url: String(url), body, headers: init.headers });
+        if (String(url).startsWith('https://api.cloudflare.com/')) return new Response(JSON.stringify(cloudflareAnswer(body.to)), { status: 200 });
         return new Response(JSON.stringify({ messageId: '<test@brevo>' }), { status: 201 });
     };
 });
@@ -426,6 +431,35 @@ test('everything the site shows or sends to carries the tagged address', async (
     // An address set for the Pages project wins for briefs, for example a tagged private one.
     await enquiry({ request: post('https://williwolff.com/api/enquiry', brief), env: { ...env, CONTACT_TO_EMAIL: 'someone+site@example.org' } });
     assert.deepEqual(sent[0].body.to, [{ email: 'someone+site@example.org' }]);
+});
+
+test('with a Cloudflare token the brief is sent through Cloudflare, not Brevo', async () => {
+    const cloudflare = { ...env, CLOUDFLARE_EMAIL_TOKEN: 'cf-token', CLOUDFLARE_ACCOUNT_ID: 'acc123', CONTACT_TO_EMAIL: 'inbox@example.org' };
+    const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, name: 'Ada' }), env: cloudflare });
+    assert.equal(response.status, 200);
+    assert.match((await response.json()).reference, /^WW-[0-9A-F]{8}$/);
+    assert.equal(sent.length, 1);
+    assert.equal(sent[0].url, 'https://api.cloudflare.com/client/v4/accounts/acc123/email/sending/send');
+    assert.equal(sent[0].headers.Authorization, 'Bearer cf-token');
+    assert.equal(sent[0].headers['api-key'], undefined);
+    assert.equal(sent[0].body.to, 'inbox@example.org');
+    assert.deepEqual(sent[0].body.from, { address: 'contact@williwolff.com', name: 'williwolff.com' });
+    assert.equal(sent[0].body.reply_to, 'ada@example.com');
+    assert.match(sent[0].body.subject, /^\[williwolff\.com\] Brief WW-/);
+    assert.match(sent[0].body.text, /Extract figures/);
+
+    // Accepted by the API but bounced, or refused: the visitor is told, with the address to use instead.
+    cloudflareAnswer = to => ({ success: true, errors: [], messages: [], result: { delivered: [], permanent_bounces: [to], queued: [] } });
+    const bounced = await enquiry({ request: post('https://williwolff.com/api/enquiry', brief), env: cloudflare });
+    assert.equal(bounced.status, 503);
+    assert.equal((await bounced.json()).code, 'delivery_failed');
+    cloudflareAnswer = () => ({ success: false, errors: [{ code: 10000, message: 'Authentication error' }], result: null });
+    assert.equal((await enquiry({ request: post('https://williwolff.com/api/enquiry', brief), env: cloudflare })).status, 503);
+
+    // Half a configuration is not one: without the account id, Brevo is used.
+    sent = [];
+    await enquiry({ request: post('https://williwolff.com/api/enquiry', brief), env: { ...env, CLOUDFLARE_EMAIL_TOKEN: 'cf-token' } });
+    assert.equal(sent[0].url, 'https://api.brevo.com/v3/smtp/email');
 });
 
 // --- /mcp -------------------------------------------------------------------------

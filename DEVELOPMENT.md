@@ -36,9 +36,16 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
 
 ## Before the brief form is live
 
-- `BREVO_API_KEY` in the Cloudflare Pages project (optional: `CONTACT_TO_EMAIL`,
-  `CONTACT_FROM_EMAIL`, `CONTACT_SENDER_NAME`). Without it the endpoint answers 503 and the
-  form falls back to email.
+- A way to send the brief emails, set as secrets of the Cloudflare Pages project. Either
+  - **Cloudflare Email Service:** `CLOUDFLARE_EMAIL_TOKEN` (an API token with "Email Sending:
+    Edit") and `CLOUDFLARE_ACCOUNT_ID`, plus `CONTACT_TO_EMAIL` set to a verified destination
+    address of the account. Sending to such an address is free on every plan; it needs Email
+    Routing on the domain. Any other recipient needs the paid Workers plan.
+  - **Brevo:** `BREVO_API_KEY`, with the sender address verified in Brevo.
+
+  If both are set, Cloudflare is used. Optional for both: `CONTACT_FROM_EMAIL`,
+  `CONTACT_SENDER_NAME`. Without either, the endpoint answers 503 and the form falls back to
+  email.
 - One test email to `contact+web@williwolff.com`. The site shows this tagged address and sends
   briefs to it, so that mail from the website can be told apart by its recipient (`SITE_ADDRESS`
   in `lib/enquiry.js`; a test fails if a page still shows the plain one). The tag needs plus
