@@ -1,7 +1,7 @@
 ---
 slug: web-mobile-products
 title: "Websites, booking systems and mobile apps"
-description: "Freelance engineer in Berlin for websites, booking systems and web and mobile apps: React Native, native iOS and Android, Supabase and PostgreSQL backends. From first prototype to release."
+description: "Freelance engineer in Berlin for websites, booking systems and mobile apps: React Native, native iOS and Android, Supabase, PostgreSQL. Prototype to release."
 lead: "From a business website with online booking to an app in the app store: React Native, native iOS and Android, and backends on Supabase and PostgreSQL. One person who can take a product from idea to release."
 order: 4
 updated: 2026-11-21

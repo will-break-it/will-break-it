@@ -1,7 +1,7 @@
 ---
 slug: mainframe-to-java-migration
 title: "Migrating 16 million lines of mainframe code to Java"
-description: "Case study: programmatic Cobol and mainframe-to-Java migrations at Deloitte for a German insurer, a US state pension fund, Target and Walmart. 6M EUR saved per year."
+description: "Case study: programmatic Cobol and mainframe-to-Java migrations at Deloitte for a German insurer, a US pension fund, Target and Walmart. 6M EUR saved per year."
 lead: "At Deloitte I worked on programmatic migrations that move mainframe applications to Java without rewriting them by hand. As lead engineer I ran the migration of 16 million lines of code for a German insurer, which saves the client 6 million EUR a year in licence costs."
 order: 4
 updated: 2026-11-20

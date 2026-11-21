@@ -1,7 +1,7 @@
 ---
 slug: web-mobile-produkte
 title: "Websites, Buchungssysteme und Mobile-Apps"
-description: "Freelancer in Berlin für Websites, Buchungssysteme sowie Web- und Mobile-Apps: React Native, natives iOS und Android, Backends mit Supabase und PostgreSQL. Vom ersten Prototyp bis zum Release."
+description: "Freelancer in Berlin für Websites, Buchungssysteme und Mobile-Apps: React Native, natives iOS und Android, Supabase, PostgreSQL. Vom Prototyp bis zum Release."
 lead: "Von der Unternehmenswebsite mit Online-Buchung bis zur App im App Store: React Native, natives iOS und Android, Backends mit Supabase und PostgreSQL. Eine Person, die ein Produkt von der Idee bis zum Release bringt."
 order: 4
 updated: 2026-11-21

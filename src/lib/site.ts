@@ -16,12 +16,12 @@ export const other = (lang: Lang): Lang => (lang === 'de' ? 'en' : 'de');
 export const HOME = {
     en: {
         title: 'Willi Wolff – Freelance Software Engineer & Architect, Berlin',
-        description: 'Berlin-based freelance software engineer and architect. AI, blockchain, web and mobile, from research to production. Currently on Ouroboros Leios at IOG.',
+        description: 'Freelance software engineer and architect in Berlin, available for contract work: AI agents, distributed systems, enterprise software, websites and mobile apps.',
         ogLocale: 'en_US',
     },
     de: {
         title: 'Willi Wolff – Freelance Software Engineer & Architekt, Berlin',
-        description: 'Freiberuflicher Software Engineer und Architekt aus Berlin. KI, Blockchain, Web und Mobile, von der Forschung bis in Produktion. Aktuell bei IOG für Ouroboros Leios.',
+        description: 'Freiberuflicher Software Engineer und Architekt in Berlin, buchbar für Projekte: KI-Agenten, verteilte Systeme, Enterprise-Software, Websites und Mobile-Apps.',
         ogLocale: 'de_DE',
     },
 } as const;

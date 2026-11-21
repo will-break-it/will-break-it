@@ -26,3 +26,7 @@
 
 /de/projekte/*.md
   X-Robots-Tag: noindex
+
+# What the link preview images say, as data for the script that draws them.
+/og/cards.json
+  X-Robots-Tag: noindex

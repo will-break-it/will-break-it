@@ -1,7 +1,7 @@
 ---
 slug: operando-deal-sourcing
 title: "Deal-Teaser aus dem Postfach ins CRM, mit Claude"
-description: "Fallstudie: eine LLM-Pipeline für Operando Partners, die Deal-Teaser aus E-Mails liest, Kennzahlen aus PDFs extrahiert und HubSpot-Leads zur Prüfung vorbereitet."
+description: "Fallstudie: eine LLM-Pipeline für Operando Partners, die Deal-Teaser aus E-Mails liest, Kennzahlen aus PDFs extrahiert und HubSpot-Leads zur Prüfung anlegt."
 lead: "Operando Partners erhält Deal-Teaser von M&A-Beratern per E-Mail. Eine Pipeline liest sie jetzt, extrahiert die Kennzahlen und bereitet den Lead in HubSpot vor. Das Team prüft, bevor etwas gespeichert wird."
 order: 1
 updated: 2026-11-20

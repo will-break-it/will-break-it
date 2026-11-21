@@ -8,6 +8,7 @@ npm ci
 npm run dev      # http://localhost:4321, English at /, German at /de/
 npm test         # builds into dist/, then runs the tests against the built site
 npm run cv       # regenerates public/cv*.md and public/cv*.json from the Typst sources
+npm run previews # redraws the link preview images, see below
 ```
 
 To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locally:
@@ -31,8 +32,27 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
    front matter as an existing file. `slug` sets the URL and may differ per language.
 2. Link to it from other content as `@work/<key>` or `@service/<key>`; the build turns that
    into the right URL for each language.
-3. `npm test`. The sitemap, `/llms.txt`, the language links and the Markdown twin
+3. `npm run previews` draws the page's link preview image.
+4. `npm test`. The sitemap, `/llms.txt`, the language links and the Markdown twin
    (`<url without trailing slash>.md`) are generated and checked.
+
+## Titles, descriptions and link previews
+
+Every page sets its own title, description, Open Graph and Twitter tags in
+`src/layouts/Base.astro`. The home pages take theirs from `HOME` in `src/lib/site.ts`, a
+service page or case study from its front matter. `npm test` holds each title to 65
+characters and each description to 110 to 160, and fails if two pages share one.
+
+The image a shared link shows is drawn per page: `public/social-preview.png` and
+`.de.png` for the home pages, `public/og/*.png` for the rest. What a card says is decided in
+`src/lib/previews.ts` (a case study shows its `facts.result`, a service its `facts.stack`),
+how it looks in `scripts/preview-card.mjs`. After changing a title, one of those facts or the
+template, run `npm run previews` and commit the images with `scripts/previews.lock.json`;
+`npm test` fails while a page and its image disagree. Drawing needs Playwright, which is
+not a dependency of the site: `npm install --no-save playwright && npx playwright install chromium`.
+
+LinkedIn, Slack and others keep a copy of the preview for days. To see a change at once,
+run the URL through LinkedIn's Post Inspector.
 
 ## Before the brief form is live
 

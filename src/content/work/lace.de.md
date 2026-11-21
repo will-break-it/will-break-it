@@ -1,7 +1,7 @@
 ---
 slug: lace-wallet-neuarchitektur
 title: "Neuarchitektur des Lace-Wallet-Backends: von Polling zu Events"
-description: "Fallstudie: event-getriebene Neuarchitektur des Cardano-Wallets Lace bei IOG. 45 % weniger Latenz, über 60 % geringere Infrastrukturkosten, Indexing mit 2.000+ Tx/s."
+description: "Fallstudie: event-getriebene Neuarchitektur des Cardano-Wallets Lace bei IOG. 45 % weniger Latenz, 60 %+ geringere Infrastrukturkosten, Indexing mit 2.000+ Tx/s"
 lead: "Lace ist das Light Wallet von IOG für Cardano. Das Backend fragte die Chain für jedes Wallet per Polling ab. Ich habe den Umbau zu einem event-getriebenen Design geleitet: 45 % weniger Latenz und über 60 % geringere Infrastrukturkosten."
 order: 2
 updated: 2026-11-20

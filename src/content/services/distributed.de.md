@@ -1,7 +1,7 @@
 ---
 slug: verteilte-systeme-blockchain
 title: "Verteilte Systeme und Blockchain-Engineering"
-description: "Freiberuflicher Architekt in Berlin für Protokolldesign, event-getriebene Backends und Chain-Indexing. Fünf Jahre Cardano bei IOG, von Wallet-Infrastruktur bis Konsensforschung."
+description: "Freiberuflicher Architekt in Berlin für Protokolldesign, event-getriebene Backends und Chain-Indexing. Fünf Jahre Cardano bei IOG, von Wallets bis Konsens."
 lead: "Protokolldesign, event-getriebene Backends und Chain-Indexing. Fünf Jahre Cardano bei IOG, von Wallet-Infrastruktur bis Konsensforschung, davor Enterprise-Migrationen."
 order: 2
 updated: 2026-11-20
