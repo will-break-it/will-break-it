@@ -673,14 +673,20 @@ test('every page has its own title, description and link preview image', () => {
     assert.deepEqual(readdirSync(join(dist, 'og')).filter(file => file.endsWith('.png')).length, 18);
 });
 
+// Will went through the audit's before and after pictures on 2026-11-21 and chose per
+// section. The first screen and the career section keep their earlier look (small
+// capital labels, middle dots, the brighter button); the rest follows the audit.
 test('the design holds the rules of the November 2026 audit', () => {
     const css = readFileSync(join(root, 'src', 'styles', 'site.css'), 'utf8');
 
-    // Labels are plain sentence case in the body face: no capitals, no spread letters.
-    assert.doesNotMatch(css, /text-transform:\s*uppercase|small-caps/);
-    for (const [, em] of css.matchAll(/letter-spacing:\s*(-?[\d.]+)em/g)) assert.ok(Number(em) <= 0.03, 'letter-spacing ' + em + 'em');
-    // No text under 12px.
-    for (const [, rem] of css.matchAll(/font-size:\s*([\d.]+)rem/g)) assert.ok(Number(rem) >= 0.75, 'font-size ' + rem + 'rem');
+    // Capitals with spread letters stay on two labels only: the small label of the first
+    // screen and of the career section, and "Building now".
+    assert.equal((css.match(/text-transform:\s*uppercase/g) || []).length, 2);
+    assert.match(css, /\.section-kicker \{[^}]*text-transform: uppercase/);
+    assert.match(css, /\.now-label \{[^}]*text-transform: uppercase/);
+    for (const [, em] of css.matchAll(/letter-spacing:\s*(-?[\d.]+)em/g)) assert.ok(Number(em) <= 0.06, 'letter-spacing ' + em + 'em');
+    // No text under 11px.
+    for (const [, rem] of css.matchAll(/font-size:\s*([\d.]+)rem/g)) assert.ok(Number(rem) >= 0.7, 'font-size ' + rem + 'rem');
     // Motion names what it moves, and stops for a visitor who asked for less.
     assert.doesNotMatch(css, /transition:\s*all|transition:[^;]*\b(?:max-)?(?:width|height|top|left)\b/);
     assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{\s*\*, \*::before, \*::after \{/);
@@ -688,7 +694,8 @@ test('the design holds the rules of the November 2026 audit', () => {
     for (const [, value] of css.matchAll(/font-family:\s*([^;]+);/g)) assert.match(value, /^var\(--font-|^inherit$/, 'font-family ' + value);
     assert.match(css, /html, body \{ overflow-x: clip; \}/);
 
-    // Contrast, worked out from the tokens: button text 4.5:1, the edge of a field 3:1, in both palettes.
+    // Contrast, worked out from the tokens: the edge of a field 3:1 in both palettes, button
+    // text 4.5:1 in dark. In light Will chose the brand teal for buttons, which is 3.7:1.
     const token = (block, name) => block.match(new RegExp(name + ':\\s*(#[0-9a-f]{6})', 'i'))[1];
     const luminance = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255)
         .map(c => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
@@ -698,7 +705,7 @@ test('the design holds the rules of the November 2026 audit', () => {
     const dark = css.slice(css.indexOf('\n:root[data-theme="dark"] {'));
     for (const [name, palette] of [['light', light], ['dark', dark]]) {
         for (const fill of ['--action', '--action-hover']) {
-            assert.ok(contrast(token(palette, '--brand-ink'), token(palette, fill)) >= 4.5, name + ' button text on ' + fill);
+            assert.ok(contrast(token(palette, '--brand-ink'), token(palette, fill)) >= (name === 'light' ? 3.7 : 4.5), name + ' button text on ' + fill);
         }
         assert.ok(contrast(token(palette, '--field-edge'), token(palette, '--bg')) >= 3, name + ' field edge');
         assert.ok(contrast(token(palette, '--brand'), token(palette, '--bg')) >= 3, name + ' focus ring');
@@ -706,8 +713,10 @@ test('the design holds the rules of the November 2026 audit', () => {
     assert.match(css, /\.btn-primary \{\s*background: var\(--action\);/);
 
     for (const path of pages) {
-        const html = file(path).replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
-        // Facts are joined by words, commas and layout. The one dot left is the byline on the home page.
+        const html = file(path).replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '')
+            .replace(/<section id="experience"[\s\S]*?<\/section>/, '');
+        // Outside the career section, facts are joined by words, commas and layout. The one
+        // dot left is the byline on the home page.
         const dots = (html.replace(/<[^>]+>/g, '').match(/·/g) || []).length;
         assert.ok(dots <= 1, path + ' joins text with ' + dots + ' middle dots');
         // An icon is hidden from screen readers or named.

@@ -53,18 +53,21 @@ uses the light palette. The link preview images are light only.
 ## Design rules
 
 The design was audited in November 2026 against the public Hallmark skill
-(`nutlope/hallmark`, by hand: its lint script was not run). `npm test` keeps what came out of it:
+(`nutlope/hallmark`, by hand: its lint script was not run). Will then chose per section
+between the look before and after. `npm test` keeps the outcome:
 
-- Labels are sentence case in the body face. No capitals with spread letters, no small label
-  above a section heading, no text under 12px.
-- Facts are joined by words, commas or layout, not by middle dots. The one dot left is the
-  byline on the home page.
-- A filled button uses `--action`, which holds 4.5:1 against its text in both palettes. The edge
-  of a form field uses `--field-edge`, which holds 3:1 against the page.
+- **First screen and career section: the earlier look.** The soft glows behind the first
+  screen, the small labels in capitals ("Terms at a glance", "Building now", "Timeline"),
+  middle dots in the career lines, arrows on the chips, and the brand teal on filled buttons.
+  White on that teal is 3.7:1 in the light palette, under the 4.5:1 that WCAG asks for; this
+  was shown and chosen. `--action` is the one place to change it.
+- **Everywhere else: the audit's look.** No small label above a section heading, labels in
+  sentence case, facts joined by words, commas or layout and not by middle dots, links to
+  case studies underlined, no zoom on project pictures.
+- The edge of a form field uses `--field-edge`, which holds 3:1 against the page.
 - Nothing is collapsed unless scripts run: the head script sets `js` on `<html>`, and only
   `.js` rules close the roles in the career section. Each role opens with a real button.
 - Motion names the property it changes, and all of it stops under `prefers-reduced-motion`.
-- The first screen is flat: no gradient behind it, in either palette.
 - The German header has longer labels. `Header.astro` marks it with `long-labels`, and the CV
   button gives way where there is no room; check 320 to 1300 pixels in both languages after
   changing the header.
