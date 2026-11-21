@@ -68,6 +68,15 @@ between the look before and after. `npm test` keeps the outcome:
 - Nothing is collapsed unless scripts run: the head script sets `js` on `<html>`, and only
   `.js` rules close the roles in the career section. Each role opens with a real button.
 - Motion names the property it changes, and all of it stops under `prefers-reduced-motion`.
+- **The form moves after [transitions.dev](https://transitions.dev)** (November 2026). Its
+  published rules sit unchanged under `t-*` classes at the end of `site.css`: menu dropdown,
+  error state shake, text states swap, success check and panel reveal. Their settings are the
+  motion variables in the first `:root` block, and `public/js/brief.js` reads its waiting
+  times from the same variables. Size, colour and type stay with the components.
+- A dropdown is a native `<select>` inside `.select`. It holds the value and is what a visitor
+  without scripts sees, already in the page's look. `brief.js` hides it and puts a button and
+  a list in its place (a select-only combobox: arrow keys, Home, End, Enter, Escape, typing).
+  A new select in the form needs only that wrapper and the arrow icon.
 - The German header has longer labels. `Header.astro` marks it with `long-labels`, and the CV
   button gives way where there is no room; check 320 to 1300 pixels in both languages after
   changing the header.

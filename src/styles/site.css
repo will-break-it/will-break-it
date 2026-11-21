@@ -16,6 +16,9 @@
     --bg: #ffffff;
     --surface: #f6f8fa;
     --surface-2: #eef2f5;
+    /* A list that opens above the page, and the shadow under it. */
+    --pop: #ffffff;
+    --pop-shadow: 0 18px 40px -18px rgba(11, 22, 34, 0.3), 0 2px 6px -2px rgba(11, 22, 34, 0.08);
     --border: #e2e8ee;
     --border-strong: #cdd6df;
     /* The edge of a form field: 3:1 against the page, so the field can be found. */
@@ -68,6 +71,55 @@
     --s-6: 2rem;
     --s-7: 3rem;
     --s-8: 4.5rem;
+
+    /* Motion, after transitions.dev: one scale of durations, curves, distances and
+       scales, and under it the settings of each transition the form uses. The
+       form script reads the timings from here, so a change here is enough. */
+    --duration-micro: 80ms;
+    --duration-quick: 150ms;
+    --duration-fast: 250ms;
+    --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out: ease-out;
+    --scale-medium: 0.97;
+    /* Menu dropdown */
+    --dropdown-open-dur: 250ms;
+    --dropdown-close-dur: 150ms;
+    --dropdown-pre-scale: 0.97;
+    --dropdown-closing-scale: 0.99;
+    --dropdown-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Text states swap */
+    --text-swap-dur: 150ms;
+    --text-swap-translate-y: 4px;
+    --text-swap-blur: 2px;
+    --text-swap-ease: ease-in-out;
+    /* Error state shake */
+    --shake-distance: 6px;
+    --shake-overshoot: 4px;
+    --shake-dur-a: 80ms;
+    --shake-dur-b: 60ms;
+    --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --revert-dur: 280ms;
+    /* Success check */
+    --check-opacity-dur: 500ms;
+    --check-rotate-dur: 500ms;
+    --check-rotate-from: 80deg;
+    --check-bob-dur: 500ms;
+    --check-y-amount: 40px;
+    --check-blur-dur: 500ms;
+    --check-blur-from: 10px;
+    --check-path-dur: 500ms;
+    --check-path-delay: 80ms;
+    --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease-opacity: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease-rotate: cubic-bezier(0.22, 1, 0.36, 1);
+    --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
+    --check-ease-path: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Panel reveal */
+    --panel-open-dur: 400ms;
+    --panel-close-dur: 350ms;
+    --panel-translate-y: 100px;
+    --panel-blur: 2px;
+    --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --- base --------------------------------------------------------- */
@@ -81,6 +133,8 @@
         --bg: #0b1622;
         --surface: #101d2b;
         --surface-2: #172636;
+        --pop: #132233;
+        --pop-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.65), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
         --border: #213243;
         --border-strong: #31455a;
         --field-edge: #647a90;
@@ -115,6 +169,8 @@
     --bg: #0b1622;
     --surface: #101d2b;
     --surface-2: #172636;
+    --pop: #132233;
+    --pop-shadow: 0 18px 40px -14px rgba(0, 0, 0, 0.65), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
     --border: #213243;
     --border-strong: #31455a;
     --field-edge: #647a90;
@@ -263,10 +319,11 @@ h2 { text-wrap: balance; }
     font-size: 0.9rem;
     font-weight: 600;
     white-space: nowrap;
-    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    transition: background var(--duration-quick) var(--ease-out), border-color var(--duration-quick) var(--ease-out), transform var(--duration-quick) var(--ease-smooth-out);
 }
 .btn:hover { text-decoration: none; border-color: var(--ink); }
-.btn:active { transform: translateY(1px); }
+/* Pressed: the button gives a little, and comes back on the same curve. */
+.btn:active { transform: scale(var(--scale-medium)); }
 .btn svg { width: 16px; height: 16px; flex: none; }
 
 .btn-primary {
@@ -1040,6 +1097,11 @@ h3.project-title-link::after { content: none; }
 .btn-lg { height: 48px; padding: 0 1.4rem; font-size: 1rem; }
 button.btn { font-family: inherit; cursor: pointer; }
 button.btn[disabled] { opacity: 0.6; cursor: progress; }
+/* The send button keeps its width while its label changes. */
+#brief-send { justify-content: center; }
+/* The tick in the send button: the success check of transitions.dev, sized for a button. */
+.btn .t-success-check { --check-y-amount: 6px; --check-blur-from: 3px; }
+.t-success-check[hidden] { display: none; }
 
 .lead-more {
     margin-left: var(--s-2);
@@ -1156,14 +1218,17 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 
 .brief-form { flex: 1.2 1 420px; min-width: 0; display: grid; gap: var(--s-5); }
 
-.field { display: grid; gap: 0.4rem; min-width: 0; }
+/* Rows keep their own height, so a field does not grow when its neighbour shows a message. */
+.field { display: grid; align-content: start; gap: 0.4rem; min-width: 0; }
 .field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--s-5); }
 .field label { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
 .field .optional { font-weight: 400; color: var(--muted); }
 
+/* A field, a dropdown and its button share one box: same height, edge and corner. */
 .field input,
 .field select,
-.field textarea {
+.field textarea,
+.select-trigger {
     width: 100%;
     min-height: 48px;
     padding: 0.7rem 0.9rem;
@@ -1172,15 +1237,84 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
     background: var(--bg);
     color: var(--ink);
     font: inherit;
+    /* Not seen, but drawn in a forced-colours page, where the ring below is dropped. */
+    outline: 2px solid transparent;
+    outline-offset: 1px;
+    transition: border-color var(--duration-quick) var(--ease-out), box-shadow var(--duration-quick) var(--ease-out);
 }
 .field textarea { resize: vertical; line-height: 1.5; }
 .field input::placeholder,
 .field textarea::placeholder { color: var(--faint); }
+.field input:hover,
+.field select:hover,
+.field textarea:hover,
+.select-trigger:hover { border-color: var(--muted); }
+/* In use: the edge turns teal and thickens, with a soft ring around it. */
 .field input:focus-visible,
 .field select:focus-visible,
-.field textarea:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; border-color: var(--brand); }
+.field textarea:focus-visible,
+.select-trigger:focus-visible,
+.select.is-open .select-trigger { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand), 0 0 0 4px var(--brand-soft); }
 .field [aria-invalid="true"] { border-color: var(--signal); }
+.field [aria-invalid="true"]:focus-visible { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), 0 0 0 4px var(--signal-soft); }
 .field-error { font-size: 0.85rem; color: var(--signal); }
+
+/* Dropdown. Without scripts it is the browser's own select in the page's look. With
+   scripts brief.js hides that select, which still holds the value, and puts a button
+   and a list in its place; the list opens with the menu dropdown of transitions.dev. */
+.select { position: relative; }
+.field select { -webkit-appearance: none; appearance: none; padding-right: 2.75rem; text-overflow: ellipsis; cursor: pointer; }
+.select-chevron {
+    position: absolute;
+    top: 50%;
+    right: 0.9rem;
+    width: 18px;
+    height: 18px;
+    margin-top: -9px;
+    color: var(--muted);
+    pointer-events: none;
+    transition: transform var(--duration-fast) var(--ease-smooth-out);
+}
+.select.is-open .select-chevron { transform: rotate(180deg); }
+.select.is-enhanced select { display: none; }
+.select-trigger { display: flex; align-items: center; padding-right: 2.75rem; text-align: left; cursor: pointer; }
+.select-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.select-list {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: min(320px, 60vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 6px;
+    list-style: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--pop);
+    box-shadow: var(--pop-shadow);
+}
+.select-list[hidden] { display: none; }
+/* No room below: the list opens upwards and grows from its lower edge. */
+.select-list[data-origin^="bottom"] { top: auto; bottom: calc(100% + 6px); }
+.select-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    min-height: 44px;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    color: var(--text);
+    line-height: 1.35;
+    cursor: pointer;
+    transition: background var(--duration-micro) var(--ease-out);
+}
+.select-option.is-active { background: var(--hover); color: var(--ink); }
+.select-option[aria-selected="true"] { color: var(--ink); font-weight: 600; }
+.select-check { flex: none; width: 16px; height: 16px; color: var(--brand); opacity: 0; }
+.select-option[aria-selected="true"] .select-check { opacity: 1; }
 
 .brief-noscript { margin: 0 0 var(--s-4); font-size: 0.9rem; color: var(--muted); }
 .field-trap { position: absolute; left: -200vw; width: 1px; height: 1px; overflow: hidden; }
@@ -1201,6 +1335,8 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
     color: var(--ink);
 }
 .brief-status.is-error { background: var(--signal-soft); }
+/* It arrives with the panel reveal, over a short way. */
+.brief-status.t-panel-slide { --panel-translate-y: 8px; }
 
 .brief-agent { flex: 1 1 360px; min-width: 0; display: grid; gap: var(--s-3); }
 .brief-agent h3 { font-size: 1.15rem; font-weight: 700; }
@@ -1238,6 +1374,8 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
     cursor: pointer;
 }
 .code-copy:hover { border-color: var(--ink); color: var(--ink); }
+.code-copy { transition: border-color var(--duration-quick) var(--ease-out), color var(--duration-quick) var(--ease-out), transform var(--duration-quick) var(--ease-smooth-out); }
+.code-copy:active { transform: scale(var(--scale-medium)); }
 
 .back { margin-top: var(--s-7); }
 .back h3 { font-size: 1.15rem; font-weight: 700; }
@@ -1352,6 +1490,210 @@ a.icon-btn:hover { text-decoration: none; }
 .notfound { max-width: 34rem; padding-top: var(--s-8); }
 .notfound h1 { margin-top: var(--s-2); font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
 .notfound p { margin-top: var(--s-4); color: var(--muted); }
+
+/* --- motion from transitions.dev ------------------------------------ */
+/* The rules below are the published transitions of transitions.dev (Jakub
+   Antalik), kept as they are so they can be compared with the source. They only
+   move things: size, colour and type come from the rules of each component
+   above. Their settings are the variables at the top of this sheet. */
+
+/* Menu dropdown: the list of a dropdown */
+.t-dropdown {
+  transform-origin: top left;
+  transform: scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-open-dur) var(--dropdown-ease);
+  will-change: transform, opacity;
+}
+.t-dropdown[data-origin="top-right"]     { transform-origin: top right; }
+.t-dropdown[data-origin="top-center"]    { transform-origin: top center; }
+.t-dropdown[data-origin="bottom-left"]   { transform-origin: bottom left; }
+.t-dropdown[data-origin="bottom-center"] { transform-origin: bottom center; }
+.t-dropdown[data-origin="bottom-right"]  { transform-origin: bottom right; }
+
+.t-dropdown.is-open {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+.t-dropdown.is-closing {
+  transform: scale(var(--dropdown-closing-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-close-dur) var(--dropdown-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-dropdown { transition: none !important; }
+}
+
+/* Error state shake: a field that was left empty or wrong */
+/* Border-color tween. Define your input's default / focused
+   / error border-color in your own component CSS — this rule
+   only owns the interpolation. Use a constant border-width
+   across states so the tween never shifts inner content. */
+.t-input {
+  transition: border-color 150ms ease-out;
+  will-change: transform;
+}
+.t-input.is-error {
+  /* Error border auto-reverts on the hold timer, so the
+     fade-out uses the slower revert duration (matches the
+     message fade). */
+  transition: border-color var(--revert-dur, 280ms) ease-out;
+}
+
+/* Error message reveal. Visibility is delayed by --revert-dur
+   on hide so the message stays painted for the full opacity
+   fade-out. Entering .is-error drops the delay to 0 so the
+   message becomes visible immediately. */
+.t-error-msg {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity    var(--revert-dur, 280ms) ease-out,
+    visibility 0s linear var(--revert-dur, 280ms);
+}
+.t-input-wrap.is-error .t-error-msg {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity    var(--revert-dur, 280ms) ease-out,
+    visibility 0s linear 0s;
+}
+
+/* Multi-segment keyframe with per-stop easing so each leg
+   of the shake follows its own cubic-bezier independently.
+   %-stops are cumulative durations as a fraction of the
+   total (80, 60, 80, 60 = 280ms): 28.57%, 57.14%, 78.57%,
+   100%. Recompute if any segment duration changes. */
+.t-input.is-shaking {
+  animation: t-input-shake calc(
+      var(--shake-dur-a) * 2 + var(--shake-dur-b) * 2
+    ) linear;
+}
+@keyframes t-input-shake {
+  0%      { transform: translateX(0);                                 animation-timing-function: var(--shake-ease); }
+  28.57%  { transform: translateX(var(--shake-distance));             animation-timing-function: var(--shake-ease); }
+  57.14%  { transform: translateX(calc(var(--shake-distance) * -1)); animation-timing-function: var(--shake-ease); }
+  78.57%  { transform: translateX(var(--shake-overshoot));            animation-timing-function: var(--shake-ease); }
+  100%    { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-input { animation: none !important; transform: none !important; }
+}
+
+/* Text states swap: the label of the send and copy buttons, the value of a dropdown */
+.t-text-swap {
+  display: inline-block;
+  transform: translateY(0);
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter    var(--text-swap-dur) var(--text-swap-ease),
+    opacity   var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+.t-text-swap.is-exit {
+  transform: translateY(calc(var(--text-swap-translate-y) * -1));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+.t-text-swap.is-enter-start {
+  transform: translateY(var(--text-swap-translate-y));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-text-swap { transition: none !important; }
+}
+
+/* Success check: the tick in the send button */
+/* Wrapper drives the appear animation; it doesn't own any
+   sizing or color so you can drop in any icon. */
+.t-success-check {
+  display: inline-block;
+  transform-origin: center;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+/* overflow: visible keeps the stroke from clipping while it
+   draws; display: block kills the inline whitespace under SVGs. */
+.t-success-check svg { display: block; overflow: visible; }
+/* Stroke-draw setup. Replace 20 with the result of
+   path.getTotalLength() for your path; round caps mean any
+   sub-pixel overshoot is invisible. */
+.t-success-check svg path {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+}
+
+.t-success-check[data-state="in"] {
+  animation:
+    t-check-fade   var(--check-opacity-dur) var(--check-ease-opacity) forwards,
+    t-check-rotate var(--check-rotate-dur)  var(--check-ease-rotate)  forwards,
+    t-check-blur   var(--check-blur-dur)    var(--check-ease-out)     forwards,
+    t-check-bob    var(--check-bob-dur)     var(--check-ease-bob)     forwards;
+}
+.t-success-check[data-state="in"] svg path {
+  animation: t-check-draw var(--check-path-dur) var(--check-ease-path) var(--check-path-delay, 0ms) forwards;
+}
+
+@keyframes t-check-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes t-check-rotate {
+  from { transform: rotate(var(--check-rotate-from)); }
+  to   { transform: rotate(0deg); }
+}
+@keyframes t-check-blur {
+  from { filter: blur(var(--check-blur-from)); }
+  to   { filter: blur(0); }
+}
+@keyframes t-check-bob {
+  from { translate: 0 var(--check-y-amount); }
+  to   { translate: 0 0; }
+}
+@keyframes t-check-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-success-check { animation: none !important; opacity: 1; }
+  .t-success-check svg path { animation: none !important; stroke-dashoffset: 0 !important; }
+}
+
+/* Panel reveal: the message under the form */
+.t-panel-slide {
+  transform: translateY(var(--panel-translate-y));
+  opacity: 0;
+  filter: blur(var(--panel-blur));
+  pointer-events: none;
+  transition:
+    transform var(--panel-close-dur) var(--panel-ease),
+    opacity   var(--panel-close-dur) var(--panel-ease),
+    filter    var(--panel-close-dur) var(--panel-ease);
+  will-change: transform, opacity, filter;
+}
+.t-panel-slide[data-open="true"] {
+  transform: translateY(0);
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+  transition:
+    transform var(--panel-open-dur) var(--panel-ease),
+    opacity   var(--panel-open-dur) var(--panel-ease),
+    filter    var(--panel-open-dur) var(--panel-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-panel-slide { transition: none !important; }
+}
 
 /* A visitor who asked for less motion gets none: every state change is immediate. */
 @media (prefers-reduced-motion: reduce) {
