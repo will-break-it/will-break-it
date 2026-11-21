@@ -1,10 +1,10 @@
 {
-  "generated": "2026-11-21T07:15:11Z",
+  "generated": "2026-11-21T19:20:30Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 15218,
+    "total": 15369,
     "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
@@ -54,18 +54,18 @@
       },
       {
         "month": "2026-11",
-        "total": 1478
+        "total": 1629
       }
     ]
   },
-  "streakDays": 1,
+  "streakDays": 2,
   "totals": {
-    "contributions": 19956,
+    "contributions": 20107,
     "private": 85,
-    "commits": 15756,
-    "pullRequests": 3387,
+    "commits": 15881,
+    "pullRequests": 3411,
     "reviews": 89,
-    "repositories": 43,
+    "repositories": 44,
     "publicRepositories": 11
   },
   "years": [
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 14595,
+      "total": 14746,
       "private": 0,
-      "commits": 10791,
-      "prs": 3182,
+      "commits": 10916,
+      "prs": 3206,
       "reviews": 57
     }
   ],
@@ -517,8 +517,8 @@
     },
     {
       "month": "2026-11",
-      "total": 1478,
-      "commits": 1031
+      "total": 1629,
+      "commits": 1156
     }
   ],
   "days": [
@@ -2119,13 +2119,13 @@
     },
     {
       "date": "2026-11-16",
-      "total": 105,
-      "commits": 62
+      "total": 107,
+      "commits": 64
     },
     {
       "date": "2026-11-17",
-      "total": 116,
-      "commits": 73
+      "total": 123,
+      "commits": 80
     },
     {
       "date": "2026-11-18",
@@ -2134,26 +2134,31 @@
     },
     {
       "date": "2026-11-20",
-      "total": 20,
-      "commits": 7
+      "total": 23,
+      "commits": 10
+    },
+    {
+      "date": "2026-11-21",
+      "total": 139,
+      "commits": 113
     }
   ],
   "languages": [
     {
       "name": "TypeScript",
-      "share": 68.3
+      "share": 68.1
     },
     {
       "name": "PLpgSQL",
-      "share": 9.9
+      "share": 9.8
     },
     {
       "name": "HTML",
-      "share": 9.6
+      "share": 9.4
     },
     {
       "name": "JavaScript",
-      "share": 2.2
+      "share": 2.5
     },
     {
       "name": "Dart",
@@ -2161,26 +2166,26 @@
     },
     {
       "name": "Astro",
-      "share": 1.4
+      "share": 1.5
     }
   ],
   "lastPush": {
-    "at": "2026-11-20T20:27:48Z",
-    "repo": "will-break-it",
-    "url": "https://github.com/will-break-it/will-break-it",
-    "private": false
+    "at": "2026-11-21T18:33:02Z",
+    "repo": null,
+    "url": null,
+    "private": true
   },
   "recentPublic": [
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-11-20T20:27:48Z",
-      "language": "HTML"
+      "pushedAt": "2026-11-21T16:11:45Z",
+      "language": "JavaScript"
     },
     {
       "name": "will-break-it.github.io",
       "url": "https://github.com/will-break-it/will-break-it.github.io",
-      "pushedAt": "2026-11-20T09:10:19Z",
+      "pushedAt": "2026-11-21T12:06:27Z",
       "language": "Typst"
     },
     {
