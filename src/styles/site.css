@@ -987,6 +987,8 @@ button.btn[disabled] { opacity: 0.6; cursor: progress; }
 .lane-what { color: var(--muted); }
 .lane-proof { font-size: 0.95rem; }
 .lane-proof strong { color: var(--ink); }
+/* The technologies of a lane, as the plain words people search for. */
+.lane-stack { font-size: 0.85rem; color: var(--muted); }
 .lane .jump-link { margin-top: auto; padding-top: var(--s-2); font-size: 0.92rem; }
 
 .results { margin-top: var(--s-7); }

@@ -579,3 +579,36 @@ test('the generated CV files match their Typst sources', async () => {
     const { execFileSync } = await import('node:child_process');
     execFileSync('node', ['scripts/build-cv-data.mjs', '--check'], { cwd: root });
 });
+
+test('the technologies recruiters search for are named where they look', () => {
+    const wanted = ['React', 'React Native', 'TypeScript', 'JavaScript', 'Rust', 'Flutter', 'Swift', 'Java', 'Next.js', 'Kotlin', 'Node.js', 'PostgreSQL'];
+    const word = name => new RegExp('(^|[^\\w.])' + name.replace(/[.]/g, '\\.') + '($|[^\\w.])');
+
+    // The home page, in both languages, as visible text.
+    for (const page of ['index.html', 'de/index.html']) {
+        const text = readFileSync(join(dist, page), 'utf8').replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ');
+        for (const name of wanted) assert.match(text, word(name), page + ' names ' + name);
+    }
+    // Each kind of work names its own stack on the home page.
+    assert.equal((readFileSync(join(dist, 'index.html'), 'utf8').match(/class="lane-stack"/g) || []).length, 4);
+
+    // Structured data, the hiring summary and the profile for agents.
+    const home = readFileSync(join(dist, 'index.html'), 'utf8');
+    const graph = JSON.parse(home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+    const person = (graph['@graph'] || [graph]).find(node => node['@type'] === 'Person');
+    const skills = Object.values(JSON.parse(readFileSync(join(dist, 'hire.json'), 'utf8')).skills).flat().join(', ');
+    const profile = readFileSync(join(dist, 'llms.txt'), 'utf8');
+    for (const name of wanted) {
+        assert.ok(person.knowsAbout.includes(name), 'knowsAbout has ' + name);
+        assert.match(skills, word(name), 'hire.json names ' + name);
+        assert.match(profile, word(name), 'llms.txt names ' + name);
+    }
+
+    // Every service page carries a Stack line, in the page and in its Markdown twin.
+    const services = readdirSync(join(dist, 'services'));
+    assert.equal(services.filter(name => !name.endsWith('.md')).length, 4);
+    for (const name of services) {
+        const file = name.endsWith('.md') ? join(dist, 'services', name) : join(dist, 'services', name, 'index.html');
+        assert.match(readFileSync(file, 'utf8'), name.endsWith('.md') ? /\*\*Stack:\*\* \w/ : /<dt>Stack<\/dt><dd>\w/, name);
+    }
+});

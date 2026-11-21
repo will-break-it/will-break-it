@@ -127,8 +127,16 @@ Products and client work:
 
 ## Technologies
 
-Languages by weight across the career: TypeScript, Java, Swift, React/React Native, Kotlin,
-Rust, Plutus/Haskell, Python, Agda, Dart/Flutter, Astro.
+Languages by weight across the career: TypeScript and JavaScript, Java, Swift, Kotlin, Rust,
+Plutus/Haskell, Python, Agda, Dart.
+
+Frameworks: React, React Native, Next.js, Astro, Flutter, Node.js, NestJS, Spring Boot, Vert.x.
+
+By kind of work:
+- AI agents and automation: TypeScript, Claude API, OpenRouter, MCP, structured outputs, Zod, pgvector, Whisper, Microsoft Graph, HubSpot API.
+- Distributed systems and blockchain: TypeScript, Rust, Haskell, Agda, Cardano, Plutus, CQRS, event sourcing, PostgreSQL, Redis, gRPC.
+- Enterprise and mission-critical software: Java, Spring Boot, Vert.x, TypeScript, Node.js, NestJS, PostgreSQL, Redis, Docker, Terraform, AWS.
+- Websites, booking systems and mobile apps: React, React Native, Next.js, TypeScript, JavaScript, Swift, SwiftUI, Kotlin, Jetpack Compose, Flutter, Astro, Tailwind, Supabase, PostgreSQL, Cloudflare Workers.
 
 Focus areas: distributed ledger technology (DLT), Cardano and the eUTxO model, Plutus smart
 contracts, consensus protocols, formal methods, distributed systems, event-driven

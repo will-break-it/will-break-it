@@ -7,6 +7,8 @@ order: 2
 updated: 2026-11-20
 brief: blockchain_distributed
 related: [lace, leios, deloitte]
+facts:
+  stack: "TypeScript, Rust, Haskell, Agda, Cardano, Plutus, CQRS, Event Sourcing, PostgreSQL, Redis, gRPC"
 proof:
   - label: "CIP-0164, die Spezifikation von Ouroboros Leios"
     href: "https://github.com/cardano-scaling/CIPs/blob/leios/CIP-0164/README.md"
