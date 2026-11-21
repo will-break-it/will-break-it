@@ -28,7 +28,7 @@
   ],
   "fixed_price_websites": "https://pagebase.dev",
   "contact": {
-    "email": "contact+web@williwolff.com",
+    "email": "contact@williwolff.com",
     "enquiry": {
       "method": "POST",
       "url": "https://williwolff.com/api/enquiry",

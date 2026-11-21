@@ -12,7 +12,7 @@
       "description": "Freelance software engineer and architect in Berlin: AI, blockchain, web and mobile, from research to production. Writing code since 2008, shipping professionally since 2015.",
       "url": "https://williwolff.com/",
       "image": "https://williwolff.com/assets/images/will.jpg",
-      "email": "mailto:contact+web@williwolff.com",
+      "email": "mailto:contact@williwolff.com",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Berlin",
@@ -98,7 +98,7 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "project enquiries",
-        "email": "contact+web@williwolff.com",
+        "email": "contact@williwolff.com",
         "url": "https://williwolff.com/#brief",
         "availableLanguage": [
           "de",
