@@ -8,7 +8,8 @@ const { lang, altPath, onHome = false } = Astro.props;
 const t = T[lang];
 const base = onHome ? '' : home(lang);
 ---
-<header class="site-header" id="header">
+{/* long-labels: the German labels need more room, see the header rules in site.css. */}
+<header class:list={['site-header', { 'long-labels': lang === 'de' }]} id="header">
     <a href={onHome ? '#top' : home(lang)} class="logo">Will<span class="name-soft">i</span> Wolff</a>
 
     <nav class="site-nav" aria-label={lang === 'de' ? 'Abschnitte' : 'Sections'}>

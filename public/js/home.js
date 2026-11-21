@@ -6,13 +6,21 @@ const html = document.documentElement;
 // nothing hides the other language any more.
 const pageLang = html.getAttribute('data-lang') === 'de' ? 'de' : 'en';
 
-// Collapsible job sections
+// Collapsible job sections. The button carries the state for the keyboard and
+// for screen readers; a click anywhere on the header does the same for a mouse.
+document.querySelectorAll('.job').forEach(function (job) {
+    const button = job.querySelector('.job-toggle');
+    const title = job.querySelector('.job-title h3');
+    if (!button || !title) return;
+    button.setAttribute('aria-label', 'Details: ' + title.textContent.replace(/\s+/g, ' ').trim());
+});
 document.addEventListener('click', function(e) {
     const jobHeader = e.target.closest('.job-header');
-    if (jobHeader) {
-        const job = jobHeader.closest('.job');
-        job.classList.toggle('expanded');
-    }
+    if (!jobHeader || e.target.closest('a')) return;
+    const job = jobHeader.closest('.job');
+    const open = job.classList.toggle('expanded');
+    const button = job.querySelector('.job-toggle');
+    if (button) button.setAttribute('aria-expanded', String(open));
 });
 
 // ===================================================================
@@ -150,13 +158,13 @@ function spinReels(root) {
                 const desc = card.querySelector('.project-description');
                 if (!st || !desc) return;
                 const year = p.year ? ` ${p.year}` : '';
-                // After the dot: why it ended, or a headline figure.
+                // After the state: why it ended, or a headline figure.
                 const after = p.why || p.metric;
-                const why = after ? { en: ` · ${after.en}`, de: ` · ${after.de || after.en}` } : { en: '', de: '' };
+                const why = after ? { en: ' ' + after.en, de: ' ' + (after.de || after.en) } : { en: '', de: '' };
                 const line = document.createElement('p');
                 line.className = 'project-status';
                 line.dataset.state = p.building ? 'building' : p.status;
-                line.innerHTML = `<span><b>${st[pageLang]}${year}</b>${why[pageLang]}</span>`;
+                line.innerHTML = `<span><b>${st[pageLang]}${year}${after ? ':' : ''}</b>${why[pageLang]}</span>`;
                 desc.parentNode.insertBefore(line, desc);
             });
 
@@ -211,8 +219,8 @@ function spinReels(root) {
             const fmt = v => v.toLocaleString(de ? 'de-DE' : 'en-US');
             const sinceYear = (data.since || '').slice(0, 4);
             panel.querySelector('[data-activity="summary"]').textContent = de
-                ? `${fmt(data.totals.contributions)} seit ${sinceYear} · ${fmt(data.totals.pullRequests)} Pull Requests`
-                : `${fmt(data.totals.contributions)} since ${sinceYear} · ${fmt(data.totals.pullRequests)} pull requests`;
+                ? `${fmt(data.totals.contributions)} seit ${sinceYear} und ${fmt(data.totals.pullRequests)} Pull Requests`
+                : `${fmt(data.totals.contributions)} since ${sinceYear} and ${fmt(data.totals.pullRequests)} pull requests`;
 
             // GitHub's own layout: one column per week, Sunday on top,
             // the current week on the right. Levels follow a log scale so
