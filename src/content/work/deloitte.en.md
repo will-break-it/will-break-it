@@ -6,7 +6,7 @@ lead: "At Deloitte I worked on programmatic migrations that move mainframe appli
 order: 4
 updated: 2026-11-20
 brief: backend_architecture
-related: [distributed]
+related: [enterprise]
 facts:
   client: "Deloitte, for a major German insurer, a US state pension fund and social security agency, Target and Walmart"
   role: "Software Engineer, then Lead Engineer (employed)"

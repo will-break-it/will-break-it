@@ -9,7 +9,8 @@
 ## How to work with him
 
 - **What:** freelance software engineering and architecture: AI agents and automation,
-  blockchain and distributed systems, web and mobile. Delivery is scaled with AI agents and
+  blockchain and distributed systems, enterprise and mission-critical software (legacy
+  migrations, re-architecture), and websites, booking systems and mobile apps. Delivery is scaled with AI agents and
   every result is reviewed by him before it ships.
 - **Rate:** 75 to 110 EUR per hour, billed as a freelancer on a contract basis. Where a
   project lands in that range depends on scope and length; his quote names the number.
@@ -59,7 +60,7 @@ languages; the lists above give the English ones, and every page links its Germa
 The home page is one page, read top to bottom:
 
 - `/#home` — who he is, with his terms at a glance: availability, rate, engagement, location, languages
-- `/#work` — what he takes on, in three lanes, each with a result behind it and a link to its service page and case studies
+- `/#work` — what he takes on, in four lanes, each with a result behind it and a link to its service page and case studies
 - `/#brief` — the brief form, next to the same request as JSON
 - `/#cv` — the CV as PDF, Markdown and JSON, in English and German
 - `/#now` — projects at a glance (counts that filter the project list) and a GitHub
