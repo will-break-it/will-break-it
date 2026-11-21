@@ -673,6 +673,56 @@ test('every page has its own title, description and link preview image', () => {
     assert.deepEqual(readdirSync(join(dist, 'og')).filter(file => file.endsWith('.png')).length, 18);
 });
 
+test('the design holds the rules of the November 2026 audit', () => {
+    const css = readFileSync(join(root, 'src', 'styles', 'site.css'), 'utf8');
+
+    // Labels are plain sentence case in the body face: no capitals, no spread letters.
+    assert.doesNotMatch(css, /text-transform:\s*uppercase|small-caps/);
+    for (const [, em] of css.matchAll(/letter-spacing:\s*(-?[\d.]+)em/g)) assert.ok(Number(em) <= 0.03, 'letter-spacing ' + em + 'em');
+    // No text under 12px.
+    for (const [, rem] of css.matchAll(/font-size:\s*([\d.]+)rem/g)) assert.ok(Number(rem) >= 0.75, 'font-size ' + rem + 'rem');
+    // Motion names what it moves, and stops for a visitor who asked for less.
+    assert.doesNotMatch(css, /transition:\s*all|transition:[^;]*\b(?:max-)?(?:width|height|top|left)\b/);
+    assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{\s*\*, \*::before, \*::after \{/);
+    // Fonts come from the tokens, and no page scrolls sideways.
+    for (const [, value] of css.matchAll(/font-family:\s*([^;]+);/g)) assert.match(value, /^var\(--font-|^inherit$/, 'font-family ' + value);
+    assert.match(css, /html, body \{ overflow-x: clip; \}/);
+
+    // Contrast, worked out from the tokens: button text 4.5:1, the edge of a field 3:1, in both palettes.
+    const token = (block, name) => block.match(new RegExp(name + ':\\s*(#[0-9a-f]{6})', 'i'))[1];
+    const luminance = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255)
+        .map(c => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+        .reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+    const contrast = (a, b) => { const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+    const light = css.slice(css.indexOf(':root {'), css.indexOf('\n}'));
+    const dark = css.slice(css.indexOf('\n:root[data-theme="dark"] {'));
+    for (const [name, palette] of [['light', light], ['dark', dark]]) {
+        for (const fill of ['--action', '--action-hover']) {
+            assert.ok(contrast(token(palette, '--brand-ink'), token(palette, fill)) >= 4.5, name + ' button text on ' + fill);
+        }
+        assert.ok(contrast(token(palette, '--field-edge'), token(palette, '--bg')) >= 3, name + ' field edge');
+        assert.ok(contrast(token(palette, '--brand'), token(palette, '--bg')) >= 3, name + ' focus ring');
+    }
+    assert.match(css, /\.btn-primary \{\s*background: var\(--action\);/);
+
+    for (const path of pages) {
+        const html = file(path).replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
+        // Facts are joined by words, commas and layout. The one dot left is the byline on the home page.
+        const dots = (html.replace(/<[^>]+>/g, '').match(/·/g) || []).length;
+        assert.ok(dots <= 1, path + ' joins text with ' + dots + ' middle dots');
+        // An icon is hidden from screen readers or named.
+        for (const [svg] of html.matchAll(/<svg\b[^>]*>/g)) assert.match(svg, /aria-hidden="true"|aria-label=|style="display:\s*none/, path + ' ' + svg.slice(0, 80));
+        // Scripts say they run before the page is drawn, so nothing is collapsed without them.
+        assert.match(file(path).slice(0, file(path).indexOf('</head>')), /classList\.add\('js'\)/, path);
+    }
+    // A role in the career section opens with a real button, and is open when scripts do not run.
+    for (const path of ['/', '/de/']) {
+        const toggles = file(path).match(/<button type="button" class="job-toggle" aria-expanded="false">/g) || [];
+        assert.equal(toggles.length, 9, path);
+    }
+    assert.match(css, /\.js \.job-content \{[^}]*visibility: hidden/);
+});
+
 test('the dark palette is complete and every page carries the switch', () => {
     const css = readFileSync(join(root, 'src', 'styles', 'site.css'), 'utf8');
     const declarations = block => block.split('\n').map(line => line.trim()).filter(line => /^(--[\w-]+|color-scheme):/.test(line));

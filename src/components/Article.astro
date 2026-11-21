@@ -81,9 +81,11 @@ const updated = new Date(entry.updated + 'T00:00:00Z').toLocaleDateString(lang =
     <main class="page" id="top">
         <div class="content">
             <article class="article">
-                <p class="article-crumb"><a href={`${home(lang)}#work`}>{t.back}</a></p>
+                <nav class="article-crumb" aria-label={lang === 'de' ? 'Pfad' : 'Breadcrumb'}>
+                    <a href={`${home(lang)}#work`}>{t.back}</a>
+                    <span>{isWork ? t.workKicker : t.serviceKicker}</span>
+                </nav>
                 <header class="article-head">
-                    <p class="section-kicker">{isWork ? t.workKicker : t.serviceKicker}</p>
                     <h1>{entry.title}</h1>
                     <p class="article-lead">{entry.lead}</p>
                     <div class="article-actions">
@@ -104,13 +106,13 @@ const updated = new Date(entry.updated + 'T00:00:00Z').toLocaleDateString(lang =
                         )}
                         {entry.proof.length > 0 && (
                             <div class="side-list">
-                                <p class="section-kicker">{t.proof}</p>
+                                <h2 class="list-head">{t.proof}</h2>
                                 <ul>{entry.proof.map(link => <li><a href={link.href} target="_blank" rel="noopener">{link.label}</a></li>)}</ul>
                             </div>
                         )}
                         {related.length > 0 && (
                             <div class="side-list">
-                                <p class="section-kicker">{isWork ? t.relatedService : t.related}</p>
+                                <h2 class="list-head">{isWork ? t.relatedService : t.related}</h2>
                                 <ul>{related.map(item => <li><a href={item.path}>{item.title}</a></li>)}</ul>
                             </div>
                         )}
@@ -127,7 +129,7 @@ const updated = new Date(entry.updated + 'T00:00:00Z').toLocaleDateString(lang =
                 </section>
 
                 <div class="side-list" style="margin-top: var(--s-7)">
-                    <p class="section-kicker">{isWork ? (lang === 'de' ? 'Weitere Fallstudien' : 'More case studies') : t.moreServices}</p>
+                    <h2 class="list-head">{isWork ? (lang === 'de' ? 'Weitere Fallstudien' : 'More case studies') : t.moreServices}</h2>
                     <ul>{siblings.map(item => <li><a href={item.path}>{item.title}</a></li>)}</ul>
                 </div>
                 <p class="article-meta">{t.updated}: <time datetime={entry.updated}>{updated}</time></p>

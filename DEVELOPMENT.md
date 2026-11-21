@@ -50,6 +50,25 @@ drawn. Choosing what the device asks for anyway removes the stored choice, so th
 the device again. Without scripts the switch stays hidden and the device decides. Print always
 uses the light palette. The link preview images are light only.
 
+## Design rules
+
+The design was audited in November 2026 against the public Hallmark skill
+(`nutlope/hallmark`, by hand: its lint script was not run). `npm test` keeps what came out of it:
+
+- Labels are sentence case in the body face. No capitals with spread letters, no small label
+  above a section heading, no text under 12px.
+- Facts are joined by words, commas or layout, not by middle dots. The one dot left is the
+  byline on the home page.
+- A filled button uses `--action`, which holds 4.5:1 against its text in both palettes. The edge
+  of a form field uses `--field-edge`, which holds 3:1 against the page.
+- Nothing is collapsed unless scripts run: the head script sets `js` on `<html>`, and only
+  `.js` rules close the roles in the career section. Each role opens with a real button.
+- Motion names the property it changes, and all of it stops under `prefers-reduced-motion`.
+- The first screen is flat: no gradient behind it, in either palette.
+- The German header has longer labels. `Header.astro` marks it with `long-labels`, and the CV
+  button gives way where there is no room; check 320 to 1300 pixels in both languages after
+  changing the header.
+
 ## Titles, descriptions and link previews
 
 Every page sets its own title, description, Open Graph and Twitter tags in

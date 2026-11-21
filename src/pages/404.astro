@@ -11,14 +11,14 @@ const de = T.de.notFound;
     <main class="page" id="top">
         <div class="content">
             <div class="notfound">
-                <p class="section-kicker">404</p>
+                <p class="list-head">404</p>
                 <h1>{en.title}</h1>
                 <p>{en.text} <span lang="de">{de.title} {de.text}</span></p>
                 <div class="side-list" style="margin-top: var(--s-6)">
-                    <ul>
-                        <li><a href="/">{en.home}</a> · <a href="/de/" lang="de">{de.home}</a></li>
-                        <li><a href="/#brief">{T.en.sendBrief}</a> · <a href="/de/#brief" lang="de">{T.de.sendBrief}</a></li>
-                        <li><a href="/#cv">{en.cv}</a> · <a href="/de/#cv" lang="de">{de.cv}</a></li>
+                    <ul class="pair-list">
+                        <li><a href="/">{en.home}</a> <a href="/de/" lang="de">{de.home}</a></li>
+                        <li><a href="/#brief">{T.en.sendBrief}</a> <a href="/de/#brief" lang="de">{T.de.sendBrief}</a></li>
+                        <li><a href="/#cv">{en.cv}</a> <a href="/de/#cv" lang="de">{de.cv}</a></li>
                         <li><a href="/llms.txt">{en.md}</a></li>
                     </ul>
                 </div>

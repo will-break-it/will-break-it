@@ -77,8 +77,9 @@ const image = abs(card.image);
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0b1622" media="(prefers-color-scheme: dark)">
     <meta name="color-scheme" content="light dark">
-    {/* Before the first paint: a visitor who picked a palette gets it without a flash of the other one. */}
-    <script is:inline>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
+    {/* Before the first paint: a visitor who picked a palette gets it without a flash of the other one.
+        The js class tells the styles that scripts run, so only then is anything collapsed. */}
+    <script is:inline>document.documentElement.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
     <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
