@@ -7,6 +7,8 @@ order: 1
 updated: 2026-11-20
 brief: ai_automation
 related: [operando]
+facts:
+  stack: "TypeScript, Claude API, OpenRouter, MCP, Structured Outputs, Zod, pgvector, Whisper, Microsoft Graph, HubSpot API"
 proof:
   - label: "Operando Deal Sourcing, produktiv seit September 2026"
     href: "https://operando.de"

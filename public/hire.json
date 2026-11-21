@@ -24,8 +24,17 @@
   "takes_on": [
     "AI agents and automation",
     "Blockchain and distributed systems",
-    "Web and mobile products"
+    "Enterprise and mission-critical software",
+    "Websites, booking systems and mobile apps"
   ],
+  "skills": {
+    "languages": ["TypeScript", "JavaScript", "Rust", "Swift", "Kotlin", "Java", "Python", "Haskell", "Agda"],
+    "web": ["React", "Next.js", "Astro", "Tailwind", "Node.js", "NestJS", "Spring Boot", "Vert.x"],
+    "mobile": ["React Native", "Flutter", "iOS (Swift, SwiftUI)", "Android (Kotlin, Jetpack Compose)"],
+    "ai": ["Claude API", "OpenRouter", "Model Context Protocol (MCP)", "structured outputs", "pgvector", "Whisper"],
+    "data_and_infrastructure": ["PostgreSQL", "Supabase", "Redis", "Docker", "Terraform", "Ansible", "GitHub Actions", "Cloudflare Workers", "AWS"],
+    "distributed_systems": ["Cardano (eUTxO)", "Plutus", "consensus protocols", "CQRS", "event sourcing", "formal verification"]
+  },
   "fixed_price_websites": "https://pagebase.dev",
   "contact": {
     "email": "contact@williwolff.com",
@@ -50,5 +59,5 @@
     }
   },
   "profile": "https://williwolff.com/llms.txt",
-  "updated": "2026-11-20"
+  "updated": "2026-11-21"
 }

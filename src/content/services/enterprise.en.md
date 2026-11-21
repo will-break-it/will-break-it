@@ -7,6 +7,8 @@ order: 3
 updated: 2026-11-21
 brief: backend_architecture
 related: [deloitte, lace]
+facts:
+  stack: "Java, Spring Boot, Vert.x, TypeScript, Node.js, NestJS, PostgreSQL, Redis, Docker, Terraform, AWS"
 proof:
   - label: "Wallet indexing architecture, published as a CIP and a problem statement"
     href: "https://github.com/will-break-it/wallet-architecture"

@@ -7,6 +7,8 @@ order: 4
 updated: 2026-11-21
 brief: web_mobile
 related: [alwayssandy]
+facts:
+  stack: "React, React Native, Next.js, TypeScript, JavaScript, Swift, SwiftUI, Kotlin, Jetpack Compose, Flutter, Astro, Tailwind, Supabase, PostgreSQL, Cloudflare Workers"
 proof:
   - label: "AlwaysSandy: Web, iOS und Android aus einer Codebasis"
     href: "https://alwayssandy.com"
