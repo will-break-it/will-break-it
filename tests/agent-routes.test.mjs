@@ -275,6 +275,43 @@ test('a valid brief is emailed to Will and never to the sender', async () => {
     assert.match(sent[0].body.textContent, /Sent by an agent \(Scout\)/);
 });
 
+// Will chose the design of this email from four variants in November 2026.
+test('the brief email is designed, says what the form says, and keeps its plain text', async () => {
+    await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, name: 'Ada Example', company: 'Example GmbH', project_type: 'ai_automation', timeline: 'start within a month', budget_eur: '10000-40000', summary: 'First line.\nSecond line, with <b>markup</b>.' }, { origin: 'https://williwolff.com' }), env });
+    const { htmlContent: html, textContent: text, subject } = sent[0].body;
+    assert.match(html, /^<!doctype html>/);
+    assert.match(html, /New brief &#127881;/);
+    assert.match(html, /Ada Example, Example GmbH/);
+    const ref = subject.match(/WW-[0-9A-F]{8}/)[0];
+    assert.ok(html.includes(ref), 'the reference is in the email');
+    // The words of the form, not the values of the API.
+    assert.match(html, />AI agent or automation</);
+    assert.match(html, />Start within a month</);
+    assert.match(html, />10,000 to 40,000 EUR</);
+    assert.doesNotMatch(html, /ai_automation|Engagement/, 'no raw value, and no row for an engagement nobody chose');
+    // The brief is text: its line breaks are kept and its markup is not.
+    assert.match(html, /First line\.<br>Second line, with &lt;b&gt;markup&lt;\/b&gt;\./);
+    // One link, a reply to the visitor that starts fresh, and no picture to load.
+    const links = [...html.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
+    assert.deepEqual(links, ['mailto:ada@example.com?subject=Your%20brief%20' + ref]);
+    assert.match(html, />Reply to Ada</);
+    assert.doesNotMatch(html, /<img|<script|url\(/);
+    assert.match(html, /Sent by a person, through the form, in English\./);
+    // The plain text is still there for a mail program that shows no HTML.
+    assert.match(text, /^New brief from williwolff\.com · WW-/);
+    assert.match(text, /What they need:\nFirst line\.\nSecond line/);
+
+    // An agent's brief says so, and a German visitor gets a German subject on the reply.
+    await enquiry({ request: post('https://williwolff.com/api/enquiry', { ...brief, submitted_by: 'agent', agent: 'Scout <x>', locale: 'de', engagement: 'fixed_price', budget_eur: 'hourly, open ended' }), env });
+    const second = sent[1].body.htmlContent;
+    assert.match(second, /Via an agent \(Scout &lt;x&gt;\)/);
+    assert.match(second, /Sent by an agent \(Scout &lt;x&gt;\) on behalf of this person, through the API, in German\./);
+    assert.match(second, /subject=Ihre%20Anfrage%20WW-/);
+    assert.match(second, />Fixed price</);
+    assert.match(second, />Hourly, open ended</);
+    assert.match(second, />Reply</, 'without a name the button only says Reply');
+});
+
 test('missing fields are named and nothing is sent', async () => {
     const response = await enquiry({ request: post('https://williwolff.com/api/enquiry', { email: 'not-an-address', summary: 'hi', project_type: 'nonsense' }), env });
     const body = await response.json();

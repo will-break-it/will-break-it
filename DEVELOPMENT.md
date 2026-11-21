@@ -121,6 +121,12 @@ run the URL through LinkedIn's Post Inspector.
   test fails if a page shows another one). Brief emails are marked by their subject,
   `[williwolff.com]`.
 
+The email itself is built in `lib/brief-mail.js` (HTML: a teal band with "New brief", what
+the visitor needs, the facts in the form's words, a reply button) and in `messageText()` in
+`lib/enquiry.js` (plain text). Will chose the design from four variants in November 2026. It
+is written for Gmail: tables, inline styles, no images. Gmail's Reply quotes this email under
+the answer, so the visitor may see it; the button starts a fresh message without the quote.
+
 `POST /api/enquiry` and `POST /mcp` send one email per valid request and need no sign-in,
 because agents use them. `lib/enquiry.js` caps briefs at 5 per visitor per hour and 100 per
 day and answers 429 beyond that (`BRIEF_LIMIT_PER_VISITOR_HOUR` and `BRIEF_LIMIT_PER_DAY`
