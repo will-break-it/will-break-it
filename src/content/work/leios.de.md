@@ -1,7 +1,7 @@
 ---
 slug: ouroboros-leios-cip-0164
 title: "Ouroboros Leios: von offener Forschung zu CIP-0164"
-description: "Fallstudie: Leitung von Forschung und Entwicklung für Ouroboros Leios, Cardanos Hochdurchsatz-Protokoll, bei IOG, und Autorschaft von CIP-0164, der öffentlichen Spezifikation."
+description: "Fallstudie: Leitung von Forschung und Entwicklung für Ouroboros Leios, Cardanos Hochdurchsatz-Protokoll, bei IOG, und Autor der Spezifikation CIP-0164."
 lead: "Ouroboros Leios ist das Protokoll, das Cardanos Durchsatz erhöht. Ich habe Forschung und Entwicklung bei IOG mit einem achtköpfigen Team geleitet und bin Hauptautor von CIP-0164, der Spezifikation, nach der die Teams implementieren."
 order: 3
 updated: 2026-11-20

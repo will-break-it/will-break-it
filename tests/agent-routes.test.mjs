@@ -12,6 +12,7 @@ import { onRequest as middleware } from '../functions/_middleware.js';
 import { onRequest as enquiry } from '../functions/api/enquiry.js';
 import { onRequest as mcp } from '../functions/mcp.js';
 import { forgetBriefCounts, overLimit, SITE_ADDRESS } from '../lib/enquiry.js';
+import { cardHash } from '../scripts/preview-card.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -611,4 +612,63 @@ test('the technologies recruiters search for are named where they look', () => {
         const file = name.endsWith('.md') ? join(dist, 'services', name) : join(dist, 'services', name, 'index.html');
         assert.match(readFileSync(file, 'utf8'), name.endsWith('.md') ? /\*\*Stack:\*\* \w/ : /<dt>Stack<\/dt><dd>\w/, name);
     }
+});
+
+test('every page has its own title, description and link preview image', () => {
+    const pages = (function walk(dir) {
+        return readdirSync(dir, { withFileTypes: true }).flatMap(item => item.isDirectory() ? walk(join(dir, item.name)) : [join(dir, item.name)]);
+    })(dist).filter(file => file.endsWith('index.html'));
+    assert.equal(pages.length, 20);
+    const cards = JSON.parse(readFileSync(join(dist, 'og', 'cards.json'), 'utf8'));
+    const lock = JSON.parse(readFileSync(join(root, 'scripts', 'previews.lock.json'), 'utf8'));
+    const plain = text => text.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+    const meta = (html, name) => (html.match(new RegExp('<meta (?:name|property)="' + name + '" content="([^"]*)"')) || [])[1];
+
+    const seen = { title: new Map(), description: new Map(), image: new Map() };
+    for (const file of pages) {
+        const html = readFileSync(file, 'utf8');
+        const name = file.slice(dist.length);
+        const isHome = /^\/(de\/)?index\.html$/.test(name);
+        const title = plain(html.match(/<title>([^<]*)<\/title>/)[1]);
+        const description = plain(meta(html, 'description'));
+
+        // Search results cut titles at about 65 characters and descriptions at about 160.
+        assert.ok(title.length >= 30 && title.length <= 65, name + ' title has ' + title.length + ' characters');
+        assert.ok(description.length >= 110 && description.length <= 160, name + ' description has ' + description.length + ' characters');
+        assert.equal(plain(meta(html, 'og:title')), title, name);
+        assert.equal(plain(meta(html, 'og:description')), description, name);
+        assert.equal(plain(meta(html, 'twitter:title')), title, name);
+        assert.equal(meta(html, 'og:url'), html.match(/<link rel="canonical" href="([^"]*)"/)[1], name);
+        assert.equal(meta(html, 'twitter:card'), 'summary_large_image', name);
+
+        // The image belongs to this page: its language on a home page, its own card elsewhere.
+        const image = meta(html, 'og:image');
+        assert.equal(meta(html, 'twitter:image'), image, name);
+        const card = cards.find(entry => 'https://williwolff.com' + entry.image === image);
+        assert.ok(card, name + ' shows an image that is not a card: ' + image);
+        assert.equal(card.lang, html.match(/<html lang="(\w+)"/)[1], name + ' image language');
+        assert.equal(card.kind === 'home', isHome, name + ' image kind');
+        assert.equal(plain(meta(html, 'og:image:alt')), card.alt, name);
+        if (!isHome) assert.ok(plain(html).includes(card.title), name + ' card title is the page title');
+        assert.equal(meta(html, 'og:type'), card.kind === 'work' ? 'article' : 'website', name);
+        if (card.kind === 'work') assert.match(meta(html, 'article:modified_time'), /^\d{4}-\d\d-\d\dT/, name);
+
+        for (const [kind, value] of [['title', title], ['description', description], ['image', image]]) {
+            assert.ok(!seen[kind].has(value), name + ' shares its ' + kind + ' with ' + seen[kind].get(value));
+            seen[kind].set(value, name);
+        }
+    }
+
+    // Each image exists at 1200 x 630, stays light enough for messengers, and was
+    // drawn from what the page says today. Run `npm run previews` when this fails.
+    assert.equal(cards.length, 20);
+    assert.deepEqual(Object.keys(lock).sort(), cards.map(card => card.image).sort());
+    for (const card of cards) {
+        const png = readFileSync(join(dist, card.image));
+        assert.equal(png.toString('latin1', 1, 4), 'PNG', card.image);
+        assert.deepEqual([png.readUInt32BE(16), png.readUInt32BE(20)], [1200, 630], card.image + ' size');
+        assert.ok(png.length < 300 * 1024, card.image + ' is ' + Math.round(png.length / 1024) + ' KB');
+        assert.equal(lock[card.image], cardHash(card), card.image + ' is out of date: run `npm run previews`');
+    }
+    assert.deepEqual(readdirSync(join(dist, 'og')).filter(file => file.endsWith('.png')).length, 18);
 });

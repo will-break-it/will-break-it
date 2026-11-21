@@ -1,7 +1,7 @@
 ---
 slug: lace-wallet-rearchitecture
 title: "Re-architecting the Lace wallet backend from polling to events"
-description: "Case study: an event-driven re-architecture of the Lace Cardano wallet backend at IOG. 45% lower latency, over 60% lower infrastructure cost, 2,000+ tx/s indexing."
+description: "Case study: event-driven re-architecture of the Lace Cardano wallet backend at IOG. 45% lower latency, 60%+ lower infrastructure cost, 2,000+ tx/s indexing."
 lead: "Lace is IOG's light wallet for Cardano. Its backend polled the chain for every wallet. I led the move to an event-driven design that cut latency by 45% and infrastructure cost by more than 60%."
 order: 2
 updated: 2026-11-20

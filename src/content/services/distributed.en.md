@@ -1,7 +1,7 @@
 ---
 slug: distributed-systems-blockchain
 title: "Distributed systems and blockchain engineering"
-description: "Freelance architect in Berlin for protocol design, event-driven backends and chain indexing. Five years on Cardano at IOG, from wallet infrastructure to consensus research."
+description: "Freelance architect in Berlin for protocol design, event-driven backends and chain indexing. Five years on Cardano at IOG, from wallets to consensus research."
 lead: "Protocol design, event-driven backends and chain indexing. Five years on Cardano at IOG, from wallet infrastructure to consensus research, and enterprise migrations before that."
 order: 2
 updated: 2026-11-20

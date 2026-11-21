@@ -1,7 +1,7 @@
 ---
 slug: mainframe-java-migration
 title: "16 Millionen Zeilen Mainframe-Code nach Java migriert"
-description: "Fallstudie: programmatische Cobol- und Mainframe-Migrationen nach Java bei Deloitte für einen deutschen Versicherer, einen US-Pensionsfonds, Target und Walmart. 6 Mio. EUR Ersparnis pro Jahr."
+description: "Fallstudie: Cobol- und Mainframe-Migrationen nach Java bei Deloitte, für einen deutschen Versicherer, einen US-Pensionsfonds, Target und Walmart."
 lead: "Bei Deloitte habe ich an programmatischen Migrationen gearbeitet, die Mainframe-Anwendungen nach Java überführen, ohne sie von Hand neu zu schreiben. Als Lead Engineer habe ich die Migration von 16 Millionen Zeilen Code für einen deutschen Versicherer geleitet. Sie spart dem Kunden 6 Millionen EUR Lizenzkosten pro Jahr."
 order: 4
 updated: 2026-11-20

@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Footer from './Footer.astro';
 import { type Entry, find, list } from '../lib/content';
 import { type Lang, T, ORIGIN, PERSON_ID, RATE, abs, home } from '../lib/site';
+import { entryCard } from '../lib/previews';
 
 interface Props { entry: Entry }
 const { entry } = Astro.props;
@@ -12,6 +13,7 @@ const t = T[lang];
 const isWork = entry.kind === 'work';
 const paths = { en: find(entry.kind, entry.key, 'en').path, de: find(entry.kind, entry.key, 'de').path };
 
+const card = entryCard(entry);
 const relatedKind = isWork ? 'services' : 'work';
 const related = entry.related.map(key => find(relatedKind, key, lang));
 const siblings = list(entry.kind, lang).filter(e => e.key !== entry.key);
@@ -38,7 +40,7 @@ const main = isWork
         author: { '@id': PERSON_ID },
         publisher: { '@id': PERSON_ID },
         mainEntityOfPage: page,
-        image: `${ORIGIN}/social-preview.png`,
+        image: abs(card.image),
     }
     : {
         '@type': 'Service',
@@ -75,7 +77,7 @@ const withName = `${entry.title} – Willi Wolff`;
 const pageTitle = withName.length <= 65 ? withName : entry.title;
 const updated = new Date(entry.updated + 'T00:00:00Z').toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
-<Base lang={lang} title={pageTitle} description={entry.description} path={entry.path} paths={paths} jsonld={jsonld} ogType={isWork ? 'article' : 'website'} markdownPath={entry.markdownPath}>
+<Base lang={lang} title={pageTitle} description={entry.description} path={entry.path} paths={paths} jsonld={jsonld} ogType={isWork ? 'article' : 'website'} card={card} updated={entry.updated} markdownPath={entry.markdownPath}>
     <main class="page" id="top">
         <div class="content">
             <article class="article">

@@ -7,7 +7,8 @@
     "build": "node scripts/build-cv-data.mjs --check && astro build",
     "preview": "astro preview",
     "test": "npm run build && node --test tests/agent-routes.test.mjs",
-    "cv": "node scripts/build-cv-data.mjs"
+    "cv": "node scripts/build-cv-data.mjs",
+    "previews": "npm run build && node scripts/build-previews.mjs"
   },
   "devDependencies": {
     "@fontsource-variable/inter": "^5.3.0",
