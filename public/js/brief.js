@@ -9,7 +9,7 @@
     const status = document.getElementById('brief-status');
     const send = document.getElementById('brief-send');
     const copy = document.getElementById('brief-copy');
-    const MAIL = 'contact+web@williwolff.com';
+    const MAIL = 'contact@williwolff.com';
     const T = {
         en: {
             email: 'Give an email address I can reply to.',

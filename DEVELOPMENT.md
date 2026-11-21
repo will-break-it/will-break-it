@@ -46,12 +46,10 @@ To run the Pages Functions (`/api/enquiry`, `/mcp`, the Markdown answers) locall
   If both are set, Cloudflare is used. Optional for both: `CONTACT_FROM_EMAIL`,
   `CONTACT_SENDER_NAME`. Without either, the endpoint answers 503 and the form falls back to
   email.
-- One test email to `contact+web@williwolff.com`. The site shows this tagged address and sends
-  briefs to it, so that mail from the website can be told apart by its recipient (`SITE_ADDRESS`
-  in `lib/enquiry.js`; a test fails if a page still shows the plain one). The tag needs plus
-  addressing for the domain: in Cloudflare Email Routing it is a switch under Settings
-  (Subaddressing). The CV files keep the plain address on purpose. `CONTACT_TO_EMAIL` overrides
-  where briefs go, for example a tagged private address.
+- `contact@williwolff.com` has to exist: in Cloudflare Email Routing, a rule that forwards it to
+  the inbox. The site shows this address on every page (`SITE_ADDRESS` in `lib/enquiry.js`; a
+  test fails if a page shows another one). Brief emails are marked by their subject,
+  `[williwolff.com]`.
 
 `POST /api/enquiry` and `POST /mcp` send one email per valid request and need no sign-in,
 because agents use them. `lib/enquiry.js` caps briefs at 5 per visitor per hour and 100 per

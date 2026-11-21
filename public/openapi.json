@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "summary": "Hire Willi Wolff, freelance software engineer and architect in Berlin.",
     "description": "Machine-readable routes of williwolff.com. Read the profile, the terms and the CV, then send a project brief. A person reads and answers every brief; nothing is booked or quoted automatically.",
-    "contact": { "name": "Willi Wolff", "email": "contact+web@williwolff.com", "url": "https://williwolff.com/" }
+    "contact": { "name": "Willi Wolff", "email": "contact@williwolff.com", "url": "https://williwolff.com/" }
   },
   "servers": [{ "url": "https://williwolff.com" }],
   "paths": {
