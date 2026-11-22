@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-22T06:55:50Z",
+  "generated": "2026-11-22T19:44:42Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 15383,
-    "activeWeeks": 51,
+    "total": 15423,
+    "activeWeeks": 52,
     "weeksInWindow": 52,
     "months": [
       {
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-11",
-        "total": 1645
+        "total": 1685
       }
     ]
   },
-  "streakDays": 2,
+  "streakDays": 3,
   "totals": {
-    "contributions": 20123,
+    "contributions": 20163,
     "private": 85,
-    "commits": 15895,
-    "pullRequests": 3413,
+    "commits": 15924,
+    "pullRequests": 3424,
     "reviews": 89,
     "repositories": 44,
     "publicRepositories": 11
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 14762,
+      "total": 14802,
       "private": 0,
-      "commits": 10930,
-      "prs": 3208,
+      "commits": 10959,
+      "prs": 3219,
       "reviews": 57
     }
   ],
@@ -517,8 +517,8 @@
     },
     {
       "month": "2026-11",
-      "total": 1645,
-      "commits": 1170
+      "total": 1685,
+      "commits": 1199
     }
   ],
   "days": [
@@ -2136,6 +2136,11 @@
       "date": "2026-11-21",
       "total": 155,
       "commits": 127
+    },
+    {
+      "date": "2026-11-22",
+      "total": 40,
+      "commits": 29
     }
   ],
   "languages": [
@@ -2160,12 +2165,12 @@
       "share": 1.5
     },
     {
-      "name": "Astro",
-      "share": 1.5
+      "name": "CSS",
+      "share": 1.4
     }
   ],
   "lastPush": {
-    "at": "2026-11-21T22:39:20Z",
+    "at": "2026-11-22T19:36:22Z",
     "repo": null,
     "url": null,
     "private": true
@@ -2174,7 +2179,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-11-21T19:22:14Z",
+      "pushedAt": "2026-11-22T06:57:35Z",
       "language": "JavaScript"
     },
     {
