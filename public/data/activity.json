@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-21T19:20:30Z",
+  "generated": "2026-11-22T06:55:50Z",
   "login": "will-break-it",
   "scope": "public+private",
   "since": "2014-10-08",
   "last12Months": {
-    "total": 15369,
-    "activeWeeks": 52,
+    "total": 15383,
+    "activeWeeks": 51,
     "weeksInWindow": 52,
     "months": [
       {
@@ -54,16 +54,16 @@
       },
       {
         "month": "2026-11",
-        "total": 1629
+        "total": 1645
       }
     ]
   },
   "streakDays": 2,
   "totals": {
-    "contributions": 20107,
+    "contributions": 20123,
     "private": 85,
-    "commits": 15881,
-    "pullRequests": 3411,
+    "commits": 15895,
+    "pullRequests": 3413,
     "reviews": 89,
     "repositories": 44,
     "publicRepositories": 11
@@ -167,10 +167,10 @@
     },
     {
       "year": 2026,
-      "total": 14746,
+      "total": 14762,
       "private": 0,
-      "commits": 10916,
-      "prs": 3206,
+      "commits": 10930,
+      "prs": 3208,
       "reviews": 57
     }
   ],
@@ -517,16 +517,11 @@
     },
     {
       "month": "2026-11",
-      "total": 1629,
-      "commits": 1156
+      "total": 1645,
+      "commits": 1170
     }
   ],
   "days": [
-    {
-      "date": "2025-10-21",
-      "total": 3,
-      "commits": 3
-    },
     {
       "date": "2025-10-22",
       "total": 2,
@@ -2139,8 +2134,8 @@
     },
     {
       "date": "2026-11-21",
-      "total": 139,
-      "commits": 113
+      "total": 155,
+      "commits": 127
     }
   ],
   "languages": [
@@ -2150,7 +2145,7 @@
     },
     {
       "name": "PLpgSQL",
-      "share": 9.8
+      "share": 9.7
     },
     {
       "name": "HTML",
@@ -2158,7 +2153,7 @@
     },
     {
       "name": "JavaScript",
-      "share": 2.5
+      "share": 2.6
     },
     {
       "name": "Dart",
@@ -2170,7 +2165,7 @@
     }
   ],
   "lastPush": {
-    "at": "2026-11-21T18:33:02Z",
+    "at": "2026-11-21T22:39:20Z",
     "repo": null,
     "url": null,
     "private": true
@@ -2179,7 +2174,7 @@
     {
       "name": "will-break-it",
       "url": "https://github.com/will-break-it/will-break-it",
-      "pushedAt": "2026-11-21T16:11:45Z",
+      "pushedAt": "2026-11-21T19:22:14Z",
       "language": "JavaScript"
     },
     {
